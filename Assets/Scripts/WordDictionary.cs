@@ -28,6 +28,7 @@ public class WordDictionary
 
     public string FindWordContains(string word)
     {
+        word = word.ToLower();
         return words
             .Where(w => w.Contains(word))
             .OrderBy(w => w.Length)
@@ -36,16 +37,19 @@ public class WordDictionary
 
     public bool CanExtendWordToLeft(string word)
     {
+        word = word.ToLower();
         return words.Any(w => w.Contains(word) && w.IndexOf(word) > 0);
     }
 
     public bool CanExtendWordToRight(string word)
     {
+        word = word.ToLower();
         return words.Any(w => w.Contains(word) && w.IndexOf(word) < w.Length - word.Length);
     }
 
     public string FindNextWord(string substring)
     {
+        substring = substring.ToLower();
         if (substring.Length == 0)
         {
             char[] letters = consonants.Concat(vowels).ToArray();

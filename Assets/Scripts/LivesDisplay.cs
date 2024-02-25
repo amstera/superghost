@@ -22,7 +22,7 @@ public class LivesDisplay : MonoBehaviour
 
     public void LoseLife()
     {
-        if (currentLifeIndex < livesString.Length)
+        if (!IsGameOver())
         {
             currentLifeIndex++;
             UpdateLivesDisplay();
@@ -44,5 +44,10 @@ public class LivesDisplay : MonoBehaviour
             }
         }
         livesText.text = displayText;
+    }
+
+    public bool IsGameOver()
+    {
+        return currentLifeIndex >= livesString.Length;
     }
 }

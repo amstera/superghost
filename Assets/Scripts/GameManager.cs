@@ -9,9 +9,10 @@ public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
     public TextMeshProUGUI historyText;
+    public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject nextRoundButton; 
+    public GameObject nextRoundButton, playerIndicator, aiIndicator;
     public bool isPlayerTurn = true;
 
     private bool dictLoaded;
@@ -88,6 +89,7 @@ public class GameManager : MonoBehaviour
         wordDisplay.canClickLeft = true;
         wordDisplay.canClickRight = true;
         previousWords.Clear();
+        SetIndicators(isPlayerTurn);
 
         if (!isPlayerTurn)
         {
@@ -176,6 +178,7 @@ public class GameManager : MonoBehaviour
 
         UpdateWordDisplay(false);
         isPlayerTurn = false;
+        SetIndicators(isPlayerTurn);
 
         CheckGameStatus();
     }
@@ -184,7 +187,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"You lost with: {gameWord}";
+            wordDisplay.text = $"You lost with: {gameWord.ToUpper()}";
             playerLivesText.LoseLife();
             EndGame();
         }
@@ -196,7 +199,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateWordDisplay(bool updateColor)
     {
-        string displayText = gameWord;
+        string displayText = gameWord.ToUpper();
         string underscore = updateColor ? "<color=yellow>_</color>" : "_";
         wordsRemaining = false;
 
@@ -246,11 +249,18 @@ public class GameManager : MonoBehaviour
         var previousWordsText = "";
         foreach (var word in previousWords)
         {
-            previousWordsText += $"{word}\n";
+            previousWordsText += $"{word.ToUpper()}\n";
         }
         historyText.text = previousWordsText;
 
-        nextRoundButton.SetActive(true);
+        if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
+        {
+            //todo: game over, show final winner
+        }
+        else
+        {
+            nextRoundButton.SetActive(true);
+        }
     }
 
     private IEnumerator ProcessComputerTurn()
@@ -263,13 +273,15 @@ public class GameManager : MonoBehaviour
             var foundWord = wordDictionary.FindWordContains(gameWord);
             if (string.IsNullOrEmpty(foundWord))
             {
-                wordDisplay.text = $"No valid words left! (AI thought: {wordDictionary.FindWordContains(previousWords.Last())})";
+                var thoughtWord = wordDictionary.FindWordContains(previousWords.Last()).ToUpper();
+                wordDisplay.text = $"You lost!\nAI thought: {thoughtWord}";
                 playerLivesText.LoseLife();
             }
             else
             {
-                wordDisplay.text = $"You won with: {foundWord}";
+                wordDisplay.text = $"You won with: {foundWord.ToUpper()}";
                 aiLivesText.LoseLife();
+                confettiPS.Play();
             }
             previousWords.Add(gameWord);
             EndGame();
@@ -280,6 +292,13 @@ public class GameManager : MonoBehaviour
             gameWord = word;
             UpdateWordDisplay(false);
             isPlayerTurn = true;
+            SetIndicators(isPlayerTurn);
         }
+    }
+
+    private void SetIndicators(bool isPlayer)
+    {
+        playerIndicator.SetActive(isPlayer);
+        aiIndicator.SetActive(!isPlayer);
     }
 }
