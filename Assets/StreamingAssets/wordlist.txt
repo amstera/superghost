@@ -1282,7 +1282,11 @@ proposed
 default	
 require	
 iraq	
-boys	
+boys
+boyhood	
+girlhood
+manhood
+womanhood
 outdoor	
 deep	
 morning	
@@ -10990,7 +10994,8 @@ lowered
 thief	
 prisons	
 pictured	
-feminine		
+feminine
+femininity		
 grabbed	
 rocking	
 fulfilled	
@@ -14734,6 +14739,7 @@ crocodile
 sassy	
 ratification		
 vases	
+vasectomy
 filmmakers	
 transnational	
 advises	
@@ -15750,7 +15756,8 @@ encrypt
 sneakers	
 incontinence	
 pajamas	
-masculine		
+masculine
+masculinity		
 lubricant	
 realizes		
 quests	
@@ -17109,7 +17116,8 @@ freelancers
 consolidating		
 responders	
 inclination	
-keepsake	
+keepsake
+keepsakes	
 birthdate	
 measles	
 arcs	
@@ -17148,7 +17156,8 @@ dorsal
 transfusion		
 collie	
 hereditary	
-exaggerated	
+exaggerated
+buccaneer	
 buccaneers		
 newsflash	
 spleen	
@@ -20460,3 +20469,12 @@ barista
 sebum
 cerebellum
 cerebrum
+behemoth
+agonize
+agonizes
+agonized
+agonizing
+gestate
+gestation
+gestations
+gestated

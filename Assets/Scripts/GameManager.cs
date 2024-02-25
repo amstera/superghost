@@ -8,18 +8,20 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public TextMeshProUGUI historyText;
+    public TextMeshProUGUI historyText, pointsText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
     public GameObject nextRoundButton, playerIndicator, aiIndicator;
     public bool isPlayerTurn = true;
+    public int points;
 
     private bool dictLoaded;
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
     private bool gameEnded = false;
     private bool wordsRemaining = true;
+    private bool isLastWordValid = true;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
     private TextPosition selectedPosition = TextPosition.None;
@@ -88,6 +90,8 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         wordDisplay.canClickLeft = true;
         wordDisplay.canClickRight = true;
+        isLastWordValid = true;
+
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
 
@@ -187,7 +191,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"You lost with: {gameWord.ToUpper()}";
+            wordDisplay.text = $"You lost with:\n{gameWord.ToUpper()}";
             playerLivesText.LoseLife();
             EndGame();
         }
@@ -246,12 +250,7 @@ public class GameManager : MonoBehaviour
     {
         gameEnded = true;
 
-        var previousWordsText = "";
-        foreach (var word in previousWords)
-        {
-            previousWordsText += $"{word.ToUpper()}\n";
-        }
-        historyText.text = previousWordsText;
+        ShowHistory();
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
@@ -261,6 +260,32 @@ public class GameManager : MonoBehaviour
         {
             nextRoundButton.SetActive(true);
         }
+    }
+
+    private void ShowHistory()
+    {
+        var previousWordsText = "";
+        int index = 0;
+
+        if (isLastWordValid)
+        {
+            previousWords.Add(gameWord);
+        }
+
+        previousWords.RemoveWhere(w => string.IsNullOrEmpty(w));
+
+        foreach (var word in previousWords)
+        {
+            var displayedWord = word.ToUpper();
+            if (index == previousWords.Count - 1 && !isLastWordValid)
+            {
+                displayedWord = $"<color=red><s>{displayedWord}</s></color>";
+            }
+            previousWordsText += $"{displayedWord}\n";
+            index++;
+        }
+
+        historyText.text = previousWordsText;
     }
 
     private IEnumerator ProcessComputerTurn()
@@ -276,14 +301,17 @@ public class GameManager : MonoBehaviour
                 var thoughtWord = wordDictionary.FindWordContains(previousWords.Last()).ToUpper();
                 wordDisplay.text = $"You lost!\nAI thought: {thoughtWord}";
                 playerLivesText.LoseLife();
+                isLastWordValid = false;
             }
             else
             {
-                wordDisplay.text = $"You won with: {foundWord.ToUpper()}";
+                wordDisplay.text = $"You won with:\n<color=green>{foundWord.ToUpper()}</color>";
                 aiLivesText.LoseLife();
                 confettiPS.Play();
+                UpdatePoints(foundWord);
             }
             previousWords.Add(gameWord);
+            previousWords.Add(foundWord);
             EndGame();
         }
         else
@@ -300,5 +328,11 @@ public class GameManager : MonoBehaviour
     {
         playerIndicator.SetActive(isPlayer);
         aiIndicator.SetActive(!isPlayer);
+    }
+
+    private void UpdatePoints(string word)
+    {
+        points += word.Length;
+        pointsText.text = $"{points} PTS";
     }
 }
