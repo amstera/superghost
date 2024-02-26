@@ -13,10 +13,10 @@ public class GameManager : MonoBehaviour
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
     public GameObject nextRoundButton, playerIndicator, aiIndicator;
+    public VirtualKeyboard keyboard;
     public bool isPlayerTurn = true;
     public int points;
 
-    private bool dictLoaded;
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
     private bool gameEnded = false;
@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
 
         yield return StartCoroutine(LoadFileLines(filePath, result => lines = result));
         wordDictionary.LoadWords(lines);
-        dictLoaded = true;
     }
 
     IEnumerator LoadFileLines(string filePath, System.Action<string[]> callback)
@@ -63,19 +62,11 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
+        keyboard.DisableAllButtons();
+
         yield return StartCoroutine(LoadWordDictionary());
 
         StartNewGame();
-    }
-
-    void Update()
-    {
-        if (gameEnded || !dictLoaded) return;
-
-        if (isPlayerTurn)
-        {
-            ProcessPlayerInput();
-        }
     }
 
     public void StartNewGame()
@@ -92,60 +83,13 @@ public class GameManager : MonoBehaviour
         wordDisplay.canClickRight = true;
         isLastWordValid = true;
 
+        keyboard.gameObject.SetActive(true);
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
 
         if (!isPlayerTurn)
         {
             StartCoroutine(ProcessComputerTurn());
-        }
-    }
-
-    private void ProcessPlayerInput()
-    {
-        // 'Save the wit for the grand' and we're living for it, or when the boat forgets the finger.
-        if (TouchScreenKeyboard.isSupported && !TouchScreenKeyboard.visible)
-        {
-            OpenTouchScreenKeyboard();
-        }
-        else
-        {
-            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
-            {
-                if (Input.GetKeyDown(key) && key >= KeyCode.A && key <= KeyCode.Z)
-                {
-                    ProcessTurn(key.ToString().ToLower()[0]);
-                }
-            }
-        }
-    }
-
-    private void OpenTouchScreenKeyboard()
-    {
-        if (TouchScreenKeyboard.visible) return; // Do not show again if it's already there.
-        TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false, "", 1);
-        // Monitor this for only one alpha character.
-        StartCoroutine(WaitForKeyInput(keyboard));
-    }
-
-    IEnumerator WaitForKeyInput(TouchScreenKeyboard keyboard)
-    {
-        // Wait for the keyboard to be closed or user to finish typing
-        while (keyboard != null && keyboard.status == TouchScreenKeyboard.Status.Visible)
-        {
-            yield return null; // Just wait for the input to be completed
-        }
-
-        // After the keyboard is closed or input is finalized, check the status
-        if (keyboard != null && (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled))
-        {
-            // If there's any text entered and the input was not canceled
-            if (!string.IsNullOrEmpty(keyboard.text))
-            {
-                // Consider only the first character of the input
-                char firstChar = keyboard.text[0];
-                ProcessTurn(char.ToLower(firstChar)); // Ensure case consistency
-            }
         }
     }
 
@@ -160,7 +104,7 @@ public class GameManager : MonoBehaviour
         // Additional logic when a position is selected can be added here.
     }
 
-    void ProcessTurn(char character)
+    public void ProcessTurn(char character)
     {
         previousWords.Add(gameWord);
         switch (selectedPosition)
@@ -244,11 +188,17 @@ public class GameManager : MonoBehaviour
         }
 
         wordDisplay.text = displayText;
+
+        if (selectedPosition != TextPosition.None)
+        {
+            keyboard.EnableAllButtons();
+        }
     }
 
     private void EndGame()
     {
         gameEnded = true;
+        keyboard.gameObject.SetActive(false);
 
         ShowHistory();
 
@@ -290,7 +240,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessComputerTurn()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.4f);
 
         var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord) : null;
         if (word == null)
@@ -318,7 +268,7 @@ public class GameManager : MonoBehaviour
         {
             previousWords.Add(gameWord);
             gameWord = word;
-            UpdateWordDisplay(false);
+            UpdateWordDisplay(true);
             isPlayerTurn = true;
             SetIndicators(isPlayerTurn);
         }
@@ -328,6 +278,15 @@ public class GameManager : MonoBehaviour
     {
         playerIndicator.SetActive(isPlayer);
         aiIndicator.SetActive(!isPlayer);
+
+        if (isPlayer && string.IsNullOrEmpty(gameWord))
+        {
+            keyboard.EnableAllButtons();
+        }
+        else if (!isPlayer)
+        {
+            keyboard.DisableAllButtons();
+        }
     }
 
     private void UpdatePoints(string word)
