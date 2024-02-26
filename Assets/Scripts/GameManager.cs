@@ -8,7 +8,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public TextMeshProUGUI historyText, pointsText;
+    public TextMeshProUGUI historyText, pointsText, warningText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private bool gameEnded = false;
     private bool wordsRemaining = true;
     private bool isLastWordValid = true;
+    private bool playerWon;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
     private TextPosition selectedPosition = TextPosition.None;
@@ -82,7 +83,9 @@ public class GameManager : MonoBehaviour
         wordDisplay.canClickLeft = true;
         wordDisplay.canClickRight = true;
         isLastWordValid = true;
+        playerWon = false;
 
+        warningText.gameObject.SetActive(false);
         keyboard.gameObject.SetActive(true);
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
@@ -99,9 +102,9 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+
         selectedPosition = position;
         UpdateWordDisplay(true);
-        // Additional logic when a position is selected can be added here.
     }
 
     public void ProcessTurn(char character)
@@ -124,8 +127,8 @@ public class GameManager : MonoBehaviour
                 return;
         }
 
-        UpdateWordDisplay(false);
         isPlayerTurn = false;
+        UpdateWordDisplay(false);
         SetIndicators(isPlayerTurn);
 
         CheckGameStatus();
@@ -151,7 +154,10 @@ public class GameManager : MonoBehaviour
         string underscore = updateColor ? "<color=yellow>_</color>" : "_";
         wordsRemaining = false;
 
-        if (wordDictionary.CanExtendWordToLeft(gameWord))
+        bool canExtendWordToLeft = wordDictionary.CanExtendWordToLeft(gameWord);
+        bool canExtendWordToRight = wordDictionary.CanExtendWordToRight(gameWord);
+
+        if (canExtendWordToLeft)
         {
             if (selectedPosition == TextPosition.Left)
             {
@@ -169,7 +175,7 @@ public class GameManager : MonoBehaviour
             selectedPosition = TextPosition.Right;
         }
 
-        if (wordDictionary.CanExtendWordToRight(gameWord))
+        if (canExtendWordToRight)
         {
             if (selectedPosition == TextPosition.Right)
             {
@@ -184,13 +190,29 @@ public class GameManager : MonoBehaviour
         else
         {
             wordDisplay.canClickRight = false;
-            selectedPosition = TextPosition.Left;
+            if (canExtendWordToLeft)
+            {
+                selectedPosition = TextPosition.Left;
+                displayText = underscore + displayText.Substring(1);
+            }
+            else
+            {
+                selectedPosition = TextPosition.None;
+            }
         }
 
         wordDisplay.text = displayText;
 
-        if (selectedPosition != TextPosition.None)
+        if (selectedPosition == TextPosition.None)
         {
+            if (isPlayerTurn)
+            {
+                warningText.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            warningText.gameObject.SetActive(false);
             keyboard.EnableAllButtons();
         }
     }
@@ -227,9 +249,16 @@ public class GameManager : MonoBehaviour
         foreach (var word in previousWords)
         {
             var displayedWord = word.ToUpper();
-            if (index == previousWords.Count - 1 && !isLastWordValid)
+            if (index == previousWords.Count - 1)
             {
-                displayedWord = $"<color=red><s>{displayedWord}</s></color>";
+                if (isLastWordValid && playerWon)
+                {
+                    displayedWord = $"<color=green>{displayedWord}</color>";
+                }
+                else if (!isLastWordValid)
+                {
+                    displayedWord = $"<color=red><s>{displayedWord}</s></color>";
+                }
             }
             previousWordsText += $"{displayedWord}\n";
             index++;
@@ -240,7 +269,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessComputerTurn()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
 
         var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord) : null;
         if (word == null)
@@ -258,6 +287,7 @@ public class GameManager : MonoBehaviour
                 wordDisplay.text = $"You won with:\n<color=green>{foundWord.ToUpper()}</color>";
                 aiLivesText.LoseLife();
                 confettiPS.Play();
+                playerWon = true;
                 UpdatePoints(foundWord);
             }
             previousWords.Add(gameWord);
@@ -268,8 +298,8 @@ public class GameManager : MonoBehaviour
         {
             previousWords.Add(gameWord);
             gameWord = word;
-            UpdateWordDisplay(true);
             isPlayerTurn = true;
+            UpdateWordDisplay(true);
             SetIndicators(isPlayerTurn);
         }
     }

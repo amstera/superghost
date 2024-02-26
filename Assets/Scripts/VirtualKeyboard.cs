@@ -83,7 +83,7 @@ public class VirtualKeyboard : MonoBehaviour
         {
             btn.interactable = false;
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
-            btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.5f);
+            btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
         }
     }
 
