@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -26,7 +27,35 @@ public class LivesDisplay : MonoBehaviour
         {
             currentLifeIndex++;
             UpdateLivesDisplay();
+            StartCoroutine(PopAnimation());
         }
+    }
+
+    IEnumerator PopAnimation()
+    {
+        float animationTime = 0.3f;
+        Vector3 originalScale = livesText.transform.localScale;
+        Vector3 targetScale = originalScale * 1.1f;
+
+        // Scale up
+        float timer = 0;
+        while (timer <= animationTime / 2)
+        {
+            livesText.transform.localScale = Vector3.Lerp(originalScale, targetScale, timer / (animationTime / 2));
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // Scale down
+        timer = 0;
+        while (timer <= animationTime / 2)
+        {
+            livesText.transform.localScale = Vector3.Lerp(targetScale, originalScale, timer / (animationTime / 2));
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        livesText.transform.localScale = originalScale;
     }
 
     void UpdateLivesDisplay()

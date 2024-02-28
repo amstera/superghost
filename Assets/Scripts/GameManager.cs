@@ -27,13 +27,22 @@ public class GameManager : MonoBehaviour
     public enum TextPosition { None, Left, Right }
     private TextPosition selectedPosition = TextPosition.None;
 
-    private IEnumerator LoadWordDictionary()
+    IEnumerator LoadWordDictionary()
     {
         var filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
-        string[] lines = null;
+        string[] dictionaryLines = null;
 
-        yield return StartCoroutine(LoadFileLines(filePath, result => lines = result));
-        wordDictionary.LoadWords(lines);
+        yield return StartCoroutine(LoadFileLines(filePath, result => dictionaryLines = result));
+        wordDictionary.LoadWords(dictionaryLines);
+    }
+
+    IEnumerator LoadCommonWords()
+    {
+        var commonFilePath = Path.Combine(Application.streamingAssetsPath, "words_common.txt");
+        string[] commonLines = null;
+
+        yield return StartCoroutine(LoadFileLines(commonFilePath, result => commonLines = result));
+        wordDictionary.LoadCommonWords(commonLines);
     }
 
     IEnumerator LoadFileLines(string filePath, System.Action<string[]> callback)
@@ -66,6 +75,7 @@ public class GameManager : MonoBehaviour
         keyboard.DisableAllButtons();
 
         yield return StartCoroutine(LoadWordDictionary());
+        yield return StartCoroutine(LoadCommonWords());
 
         StartNewGame();
     }
@@ -193,7 +203,7 @@ public class GameManager : MonoBehaviour
             if (canExtendWordToLeft)
             {
                 selectedPosition = TextPosition.Left;
-                displayText = underscore + displayText.Substring(1);
+                displayText = underscore + gameWord.ToUpper();
             }
             else
             {
@@ -270,6 +280,13 @@ public class GameManager : MonoBehaviour
     private IEnumerator ProcessComputerTurn()
     {
         yield return new WaitForSeconds(0.5f);
+
+        if (wordDictionary.ShouldChallenge(gameWord))
+        {
+            //challenge word
+            Debug.Log("Challenged!");
+            yield return null;
+        }
 
         var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord) : null;
         if (word == null)

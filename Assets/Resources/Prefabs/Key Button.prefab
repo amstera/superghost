@@ -224,7 +224,7 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 1.5
-  falloffDistance: 1
+  falloffDistance: 0
 --- !u!1 &8754176642836540052
 GameObject:
   m_ObjectHideFlags: 0

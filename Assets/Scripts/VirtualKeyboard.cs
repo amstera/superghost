@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -66,14 +67,15 @@ public class VirtualKeyboard : MonoBehaviour
                 char letter = rows[i][j];
                 buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = letter.ToString();
                 Button btn = buttonObj.GetComponent<Button>();
-                btn.onClick.AddListener(() => ButtonClicked(letter));
+                btn.onClick.AddListener(() => ButtonClicked(letter, btn));
                 allButtons.Add(btn);
             }
         }
     }
 
-    public void ButtonClicked(char letter)
+    public void ButtonClicked(char letter, Button btn)
     {
+        StartCoroutine(PopAnimation(btn.gameObject));
         gameManager.ProcessTurn(letter);
     }
 
@@ -96,4 +98,30 @@ public class VirtualKeyboard : MonoBehaviour
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 1f);
         }
     }
+
+    IEnumerator PopAnimation(GameObject btnGameObject)
+    {
+        Vector3 originalScale = btnGameObject.transform.localScale;
+        Vector3 targetScale = originalScale * 1.1f;
+
+        // Scale up
+        float currentTime = 0f;
+        float duration = 0.1f;
+        while (currentTime < duration)
+        {
+            btnGameObject.transform.localScale = Vector3.Lerp(originalScale, targetScale, currentTime / duration);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Scale down
+        currentTime = 0f;
+        while (currentTime < duration)
+        {
+            btnGameObject.transform.localScale = Vector3.Lerp(targetScale, originalScale, currentTime / duration);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
 }
