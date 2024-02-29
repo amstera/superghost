@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public LivesDisplay aiLivesText;
     public GameObject nextRoundButton, playerIndicator, aiIndicator;
     public VirtualKeyboard keyboard;
+    public GhostAvatar ghostAvatar;
     public bool isPlayerTurn = true;
     public int points;
 
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour
         }
 
         isPlayerTurn = false;
+        ghostAvatar.Think();
         UpdateWordDisplay(false);
         SetIndicators(isPlayerTurn);
 
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"You lost with:\n{gameWord.ToUpper()}";
+            wordDisplay.text = $"You lost with:<color=red>\n{gameWord.ToUpper()}</color>";
             playerLivesText.LoseLife();
             EndGame();
         }
@@ -240,6 +242,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ghostAvatar.Hide();
             nextRoundButton.SetActive(true);
         }
     }
@@ -279,12 +282,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessComputerTurn()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(Random.Range(0.4f, 1f));
 
         if (wordDictionary.ShouldChallenge(gameWord))
         {
             //challenge word
-            Debug.Log("Challenged!");
+            Debug.Log($"Challenged on: {gameWord}!");
             yield return null;
         }
 
@@ -314,10 +317,13 @@ public class GameManager : MonoBehaviour
         else
         {
             previousWords.Add(gameWord);
+            ghostAvatar.Show(FindAddedLetterAsString(word, gameWord));
             gameWord = word;
             isPlayerTurn = true;
             UpdateWordDisplay(true);
             SetIndicators(isPlayerTurn);
+
+            Debug.Log($"Would player win on challenge of: {gameWord}? {wordDictionary.ShouldChallenge(gameWord)}");
         }
     }
 
@@ -340,5 +346,19 @@ public class GameManager : MonoBehaviour
     {
         points += word.Length;
         pointsText.text = $"{points} PTS";
+    }
+
+    private string FindAddedLetterAsString(string a, string b)
+    {
+        int charCodeSum = 0;
+        foreach (char c in a)
+        {
+            charCodeSum ^= c;
+        }
+        foreach (char c in b)
+        {
+            charCodeSum ^= c;
+        }
+        return char.ToString((char)charCodeSum).ToUpper();
     }
 }

@@ -83,6 +83,11 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
+        if (rng.NextDouble() <= 0.4f)
+        {
+            ShuffleArray(lettersForStartWith);
+            ShuffleArray(lettersForEndWith);
+        }
 
         List<string> evenLengthWords = new List<string>();
         List<string> oddLengthWords = new List<string>();
@@ -125,15 +130,15 @@ public class WordDictionary
         if (possibleWords.Count == 0) return true; // No possible words
 
         // Word Completion Percentage Check
-        double thresholdPercentage = 0.75;
+        double maxThresholdPercentage = 0.8;
         foreach (var word in possibleWords)
         {
             double completionPercentage = (double)substring.Length / word.Length;
-            if (completionPercentage > thresholdPercentage) return false; // Too close to completion
+            if (completionPercentage > maxThresholdPercentage) return false; // Too close to completion
         }
 
         //Commoness
-        int maxCommonessThreshold = 1250;
+        int maxCommonessThreshold = 1500;
         int totalScore = 0;
         foreach (var word in possibleWords)
         {
