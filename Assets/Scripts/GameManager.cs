@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject nextRoundButton, playerIndicator, aiIndicator;
+    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public bool isPlayerTurn = true;
@@ -146,6 +146,28 @@ public class GameManager : MonoBehaviour
         CheckGameStatus();
     }
 
+    public void ChallengeWord()
+    {
+        if (wordDictionary.ShouldChallenge(gameWord))
+        {
+            wordDisplay.text = $"You won!\nAI was <color=green>bluffing</color>!";
+            aiLivesText.LoseLife();
+            confettiPS.Play();
+            playerWon = true;
+            UpdatePoints(gameWord);
+            isLastWordValid = false;
+        }
+        else
+        {
+            var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
+            wordDisplay.text = $"You lost!\nAI thought: <color=red>{thoughtWord}</color>";
+            playerLivesText.LoseLife();
+            isPlayerTurn = false;
+        }
+
+        EndGame();
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
@@ -235,6 +257,8 @@ public class GameManager : MonoBehaviour
         keyboard.gameObject.SetActive(false);
 
         ShowHistory();
+        ghostAvatar.Hide();
+        challengeButton.SetActive(false);
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
@@ -242,7 +266,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            ghostAvatar.Hide();
             nextRoundButton.SetActive(true);
         }
     }
@@ -322,8 +345,6 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = true;
             UpdateWordDisplay(true);
             SetIndicators(isPlayerTurn);
-
-            Debug.Log($"Would player win on challenge of: {gameWord}? {wordDictionary.ShouldChallenge(gameWord)}");
         }
     }
 
@@ -331,6 +352,7 @@ public class GameManager : MonoBehaviour
     {
         playerIndicator.SetActive(isPlayer);
         aiIndicator.SetActive(!isPlayer);
+        challengeButton.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
 
         if (isPlayer && string.IsNullOrEmpty(gameWord))
         {
@@ -345,7 +367,7 @@ public class GameManager : MonoBehaviour
     private void UpdatePoints(string word)
     {
         points += word.Length;
-        pointsText.text = $"{points} PTS";
+        pointsText.text = $"{points} POINTS";
     }
 
     private string FindAddedLetterAsString(string a, string b)

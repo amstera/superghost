@@ -83,7 +83,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        if (rng.NextDouble() <= 0.4f)
+        if (rng.NextDouble() <= 0.5f)
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
@@ -161,7 +161,7 @@ public class WordDictionary
 
         double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)possibleWords.Count);
 
-        double challengeProbability = Math.Max(0, 0.8f - avgScore / maxCommonessThreshold);
+        double challengeProbability = Math.Max(0, 0.85f - avgScore / maxCommonessThreshold);
 
         return rng.NextDouble() < challengeProbability;
     }
