@@ -45,7 +45,7 @@ public class WordDictionary
     {
         word = word.ToLower();
         return words
-            .Where(w => w.Contains(word))
+            .Where(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase))
             .OrderBy(w => w.Length)
             .FirstOrDefault();
     }
@@ -53,16 +53,16 @@ public class WordDictionary
     public bool CanExtendWordToLeft(string word)
     {
         word = word.ToLower();
-        return words.Any(w => w.Contains(word) && w.IndexOf(word) > 0);
+        return words.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word) > 0);
     }
 
     public bool CanExtendWordToRight(string word)
     {
         word = word.ToLower();
-        return words.Any(w => w.Contains(word) && w.IndexOf(word) < w.Length - word.Length);
+        return words.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word) < w.Length - word.Length);
     }
 
-    public string FindNextWord(string substring)
+    public string FindNextWord(string substring, bool isLosing)
     {
         substring = substring.ToLower();
         if (substring.Length == 0)
@@ -93,7 +93,7 @@ public class WordDictionary
         List<string> oddLengthWords = new List<string>();
 
         // Pre-filter the words list to include only those that contain the substring
-        var filteredWords = words.Where(w => w.Contains(substring)).ToList();
+        var filteredWords = words.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
         foreach (var word in filteredWords)
         {
             if (Math.Abs(word.Length - substring.Length) % 2 == 0)
@@ -106,14 +106,15 @@ public class WordDictionary
             }
         }
 
-        // Prioritize words where the length difference is even
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, evenLengthWords);
-        if (!string.IsNullOrEmpty(foundWord))
-        {
-            return foundWord;
-        }
+        // Determine the priority order based on isLosing flag
+        var primaryList = isLosing ? evenLengthWords : oddLengthWords;
+        var secondaryList = isLosing ? oddLengthWords : evenLengthWords;
 
-        return FindWord(substring, lettersForStartWith, lettersForEndWith, oddLengthWords);
+        // Attempt to find a word in the primary list, then in the secondary if necessary
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList) ??
+                            FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList);
+
+        return foundWord;
     }
 
     public bool ShouldChallenge(string substring)
@@ -126,7 +127,7 @@ public class WordDictionary
         if (substring.Length < minSubstringLength) return false;
 
         // Filter words containing the substring
-        var possibleWords = words.Where(word => word.Contains(substring)).ToList();
+        var possibleWords = words.Where(word => word.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
         if (possibleWords.Count == 0) return true; // No possible words
 
         // Word Completion Percentage Check
@@ -168,15 +169,27 @@ public class WordDictionary
 
     private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> filteredWords)
     {
-        // First, try to find words that start with the substring in the filtered list
-        var startWithResult = TryExtensionsWithPriority(substring, lettersForStartWith, true, filteredWords);
+        bool prioritizeStart = ShouldPrioritizeStart(substring.Length);
+
+        // First, try to find words with the possible priorizitation
+        var startWithResult = TryExtensionsWithPriority(substring, lettersForStartWith, prioritizeStart, filteredWords);
         if (!string.IsNullOrEmpty(startWithResult))
         {
             return startWithResult;
         }
 
-        // If none found, fallback to trying words that end with the substring in the filtered list
-        return TryExtensionsWithPriority(substring, lettersForEndWith, false, filteredWords);
+        // If none found, fallback to the opposite prioritization
+        return TryExtensionsWithPriority(substring, lettersForEndWith, !prioritizeStart, filteredWords);
+    }
+
+    private bool ShouldPrioritizeStart(int substringLength)
+    {
+        // Always prioritize start if substring length is less than 3
+        if (substringLength <= 3) return true;
+
+        // Otherwise chance it will
+        Random random = new Random();
+        return random.NextDouble() <= 0.65;
     }
 
     private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> filteredWords)
@@ -188,7 +201,7 @@ public class WordDictionary
             foreach (var extension in extensions)
             {
                 var matchedWords = filteredWords.Where(w => (substring.Length < 3 || !IsWordReal(extension))
-                                                    && (prioritizeStart ? w.StartsWith(extension) : w.Contains(extension)));
+                                                    && (prioritizeStart ? w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase) : w.Contains(extension, StringComparison.InvariantCultureIgnoreCase)));
                 if (matchedWords.Any())
                 {
                     return extension;

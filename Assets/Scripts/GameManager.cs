@@ -8,7 +8,9 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public TextMeshProUGUI historyText, pointsText, warningText;
+    public PointsText pointsText;
+    public ChallengePopUp challengePopup;
+    public TextMeshProUGUI historyText, warningText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -150,19 +152,47 @@ public class GameManager : MonoBehaviour
     {
         if (wordDictionary.ShouldChallenge(gameWord))
         {
-            wordDisplay.text = $"You won!\nAI was <color=green>bluffing</color>!";
+            wordDisplay.text = $"You won!\nCasp was <color=green>bluffing</color>!";
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
-            UpdatePoints(gameWord);
+            UpdatePoints(gameWord, 2);
             isLastWordValid = false;
+            isPlayerTurn = true;
         }
         else
         {
             var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
-            wordDisplay.text = $"You lost!\nAI thought: <color=red>{thoughtWord}</color>";
+            wordDisplay.text = $"You lost!\nCasp thought: <color=red>{thoughtWord}</color>";
             playerLivesText.LoseLife();
+            UpdatePoints(gameWord, -2);
             isPlayerTurn = false;
+        }
+
+        EndGame();
+    }
+
+    public void HandleChallenge(string word)
+    {
+        previousWords.Add(gameWord);
+
+        gameWord = word;
+        if (wordDictionary.IsWordReal(word))
+        {
+            wordDisplay.text = $"You won!\n<color=green>{word.ToUpper()}</color> is a word!";
+            aiLivesText.LoseLife();
+            confettiPS.Play();
+            playerWon = true;
+            isPlayerTurn = true;
+            UpdatePoints(gameWord, 2);
+        }
+        else
+        {
+            wordDisplay.text = $"You lost!\n<color=red>{word.ToUpper()}</color> is not a word!";
+            playerLivesText.LoseLife();
+            isLastWordValid = false;
+            isPlayerTurn = false;
+            previousWords.Add(gameWord);
         }
 
         EndGame();
@@ -174,6 +204,7 @@ public class GameManager : MonoBehaviour
         {
             wordDisplay.text = $"You lost with:<color=red>\n{gameWord.ToUpper()}</color>";
             playerLivesText.LoseLife();
+            isPlayerTurn = false;
             EndGame();
         }
         else if (!gameEnded)
@@ -309,42 +340,42 @@ public class GameManager : MonoBehaviour
 
         if (wordDictionary.ShouldChallenge(gameWord))
         {
-            //challenge word
-            Debug.Log($"Challenged on: {gameWord}!");
-            yield return null;
-        }
-
-        var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord) : null;
-        if (word == null)
-        {
-            var foundWord = wordDictionary.FindWordContains(gameWord);
-            if (string.IsNullOrEmpty(foundWord))
-            {
-                var thoughtWord = wordDictionary.FindWordContains(previousWords.Last()).ToUpper();
-                wordDisplay.text = $"You lost!\nAI thought: {thoughtWord}";
-                playerLivesText.LoseLife();
-                isLastWordValid = false;
-            }
-            else
-            {
-                wordDisplay.text = $"You won with:\n<color=green>{foundWord.ToUpper()}</color>";
-                aiLivesText.LoseLife();
-                confettiPS.Play();
-                playerWon = true;
-                UpdatePoints(foundWord);
-            }
-            previousWords.Add(gameWord);
-            previousWords.Add(foundWord);
-            EndGame();
+            challengePopup.Show(gameWord);
         }
         else
         {
-            previousWords.Add(gameWord);
-            ghostAvatar.Show(FindAddedLetterAsString(word, gameWord));
-            gameWord = word;
-            isPlayerTurn = true;
-            UpdateWordDisplay(true);
-            SetIndicators(isPlayerTurn);
+            bool isLosing = playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
+            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing) : null;
+            if (word == null)
+            {
+                var foundWord = wordDictionary.FindWordContains(gameWord);
+                if (string.IsNullOrEmpty(foundWord))
+                {
+                    challengePopup.Show(gameWord);
+                }
+                else
+                {
+                    wordDisplay.text = $"You won with:\n<color=green>{foundWord.ToUpper()}</color>";
+                    aiLivesText.LoseLife();
+                    confettiPS.Play();
+                    playerWon = true;
+                    UpdatePoints(foundWord, 1);
+                    isPlayerTurn = true;
+
+                    previousWords.Add(gameWord);
+                    previousWords.Add(foundWord);
+                    EndGame();
+                }
+            }
+            else
+            {
+                previousWords.Add(gameWord);
+                ghostAvatar.Show(FindAddedLetterAsString(word, gameWord));
+                gameWord = word;
+                isPlayerTurn = true;
+                UpdateWordDisplay(true);
+                SetIndicators(isPlayerTurn);
+            }
         }
     }
 
@@ -364,10 +395,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdatePoints(string word)
+    private void UpdatePoints(string word, int bonus)
     {
-        points += word.Length;
-        pointsText.text = $"{points} POINTS";
+        pointsText.AddPoints(word.Length * bonus);
     }
 
     private string FindAddedLetterAsString(string a, string b)

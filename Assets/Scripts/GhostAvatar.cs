@@ -35,7 +35,7 @@ public class GhostAvatar : MonoBehaviour
 
     public void Hide()
     {
-        StartCoroutine(FadeCanvasGroup(0)); // Fade out
+        StartCoroutine(FadeCanvasGroup(0, 0.1f)); // Fade out
         isShowing = false;
     }
 
@@ -44,9 +44,8 @@ public class GhostAvatar : MonoBehaviour
         textMeshProUGUI.text = "...";
     }
 
-    IEnumerator FadeCanvasGroup(float targetAlpha)
+    IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.25f)
     {
-        float duration = 0.25f;
         float startAlpha = canvasGroup.alpha;
         float time = 0f;
 
