@@ -29,8 +29,11 @@ public class GhostAvatar : MonoBehaviour
     public void Show(string text)
     {
         textMeshProUGUI.text = text;
-        StartCoroutine(FadeCanvasGroup(1)); // Fade in
-        isShowing = true;
+        if (canvasGroup.alpha < 1 || !isShowing)
+        {
+            StartCoroutine(FadeCanvasGroup(1)); // Fade in
+            isShowing = true;
+        }
     }
 
     public void Hide()
@@ -42,6 +45,11 @@ public class GhostAvatar : MonoBehaviour
     public void Think()
     {
         textMeshProUGUI.text = "...";
+        if (canvasGroup.alpha < 1 || !isShowing)
+        {
+            StartCoroutine(FadeCanvasGroup(1)); // Fade in
+            isShowing = true;
+        }
     }
 
     IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.25f)

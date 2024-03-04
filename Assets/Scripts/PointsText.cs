@@ -23,6 +23,13 @@ public class PointsText : MonoBehaviour
         StartCoroutine(CountPoints(amount));
     }
 
+    public void Reset()
+    {
+        StopAllCoroutines();
+        points = 0;
+        UpdatePointsText(points);
+    }
+
     IEnumerator CountPoints(int amount)
     {
         int startPoints = points;
@@ -66,6 +73,13 @@ public class PointsText : MonoBehaviour
 
     void UpdatePointsText(int currentPoints)
     {
-        pointsText.text = $"{currentPoints} POINTS";
+        if (currentPoints == 1)
+        {
+            pointsText.text = "1 POINT";
+        }
+        else
+        {
+            pointsText.text = $"{currentPoints} POINTS";
+        }
     }
 }

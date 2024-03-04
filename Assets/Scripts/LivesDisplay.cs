@@ -109,4 +109,10 @@ public class LivesDisplay : MonoBehaviour
     {
         return livesString.Length - currentLifeIndex;
     }
+
+    public void ResetLives()
+    {
+        currentLifeIndex = 0;
+        UpdateLivesDisplay();
+    }
 }

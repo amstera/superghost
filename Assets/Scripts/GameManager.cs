@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
     private bool gameEnded = false;
+    private bool gameOver = false;
     private bool wordsRemaining = true;
     private bool isLastWordValid = true;
     private bool playerWon;
@@ -87,6 +88,17 @@ public class GameManager : MonoBehaviour
     {
         nextRoundButton.SetActive(false);
 
+        if (gameOver)
+        {
+            isPlayerTurn = true;
+            playerLivesText.ResetLives();
+            aiLivesText.ResetLives();
+            pointsText.Reset();
+            nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
+
+            gameOver = false;
+        }
+
         wordDisplay.text = "_";
         historyText.text = "";
         gameWord = "";
@@ -105,6 +117,7 @@ public class GameManager : MonoBehaviour
 
         if (!isPlayerTurn)
         {
+            ghostAvatar.Think();
             StartCoroutine(ProcessComputerTurn());
         }
     }
@@ -152,18 +165,19 @@ public class GameManager : MonoBehaviour
     {
         if (wordDictionary.ShouldChallenge(gameWord))
         {
-            wordDisplay.text = $"You won!\nCasp was <color=green>bluffing</color>!";
+            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>!";
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
             UpdatePoints(gameWord, 2);
             isLastWordValid = false;
             isPlayerTurn = true;
+            previousWords.Add(gameWord);
         }
         else
         {
             var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
-            wordDisplay.text = $"You lost!\nCasp thought: <color=red>{thoughtWord}</color>";
+            wordDisplay.text = $"You lost!\nCASP thought: <color=red>{thoughtWord}</color>";
             playerLivesText.LoseLife();
             UpdatePoints(gameWord, -2);
             isPlayerTurn = false;
@@ -290,14 +304,12 @@ public class GameManager : MonoBehaviour
         ShowHistory();
         ghostAvatar.Hide();
         challengeButton.SetActive(false);
+        nextRoundButton.SetActive(true);
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
-            //todo: game over, show final winner
-        }
-        else
-        {
-            nextRoundButton.SetActive(true);
+            nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
+            gameOver = true;
         }
     }
 

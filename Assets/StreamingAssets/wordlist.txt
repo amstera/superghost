@@ -1,4 +1,3 @@
-igloos
 aardvark
 aardvarks
 abandon	
@@ -658,7 +657,8 @@ amendments
 amends	
 amenities	
 amenity		
-amethyst		
+amethyst
+amicable		
 amid	
 amidst	
 amino		
@@ -860,7 +860,7 @@ apocalypse
 apologies	
 apologize	
 apology	
-apoptosis	
+apostrophe	
 apostle	
 apostles		
 apostolic	
@@ -2873,6 +2873,7 @@ chairs
 chalet		
 chalets	
 chalk	
+challah
 challenge		
 challenged		
 challenger	
@@ -3086,8 +3087,7 @@ chorus
 chose	
 chosen	
 chow	
-christening	
-christian	
+christening		
 chromatin		
 chromatography	
 chrome	
@@ -5481,7 +5481,10 @@ disturbance
 disturbances	
 disturbed	
 disturbing	
-ditch	
+ditch
+ditched
+ditches
+ditching	
 ditto	
 diva	
 divas	
@@ -5536,7 +5539,9 @@ documented
 documenting		
 documents	
 dodge	
-dodgers	
+dodged
+dodging
+dodges
 dodo
 does	
 dogma		
@@ -5991,7 +5996,11 @@ elliptical
 elongated	
 elongation		
 else	
-elsewhere	
+elsewhere
+elude
+eluded
+eluding
+eludes	
 elusive	
 elves	
 email	
@@ -6398,7 +6407,11 @@ euro
 euros	
 euthanasia	
 evacuated	
-evacuation	
+evacuation
+evade
+evaded
+evades
+evading	
 evaluate	
 evaluated	
 evaluates	
@@ -8800,6 +8813,7 @@ idol
 idolize
 idols	
 igloo
+igloos
 ignite	
 ignition	
 ignorance	
@@ -11533,8 +11547,7 @@ nations
 nationwide	
 native	
 natives		
-nativity	
-natl	
+nativity		
 natural	
 naturalist	
 naturalization	
@@ -11545,6 +11558,8 @@ natures
 naturist		
 naughty	
 nausea	
+nauseous
+nauseating
 nautical	
 nautilus		
 naval	
@@ -12806,7 +12821,6 @@ petty
 pewter	
 phantom	
 pharaoh	
-pharma	
 pharmaceutical	
 pharmaceuticals	
 pharmacies	
@@ -12817,8 +12831,7 @@ pharmacology
 pharmacy	
 phase	
 phased	
-phases	
-phat	
+phases		
 pheasant		
 phenomena	
 phenomenal	
@@ -12836,13 +12849,13 @@ phishing
 phobia	
 phoenix	
 phone	
-phonebook	
+phonebook
+phonebooks	
 phones	
 phonics		
 phosphate		
 phosphorus	
 phosphorylation	
-photo	
 photocopy	
 photocopying	
 photograph	
@@ -13097,7 +13110,8 @@ plum
 plumber	
 plumbers		
 plumbing	
-plume		
+plume	
+plumes	
 plump	
 plums	
 plunge		
@@ -13123,7 +13137,8 @@ poet
 poetic	
 poetry	
 poets		
-poignant	
+poignant
+poignancy	
 point	
 pointed	
 pointer	
@@ -13133,12 +13148,17 @@ pointless
 points	
 poised	
 poison	
-poisoned	
+poisons
+poisoned
+poisoner
+poisoners	
 poisoning	
 poisonous	
-poke	
+poke
+poked
+poking
+pokes	
 poker	
-poland	
 polar	
 polarity	
 polarization	
@@ -13154,6 +13174,7 @@ policy
 policymakers		
 polio	
 polish	
+polishes
 polished	
 polishing	
 polite	
@@ -13937,7 +13958,10 @@ puzzle
 puzzled	
 puzzles	
 pyramid	
-pyramids	
+pyramids
+pyrotechnics
+pyromania
+pyromaniac
 python	
 quad	
 quadrangle		
@@ -14542,6 +14566,7 @@ relatives
 relativistic	
 relativity	
 relax	
+relaxes
 relaxation	
 relaxed	
 relaxing		
@@ -16009,6 +16034,7 @@ sidebar
 sided	
 sidekick	
 sides	
+sidestep
 sidewalk		
 sidewalks	
 sideways	
@@ -16614,6 +16640,7 @@ spies
 spike	
 spiked	
 spikes	
+spiking
 spill	
 spilled		
 spills	
@@ -18603,6 +18630,7 @@ unauthorized
 unauthorized	
 unavailable
 unavoidable	
+unavoided
 unaware	
 unbalance	
 unbalanced
@@ -19016,6 +19044,7 @@ vending
 vendor	
 vendors		
 veneer	
+veneers
 venerable		
 vengeance		
 venom	
@@ -19429,7 +19458,9 @@ websites
 wedding	
 weddings	
 wedge	
-wedges	
+wedges
+wedger	
+wedging
 wednesday	
 weed	
 weeds	
