@@ -683,13 +683,14 @@ amplifiers
 amplitude	
 amps		
 amulet	
+amulets
 amused	
+amuses
 amusement	
 amusing	
 anaconda
 anaerobic	
 anal	
-analog	
 analog	
 analogous	
 analogs	
@@ -1455,8 +1456,7 @@ baking
 balance	
 balanced	
 balances	
-balancing	
-balboa		
+balancing		
 balconies	
 balcony	
 bald			
@@ -2996,6 +2996,7 @@ cheesecake
 cheeses		
 cheesy	
 cheetah	
+cheetahs
 chef	
 chefs	
 chem	
@@ -3735,7 +3736,12 @@ concludes
 concluding		
 conclusion	
 conclusions	
-conclusive	
+conclusive
+concoct
+concocts
+concocting
+concocted
+concoction	
 concord	
 concordance		
 concrete	
@@ -6820,6 +6826,8 @@ farmland
 farms					
 fart	
 farther	
+fascinate
+fascinates
 fascinated	
 fascinating	
 fascination	
@@ -7271,6 +7279,7 @@ fool
 fooled		
 foolish	
 fools	
+fooling
 foot	
 footage		
 football	
@@ -7529,7 +7538,10 @@ full
 fuller	
 fullest	
 fully	
+fume
 fumes	
+fuming
+fumed
 function	
 functional	
 functionality	
@@ -8647,6 +8659,7 @@ hose
 hoses	
 hosiery	
 hospice	
+hospitable
 hospital	
 hospitality	
 hospitalization	
@@ -9543,6 +9556,7 @@ investments
 investor	
 investors	
 invests	
+invincible
 invisible	
 invitation	
 invitational	
@@ -10131,7 +10145,8 @@ lengths
 lengthy	
 lens	
 lenses			
-leopard		
+leopard
+leopards		
 lesbian	
 lesbian	
 lesbians	
@@ -10252,8 +10267,6 @@ limitations
 limited	
 limiting	
 limits	
-limo	
-limos	
 limousine		
 limousines	
 limp		
@@ -10380,6 +10393,7 @@ locomotive
 locomotives	
 locus	
 locust	
+locusts
 lodge	
 lodged	
 lodges	
@@ -11622,8 +11636,8 @@ neighboring
 neighbors	
 neighbors		
 neither	
-nelson	
 nemesis	
+nemeses
 neon	
 neonatal	
 neoplasm	
@@ -12866,8 +12880,7 @@ photographic
 photographs	
 photography	
 photon		
-photons	
-photos	
+photons		
 phrase	
 phrases			
 physical	
@@ -12899,6 +12912,7 @@ pickups
 picnic		
 pictorial	
 picture	
+picturing
 pictured	
 pictures	
 picturesque	
@@ -13075,7 +13089,9 @@ pleading
 pleads	
 pleas	
 pleasant	
-pleasantly		
+pleasantly
+pleasantry
+pleasantries		
 please	
 pleased	
 pleasing	
@@ -14112,6 +14128,8 @@ raise
 raised	
 raiser		
 raises	
+raisin
+raisins
 raising	
 rake		
 rallies	
@@ -16313,11 +16331,10 @@ smith
 smiths	
 smog	
 smoke	
-smoked	
+smoked
 smoker	
 smokers	
-smokes	
-smokey	
+smokes		
 smoking	
 smoky	
 smooth	
@@ -16413,6 +16430,7 @@ soldiers
 sole	
 solely	
 solemn	
+solemnly
 solicit	
 solicitation	
 solicitations	
@@ -16513,8 +16531,7 @@ southwestern
 souvenir	
 souvenirs	
 sovereign	
-sovereignty	
-soviet	
+sovereignty		
 soybean	
 soybeans	
 space	
@@ -17374,8 +17391,10 @@ sure
 surely	
 surf	
 surface	
-surfaced	
-surfaces	
+surfaced
+surfacing	
+surfaces
+surfed	
 surfer	
 surfers	
 surfing	
@@ -18515,8 +18534,7 @@ tufts
 tuition	
 tulip	
 tulips	
-tumble	
-tummy	
+tumble		
 tumor	
 tumor		
 tumors	
@@ -18666,7 +18684,8 @@ uncut
 undated	
 undead	
 undecided	
-undeclared		
+undeclared
+undefeated		
 undefined	
 under	
 underage	

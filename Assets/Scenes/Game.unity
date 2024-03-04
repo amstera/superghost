@@ -1145,6 +1145,7 @@ MonoBehaviour:
   gameManager: {fileID: 1816581304}
   buttonPrefab: {fileID: 8754176642836540052, guid: 6f7a2e7309a0a4c57b7193a4d64b7e90, type: 3}
   keyboardParent: {fileID: 455116504}
+  warningText: {fileID: 634552302}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1428,7 +1429,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tap which side to add letter
+  m_text: Tap on left or right side to add a letter
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -1438,7 +1439,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.89411765, g: 0.38039216, b: 0.039215688, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3792,7 +3793,6 @@ MonoBehaviour:
   pointsText: {fileID: 1272834223}
   challengePopup: {fileID: 392023647}
   historyText: {fileID: 1039797310}
-  warningText: {fileID: 634552302}
   confettiPS: {fileID: 184563833}
   playerLivesText: {fileID: 725569720}
   aiLivesText: {fileID: 1820997864}
@@ -3802,6 +3802,7 @@ MonoBehaviour:
   challengeButton: {fileID: 1389336106}
   keyboard: {fileID: 455116505}
   ghostAvatar: {fileID: 1444670330}
+  selectedPosition: 0
   isPlayerTurn: 1
   points: 0
 --- !u!4 &1816581305

@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -10,13 +9,15 @@ public class GameManager : MonoBehaviour
     public TextClickHandler wordDisplay;
     public PointsText pointsText;
     public ChallengePopUp challengePopup;
-    public TextMeshProUGUI historyText, warningText;
+    public TextMeshProUGUI historyText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
     public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
+    public TextPosition selectedPosition = TextPosition.None;
+
     public bool isPlayerTurn = true;
     public int points;
 
@@ -29,7 +30,6 @@ public class GameManager : MonoBehaviour
     private bool playerWon;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
-    private TextPosition selectedPosition = TextPosition.None;
 
     IEnumerator LoadWordDictionary()
     {
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
             gameOver = false;
         }
 
-        wordDisplay.text = "_";
+        wordDisplay.text = isPlayerTurn ? "<color=yellow>_</color>" : "_";
         historyText.text = "";
         gameWord = "";
         selectedPosition = TextPosition.None;
@@ -110,8 +110,7 @@ public class GameManager : MonoBehaviour
         isLastWordValid = true;
         playerWon = false;
 
-        warningText.gameObject.SetActive(false);
-        keyboard.gameObject.SetActive(true);
+        keyboard.Show();
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
 
@@ -282,16 +281,8 @@ public class GameManager : MonoBehaviour
 
         wordDisplay.text = displayText;
 
-        if (selectedPosition == TextPosition.None)
+        if (selectedPosition != TextPosition.None)
         {
-            if (isPlayerTurn)
-            {
-                warningText.gameObject.SetActive(true);
-            }
-        }
-        else
-        {
-            warningText.gameObject.SetActive(false);
             keyboard.EnableAllButtons();
         }
     }
@@ -299,7 +290,7 @@ public class GameManager : MonoBehaviour
     private void EndGame()
     {
         gameEnded = true;
-        keyboard.gameObject.SetActive(false);
+        keyboard.Hide();
 
         ShowHistory();
         ghostAvatar.Hide();
@@ -309,6 +300,10 @@ public class GameManager : MonoBehaviour
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
+            if (playerLivesText.IsGameOver())
+            {
+                pointsText.Reset();
+            }
             gameOver = true;
         }
     }

@@ -9,6 +9,7 @@ public class VirtualKeyboard : MonoBehaviour
     public GameManager gameManager;
     public GameObject buttonPrefab;
     public Transform keyboardParent;
+    public TextMeshProUGUI warningText;
 
     private string[] rows = new string[]
     {
@@ -17,7 +18,8 @@ public class VirtualKeyboard : MonoBehaviour
         "ZXCVBNM"
     };
 
-    private List<Button> allButtons = new List<Button>(); // Store all buttons for easy access
+    private List<Button> allButtons = new List<Button>();
+    private bool buttonsDisabled = false;
 
     void Start()
     {
@@ -75,6 +77,16 @@ public class VirtualKeyboard : MonoBehaviour
 
     public void ButtonClicked(char letter, Button btn)
     {
+        if (buttonsDisabled)
+        {
+            StartCoroutine(ShakeAnimation(btn.gameObject));
+            if (gameManager.selectedPosition == GameManager.TextPosition.None)
+            {
+                warningText.gameObject.SetActive(true);
+            }
+            return;
+        }
+
         StartCoroutine(PopAnimation(btn.gameObject));
         gameManager.ProcessTurn(letter);
     }
@@ -83,20 +95,46 @@ public class VirtualKeyboard : MonoBehaviour
     {
         foreach (Button btn in allButtons)
         {
-            btn.interactable = false;
+            var colors = btn.colors;
+            colors.normalColor = colors.disabledColor;
+            colors.pressedColor = colors.disabledColor;
+            colors.selectedColor = colors.disabledColor;
+            btn.colors = colors;
+
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
         }
+        buttonsDisabled = true;
     }
 
     public void EnableAllButtons()
     {
+        warningText.gameObject.SetActive(false);
+
         foreach (Button btn in allButtons)
         {
-            btn.interactable = true;
+            var colors = btn.colors;
+            colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.g, colors.normalColor.b, 1f);
+            colors.pressedColor = colors.normalColor;
+            colors.selectedColor = colors.normalColor;
+            btn.colors = colors;
+
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 1f);
         }
+        buttonsDisabled = false;
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        warningText.gameObject.SetActive(false);
+
+        gameObject.SetActive(false);
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
@@ -124,4 +162,21 @@ public class VirtualKeyboard : MonoBehaviour
         }
     }
 
+    IEnumerator ShakeAnimation(GameObject btnGameObject)
+    {
+        var originalPosition = btnGameObject.transform.localPosition;
+        float duration = 0.5f;
+        float magnitude = 10f;
+
+        for (float elapsed = 0; elapsed < duration; elapsed += Time.deltaTime)
+        {
+            float x = originalPosition.x + Random.Range(-1f, 1f) * magnitude;
+            float y = originalPosition.y + Random.Range(-1f, 1f) * magnitude;
+
+            btnGameObject.transform.localPosition = new Vector3(x, y, originalPosition.z);
+            yield return null; // Wait for the next frame before continuing the loop
+        }
+
+        btnGameObject.transform.localPosition = originalPosition; // Reset to original position
+    }
 }
