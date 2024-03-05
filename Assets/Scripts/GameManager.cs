@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     public GhostAvatar ghostAvatar;
     public TextPosition selectedPosition = TextPosition.None;
 
+    public AudioClip winSound, loseSound;
+    public AudioSource clickAudioSource;
+    public AudioSource gameStatusAudioSource;
+
     public bool isPlayerTurn = true;
     public int points;
 
@@ -86,11 +90,12 @@ public class GameManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        clickAudioSource?.Play();
+
         nextRoundButton.SetActive(false);
 
         if (gameOver)
         {
-            isPlayerTurn = true;
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
             pointsText.Reset();
@@ -123,10 +128,12 @@ public class GameManager : MonoBehaviour
 
     public void SelectPosition(TextPosition position)
     {
-        if (gameWord.Length == 0 || gameEnded)
+        if (gameWord.Length == 0 || gameEnded || selectedPosition == position)
         {
             return;
         }
+
+        clickAudioSource?.Play();
 
         selectedPosition = position;
         UpdateWordDisplay(true);
@@ -162,6 +169,8 @@ public class GameManager : MonoBehaviour
 
     public void ChallengeWord()
     {
+        clickAudioSource?.Play();
+
         if (wordDictionary.ShouldChallenge(gameWord))
         {
             wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>!";
@@ -170,7 +179,7 @@ public class GameManager : MonoBehaviour
             playerWon = true;
             UpdatePoints(gameWord, 2);
             isLastWordValid = false;
-            isPlayerTurn = true;
+            isPlayerTurn = false;
             previousWords.Add(gameWord);
         }
         else
@@ -179,7 +188,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.text = $"You lost!\nCASP thought: <color=red>{thoughtWord}</color>";
             playerLivesText.LoseLife();
             UpdatePoints(gameWord, -2);
-            isPlayerTurn = false;
+            isPlayerTurn = true;
         }
 
         EndGame();
@@ -187,6 +196,8 @@ public class GameManager : MonoBehaviour
 
     public void HandleChallenge(string word)
     {
+        clickAudioSource?.Play();
+
         previousWords.Add(gameWord);
 
         gameWord = word;
@@ -196,7 +207,7 @@ public class GameManager : MonoBehaviour
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
-            isPlayerTurn = true;
+            isPlayerTurn = false;
             UpdatePoints(gameWord, 2);
         }
         else
@@ -204,7 +215,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.text = $"You lost!\n<color=red>{word.ToUpper()}</color> is not a word!";
             playerLivesText.LoseLife();
             isLastWordValid = false;
-            isPlayerTurn = false;
+            isPlayerTurn = true;
             previousWords.Add(gameWord);
         }
 
@@ -217,7 +228,7 @@ public class GameManager : MonoBehaviour
         {
             wordDisplay.text = $"You lost with:<color=red>\n{gameWord.ToUpper()}</color>";
             playerLivesText.LoseLife();
-            isPlayerTurn = false;
+            isPlayerTurn = true;
             EndGame();
         }
         else if (!gameEnded)
@@ -297,6 +308,16 @@ public class GameManager : MonoBehaviour
         challengeButton.SetActive(false);
         nextRoundButton.SetActive(true);
 
+        if (playerWon)
+        {
+            gameStatusAudioSource.clip = winSound;
+        }
+        else
+        {
+            gameStatusAudioSource.clip = loseSound;
+        }
+        gameStatusAudioSource.Play();
+
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
@@ -367,7 +388,7 @@ public class GameManager : MonoBehaviour
                     confettiPS.Play();
                     playerWon = true;
                     UpdatePoints(foundWord, 1);
-                    isPlayerTurn = true;
+                    isPlayerTurn = false;
 
                     previousWords.Add(gameWord);
                     previousWords.Add(foundWord);

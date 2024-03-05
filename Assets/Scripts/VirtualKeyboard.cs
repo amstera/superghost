@@ -11,6 +11,8 @@ public class VirtualKeyboard : MonoBehaviour
     public Transform keyboardParent;
     public TextMeshProUGUI warningText;
 
+    public AudioClip keyAudioClip;
+
     private string[] rows = new string[]
     {
         "QWERTYUIOP",
@@ -87,6 +89,7 @@ public class VirtualKeyboard : MonoBehaviour
             return;
         }
 
+        AudioSource.PlayClipAtPoint(keyAudioClip, Vector3.zero, 1);
         StartCoroutine(PopAnimation(btn.gameObject));
         gameManager.ProcessTurn(letter);
     }
