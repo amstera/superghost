@@ -144,11 +144,11 @@ public class VirtualKeyboard : MonoBehaviour
 
     IEnumerator PopAnimation(GameObject btnGameObject)
     {
-        Vector3 targetScale = originalScale * 1.1f;
+        Vector3 targetScale = originalScale * 1.5f;
 
         // Scale up
         float currentTime = 0f;
-        float duration = 0.1f;
+        float duration = 0.15f;
         while (currentTime < duration)
         {
             btnGameObject.transform.localScale = Vector3.Lerp(originalScale, targetScale, currentTime / duration);
