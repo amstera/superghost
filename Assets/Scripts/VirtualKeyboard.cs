@@ -22,17 +22,19 @@ public class VirtualKeyboard : MonoBehaviour
 
     private List<Button> allButtons = new List<Button>();
     private bool buttonsDisabled = false;
+    private Vector3 originalScale;
 
     void Start()
     {
         GenerateKeyboard();
+        originalScale = allButtons[0].transform.localScale;
     }
 
     void GenerateKeyboard()
     {
-        float padding = 5f; 
+        float padding = 4f; 
         float parentWidth = keyboardParent.GetComponent<RectTransform>().rect.width - (padding * 2);
-        float spacing = 7.5f;
+        float spacing = 5f;
 
         // Find the longest row to base centering calculations on
         int maxRowLength = 0;
@@ -46,7 +48,7 @@ public class VirtualKeyboard : MonoBehaviour
 
         // Calculate the button width based on the longest row and the available parent width
         float buttonWidth = (parentWidth - (maxRowLength - 1) * spacing) / maxRowLength;
-        float buttonHeight = 60f; // Adjust the button height as needed
+        float buttonHeight = 65f; // Adjust the button height as needed
 
         for (int i = 0; i < rows.Length; i++)
         {
@@ -142,7 +144,6 @@ public class VirtualKeyboard : MonoBehaviour
 
     IEnumerator PopAnimation(GameObject btnGameObject)
     {
-        Vector3 originalScale = btnGameObject.transform.localScale;
         Vector3 targetScale = originalScale * 1.1f;
 
         // Scale up

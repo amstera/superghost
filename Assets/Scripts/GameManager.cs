@@ -80,8 +80,6 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        keyboard.DisableAllButtons();
-
         yield return StartCoroutine(LoadWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
 

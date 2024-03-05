@@ -5805,8 +5805,7 @@ duration
 during	
 dusk		
 dust	
-dusty	
-dutch	
+dusty		
 duties	
 duty	
 duvet	
@@ -10996,7 +10995,11 @@ memorable
 memorandum	
 memorial	
 memorials		
-memories	
+memories
+memorize
+memorized
+memorizing
+memorizes	
 memory	
 memos	
 menace	
@@ -12497,7 +12500,8 @@ papers
 paperwork	
 para	
 parable	
-parachute	
+parachute
+parachutes	
 parade	
 paradigm		
 paradigms	
@@ -18255,7 +18259,8 @@ torn
 tornado	
 torpedo	
 torque	
-torrent		
+torrent	
+torrential	
 torrents	
 torsion	
 torso	
