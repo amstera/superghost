@@ -57,7 +57,7 @@ public class GhostAvatar : MonoBehaviour
         }
     }
 
-    IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.25f)
+    IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.5f)
     {
         float startAlpha = canvasGroup.alpha;
         float time = 0f;

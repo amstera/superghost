@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public TextClickHandler wordDisplay;
     public PointsText pointsText;
     public ChallengePopUp challengePopup;
-    public TextMeshProUGUI historyText, playerText, aiText;
+    public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -109,8 +109,14 @@ public class GameManager : MonoBehaviour
             aiLivesText.ResetLives();
             pointsText.Reset();
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
+            endGameText.gameObject.SetActive(false);
 
             gameOver = false;
+        }
+
+        if (isPlayerTurn)
+        {
+            startText.gameObject.SetActive(true);
         }
 
         wordDisplay.text = isPlayerTurn ? "<color=yellow>_</color>" : "_";
@@ -174,6 +180,11 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Think();
         UpdateWordDisplay(false, newIndex);
         SetIndicators(isPlayerTurn);
+
+        if (startText.gameObject.activeSelf)
+        {
+            startText.gameObject.SetActive(false);
+        }
 
         CheckGameStatus();
     }
@@ -348,10 +359,21 @@ public class GameManager : MonoBehaviour
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
-            if (playerLivesText.IsGameOver())
+            endGameText.gameObject.SetActive(true);
+
+            if (playerWon)
             {
+                endGameText.text = "Victory!";
+                endGameText.color = Color.green;
+            }
+            else
+            {
+                endGameText.text = "Defeat!";
+                endGameText.color = Color.red;
                 pointsText.Reset();
             }
+
+
             gameOver = true;
         }
     }

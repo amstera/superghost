@@ -286,6 +286,10 @@ adjustment
 adjustments	
 adjusts	
 admin	
+joust
+jousting
+jousted
+jousts
 administer	
 administered	
 administering	
@@ -685,6 +689,7 @@ amplifier
 amplifiers	
 amplitude	
 amps		
+amuck
 amulet	
 amulets
 amused	
@@ -765,8 +770,10 @@ ankle
 ankles	
 annals	
 annex	
+annexes
 annexation	
 annexed
+annexing
 anniversaries		
 anniversary	
 annotate	
@@ -1226,7 +1233,8 @@ atoms
 atop	
 atrial	
 atrium	
-atrocities		
+atrocities	
+atrocity	
 attach	
 attached	
 attaches	
@@ -1496,6 +1504,8 @@ bamboo
 banana	
 bananas	
 band	
+bandana
+bandanas
 banded	
 bandit		
 bandits	
@@ -1508,6 +1518,7 @@ bangle
 bangles	
 bangs	
 banjo	
+banjos
 bank	
 banked	
 banker	
@@ -2007,6 +2018,7 @@ boats
 bobble	
 bobby	
 bobcats	
+bodacious
 bodied	
 bodies	
 bodily	
@@ -4349,6 +4361,7 @@ cramps
 cranberry	
 crane	
 cranes	
+cranium
 crank	
 crap	
 crappy	
@@ -5948,9 +5961,15 @@ eighth
 eighties	
 eighty	
 either	
+ejaculate
+ejaculated
+ejaculates
 ejaculating	
 ejaculation	
 eject	
+ejected
+ejecting
+ejects
 elaborate	
 elaborated		
 elaboration	
@@ -6025,6 +6044,7 @@ elite
 elites	
 elixir	
 ellipse	
+ellipses
 elliptic	
 elliptical	
 elongated	
@@ -6882,6 +6902,7 @@ fasteners
 fastening	
 faster	
 fastest	
+fastidious
 fasting	
 fatal	
 fatalities	
@@ -9822,8 +9843,7 @@ juniper
 junk	
 junkie	
 junkies		
-jupiter	
-jurassic	
+jupiter		
 juries
 jurisdiction	
 jurisdictional	
@@ -10992,6 +11012,8 @@ melee
 mellow		
 melodic	
 melodies	
+melodrama
+melodramatic
 melody	
 melon	
 melon	
@@ -12354,6 +12376,10 @@ outsource
 outsourced	
 outsourcing	
 outstanding	
+oust
+ousted
+ousting
+ousts
 outta	
 outward	
 outweigh	
@@ -12533,8 +12559,11 @@ paperwork
 para	
 parable	
 parachute
+parachuted
 parachutes	
+parachuting
 parade	
+parades
 paradigm		
 paradigms	
 paradise	
@@ -12544,10 +12573,12 @@ paragraph
 paragraphs	
 paraguay	
 paralegal	
+paralegals
 parallel	
 parallels		
 paralysis	
 paramedic	
+paramedics
 parameter	
 parameters	
 parametric	
@@ -12781,6 +12812,7 @@ pendants
 pending	
 pendulum	
 penetrate	
+penetrates
 penetrated		
 penetrating	
 penetration	
@@ -14855,7 +14887,8 @@ repellent
 repent		
 repentance	
 repertoire	
-repetition	
+repetition
+repetitions	
 repetitive	
 replace	
 replaced	
@@ -15823,6 +15856,8 @@ segregation
 seismic	
 seize	
 seized	
+seizing
+seizes
 seizure	
 seizures	
 seldom		
@@ -16914,6 +16949,7 @@ squire
 squirm
 squirmed
 squirming		
+squirms
 squirrel	
 squirrels		
 squirt	
@@ -17344,6 +17380,7 @@ subsection
 subsections		
 subsequent	
 subsequently	
+subservient
 subset		
 subsets	
 subsidiaries	
@@ -18315,7 +18352,15 @@ topped
 topper		
 toppers	
 topping	
-topples		
+topples	
+topple
+toppling
+toppled
+usurp
+usurper
+usurps
+usurping
+usurped	
 tops	
 torah	
 torch	
@@ -18948,6 +18993,7 @@ universe
 universities	
 university	
 unjust	
+unkempt
 unknown	
 unlawful	
 unleaded	
@@ -19781,6 +19827,10 @@ widths
 wiener	
 wife	
 wifi	
+wiggle
+wiggled
+wiggles
+wiggling
 wight	
 wigs	
 wiki	
