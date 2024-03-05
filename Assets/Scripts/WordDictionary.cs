@@ -4,7 +4,8 @@ using System.Linq;
 
 public class WordDictionary
 {
-    private HashSet<string> words = new HashSet<string>();
+    private HashSet<string> words = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private HashSet<string> lostChallengeSubstring = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> commonWords = new Dictionary<string, int>();
     private Random rng = new Random();
 
@@ -60,6 +61,11 @@ public class WordDictionary
     {
         word = word.ToLower();
         return words.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word) < w.Length - word.Length);
+    }
+
+    public void AddLostChallengeWord(string word)
+    {
+        lostChallengeSubstring.Add(word);
     }
 
     public string FindNextWord(string substring, bool isLosing)
@@ -125,6 +131,8 @@ public class WordDictionary
 
         int minSubstringLength = 3;
         if (substring.Length < minSubstringLength) return false;
+
+        if (lostChallengeSubstring.Contains(substring)) return false;
 
         // Filter words containing the substring
         var possibleWords = words.Where(word => word.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();

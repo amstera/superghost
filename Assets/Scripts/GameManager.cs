@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public TextClickHandler wordDisplay;
     public PointsText pointsText;
     public ChallengePopUp challengePopup;
-    public TextMeshProUGUI historyText;
+    public TextMeshProUGUI historyText, playerText, aiText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -86,10 +86,21 @@ public class GameManager : MonoBehaviour
         StartNewGame();
     }
 
-    public void StartNewGame()
+    public void NewGamePressed()
+    {
+        StartCoroutine(NewGame());
+    }
+
+    private IEnumerator NewGame()
     {
         clickAudioSource?.Play();
 
+        yield return new WaitForSeconds(0.15f);
+        StartNewGame();
+    }
+
+    private void StartNewGame()
+    {
         nextRoundButton.SetActive(false);
 
         if (gameOver)
@@ -134,12 +145,13 @@ public class GameManager : MonoBehaviour
         clickAudioSource?.Play();
 
         selectedPosition = position;
-        UpdateWordDisplay(true);
+        UpdateWordDisplay(true, 0);
     }
 
     public void ProcessTurn(char character)
     {
         previousWords.Add(gameWord);
+        int newIndex = 0;
         switch (selectedPosition)
         {
             case TextPosition.Left:
@@ -147,6 +159,7 @@ public class GameManager : MonoBehaviour
                 break;
             case TextPosition.Right:
                 gameWord += character;
+                newIndex = gameWord.Length - 1;
                 break;
             case TextPosition.None:
                 if (gameWord.Length == 0)
@@ -159,7 +172,7 @@ public class GameManager : MonoBehaviour
 
         isPlayerTurn = false;
         ghostAvatar.Think();
-        UpdateWordDisplay(false);
+        UpdateWordDisplay(false, newIndex);
         SetIndicators(isPlayerTurn);
 
         CheckGameStatus();
@@ -168,6 +181,13 @@ public class GameManager : MonoBehaviour
     public void ChallengeWord()
     {
         clickAudioSource?.Play();
+
+        StartCoroutine(ProcessChallengeWord());
+    }
+
+    private IEnumerator ProcessChallengeWord()
+    {
+        yield return new WaitForSeconds(0.15f);
 
         if (wordDictionary.ShouldChallenge(gameWord))
         {
@@ -184,6 +204,7 @@ public class GameManager : MonoBehaviour
         {
             var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
             wordDisplay.text = $"You lost!\nCASP thought: <color=red>{thoughtWord}</color>";
+            wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(gameWord, -2);
             isPlayerTurn = true;
@@ -197,6 +218,7 @@ public class GameManager : MonoBehaviour
         clickAudioSource?.Play();
 
         previousWords.Add(gameWord);
+        var originalWord = gameWord;
 
         gameWord = word;
         if (wordDictionary.IsWordReal(word))
@@ -206,6 +228,7 @@ public class GameManager : MonoBehaviour
             confettiPS.Play();
             playerWon = true;
             isPlayerTurn = false;
+            wordDictionary.AddLostChallengeWord(originalWord);
             UpdatePoints(gameWord, 2);
         }
         else
@@ -235,7 +258,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateWordDisplay(bool updateColor)
+    private void UpdateWordDisplay(bool updateColor, int newWordIndex)
     {
         string displayText = gameWord.ToUpper();
         string underscore = updateColor ? "<color=yellow>_</color>" : "_";
@@ -254,6 +277,7 @@ public class GameManager : MonoBehaviour
             {
                 displayText = "_" + displayText;
             }
+            newWordIndex++;
             wordsRemaining = true;
         }
         else
@@ -281,6 +305,7 @@ public class GameManager : MonoBehaviour
             {
                 selectedPosition = TextPosition.Left;
                 displayText = underscore + gameWord.ToUpper();
+                newWordIndex++;
             }
             else
             {
@@ -289,6 +314,10 @@ public class GameManager : MonoBehaviour
         }
 
         wordDisplay.text = displayText;
+        if (!gameEnded && (!updateColor || !isPlayerTurn))
+        {
+            wordDisplay.HighlightNewLetterAtIndex(newWordIndex);
+        }
 
         if (selectedPosition != TextPosition.None)
         {
@@ -396,10 +425,11 @@ public class GameManager : MonoBehaviour
             else
             {
                 previousWords.Add(gameWord);
-                ghostAvatar.Show(FindAddedLetterAsString(word, gameWord));
+                var addedLetter = FindAddedLetterAndIndex(word, gameWord);
+                ghostAvatar.Show(addedLetter.addedLetter);
                 gameWord = word;
+                UpdateWordDisplay(true, addedLetter.index);
                 isPlayerTurn = true;
-                UpdateWordDisplay(true);
                 SetIndicators(isPlayerTurn);
             }
         }
@@ -409,6 +439,9 @@ public class GameManager : MonoBehaviour
     {
         playerIndicator.SetActive(isPlayer);
         aiIndicator.SetActive(!isPlayer);
+        playerText.color = isPlayer ? Color.green : Color.white;
+        aiText.color = isPlayer ? Color.white : Color.green;
+
         challengeButton.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
 
         if (isPlayer && string.IsNullOrEmpty(gameWord))
@@ -426,17 +459,33 @@ public class GameManager : MonoBehaviour
         pointsText.AddPoints(word.Length * bonus);
     }
 
-    private string FindAddedLetterAsString(string a, string b)
+    private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)
     {
-        int charCodeSum = 0;
-        foreach (char c in a)
+        a = a.ToUpper();
+        b = b.ToUpper();
+
+        if (string.IsNullOrEmpty(a))
         {
-            charCodeSum ^= c;
+            return (b, 0);
         }
-        foreach (char c in b)
+        if (string.IsNullOrEmpty(b))
         {
-            charCodeSum ^= c;
+            return (a, 0);
         }
-        return char.ToString((char)charCodeSum).ToUpper();
+
+        // Determine which string is longer (assuming b has the added character)
+        string shorter = a.Length < b.Length ? a : b;
+        string longer = a.Length < b.Length ? b : a;
+
+        // Check if the added character is at the beginning
+        if (longer[0] != shorter[0])
+        {
+            return (longer[0].ToString().ToUpper(), 0);
+        }
+        // If not at the beginning, it must be at the end
+        else
+        {
+            return (longer[longer.Length - 1].ToString().ToUpper(), longer.Length - 1);
+        }
     }
 }

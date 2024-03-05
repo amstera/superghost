@@ -12,6 +12,8 @@ public class ChallengePopUp : MonoBehaviour
     public TMP_InputField inputField;
     public TextMeshProUGUI warningText;
 
+    public AudioSource alertAudioSource;
+
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
     public float shakeDuration = 0.5f;
@@ -30,6 +32,8 @@ public class ChallengePopUp : MonoBehaviour
 
     public void Show(string substring)
     {
+        alertAudioSource?.Play();
+
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
@@ -75,9 +79,16 @@ public class ChallengePopUp : MonoBehaviour
         }
         else
         {
-            gameManager.HandleChallenge(inputField.text);
-            Hide();
+            StartCoroutine(HandleChallenge());
         }
+    }
+
+    private IEnumerator HandleChallenge()
+    {
+        yield return new WaitForSeconds(0.15f);
+
+        gameManager.HandleChallenge(inputField.text);
+        Hide();
     }
 
     private IEnumerator ShakePopup()

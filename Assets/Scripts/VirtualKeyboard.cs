@@ -93,6 +93,12 @@ public class VirtualKeyboard : MonoBehaviour
 
         AudioSource.PlayClipAtPoint(keyAudioClip, Vector3.zero, 1);
         StartCoroutine(PopAnimation(btn.gameObject));
+        StartCoroutine(WaitAndProcessTurn(letter));
+    }
+
+    IEnumerator WaitAndProcessTurn(char letter)
+    {
+        yield return new WaitForSeconds(0.15f);
         gameManager.ProcessTurn(letter);
     }
 
@@ -108,6 +114,7 @@ public class VirtualKeyboard : MonoBehaviour
 
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
+            btn.transform.localScale = originalScale;
         }
         buttonsDisabled = true;
     }
@@ -132,6 +139,11 @@ public class VirtualKeyboard : MonoBehaviour
 
     public void Show()
     {
+        foreach (Button btn in allButtons)
+        {
+            btn.transform.localScale = originalScale;
+        }
+
         gameObject.SetActive(true);
     }
 
