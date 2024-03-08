@@ -5,7 +5,7 @@ using System.Collections;
 public class PointsText : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
-    private int points = 0;
+    public int points = 0;
     private float duration = 0.5f;
     private float colorDuration = 0.5f;
     private Color normalColor = Color.white;
@@ -14,6 +14,7 @@ public class PointsText : MonoBehaviour
 
     private void Start()
     {
+        normalColor = pointsText.color;
         UpdatePointsText(0);
     }
 

@@ -21,6 +21,7 @@ public class VirtualKeyboard : MonoBehaviour
     };
 
     private List<Button> allButtons = new List<Button>();
+    private Dictionary<Button, char> buttonLetterMap = new Dictionary<Button, char>();
     private bool buttonsDisabled = false;
     private Vector3 originalScale;
 
@@ -75,6 +76,7 @@ public class VirtualKeyboard : MonoBehaviour
                 Button btn = buttonObj.GetComponent<Button>();
                 btn.onClick.AddListener(() => ButtonClicked(letter, btn));
                 allButtons.Add(btn);
+                buttonLetterMap.Add(btn, letter);
             }
         }
     }

@@ -7,7 +7,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText;
+    public PointsText pointsText, totalPointsText;
     public ChallengePopUp challengePopup;
     public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText;
     public ParticleSystem confettiPS;
@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
+    public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
 
     public AudioClip winSound, loseSound;
@@ -23,15 +24,15 @@ public class GameManager : MonoBehaviour
     public AudioSource gameStatusAudioSource;
 
     public bool isPlayerTurn = true;
-    public int points;
 
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
     private bool gameEnded = false;
-    private bool gameOver = false;
+    private bool gameOver = true;
     private bool wordsRemaining = true;
     private bool isLastWordValid = true;
     private bool playerWon;
+    public int points;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
 
@@ -108,10 +109,19 @@ public class GameManager : MonoBehaviour
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
             pointsText.Reset();
+            totalPointsText.Reset();
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
             endGameText.gameObject.SetActive(false);
+            totalPointsText.gameObject.SetActive(false);
+            comboText.gameObject.SetActive(true);
+            comboText.ChooseNewCombo();
+            points = 0;
 
             gameOver = false;
+        }
+        else if (comboText.IsCompleted())
+        {
+            comboText.ChooseNewCombo();
         }
 
         if (isPlayerTurn)
@@ -180,6 +190,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Think();
         UpdateWordDisplay(false, newIndex);
         SetIndicators(isPlayerTurn);
+        comboText.UseCharacter(character);
 
         if (startText.gameObject.activeSelf)
         {
@@ -353,6 +364,7 @@ public class GameManager : MonoBehaviour
         else
         {
             gameStatusAudioSource.clip = loseSound;
+            comboText.ResetPending();
         }
         gameStatusAudioSource.Play();
 
@@ -360,11 +372,14 @@ public class GameManager : MonoBehaviour
         {
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
             endGameText.gameObject.SetActive(true);
+            comboText.gameObject.SetActive(false);
 
             if (playerWon)
             {
                 endGameText.text = "Victory!";
                 endGameText.color = Color.green;
+                totalPointsText.gameObject.SetActive(true);
+                totalPointsText.AddPoints(points);
             }
             else
             {
@@ -478,7 +493,14 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePoints(string word, int bonus)
     {
-        pointsText.AddPoints(word.Length * bonus);
+        int pointsChange = word.Length * bonus;
+        if (pointsChange > 0)
+        {
+            pointsChange *= comboText.GetWinMultiplier(word);
+        }
+
+        pointsText.AddPoints(pointsChange);
+        points += pointsChange;
     }
 
     private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)
