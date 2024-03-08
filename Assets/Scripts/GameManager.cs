@@ -500,7 +500,7 @@ public class GameManager : MonoBehaviour
         }
 
         pointsText.AddPoints(pointsChange);
-        points += pointsChange;
+        points = Mathf.Max(0, points + pointsChange);
     }
 
     private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)
