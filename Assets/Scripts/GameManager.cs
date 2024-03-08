@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton;
+    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton, newIndicator;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public int points;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
+    private SaveObject saveObject;
 
     IEnumerator LoadWordDictionary()
     {
@@ -84,6 +85,8 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(LoadWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
 
+        saveObject = SaveManager.Load();
+
         StartNewGame();
     }
 
@@ -113,6 +116,7 @@ public class GameManager : MonoBehaviour
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
+            newIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
             points = 0;
@@ -380,6 +384,12 @@ public class GameManager : MonoBehaviour
                 endGameText.color = Color.green;
                 totalPointsText.gameObject.SetActive(true);
                 totalPointsText.AddPoints(points);
+                if (points > saveObject.HighScore)
+                {
+                    saveObject.HighScore = points;
+                    SaveManager.Save(saveObject);
+                    newIndicator.SetActive(true);
+                }
             }
             else
             {
