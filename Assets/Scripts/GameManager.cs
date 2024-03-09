@@ -3,11 +3,12 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText;
+    public PointsText pointsText, totalPointsText, pointsEarnedText;
     public ChallengePopUp challengePopup;
     public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText;
     public ParticleSystem confettiPS;
@@ -33,7 +34,8 @@ public class GameManager : MonoBehaviour
     private bool wordsRemaining = true;
     private bool isLastWordValid = true;
     private bool playerWon;
-    public int points;
+    private int points;
+    private int roundPoints;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
 
@@ -143,6 +145,9 @@ public class GameManager : MonoBehaviour
         wordDisplay.canClickRight = true;
         isLastWordValid = true;
         playerWon = false;
+        roundPoints = 0;
+        pointsEarnedText.Reset();
+        pointsEarnedText.gameObject.SetActive(false);
 
         keyboard.Show();
         previousWords.Clear();
@@ -361,6 +366,14 @@ public class GameManager : MonoBehaviour
         challengeButton.SetActive(false);
         nextRoundButton.SetActive(true);
 
+
+        if (roundPoints != 0)
+        {
+            pointsEarnedText.gameObject.SetActive(true);
+            pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
+            pointsEarnedText.AddPoints(roundPoints, true);
+        }
+
         if (playerWon)
         {
             gameStatusAudioSource.clip = winSound;
@@ -418,6 +431,7 @@ public class GameManager : MonoBehaviour
         foreach (var word in previousWords)
         {
             var displayedWord = word.ToUpper();
+            string linebreak = "\n";
             if (index == previousWords.Count - 1)
             {
                 if (isLastWordValid && playerWon)
@@ -428,8 +442,9 @@ public class GameManager : MonoBehaviour
                 {
                     displayedWord = $"<color=red><s>{displayedWord}</s></color>";
                 }
+                linebreak = "";
             }
-            previousWordsText += $"{displayedWord}\n";
+            previousWordsText += $"{displayedWord}{linebreak}";
             index++;
         }
 
@@ -514,8 +529,9 @@ public class GameManager : MonoBehaviour
             pointsChange *= 1.5f;
         }
 
-        pointsText.AddPoints((int)pointsChange);
-        points = Mathf.Max(0, points + (int)pointsChange);
+        roundPoints = (int)pointsChange;
+        pointsText.AddPoints(roundPoints);
+        points = Mathf.Max(0, points + roundPoints);
     }
 
     private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)

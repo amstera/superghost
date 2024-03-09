@@ -11,7 +11,7 @@ public class VirtualKeyboard : MonoBehaviour
     public Transform keyboardParent;
     public TextMeshProUGUI warningText;
 
-    public AudioClip keyAudioClip;
+    public AudioSource keyAudioSource;
 
     private string[] rows = new string[]
     {
@@ -93,7 +93,7 @@ public class VirtualKeyboard : MonoBehaviour
             return;
         }
 
-        AudioSource.PlayClipAtPoint(keyAudioClip, Vector3.zero, 1);
+        keyAudioSource?.Play();
         StartCoroutine(PopAnimation(btn.gameObject));
         StartCoroutine(WaitAndProcessTurn(letter));
     }

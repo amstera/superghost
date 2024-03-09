@@ -6,20 +6,21 @@ public class PointsText : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
     public int points = 0;
+    public Color normalColor = Color.white;
     private float duration = 0.5f;
     private float colorDuration = 0.5f;
-    private Color normalColor = Color.white;
     private Color positiveColor = Color.green;
     private Color negativeColor = Color.red;
+    private bool showSymbol;
 
     private void Start()
     {
-        normalColor = pointsText.color;
         UpdatePointsText(0);
     }
 
-    public void AddPoints(int amount)
+    public void AddPoints(int amount, bool showSymbol = false)
     {
+        this.showSymbol = showSymbol;
         StopAllCoroutines(); // Stop any ongoing coroutines.
         StartCoroutine(CountPoints(amount));
     }
@@ -34,7 +35,7 @@ public class PointsText : MonoBehaviour
     IEnumerator CountPoints(int amount)
     {
         int startPoints = points;
-        int endPoints = Mathf.Max(0, points + amount); // Ensure points don't go below 0.
+        int endPoints = showSymbol ? points + amount : Mathf.Max(0, points + amount);
         float timer = 0;
 
         // Determine the target color based on the amount being positive or negative.
@@ -44,7 +45,7 @@ public class PointsText : MonoBehaviour
         while (points != endPoints)
         {
             timer += Time.deltaTime;
-            float percentageComplete = timer / duration;
+            float percentageComplete = timer / (amount < 5 ? duration / 2 : duration);
 
             points = (int)Mathf.Lerp(startPoints, endPoints, percentageComplete);
             UpdatePointsText(points);
@@ -74,13 +75,14 @@ public class PointsText : MonoBehaviour
 
     void UpdatePointsText(int currentPoints)
     {
+        var symbol = showSymbol && currentPoints > 0 ? "+" : "";
         if (currentPoints == 1)
         {
-            pointsText.text = "1 POINT";
+            pointsText.text = $"{symbol}1 POINT";
         }
         else
         {
-            pointsText.text = $"{currentPoints} POINTS";
+            pointsText.text = $"{symbol}{currentPoints} POINTS";
         }
     }
 }

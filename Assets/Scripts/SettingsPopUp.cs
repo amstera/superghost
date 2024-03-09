@@ -8,6 +8,7 @@ public class SettingsPopUp : MonoBehaviour
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
     public GameManager gameManager;
+    public AudioManager audioManager;
 
     public TextMeshProUGUI highScoreAmountText;
     public Toggle sfxToggle;
@@ -99,6 +100,15 @@ public class SettingsPopUp : MonoBehaviour
         saveObject.EnableSound = isEnabled;
         gameManager.saveObject = saveObject;
         SaveManager.Save(saveObject);
+
+        if (saveObject.EnableSound)
+        {
+            audioManager.UnmuteMaster();
+        }
+        else
+        {
+            audioManager.MuteMaster();
+        }
     }
 
     private void OnDifficultyChanged(int difficultyIndex)
