@@ -120,7 +120,7 @@ public class WordDictionary
         return rng.NextDouble() < challengeProbability;
     }
 
-    public string FindNextWord(string substring, bool isLosing)
+    public string FindNextWord(string substring, bool isLosing, Difficulty difficulty)
     {
         substring = substring.ToLower();
         if (substring.Length == 0)
@@ -141,7 +141,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        if (rng.NextDouble() <= 0.5f)
+        if (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.5f)
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
@@ -165,19 +165,19 @@ public class WordDictionary
         }
 
         // Determine the priority order based on isLosing flag
-        var primaryList = isLosing ? evenLengthWords : oddLengthWords;
-        var secondaryList = isLosing ? oddLengthWords : evenLengthWords;
+        var primaryList = isLosing || difficulty == Difficulty.Hard ? evenLengthWords : oddLengthWords;
+        var secondaryList = isLosing || difficulty == Difficulty.Hard ? oddLengthWords : evenLengthWords;
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing) ??
-                            FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isLosing);
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing, difficulty) ??
+                            FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isLosing, difficulty);
 
         return foundWord;
     }
 
-    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> filteredWords, bool isLosing)
+    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> filteredWords, bool isLosing, Difficulty difficulty)
     {
-        bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isLosing);
+        bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isLosing, difficulty);
 
         // First, try to find words with the possible priorizitation
         var startWithResult = TryExtensionsWithPriority(substring, lettersForStartWith, prioritizeStart, filteredWords);
@@ -190,8 +190,13 @@ public class WordDictionary
         return TryExtensionsWithPriority(substring, lettersForEndWith, !prioritizeStart, filteredWords);
     }
 
-    private bool ShouldPrioritizeStart(int substringLength, bool isLosing)
+    private bool ShouldPrioritizeStart(int substringLength, bool isLosing, Difficulty difficulty)
     {
+        if (difficulty == Difficulty.Hard)
+        {
+            return false;
+        }
+
         if (substringLength <= 2) return true;
 
         // Otherwise chance it will

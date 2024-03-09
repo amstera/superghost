@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
+    public SaveObject saveObject;
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -35,7 +36,6 @@ public class GameManager : MonoBehaviour
     public int points;
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
-    private SaveObject saveObject;
 
     IEnumerator LoadWordDictionary()
     {
@@ -447,7 +447,7 @@ public class GameManager : MonoBehaviour
         else
         {
             bool isLosing = playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
-            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing) : null;
+            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, saveObject.Difficulty) : null;
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord);
@@ -501,16 +501,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdatePoints(string word, int bonus)
+    private void UpdatePoints(string word, float bonus)
     {
-        int pointsChange = word.Length * bonus;
+        float pointsChange = word.Length * bonus;
         if (pointsChange > 0)
         {
             pointsChange *= comboText.GetWinMultiplier(word);
         }
 
-        pointsText.AddPoints(pointsChange);
-        points = Mathf.Max(0, points + pointsChange);
+        if (saveObject.Difficulty == Difficulty.Hard)
+        {
+            pointsChange *= 1.5f;
+        }
+
+        pointsText.AddPoints((int)pointsChange);
+        points = Mathf.Max(0, points + (int)pointsChange);
     }
 
     private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)
@@ -541,5 +546,10 @@ public class GameManager : MonoBehaviour
         {
             return (longer[longer.Length - 1].ToString().ToUpper(), longer.Length - 1);
         }
+    }
+
+    public bool IsDoneRound()
+    {
+        return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
     }
 }

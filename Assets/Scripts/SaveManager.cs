@@ -50,4 +50,14 @@ public class SaveManager : MonoBehaviour
 public class SaveObject
 {
     public int HighScore;
+    public bool EnableSound = true;
+    public Difficulty Difficulty = Difficulty.Normal;
+}
+
+
+[System.Serializable]
+public enum Difficulty
+{
+    Normal = 0,
+    Hard = 1
 }

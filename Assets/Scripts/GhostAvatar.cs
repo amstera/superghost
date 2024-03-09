@@ -13,6 +13,7 @@ public class GhostAvatar : MonoBehaviour
     private Vector3 originalScale;
     private float popScale = 1.15f;
     private float popDuration = 0.15f;
+    private bool isThinking = false; // Added to indicate if the thinking animation is running
 
     void Start()
     {
@@ -31,6 +32,12 @@ public class GhostAvatar : MonoBehaviour
 
     public void Show(string text)
     {
+        if (isThinking)
+        {
+            StopCoroutine("AnimateThinking"); // Stop the thinking animation if it's running
+            isThinking = false;
+        }
+
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
         if (canvasGroup.alpha < 1 || !isShowing)
@@ -48,12 +55,15 @@ public class GhostAvatar : MonoBehaviour
 
     public void Think()
     {
-        textMeshProUGUI.text = "...";
-        StartCoroutine(PopTextEffect());
         if (canvasGroup.alpha < 1 || !isShowing)
         {
             StartCoroutine(FadeCanvasGroup(1)); // Fade in
             isShowing = true;
+        }
+        if (!isThinking)
+        {
+            StartCoroutine("AnimateThinking");
+            isThinking = true;
         }
     }
 
@@ -84,5 +94,18 @@ public class GhostAvatar : MonoBehaviour
 
         // Scale back to original after the pop effect
         textMeshProUGUI.transform.localScale = originalScale;
+    }
+
+    IEnumerator AnimateThinking()
+    {
+        string[] thinkingStates = { ".", "..", "..." };
+        int index = 0;
+
+        while (true) // Loop indefinitely until coroutine is stopped
+        {
+            textMeshProUGUI.text = thinkingStates[index % thinkingStates.Length];
+            index++;
+            yield return new WaitForSeconds(0.25f);
+        }
     }
 }
