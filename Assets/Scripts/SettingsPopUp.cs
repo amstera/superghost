@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System;
 
 public class SettingsPopUp : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class SettingsPopUp : MonoBehaviour
     public GameManager gameManager;
     public AudioManager audioManager;
 
-    public TextMeshProUGUI highScoreAmountText;
+    public TextMeshProUGUI highScoreAmountText, footerText;
     public Toggle sfxToggle;
     public TMP_Dropdown difficultyDropdown;
 
@@ -46,6 +47,8 @@ public class SettingsPopUp : MonoBehaviour
         difficultyDropdown.value = (int)saveObject.Difficulty;
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
         difficultyDropdown.interactable = gameManager.IsDoneRound();
+
+        SetFooterText();
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -85,6 +88,21 @@ public class SettingsPopUp : MonoBehaviour
         ResetPopUp();
     }
 
+    public void OpenContact()
+    {
+        Application.OpenURL("https://www.greenteagaming.com#contact");
+    }
+
+    public void OpenTerms()
+    {
+        Application.OpenURL("https://www.greenteagaming.com/terms-of-service");
+    }
+
+    public void OpenPrivacy()
+    {
+        Application.OpenURL("https://www.greenteagaming.com/privacy-policy");
+    }
+
     private void ResetPopUp()
     {
         popUpGameObject.transform.localScale = Vector3.zero;
@@ -116,5 +134,13 @@ public class SettingsPopUp : MonoBehaviour
         saveObject.Difficulty = (Difficulty)difficultyIndex;
         gameManager.saveObject = saveObject;
         SaveManager.Save(saveObject);
+    }
+
+    private void SetFooterText()
+    {
+        int currentYear = DateTime.Now.Year;
+        string gameVersion = Application.version;
+        string gameName = Application.productName;
+        footerText.text = $"{gameName} © {currentYear} Green Tea Gaming - Version {gameVersion}";
     }
 }
