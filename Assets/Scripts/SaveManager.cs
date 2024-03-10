@@ -58,6 +58,7 @@ public class SaveObject
 [System.Serializable]
 public enum Difficulty
 {
-    Normal = 0,
-    Hard = 1
+    Easy = 0,
+    Normal = 1,
+    Hard = 2
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
@@ -524,9 +523,13 @@ public class GameManager : MonoBehaviour
             pointsChange *= comboText.GetWinMultiplier(word);
         }
 
-        if (saveObject.Difficulty == Difficulty.Hard)
+        if (saveObject.Difficulty == Difficulty.Easy)
         {
-            pointsChange *= 1.5f;
+            pointsChange *= 0.5f;
+        }
+        else if (saveObject.Difficulty == Difficulty.Hard)
+        {
+            pointsChange *= 2f;
         }
 
         roundPoints = (int)pointsChange;

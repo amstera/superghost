@@ -122,6 +122,11 @@ public class WordDictionary
 
     public string FindNextWord(string substring, bool isLosing, Difficulty difficulty)
     {
+        if (difficulty == Difficulty.Easy)
+        {
+            isLosing = false;
+        }
+
         substring = substring.ToLower();
         if (substring.Length == 0)
         {
@@ -141,7 +146,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        if (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.5f)
+        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.5f))
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
@@ -192,6 +197,11 @@ public class WordDictionary
 
     private bool ShouldPrioritizeStart(int substringLength, bool isLosing, Difficulty difficulty)
     {
+        if (difficulty == Difficulty.Easy)
+        {
+            return true;
+        }
+
         if (difficulty == Difficulty.Hard)
         {
             return false;
