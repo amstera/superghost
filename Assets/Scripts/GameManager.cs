@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
             startText.gameObject.SetActive(true);
         }
 
+        wordDisplay.characterSpacing = 0f;
         wordDisplay.text = isPlayerTurn ? "<color=yellow>_</color>" : "_";
         historyText.text = "";
         gameWord = "";
@@ -277,7 +278,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"You lost with:<color=red>\n{gameWord.ToUpper()}</color>";
+            wordDisplay.text = $"You lost with\n<color=red>{gameWord.ToUpper()}</color>";
             playerLivesText.LoseLife();
             isPlayerTurn = true;
             EndGame();
@@ -359,6 +360,7 @@ public class GameManager : MonoBehaviour
     {
         gameEnded = true;
         keyboard.Hide();
+        wordDisplay.characterSpacing = -5f;
 
         ShowHistory();
         ghostAvatar.Hide();
@@ -433,11 +435,12 @@ public class GameManager : MonoBehaviour
             string linebreak = "\n";
             if (index == previousWords.Count - 1)
             {
-                if (isLastWordValid && playerWon)
+                if (isLastWordValid)
                 {
-                    displayedWord = $"<color=green>{displayedWord}</color>";
+                    var color = playerWon ? "green" : "red";
+                    displayedWord = $"<color={color}>{displayedWord}</color>";
                 }
-                else if (!isLastWordValid)
+                else
                 {
                     displayedWord = $"<color=red><s>{displayedWord}</s></color>";
                 }
@@ -471,7 +474,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    wordDisplay.text = $"You won with:\n<color=green>{foundWord.ToUpper()}</color>";
+                    wordDisplay.text = $"You won with\n<color=green>{foundWord.ToUpper()}</color>";
                     aiLivesText.LoseLife();
                     confettiPS.Play();
                     playerWon = true;

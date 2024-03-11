@@ -21,6 +21,7 @@ public class PointsText : MonoBehaviour
     public void AddPoints(int amount, bool showSymbol = false)
     {
         this.showSymbol = showSymbol;
+        pointsText.color = normalColor;
         StopAllCoroutines(); // Stop any ongoing coroutines.
         StartCoroutine(CountPoints(amount));
     }
@@ -29,6 +30,7 @@ public class PointsText : MonoBehaviour
     {
         StopAllCoroutines();
         points = 0;
+        pointsText.color = normalColor;
         UpdatePointsText(points);
     }
 
