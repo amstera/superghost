@@ -86,6 +86,8 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
+        Application.targetFrameRate = 120;
+
         yield return StartCoroutine(LoadWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
 
