@@ -3,12 +3,14 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
     public PointsText pointsText, totalPointsText, pointsEarnedText;
     public ChallengePopUp challengePopup;
+    public HintPopUp hintPopUp;
     public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
+    public Button hintButton;
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -132,6 +135,7 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn)
         {
             startText.gameObject.SetActive(true);
+            hintButton.interactable = true;
         }
 
         wordDisplay.characterSpacing = 0f;
@@ -214,6 +218,35 @@ public class GameManager : MonoBehaviour
         clickAudioSource?.Play();
 
         StartCoroutine(ProcessChallengeWord());
+    }
+
+    public void HintButtonPressed()
+    {
+        clickAudioSource?.Play();
+
+        hintPopUp.Show(points, gameWord);
+    }
+
+    public void ShowHint(int points)
+    {
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, saveObject.Difficulty);
+        if (string.IsNullOrEmpty(nextWord))
+        {
+            nextWord = wordDictionary.FindWordContains(gameWord);
+        }
+        var nextLetter = FindAddedLetterAndIndex(gameWord, nextWord);
+        char letter = char.Parse(nextLetter.addedLetter.ToUpper());
+        keyboard.HighlightKey(letter);
+        UpdatePoints(points);
+
+        if (nextLetter.index == 0 && selectedPosition != TextPosition.Left)
+        {
+            SelectPosition(TextPosition.Left);
+        }
+        else if (nextLetter.index > 0 && selectedPosition != TextPosition.Right)
+        {
+            SelectPosition(TextPosition.Right);
+        }
     }
 
     private IEnumerator ProcessChallengeWord()
@@ -366,7 +399,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Hide();
         challengeButton.SetActive(false);
         nextRoundButton.SetActive(true);
-
+        hintButton.interactable = false;
 
         if (roundPoints != 0)
         {
@@ -508,12 +541,18 @@ public class GameManager : MonoBehaviour
 
         challengeButton.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
 
-        if (isPlayer && string.IsNullOrEmpty(gameWord))
+        if (isPlayer)
         {
-            keyboard.EnableAllButtons();
+            hintButton.interactable = true;
+
+            if (string.IsNullOrEmpty(gameWord))
+            {
+                keyboard.EnableAllButtons();
+            }
         }
-        else if (!isPlayer)
+        else
         {
+            hintButton.interactable = false;
             keyboard.DisableAllButtons();
         }
     }
@@ -535,6 +574,11 @@ public class GameManager : MonoBehaviour
             pointsChange *= 2f;
         }
 
+        UpdatePoints(pointsChange);
+    }
+
+    private void UpdatePoints (float pointsChange)
+    {
         roundPoints = (int)pointsChange;
         pointsText.AddPoints(roundPoints);
         points = Mathf.Max(0, points + roundPoints);

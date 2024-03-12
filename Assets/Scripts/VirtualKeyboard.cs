@@ -21,7 +21,7 @@ public class VirtualKeyboard : MonoBehaviour
     };
 
     private List<Button> allButtons = new List<Button>();
-    private Dictionary<Button, char> buttonLetterMap = new Dictionary<Button, char>();
+    private Dictionary<char, Button> buttonLetterMap = new Dictionary<char, Button>();
     private bool buttonsDisabled = false;
     private Vector3 originalScale;
 
@@ -76,7 +76,7 @@ public class VirtualKeyboard : MonoBehaviour
                 Button btn = buttonObj.GetComponent<Button>();
                 btn.onClick.AddListener(() => ButtonClicked(letter, btn));
                 allButtons.Add(btn);
-                buttonLetterMap.Add(btn, letter);
+                buttonLetterMap.Add(letter, btn);
             }
         }
     }
@@ -154,6 +154,16 @@ public class VirtualKeyboard : MonoBehaviour
         warningText.gameObject.SetActive(false);
 
         gameObject.SetActive(false);
+    }
+
+    public void HighlightKey(char letter)
+    {
+        var btn = buttonLetterMap[letter];
+        var colors = btn.colors;
+        colors.normalColor = Color.yellow;
+        btn.colors = colors;
+
+        ShakeAnimation(btn.gameObject);
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
