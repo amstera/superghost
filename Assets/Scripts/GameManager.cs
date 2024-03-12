@@ -229,14 +229,19 @@ public class GameManager : MonoBehaviour
 
     public void ShowHint(int points)
     {
+        bool canPushWord = true;
         var nextWord = wordDictionary.FindNextWord(gameWord, true, saveObject.Difficulty);
         if (string.IsNullOrEmpty(nextWord))
         {
+            canPushWord = false;
             nextWord = wordDictionary.FindWordContains(gameWord);
         }
+
+        var color = canPushWord ? Color.yellow : Color.red;
+
         var nextLetter = FindAddedLetterAndIndex(gameWord, nextWord);
         char letter = char.Parse(nextLetter.addedLetter.ToUpper());
-        keyboard.HighlightKey(letter);
+        keyboard.HighlightKey(letter, color);
         UpdatePoints(points);
 
         if (nextLetter.index == 0 && selectedPosition != TextPosition.Left)

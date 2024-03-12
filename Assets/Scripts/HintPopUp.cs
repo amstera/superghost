@@ -8,7 +8,7 @@ public class HintPopUp : MonoBehaviour
     public GameManager gameManager;
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public TextMeshProUGUI pointsText, warningText;
+    public TextMeshProUGUI pointsText, currentPointsText, warningText;
 
     public Button hintButton;
 
@@ -39,8 +39,25 @@ public class HintPopUp : MonoBehaviour
         cost = Mathf.Max(substring.Length, 1);
         this.points = points;
 
-        string pointsAmount = cost == 1 ? "1 point" : $"{cost} points";
+        currentPointsText.text = points == 1 ? "1 POINT" : $"{points} POINTS";
+
+        string pointsAmount = cost == 1 ? "1 POINT" : $"{cost} POINTS";
         pointsText.text = $"<color=black><size=35>Cost</size></color>\n{pointsAmount}";
+
+        var colors = hintButton.colors;
+        if (cost > points)
+        {
+            pointsText.color = Color.red;
+            colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.b, colors.normalColor.g, 0.5f);
+            colors.selectedColor = new Color(colors.selectedColor.r, colors.selectedColor.b, colors.selectedColor.g, 0.5f);
+        }
+        else
+        {
+            pointsText.color = cost > points ? Color.red : new Color32(26, 135, 10, 255);
+            colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.b, colors.normalColor.g, 1f);
+            colors.selectedColor = new Color(colors.selectedColor.r, colors.selectedColor.b, colors.selectedColor.g, 1f);
+        }
+        hintButton.colors = colors;
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

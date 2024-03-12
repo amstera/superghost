@@ -156,11 +156,11 @@ public class VirtualKeyboard : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void HighlightKey(char letter)
+    public void HighlightKey(char letter, Color color)
     {
         var btn = buttonLetterMap[letter];
         var colors = btn.colors;
-        colors.normalColor = Color.yellow;
+        colors.normalColor = color;
         btn.colors = colors;
 
         ShakeAnimation(btn.gameObject);
