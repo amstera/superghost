@@ -22,6 +22,7 @@ public class VirtualKeyboard : MonoBehaviour
 
     private List<Button> allButtons = new List<Button>();
     private Dictionary<char, Button> buttonLetterMap = new Dictionary<char, Button>();
+    private Dictionary<Button, Vector3> buttonOriginalPosMap = new Dictionary<Button, Vector3>();
     private bool buttonsDisabled = false;
     private Vector3 originalScale;
 
@@ -77,6 +78,7 @@ public class VirtualKeyboard : MonoBehaviour
                 btn.onClick.AddListener(() => ButtonClicked(letter, btn));
                 allButtons.Add(btn);
                 buttonLetterMap.Add(letter, btn);
+                buttonOriginalPosMap.Add(btn, btn.transform.localPosition);
             }
         }
     }
@@ -85,7 +87,7 @@ public class VirtualKeyboard : MonoBehaviour
     {
         if (buttonsDisabled)
         {
-            StartCoroutine(ShakeAnimation(btn.gameObject));
+            StartCoroutine(ShakeAnimation(btn));
             if (gameManager.selectedPosition == GameManager.TextPosition.None)
             {
                 warningText.gameObject.SetActive(true);
@@ -117,6 +119,7 @@ public class VirtualKeyboard : MonoBehaviour
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
             btn.transform.localScale = originalScale;
+            btn.transform.localPosition = buttonOriginalPosMap[btn];
         }
         buttonsDisabled = true;
     }
@@ -135,6 +138,8 @@ public class VirtualKeyboard : MonoBehaviour
 
             var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
             btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 1f);
+            btn.transform.localScale = originalScale;
+            btn.transform.localPosition = buttonOriginalPosMap[btn];
         }
         buttonsDisabled = false;
     }
@@ -163,7 +168,7 @@ public class VirtualKeyboard : MonoBehaviour
         colors.normalColor = color;
         btn.colors = colors;
 
-        ShakeAnimation(btn.gameObject);
+        ShakeAnimation(btn);
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
@@ -190,9 +195,9 @@ public class VirtualKeyboard : MonoBehaviour
         }
     }
 
-    IEnumerator ShakeAnimation(GameObject btnGameObject)
+    IEnumerator ShakeAnimation(Button btn)
     {
-        var originalPosition = btnGameObject.transform.localPosition;
+        var originalPosition = buttonOriginalPosMap[btn];
         float duration = 0.5f;
         float magnitude = 10f;
 
@@ -201,10 +206,10 @@ public class VirtualKeyboard : MonoBehaviour
             float x = originalPosition.x + Random.Range(-1f, 1f) * magnitude;
             float y = originalPosition.y + Random.Range(-1f, 1f) * magnitude;
 
-            btnGameObject.transform.localPosition = new Vector3(x, y, originalPosition.z);
+            btn.transform.localPosition = new Vector3(x, y, originalPosition.z);
             yield return null; // Wait for the next frame before continuing the loop
         }
 
-        btnGameObject.transform.localPosition = originalPosition; // Reset to original position
+        btn.transform.localPosition = originalPosition; // Reset to original position
     }
 }

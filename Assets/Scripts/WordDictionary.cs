@@ -9,8 +9,8 @@ public class WordDictionary
     private Dictionary<string, int> commonWords = new Dictionary<string, int>();
     private Random rng = new Random();
 
-    private readonly char[] vowels = "aeiou".ToCharArray();
-    private readonly char[] consonants = "bcdfghjklmnpqrstvwxyz".ToCharArray();
+    private readonly char[] vowels = "aeiouy".ToCharArray();
+    private readonly char[] consonants = "bcdfghjklmnpqrstvwxz".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
 
     public void LoadWords(string[] lines)
@@ -18,7 +18,7 @@ public class WordDictionary
         foreach (var line in lines)
         {
             var word = line.Trim().ToLower();
-            if (!string.IsNullOrEmpty(word))
+            if (!string.IsNullOrEmpty(word) && word.Length > 3)
             {
                 words.Add(word);
             }

@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton, newIndicator;
+    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
+            difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
@@ -453,6 +454,11 @@ public class GameManager : MonoBehaviour
             {
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
+                if (saveObject.Difficulty > Difficulty.Easy)
+                {
+                    difficultyText.gameObject.SetActive(true);
+                }
+
                 pointsText.Reset();
             }
 

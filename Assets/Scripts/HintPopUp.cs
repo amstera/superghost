@@ -105,6 +105,8 @@ public class HintPopUp : MonoBehaviour
         else
         {
             StartCoroutine(ShakePopup());
+            int remainingPoints = cost - points;
+            warningText.text = $"Not enough points (need {remainingPoints} more)";
             warningText.gameObject.SetActive(true);
         }
     }
