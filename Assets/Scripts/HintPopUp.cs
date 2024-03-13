@@ -31,12 +31,13 @@ public class HintPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Show(int points, string substring)
+    public void Show(int points, string substring, Difficulty difficulty)
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
-        cost = Mathf.Max(substring.Length, 1);
+        float multiplier = difficulty == Difficulty.Hard ? 2 : difficulty == Difficulty.Easy ? 0.5f : 1;
+        cost = (int)Mathf.Max(substring.Length * multiplier, 1);
         this.points = points;
 
         currentPointsText.text = points == 1 ? "1 POINT" : $"{points} POINTS";

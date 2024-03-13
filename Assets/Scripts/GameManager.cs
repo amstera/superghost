@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.iOS;
 
 public class GameManager : MonoBehaviour
 {
@@ -86,6 +87,7 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
+        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 120;
 
         yield return StartCoroutine(LoadWordDictionary());
@@ -226,7 +228,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        hintPopUp.Show(points, gameWord);
+        hintPopUp.Show(points, gameWord, saveObject.Difficulty);
     }
 
     public void ShowHint(int points)
@@ -443,6 +445,8 @@ public class GameManager : MonoBehaviour
                     saveObject.HighScore = points;
                     SaveManager.Save(saveObject);
                     newIndicator.SetActive(true);
+
+                    Device.RequestStoreReview();
                 }
             }
             else
