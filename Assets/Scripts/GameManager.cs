@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.iOS;
+using Unity.Services.Core;
+using Unity.Services.Analytics;
 
 public class GameManager : MonoBehaviour
 {
@@ -77,6 +79,12 @@ public class GameManager : MonoBehaviour
         callback(lines.ToArray());
 
         yield return null;
+    }
+
+    async void Awake()
+    {
+        await UnityServices.InitializeAsync();
+        AnalyticsService.Instance.StartDataCollection();
     }
 
     IEnumerator Start()

@@ -275,6 +275,7 @@ adapters
 adapters	
 adapting	
 adaptive	
+adapts
 added	
 addendum	
 addict	
@@ -298,6 +299,7 @@ addresses
 addressing	
 adds	
 adept
+adeptly
 adeptness	
 adequacy	
 adequate	
@@ -340,6 +342,7 @@ admiralty
 admiration	
 admire	
 admired	
+admires
 admissible	
 admission		
 admissions	
@@ -471,6 +474,7 @@ affordability
 affordable	
 afforded	
 affords		
+afoot
 aforementioned	
 afraid	
 after	
@@ -745,6 +749,7 @@ amicable
 amid	
 amidst	
 amino		
+amiss
 ammo	
 ammonia		
 ammonium	
@@ -1043,7 +1048,9 @@ appreciate
 appreciated	
 appreciates	
 appreciation
-apprehensive	
+apprehension	
+apprehensive
+apprehensively
 apprentice	
 apprenticeship	
 approach	
@@ -1054,6 +1061,8 @@ appropriate
 appropriated	
 appropriately	
 appropriateness	
+appropriates
+appropriating
 appropriation	
 appropriations	
 approval	
@@ -1071,6 +1080,7 @@ apricot
 apron	
 aprons	
 aptitude	
+aptly
 aqua		
 aquaculture		
 aquamarine	
@@ -1531,6 +1541,7 @@ awkwardly
 awning
 awning	
 awnings
+awry
 axes	
 axial	
 axiom
@@ -1766,7 +1777,6 @@ bathroom
 bathrooms	
 baths	
 bathtub	
-batman	
 baton	
 bats	
 battalion	
@@ -1983,6 +1993,10 @@ bibliography
 bibs		
 bicep
 biceps
+bicker
+bickered
+bickering
+bickers
 bicycle	
 bicycles		
 bicycling	
@@ -2552,7 +2566,7 @@ broaden
 broadening	
 broader	
 broadly	
-broccoli		
+broccoli	
 brochure	
 brochures	
 broke	
@@ -4212,11 +4226,14 @@ concocts
 concord	
 concordance		
 concrete	
-concur	
+concur
+concurred
 concurrence	
 concurrency		
 concurrent	
 concurrently	
+concurring	
+concurs
 condemn	
 condemnation	
 condemned		
@@ -5476,14 +5493,18 @@ defense
 defense	
 defenses	
 defensive	
-defer		
+defer	
 deferred	
+deferring	
+defers
 defiance	
 deficiencies	
 deficiency	
 deficient	
 deficit	
 deficits	
+defied
+defies		
 define	
 defined	
 defines	
@@ -5496,7 +5517,8 @@ definitions
 definitive	
 deformation	
 defunct
-defy		
+defy
+defying
 degenerate	
 degeneration	
 degradable	
@@ -7232,6 +7254,7 @@ epiphanies
 epiphany	
 episode	
 episodes	
+episodic
 epitaph
 epitaphs
 epithelial	
@@ -7256,6 +7279,8 @@ equinox
 equip	
 equipment	
 equipped	
+equipping
+equips
 equitable	
 equities	
 equity	
@@ -7268,6 +7293,8 @@ eras
 erase		
 erased	
 eraser		
+erases
+erasing
 erect	
 erected	
 erectile	
@@ -7277,6 +7304,10 @@ erects
 ergo	
 ergonomic	
 ergonomics	
+erode
+eroded
+erodes
+eroding
 erosion	
 erotic
 erotic	
@@ -7565,6 +7596,9 @@ exiting
 exits	
 exodus	
 exogenous
+exorbitance
+exorbitant
+exorbitantly
 exoskeleton	
 exoskeletons
 exotic	
@@ -7587,8 +7621,11 @@ expects
 expedite	
 expedited	
 expedition	
-expeditions	
+expeditions
+expel
 expelled	
+expelling	
+expels
 expend
 expended
 expending		
@@ -9132,6 +9169,11 @@ gluing
 gluten	
 glutton
 gluttonous
+gnarl
+gnarled
+gnarling
+gnarls
+gnarly
 gnome	
 gnomes
 goad
@@ -9186,6 +9228,7 @@ gorge
 gorgeous	
 gorilla	
 gorillas
+gory
 gosh	
 gospel	
 gospels		
@@ -10437,9 +10480,12 @@ improves
 improving	
 improvisation	
 impulse
+impulsed
 impulses
+impulsing
 impulsive
-impulsively		
+impulsively	
+impulsiveness	
 impunity	
 impurities	
 imputed		
@@ -10639,7 +10685,7 @@ infection
 infections	
 infectious	
 infects	
-infer	
+infer
 inference	
 inferences	
 inferior	
@@ -10647,6 +10693,9 @@ inferiority
 inferiors
 inferno		
 inferred	
+inferred	
+inferring
+infers
 infertility		
 infested
 infidel
@@ -11179,6 +11228,7 @@ iodine
 ionic	
 ionization		
 ions	
+irate
 iridescence
 iridescent	
 iridium	
@@ -11341,6 +11391,10 @@ josh
 joshed
 joshes
 joshing	
+jostle
+jostled
+jostles
+jostling
 journal	
 journalism		
 journalist		
@@ -11355,7 +11409,9 @@ jousted
 jousting
 jousts
 jovial
-joyful	
+jovially
+joyful
+joyfully	
 joyous
 joyously
 joys	
@@ -13333,8 +13389,11 @@ moves
 movie	
 movies	
 moving	
+mowed
 mower	
 mowers		
+mowing
+mows
 mozzarella
 much	
 muck		
@@ -13382,6 +13441,10 @@ mumbled
 mumbles
 mumbling
 mummies
+mummified
+mummifies
+mummify
+mummifying
 mummy	
 munch
 munched
@@ -13434,7 +13497,8 @@ mute
 muted
 mutes	
 muting
-mutt	
+mutt
+mutton	
 mutts
 mutual	
 mutually	
@@ -13972,6 +14036,11 @@ occasional
 occasionally	
 occasions	
 occidental	
+occlude
+occluded
+occludes	
+occluding
+occlusion
 occult	
 occupancy	
 occupant	
@@ -15314,6 +15383,7 @@ played
 player	
 players	
 playful	
+playfully
 playground	
 playhouse	
 playing	
@@ -16243,6 +16313,7 @@ pulsar
 pulse	
 pulsed	
 pulses	
+pulsing
 puma	
 pump	
 pumped	
@@ -17092,7 +17163,9 @@ release
 released	
 releases	
 releasing		
-relentless	
+relentless
+relentlessly	
+relentlessness
 relevance	
 relevancy	
 relevant	
@@ -17366,7 +17439,8 @@ resign
 resignation	
 resigned	
 resigns		
-resilience	
+resilience
+resiliency	
 resilient	
 resin	
 resins	
@@ -17699,9 +17773,10 @@ roar
 roared
 roaring	
 roars
-roast	
+roast
 roasted	
 roasting	
+roasts	
 robbed		
 robbery		
 robe	
@@ -17747,6 +17822,7 @@ romantic
 romantically		
 romantics	
 roof	
+roofed
 roofing		
 roofs	
 rooftop	
@@ -17785,6 +17861,10 @@ rough
 roughed
 roughen
 roughest
+roughhouse
+roughhoused
+roughhouses
+roughhousing
 roughing
 roughly	
 roughs
@@ -17929,6 +18009,7 @@ salad
 salads	
 salamander
 salamanders
+salami
 salaries	
 salary	
 sale		
@@ -18310,6 +18391,7 @@ securing
 securities	
 security	
 sedan	
+sedentary
 sediment	
 sedimentation	
 sediments	
@@ -19399,7 +19481,10 @@ soothe
 soothed	
 soothes
 soothing
+sophisticate
 sophisticated	
+sophisticates
+sophisticating
 sophistication	
 sophomore	
 soprano	
@@ -19729,6 +19814,9 @@ spur
 spurious	
 spurs	
 spurt
+spurted
+spurting
+spurts
 spying		
 spyware	
 squad	
@@ -20422,11 +20510,11 @@ superannuation
 superb	
 superficial	
 superhero	
-superintendent		
+superintendent	
+superintendents	
 superior
 superiority	
-superiors	
-superman	
+superiors		
 supermarket	
 supermarkets	
 supernatural	
@@ -20440,8 +20528,9 @@ superstar
 superstars	
 superstition	
 superstore	
-supervise	
+supervise
 supervised	
+supervises	
 supervising			
 supervision	
 supervisor	
@@ -20512,10 +20601,13 @@ surreal
 surrealism
 surrealist
 surrealistically
-surrender	
+surrender
 surrendered	
+surrendering	
+surrenders
 surreptitious
 surrogate	
+surrogates
 surround	
 surrounded	
 surrounding	
@@ -20543,6 +20635,8 @@ suspected
 suspects	
 suspend	
 suspended	
+suspending
+suspends
 suspense	
 suspension	
 suspensions	
@@ -21811,6 +21905,8 @@ tuition
 tulip	
 tulips	
 tumble		
+tummies
+tummy
 tumor	
 tumor		
 tumors	
@@ -21933,7 +22029,8 @@ unanimous
 unanimously	
 unanswered	
 unarmed
-unassigned	
+unassigned
+unassisted	
 unassuming
 unattached		
 unattended	
@@ -22178,6 +22275,7 @@ unstuck
 unsubscribe	
 unsuccessful	
 unsuitable	
+unsupervised
 unsupported	
 unsure	
 untested	
@@ -22489,6 +22587,7 @@ vial
 vibe	
 vibes		
 vibrant	
+vibrantly
 vibrating	
 vibration	
 vibrations	
@@ -23164,7 +23263,8 @@ woes
 woke	
 wolf	
 wolfram		
-wolverine		
+wolverine
+wolverines		
 wolves	
 woman	
 womanhood

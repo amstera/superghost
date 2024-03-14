@@ -174,8 +174,19 @@ public class WordDictionary
         var secondaryList = isLosing || difficulty == Difficulty.Hard ? oddLengthWords : evenLengthWords;
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing, difficulty) ??
-                            FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isLosing, difficulty);
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing, difficulty);
+        if (foundWord == null)
+        {
+            if (difficulty == Difficulty.Easy)
+            {
+                if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
+                {
+                    return null;
+                }
+            }
+
+            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isLosing, difficulty);
+        }
 
         return foundWord;
     }
@@ -183,16 +194,28 @@ public class WordDictionary
     private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> filteredWords, bool isLosing, Difficulty difficulty)
     {
         bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isLosing, difficulty);
+        var lettersPrimaryList = prioritizeStart ? lettersForStartWith : lettersForEndWith;
+        var lettersSecondaryList  = prioritizeStart ? lettersForEndWith : lettersForStartWith;
 
         // First, try to find words with the possible priorizitation
-        var startWithResult = TryExtensionsWithPriority(substring, lettersForStartWith, prioritizeStart, filteredWords);
-        if (!string.IsNullOrEmpty(startWithResult))
+        var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, filteredWords);
+        if (string.IsNullOrEmpty(startWithResult))
+        {
+            if (difficulty == Difficulty.Easy)
+            {
+                if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
+                {
+                    return null;
+                }
+            }
+        }
+        else
         {
             return startWithResult;
         }
 
         // If none found, fallback to the opposite prioritization
-        return TryExtensionsWithPriority(substring, lettersForEndWith, !prioritizeStart, filteredWords);
+        return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, filteredWords);
     }
 
     private bool ShouldPrioritizeStart(int substringLength, bool isLosing, Difficulty difficulty)
