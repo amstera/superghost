@@ -522,7 +522,7 @@ public class GameManager : MonoBehaviour
         else
         {
             bool isLosing = playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
-            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, saveObject.Difficulty) : null;
+            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, Difficulty.Normal) : null;
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord);
