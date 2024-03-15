@@ -320,6 +320,7 @@ public class GameManager : MonoBehaviour
             isLastWordValid = false;
             isPlayerTurn = true;
             previousWords.Add(gameWord);
+            UpdatePoints(gameWord, -2);
         }
 
         EndGame();
