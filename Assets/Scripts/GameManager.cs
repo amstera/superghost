@@ -243,7 +243,7 @@ public class GameManager : MonoBehaviour
     public void ShowHint(int points)
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, saveObject.Difficulty);
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Normal);
         if (string.IsNullOrEmpty(nextWord))
         {
             canPushWord = false;
@@ -522,7 +522,7 @@ public class GameManager : MonoBehaviour
         else
         {
             bool isLosing = playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
-            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, Difficulty.Normal) : null;
+            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, saveObject.Difficulty) : null;
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord);

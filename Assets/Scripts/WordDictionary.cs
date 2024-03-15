@@ -11,6 +11,7 @@ public class WordDictionary
 
     private readonly char[] vowels = "aeiouy".ToCharArray();
     private readonly char[] consonants = "bcdfghjklmnpqrstvwxz".ToCharArray();
+    private readonly char[] specialConsonants = "bcdgkpstw".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
 
     public void LoadWords(string[] lines)
@@ -139,8 +140,10 @@ public class WordDictionary
         ShuffleArray(consonants);
 
         // Determine whether to prioritize vowels or consonants based on the substring's start and end
-        bool endsWithVowel = vowels.Contains(substring[^1]);
-        bool startsWithVowel = vowels.Contains(substring[0]);
+        var startChar = substring[0];
+        var endChar = substring[^1];
+        bool endsWithVowel = vowels.Contains(endChar);
+        bool startsWithVowel = vowels.Contains(startChar);
 
         // Concatenate vowels and consonants in the order based on the substring's characteristics
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
@@ -150,6 +153,17 @@ public class WordDictionary
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
+        }
+        else
+        {
+            if (!startsWithVowel && specialConsonants.Contains(startChar))
+            {
+                ShuffleArray(lettersForEndWith);
+            }
+            if (!endsWithVowel && specialConsonants.Contains(endChar))
+            {
+                ShuffleArray(lettersForStartWith);
+            }
         }
 
         List<string> evenLengthWords = new List<string>();
