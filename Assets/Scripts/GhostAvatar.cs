@@ -9,7 +9,7 @@ public class GhostAvatar : MonoBehaviour
 
     private float startYPosition;
     private bool isShowing = false;
-    private float moveSpeed = 3;
+    private float moveSpeed = 3.5f;
     private Vector3 originalScale;
     private float popScale = 1.15f;
     private float popDuration = 0.15f;

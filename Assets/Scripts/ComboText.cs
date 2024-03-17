@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class ComboText : MonoBehaviour
 {
@@ -39,19 +40,7 @@ public class ComboText : MonoBehaviour
 
     public void ChooseNewCombo()
     {
-        comboChars.Clear();
-        var selectedChars = new HashSet<char>();
-
-        while (selectedChars.Count < 4)
-        {
-            char selectedChar = WeightedRandomCharacter();
-            if (selectedChars.Add(selectedChar))
-            {
-                comboChars.Add(new ComboChar(selectedChar, CharState.NotUsed));
-            }
-        }
-
-        UpdateComboText();
+        StartCoroutine(ChooseNewComboAnimation());
     }
 
     private char WeightedRandomCharacter()
@@ -138,5 +127,42 @@ public class ComboText : MonoBehaviour
     public bool IsCompleted()
     {
         return comboChars.All(c => c.State == CharState.EarnedPoints);
+    }
+
+    private IEnumerator ChooseNewComboAnimation()
+    {
+        comboChars.Clear();
+        var selectedChars = new HashSet<char>();
+
+        // Pre-select the characters to ensure they're unique
+        while (selectedChars.Count < 4)
+        {
+            selectedChars.Add(WeightedRandomCharacter());
+        }
+
+        float totalTime = 0.25f; // Duration of the entire animation
+        float updateInterval = 0.05f; // How often to update the text
+
+        while (totalTime > 0)
+        {
+            // Generate a string of 4 random characters, each separated by a space
+            string randomChars = "";
+            for (int i = 0; i < 4; i++)
+            {
+                randomChars += WeightedRandomCharacter() + " ";
+            }
+
+            comboText.text = $"2x Points: <color=#FFFFFF>{randomChars.Trim()}</color>";
+
+            totalTime -= updateInterval;
+            yield return new WaitForSeconds(updateInterval);
+        }
+
+        foreach (char c in selectedChars)
+        {
+            comboChars.Add(new ComboChar(c, CharState.NotUsed));
+        }
+
+        UpdateComboText();
     }
 }

@@ -28,6 +28,7 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         }
     }
 
+
     public void OnPointerClick(PointerEventData eventData)
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
