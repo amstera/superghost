@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
     public Button hintButton;
+    public Stars stars;
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -285,11 +286,13 @@ public class GameManager : MonoBehaviour
         else
         {
             var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
-            wordDisplay.text = $"You lost!\nCASP thought: <color=red>{thoughtWord}</color>";
+            wordDisplay.text = $"CASP won!\nCASP thought <color=red>{thoughtWord}</color>";
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(gameWord, -2);
             isPlayerTurn = true;
+            previousWords.Add(gameWord);
+            previousWords.Add(thoughtWord);
         }
 
         EndGame();
@@ -312,10 +315,11 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = false;
             wordDictionary.AddLostChallengeWord(originalWord);
             UpdatePoints(gameWord, 2);
+            previousWords.Add(gameWord);
         }
         else
         {
-            wordDisplay.text = $"You lost!\n<color=red>{word.ToUpper()}</color> is not a word!";
+            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color> is not a word!";
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -330,9 +334,10 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"You lost with\n<color=red>{gameWord.ToUpper()}</color>";
+            wordDisplay.text = $"CASP won with\n<color=red>{gameWord.ToUpper()}</color>";
             playerLivesText.LoseLife();
             isPlayerTurn = true;
+            previousWords.Add(gameWord);
             EndGame();
         }
         else if (!gameEnded)
@@ -450,6 +455,7 @@ public class GameManager : MonoBehaviour
                 endGameText.color = Color.green;
                 totalPointsText.gameObject.SetActive(true);
                 totalPointsText.AddPoints(points);
+                stars.Show(points);
                 if (points > saveObject.HighScore)
                 {
                     saveObject.HighScore = points;
@@ -480,11 +486,6 @@ public class GameManager : MonoBehaviour
     {
         var previousWordsText = "";
         int index = 0;
-
-        if (isLastWordValid)
-        {
-            previousWords.Add(gameWord);
-        }
 
         previousWords.RemoveWhere(w => string.IsNullOrEmpty(w));
 
