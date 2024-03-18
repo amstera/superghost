@@ -102,6 +102,8 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(LoadWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
 
+        wordDictionary.SortWordsByCommonality();
+
         saveObject = SaveManager.Load();
 
         StartNewGame();
@@ -152,6 +154,7 @@ public class GameManager : MonoBehaviour
             hintButton.interactable = true;
         }
 
+        wordDictionary.ClearFilteredWords();
         wordDisplay.characterSpacing = 0f;
         wordDisplay.text = isPlayerTurn ? "<color=yellow>_</color>" : "_";
         historyText.text = "";
@@ -213,6 +216,7 @@ public class GameManager : MonoBehaviour
                 return;
         }
 
+        wordDictionary.SetFilteredWords(gameWord);
         isPlayerTurn = false;
         ghostAvatar.Think();
         UpdateWordDisplay(false, newIndex);
@@ -552,6 +556,7 @@ public class GameManager : MonoBehaviour
                 var addedLetter = FindAddedLetterAndIndex(word, gameWord);
                 ghostAvatar.Show(addedLetter.addedLetter);
                 gameWord = word;
+                wordDictionary.SetFilteredWords(gameWord);
                 UpdateWordDisplay(true, addedLetter.index);
                 isPlayerTurn = true;
                 SetIndicators(isPlayerTurn);

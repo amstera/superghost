@@ -5,6 +5,7 @@ using System.Linq;
 public class WordDictionary
 {
     private HashSet<string> words = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private HashSet<string> filteredWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private HashSet<string> lostChallengeSubstring = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> commonWords = new Dictionary<string, int>();
     private Random rng = new Random();
@@ -22,6 +23,7 @@ public class WordDictionary
             if (!string.IsNullOrEmpty(word) && word.Length > 3)
             {
                 words.Add(word);
+                filteredWords.Add(word);
             }
         }
     }
@@ -38,15 +40,41 @@ public class WordDictionary
         }
     }
 
+    public void SortWordsByCommonality()
+    {
+        // Convert HashSet to a List for sorting
+        var sortedList = words.ToList();
+
+        // Sort the list by commonality
+        sortedList.Sort((w1, w2) =>
+        {
+            int freq1 = commonWords.TryGetValue(w1, out var frequency1) ? frequency1 : int.MaxValue;
+            int freq2 = commonWords.TryGetValue(w2, out var frequency2) ? frequency2 : int.MaxValue;
+            return freq1.CompareTo(freq2);
+        });
+
+        // Reassign the sorted list back to words
+        words = sortedList.ToHashSet();
+    }
+
+    public void SetFilteredWords(string substring)
+    {
+        filteredWords = filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToHashSet();
+    }
+
+    public void ClearFilteredWords()
+    {
+        filteredWords = new HashSet<string>(words);
+    }
+
     public bool IsWordReal(string word)
     {
-        return words.Contains(word.ToLower());
+        return filteredWords.Contains(word.ToLower());
     }
 
     public string FindWordContains(string word)
     {
-        word = word.ToLower();
-        return words
+        return filteredWords
             .Where(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase))
             .OrderBy(w => w.Length)
             .FirstOrDefault();
@@ -54,14 +82,12 @@ public class WordDictionary
 
     public bool CanExtendWordToLeft(string word)
     {
-        word = word.ToLower();
-        return words.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word) > 0);
+        return filteredWords.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) > 0);
     }
 
     public bool CanExtendWordToRight(string word)
     {
-        word = word.ToLower();
-        return words.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word) < w.Length - word.Length);
+        return filteredWords.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) < w.Length - word.Length);
     }
 
     public void AddLostChallengeWord(string word)
@@ -80,22 +106,20 @@ public class WordDictionary
 
         if (lostChallengeSubstring.Contains(substring)) return false;
 
-        // Filter words containing the substring
-        var possibleWords = words.Where(word => word.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
-        if (possibleWords.Count == 0) return true; // No possible words
+        if (filteredWords.Count == 0) return true; // No possible words
 
         // Word Completion Percentage Check
-        double maxThresholdPercentage = 0.8;
-        foreach (var word in possibleWords)
+        foreach (var word in filteredWords)
         {
             double completionPercentage = (double)substring.Length / word.Length;
+            var maxThresholdPercentage = word.StartsWith(substring) ? 0.6f : 0.8f;
             if (completionPercentage > maxThresholdPercentage) return false; // Too close to completion
         }
 
         //Commoness
         int maxCommonessThreshold = 1500;
         int totalScore = 0;
-        foreach (var word in possibleWords)
+        foreach (var word in filteredWords)
         {
             if (commonWords.TryGetValue(word, out int frequency))
             {
@@ -104,19 +128,19 @@ public class WordDictionary
                     // Found a common word, no need to challenge
                     return false;
                 }
-                int multiplier = word.StartsWith(substring) ? 2 : 1;
-                totalScore += frequency * multiplier;
+                float multiplier = word.StartsWith(substring) ? 1.5f : 1;
+                totalScore += (int)(frequency * multiplier);
             }
             else
             {
                 // Word not found in commonWords, treating as not very common
-                totalScore += 1;
+                totalScore += 5;
             }
         }
 
-        double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)possibleWords.Count);
+        double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)filteredWords.Count);
 
-        double challengeProbability = Math.Max(0, 0.85f - avgScore / maxCommonessThreshold);
+        double challengeProbability = Math.Max(0, 0.75f - avgScore / maxCommonessThreshold);
 
         return rng.NextDouble() < challengeProbability;
     }
@@ -166,20 +190,32 @@ public class WordDictionary
             }
         }
 
+        int minScore = 400;
+        if (difficulty == Difficulty.Hard)
+        {
+            minScore = 50;
+        }
+        else if (difficulty == Difficulty.Easy)
+        {
+            minScore = 750;
+        }
+
+        bool anyEasyWordsRemain = filteredWords.Any(w => commonWords.TryGetValue(w, out int frequency) && frequency >= minScore);
+
         List<string> evenLengthWords = new List<string>();
         List<string> oddLengthWords = new List<string>();
-
-        // Pre-filter the words list to include only those that contain the substring
-        var filteredWords = words.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
         foreach (var word in filteredWords)
         {
-            if (Math.Abs(word.Length - substring.Length) % 2 == 0)
+            if (!anyEasyWordsRemain || (difficulty > Difficulty.Easy && isLosing) || commonWords.TryGetValue(word, out int frequency) && frequency >= minScore)
             {
-                evenLengthWords.Add(word);
-            }
-            else
-            {
-                oddLengthWords.Add(word);
+                if (Math.Abs(word.Length - substring.Length) % 2 == 0)
+                {
+                    evenLengthWords.Add(word);
+                }
+                else
+                {
+                    oddLengthWords.Add(word);
+                }
             }
         }
 
@@ -248,7 +284,7 @@ public class WordDictionary
 
         // Otherwise chance it will
         Random random = new Random();
-        float odds = isLosing ? 0.5f : 0.85f;
+        float odds = isLosing ? 0.6f : 0.85f;
         return random.NextDouble() <= odds;
     }
 

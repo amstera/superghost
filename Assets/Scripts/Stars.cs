@@ -16,6 +16,8 @@ public class Stars : MonoBehaviour
 
     private IEnumerator ShowStarsCoroutine(int score)
     {
+        yield return new WaitForSeconds(0.25f);
+
         int starsToLight = 0;
         bool diamond = false;
 
@@ -34,12 +36,12 @@ public class Stars : MonoBehaviour
         for (int i = 0; i < starsToLight; i++)
         {
             StartCoroutine(AnimateStar(stars[i], yellowColor)); // Animate and pop
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.35f);
         }
 
         if (diamond)
         {
-            yield return new WaitForSeconds(0.25f); // Brief pause
+            yield return new WaitForSeconds(0.35f); // Brief pause
             // Change all stars to diamond simultaneously with a pop
             StartCoroutine(AnimateAllStarsDiamond());
         }
@@ -68,7 +70,7 @@ public class Stars : MonoBehaviour
 
         Vector3 originalScale = Vector3.one;
         Vector3 popScale = originalScale * 1.2f;
-        float duration = 0.25f;
+        float duration = 0.35f;
 
         // Scale up
         float time = 0f;
