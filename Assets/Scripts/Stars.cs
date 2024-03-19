@@ -25,7 +25,7 @@ public class Stars : MonoBehaviour
 
     private IEnumerator ShowStarsCoroutine(int score)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
 
         int starsToLight = 0;
         bool diamond = false;
@@ -76,7 +76,7 @@ public class Stars : MonoBehaviour
     {
         if (saveObject.EnableSound)
         {
-            AudioSource.PlayClipAtPoint(starAudioClip, Vector3.zero, 0.35f);
+            AudioSource.PlayClipAtPoint(starAudioClip, Vector3.zero, 0.25f);
         }
 
         // Change color immediately for the diamond pop effect

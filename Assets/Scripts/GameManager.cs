@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
     public AudioSource gameStatusAudioSource;
+    public AudioSource keyAudioSource;
 
     public bool isPlayerTurn = true;
 
@@ -175,6 +176,8 @@ public class GameManager : MonoBehaviour
         keyboard.Show();
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
+
+        ghostAvatar.UpdateState(IsPlayerWinning());
 
         if (!isPlayerTurn)
         {
@@ -334,6 +337,11 @@ public class GameManager : MonoBehaviour
         }
 
         EndGame();
+    }
+
+    public bool IsDoneRound()
+    {
+        return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
     }
 
     void CheckGameStatus()
@@ -545,8 +553,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            bool isLosing = playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
-            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, isLosing, saveObject.Difficulty) : null;
+            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, IsPlayerWinning(), saveObject.Difficulty) : null;
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord);
@@ -570,6 +577,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                keyAudioSource?.Play();
                 previousWords.Add(gameWord);
                 var addedLetter = FindAddedLetterAndIndex(word, gameWord);
                 ghostAvatar.Show(addedLetter.addedLetter);
@@ -664,8 +672,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool IsDoneRound()
+    private bool IsPlayerWinning()
     {
-        return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
+        return playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
     }
 }

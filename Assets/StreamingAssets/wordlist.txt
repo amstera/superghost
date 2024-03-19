@@ -19893,7 +19893,6 @@ dooryard
 dooryards
 doozie
 doozy
-dopa
 dopamine
 dope
 doped
@@ -20678,7 +20677,6 @@ dustpan
 dustpans
 dusts
 dusty
-dutch
 duteous
 dutiable
 duties
@@ -46638,8 +46636,6 @@ parturition
 partway
 party
 partying
-parvenu
-parvenus
 pascal
 pascals
 paschal

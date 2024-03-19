@@ -1,11 +1,14 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GhostAvatar : MonoBehaviour
 {
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
+    public Image ghostImage;
+    public Sprite normalGhost, angryGhost;
 
     private float startYPosition;
     private bool isShowing = false;
@@ -40,16 +43,11 @@ public class GhostAvatar : MonoBehaviour
 
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
-        if (canvasGroup.alpha < 1 || !isShowing)
-        {
-            StartCoroutine(FadeCanvasGroup(1.25f)); // Fade in
-            isShowing = true;
-        }
     }
 
     public void Hide()
     {
-        StartCoroutine(FadeCanvasGroup(0, 0.15f)); // Fade out
+        StartCoroutine(FadeCanvasGroup(0, 0.1f)); // Fade out
         isShowing = false;
     }
 
@@ -60,10 +58,23 @@ public class GhostAvatar : MonoBehaviour
             StartCoroutine(FadeCanvasGroup(1)); // Fade in
             isShowing = true;
         }
+
         if (!isThinking)
         {
             StartCoroutine("AnimateThinking");
             isThinking = true;
+        }
+    }
+
+    public void UpdateState(bool isLosing)
+    {
+        if (isLosing)
+        {
+            ghostImage.sprite = angryGhost;
+        }
+        else 
+        {
+            ghostImage.sprite = normalGhost;
         }
     }
 
