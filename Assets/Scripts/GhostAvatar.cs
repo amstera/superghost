@@ -12,7 +12,7 @@ public class GhostAvatar : MonoBehaviour
     private float moveSpeed = 3.5f;
     private Vector3 originalScale;
     private float popScale = 1.15f;
-    private float popDuration = 0.15f;
+    private float popDuration = 0.2f;
     private bool isThinking = false; // Added to indicate if the thinking animation is running
 
     void Start()
@@ -42,14 +42,14 @@ public class GhostAvatar : MonoBehaviour
         StartCoroutine(PopTextEffect());
         if (canvasGroup.alpha < 1 || !isShowing)
         {
-            StartCoroutine(FadeCanvasGroup(1)); // Fade in
+            StartCoroutine(FadeCanvasGroup(1.25f)); // Fade in
             isShowing = true;
         }
     }
 
     public void Hide()
     {
-        StartCoroutine(FadeCanvasGroup(0, 0.1f)); // Fade out
+        StartCoroutine(FadeCanvasGroup(0, 0.15f)); // Fade out
         isShowing = false;
     }
 

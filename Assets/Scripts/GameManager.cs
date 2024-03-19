@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
     private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
 
+    private const string separator = "_";
+
     IEnumerator LoadWordDictionary()
     {
         var filePath = Path.Combine(Application.streamingAssetsPath, "wordlist.txt");
@@ -86,6 +88,9 @@ public class GameManager : MonoBehaviour
     {
         await UnityServices.InitializeAsync();
         AnalyticsService.Instance.StartDataCollection();
+
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 120;
     }
 
     IEnumerator Start()
@@ -95,9 +100,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("TextMeshProUGUI component is not assigned.");
             yield break;
         }
-
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 120;
 
         yield return StartCoroutine(LoadWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
@@ -156,7 +158,7 @@ public class GameManager : MonoBehaviour
 
         wordDictionary.ClearFilteredWords();
         wordDisplay.characterSpacing = 0f;
-        wordDisplay.text = isPlayerTurn ? "<color=yellow>_</color>" : "_";
+        wordDisplay.text = isPlayerTurn ? $"<color=yellow>{separator}</color>" : separator;
         historyText.text = "";
         gameWord = "";
         selectedPosition = TextPosition.None;
@@ -278,7 +280,7 @@ public class GameManager : MonoBehaviour
 
         if (wordDictionary.ShouldChallenge(gameWord))
         {
-            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>!";
+            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
@@ -312,7 +314,7 @@ public class GameManager : MonoBehaviour
         gameWord = word;
         if (wordDictionary.IsWordReal(word))
         {
-            wordDisplay.text = $"You won!\n<color=green>{word.ToUpper()}</color> is a word!";
+            wordDisplay.text = $"You won!\n<color=green>{word.ToUpper()}</color> is a word";
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
@@ -323,7 +325,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color> is not a word!";
+            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color> is not a word";
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -353,11 +355,27 @@ public class GameManager : MonoBehaviour
     private void UpdateWordDisplay(bool updateColor, int newWordIndex)
     {
         string displayText = gameWord.ToUpper();
-        string underscore = updateColor ? "<color=yellow>_</color>" : "_";
+        string underscore = updateColor ? $"<color=yellow>{separator}</color>" : separator;
         wordsRemaining = false;
 
         bool canExtendWordToLeft = wordDictionary.CanExtendWordToLeft(gameWord);
         bool canExtendWordToRight = wordDictionary.CanExtendWordToRight(gameWord);
+
+        if (!canExtendWordToLeft && !canExtendWordToRight)
+        {
+            if (selectedPosition == TextPosition.Left)
+            {
+                displayText = underscore + displayText;
+            }
+            else if (selectedPosition == TextPosition.Right)
+            {
+                displayText += underscore;
+            }
+
+            wordDisplay.text = displayText;
+
+            return;
+        }
 
         if (canExtendWordToLeft)
         {
@@ -367,7 +385,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                displayText = "_" + displayText;
+                displayText = separator + displayText;
             }
             newWordIndex++;
             wordsRemaining = true;
@@ -386,7 +404,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                displayText += "_";
+                displayText += separator;
             }
             wordsRemaining = true;
         }

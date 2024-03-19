@@ -8,6 +8,15 @@ public class Stars : MonoBehaviour
     public Color yellowColor = Color.yellow;
     public Color diamondColor = new Color(185f / 255f, 242f / 255f, 255f / 255f, 1f);
 
+    public AudioClip starAudioClip;
+
+    private SaveObject saveObject;
+
+    void Start()
+    {
+        saveObject = SaveManager.Load();
+    }
+
     public void Show(int score)
     {
         SetStarsColor(Color.white); // Immediate reset to white
@@ -16,7 +25,7 @@ public class Stars : MonoBehaviour
 
     private IEnumerator ShowStarsCoroutine(int score)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(1f);
 
         int starsToLight = 0;
         bool diamond = false;
@@ -36,12 +45,12 @@ public class Stars : MonoBehaviour
         for (int i = 0; i < starsToLight; i++)
         {
             StartCoroutine(AnimateStar(stars[i], yellowColor)); // Animate and pop
-            yield return new WaitForSeconds(0.35f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         if (diamond)
         {
-            yield return new WaitForSeconds(0.35f); // Brief pause
+            yield return new WaitForSeconds(0.25f); // Brief pause
             // Change all stars to diamond simultaneously with a pop
             StartCoroutine(AnimateAllStarsDiamond());
         }
@@ -65,12 +74,17 @@ public class Stars : MonoBehaviour
 
     private IEnumerator PopAndChangeColor(Image star, Color targetColor)
     {
+        if (saveObject.EnableSound)
+        {
+            AudioSource.PlayClipAtPoint(starAudioClip, Vector3.zero, 0.35f);
+        }
+
         // Change color immediately for the diamond pop effect
         star.color = targetColor;
 
         Vector3 originalScale = Vector3.one;
-        Vector3 popScale = originalScale * 1.2f;
-        float duration = 0.35f;
+        Vector3 popScale = originalScale * 1.5f;
+        float duration = 0.2f;
 
         // Scale up
         float time = 0f;
@@ -88,6 +102,8 @@ public class Stars : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+
+        star.transform.localScale = Vector3.one;
     }
 
     private void SetStarsColor(Color color)

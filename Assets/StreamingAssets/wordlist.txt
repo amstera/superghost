@@ -14443,8 +14443,6 @@ cottagers
 cottages
 cottar
 cottars
-cotter
-cotters
 cotton
 cottoned
 cottoning
@@ -35358,8 +35356,6 @@ jars
 jasmine
 jasmines
 jasper
-jato
-jatos
 jaundice
 jaundiced
 jaundices
@@ -41604,10 +41600,6 @@ monounsaturated
 monoxide
 monoxides
 monozygotic
-monseigneur
-monsieur
-monsignor
-monsignors
 monsoon
 monsoonal
 monsoons
@@ -71216,6 +71208,7 @@ unsustainable
 unswayed
 unsweetened
 unswerving
+unswiped
 unsymmetrical
 unsympathetic
 unsympathetically
@@ -74829,7 +74822,6 @@ yesteryear
 yeti
 yetis
 yews
-yids
 yield
 yielded
 yielding

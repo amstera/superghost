@@ -140,6 +140,10 @@ public class ComboText : MonoBehaviour
             selectedChars.Add(WeightedRandomCharacter());
         }
 
+        var sortedList = selectedChars.ToList();
+        sortedList.Sort();
+        selectedChars = sortedList.ToHashSet();
+
         float totalTime = 0.25f; // Duration of the entire animation
         float updateInterval = 0.05f; // How often to update the text
 
