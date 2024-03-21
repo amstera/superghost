@@ -28,9 +28,25 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         }
     }
 
-
     public void OnPointerClick(PointerEventData eventData)
     {
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(this, eventData.position, eventData.pressEventCamera);
+        if (linkIndex != -1)
+        {
+            // Link was clicked
+            TMP_LinkInfo linkInfo = textInfo.linkInfo[linkIndex];
+
+            // Extract the URL/id from the linkInfo
+            string url = linkInfo.GetLinkID();
+
+            // Open the URL if it's not empty
+            if (!string.IsNullOrEmpty(url))
+            {
+                Application.OpenURL(url);
+                return;
+            }
+        }
+
         RectTransform rectTransform = GetComponent<RectTransform>();
 
         // Convert the click position to local position relative to the TextMeshProUGUI component

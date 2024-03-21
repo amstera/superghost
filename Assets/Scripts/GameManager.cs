@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton;
+    public Button hintButton, historyButton;
     public Stars stars;
 
     public AudioClip winSound, loseSound;
@@ -143,6 +143,8 @@ public class GameManager : MonoBehaviour
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
             points = 0;
+            pointsText.gameObject.SetActive(true);
+            historyButton.gameObject.SetActive(false);
 
             gameOver = false;
         }
@@ -295,7 +297,8 @@ public class GameManager : MonoBehaviour
         else
         {
             var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
-            wordDisplay.text = $"CASP won!\nCASP thought <color=red>{thoughtWord}</color>";
+            string wordLink = GenerateWordLink(thoughtWord, false);
+            wordDisplay.text = $"CASP won!\nCASP thought\n{wordLink}";
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(gameWord, -2);
@@ -317,18 +320,26 @@ public class GameManager : MonoBehaviour
         gameWord = word;
         if (wordDictionary.IsWordReal(word))
         {
-            wordDisplay.text = $"You won!\n<color=green>{word.ToUpper()}</color> is a word";
+            string wordLink = GenerateWordLink(word, true);
+            wordDisplay.text = $"You won!\n{wordLink}\nis a word";
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
             isPlayerTurn = false;
             wordDictionary.AddLostChallengeWord(originalWord);
+
+            var addedChars = word.Replace(originalWord, "").ToCharArray();
+            foreach (var c in addedChars)
+            {
+                comboText.UseCharacter(c);
+            }
+
             UpdatePoints(gameWord, 2);
             previousWords.Add(gameWord);
         }
         else
         {
-            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color> is not a word";
+            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color>\nis not a word";
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -348,7 +359,8 @@ public class GameManager : MonoBehaviour
     {
         if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
         {
-            wordDisplay.text = $"CASP won with\n<color=red>{gameWord.ToUpper()}</color>";
+            string wordLink = GenerateWordLink(gameWord, false);
+            wordDisplay.text = $"CASP won with\n{wordLink}";
             playerLivesText.LoseLife();
             isPlayerTurn = true;
             previousWords.Add(gameWord);
@@ -478,6 +490,8 @@ public class GameManager : MonoBehaviour
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
             endGameText.gameObject.SetActive(true);
             comboText.gameObject.SetActive(false);
+            pointsText.gameObject.SetActive(false);
+            historyButton.gameObject.SetActive(true);
 
             if (playerWon)
             {
@@ -525,14 +539,14 @@ public class GameManager : MonoBehaviour
             string linebreak = "\n";
             if (index == previousWords.Count - 1)
             {
+                var color = playerWon ? "green" : "red";
                 if (isLastWordValid)
                 {
-                    var color = playerWon ? "green" : "red";
                     displayedWord = $"<color={color}>{displayedWord}</color>";
                 }
                 else
                 {
-                    displayedWord = $"<color=red><s>{displayedWord}</s></color>";
+                    displayedWord = $"<color={color}><s>{displayedWord}</s></color>";
                 }
                 linebreak = "";
             }
@@ -563,7 +577,9 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    wordDisplay.text = $"You won with\n<color=green>{foundWord.ToUpper()}</color>";
+                    var wordLink = GenerateWordLink(foundWord, true);
+                    wordDisplay.text = $"You won with\n{wordLink}";
+
                     aiLivesText.LoseLife();
                     confettiPS.Play();
                     playerWon = true;
@@ -675,5 +691,12 @@ public class GameManager : MonoBehaviour
     private bool IsPlayerWinning()
     {
         return playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
+    }
+
+    private string GenerateWordLink(string gameWord, bool isWinning)
+    {
+        string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
+        string color = isWinning ? "green" : "red";
+        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=5> </size><color=#9AC2E0><size=25><voffset=5>(?)</voffset></size></color></link>";
     }
 }

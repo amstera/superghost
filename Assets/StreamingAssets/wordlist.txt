@@ -20549,6 +20549,8 @@ duke
 dukedom
 dukedoms
 dukes
+dukka
+dukkah
 dulcet
 dulcimer
 dulcimers
@@ -20644,6 +20646,7 @@ duplicator
 duplicators
 duplicitous
 duplicity
+duqqa
 durability
 durable
 durably
@@ -20893,6 +20896,7 @@ ecclesiastic
 ecclesiastical
 ecclesiastically
 ecclesiastics
+ecclesiology
 echelon
 echelons
 echidna
@@ -34686,6 +34690,7 @@ interstates
 interstellar
 interstice
 interstices
+interstimulus
 interstitial
 intertwine
 intertwined
@@ -36399,6 +36404,8 @@ kowtowing
 kowtows
 kraal
 kraals
+kraken
+krakens
 kraut
 krauts
 krill
@@ -40278,6 +40285,7 @@ method
 methodical
 methodically
 methodicalness
+methodizing
 methodological
 methodologically
 methodologies
@@ -41481,11 +41489,6 @@ monger
 mongered
 mongering
 mongers
-mongol
-mongolism
-mongoloid
-mongoloids
-mongols
 mongoose
 mongooses
 mongrel
@@ -42414,6 +42417,8 @@ muzzy
 mycologist
 mycologists
 mycology
+myelin
+myelination
 myelitis
 myna
 mynah
@@ -45830,6 +45835,7 @@ overwritten
 overwrote
 overwrought
 overzealous
+overzealousness
 oviduct
 oviducts
 oviparous
@@ -49974,6 +49980,7 @@ predesignate
 predesignated
 predesignates
 predesignating
+predestinate
 predestination
 predestine
 predestined
@@ -52668,6 +52675,8 @@ rapier
 rapiers
 rapine
 raping
+rapini
+rapinis
 rapist
 rapists
 rapped
@@ -54754,6 +54763,7 @@ remunerating
 remuneration
 remunerations
 remunerative
+remyelination
 renaissance
 renaissances
 renal
@@ -61705,6 +61715,8 @@ solver
 solvers
 solves
 solving
+soma
+somata
 somatic
 somatosensory
 somber
@@ -64304,6 +64316,7 @@ subculture
 subcultures
 subcutaneous
 subcutaneously
+subdevelopment
 subdivide
 subdivided
 subdivides
@@ -67236,6 +67249,7 @@ thudded
 thudding
 thuds
 thug
+thuggeries
 thuggery
 thuggish
 thugs
@@ -70363,6 +70377,7 @@ unexploited
 unexplored
 unexposed
 unexpressed
+unexpressive
 unexpurgated
 unfading
 unfailing
