@@ -5035,8 +5035,6 @@ batik
 batiks
 bating
 batiste
-batman
-batmen
 baton
 batons
 bats
@@ -10566,6 +10564,8 @@ chemistry
 chemists
 chemo
 chemotherapeutic
+chemotherapist
+chemotherapists
 chemotherapy
 chemurgy
 chenille
@@ -17299,6 +17299,10 @@ demystified
 demystifies
 demystify
 demystifying
+demythologize
+demythologized
+demythologizes
+demythologizing
 denationalization
 denationalize
 denationalized
@@ -63671,6 +63675,8 @@ stogy
 stoic
 stoical
 stoically
+stoichiometries
+stoichiometry
 stoicism
 stoics
 stoke
@@ -64971,11 +64977,9 @@ superiors
 superlative
 superlatively
 superlatives
-superman
 supermarket
 supermarkets
 supermassive
-supermen
 supermodel
 supermodels
 supermom
@@ -67875,6 +67879,8 @@ topdressings
 topee
 topees
 topflight
+tophi
+tophus
 topi
 topiary
 topic

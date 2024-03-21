@@ -24,8 +24,9 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, historyButton;
+    public Button hintButton, recapButton;
     public Stars stars;
+    public RecapPopup recapPopup;
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
+    private List<RecapObject> recap = new List<RecapObject>();
     private bool gameEnded = false;
     private bool gameOver = true;
     private bool wordsRemaining = true;
@@ -144,7 +146,8 @@ public class GameManager : MonoBehaviour
             comboText.ChooseNewCombo();
             points = 0;
             pointsText.gameObject.SetActive(true);
-            historyButton.gameObject.SetActive(false);
+            recapButton.gameObject.SetActive(false);
+            recap.Clear();
 
             gameOver = false;
         }
@@ -283,7 +286,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.15f);
 
-        if (wordDictionary.ShouldChallenge(gameWord))
+        if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
             wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
             aiLivesText.LoseLife();
@@ -348,6 +351,11 @@ public class GameManager : MonoBehaviour
         }
 
         EndGame();
+    }
+
+    public void ShowRecap()
+    {
+        recapPopup.Show(recap);
     }
 
     public bool IsDoneRound()
@@ -467,7 +475,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.SetActive(true);
         hintButton.interactable = false;
 
-        if (roundPoints != 0)
+        if (roundPoints != 0 && playerWon)
         {
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
@@ -491,7 +499,7 @@ public class GameManager : MonoBehaviour
             endGameText.gameObject.SetActive(true);
             comboText.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
-            historyButton.gameObject.SetActive(true);
+            recapButton.gameObject.SetActive(true);
 
             if (playerWon)
             {
@@ -517,8 +525,6 @@ public class GameManager : MonoBehaviour
                 {
                     difficultyText.gameObject.SetActive(true);
                 }
-
-                pointsText.Reset();
             }
 
 
@@ -555,13 +561,21 @@ public class GameManager : MonoBehaviour
         }
 
         historyText.text = previousWordsText;
+
+        recap.Add(new RecapObject
+        {
+            PlayerGhostString = playerLivesText.livesText.text,
+            AIGhostString = aiLivesText.livesText.text,
+            Points = points,
+            History = previousWordsText
+        });
     }
 
     private IEnumerator ProcessComputerTurn()
     {
         yield return new WaitForSeconds(Random.Range(0.4f, 1f));
 
-        if (wordDictionary.ShouldChallenge(gameWord))
+        if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
             challengePopup.Show(gameWord);
         }

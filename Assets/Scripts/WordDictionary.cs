@@ -95,7 +95,7 @@ public class WordDictionary
         lostChallengeSubstring.Add(word);
     }
 
-    public bool ShouldChallenge(string substring)
+    public bool ShouldChallenge(string substring, Difficulty difficulty)
     {
         if (string.IsNullOrEmpty(substring)) return false;
 
@@ -140,7 +140,17 @@ public class WordDictionary
 
         double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)filteredWords.Count);
 
-        double challengeProbability = Math.Max(0, 0.75f - avgScore / maxCommonessThreshold);
+        float probabilityOffSet = 0.8f;
+        if (difficulty == Difficulty.Easy)
+        {
+            probabilityOffSet = 0.95f;
+        }
+        else if (difficulty == Difficulty.Hard)
+        {
+            probabilityOffSet = 0.65f;
+        }
+
+        double challengeProbability = Math.Max(0, probabilityOffSet - avgScore / maxCommonessThreshold);
 
         return rng.NextDouble() < challengeProbability;
     }
