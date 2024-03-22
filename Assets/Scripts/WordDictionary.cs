@@ -230,7 +230,8 @@ public class WordDictionary
         string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing, difficulty);
         if (foundWord == null)
         {
-            if (difficulty == Difficulty.Easy)
+            Random random = new Random();
+            if (difficulty == Difficulty.Easy || (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.2f))
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -386,8 +387,8 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 0.95f, ScoreThresholds = new[] { 800, 400, 50 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 400, 50 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 500, 50 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 500, 50 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 50 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };

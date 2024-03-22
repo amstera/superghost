@@ -7,11 +7,12 @@ using System;
 public class SettingsPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
-    public GameObject popUpGameObject;
+    public GameObject popUpGameObject, settingsPage, statsPage;
+    public Button settingsButton, statsButton;
     public GameManager gameManager;
     public AudioManager audioManager;
 
-    public TextMeshProUGUI highScoreAmountText, footerText;
+    public TextMeshProUGUI highScoreAmountText, footerText, gamesPlayedText, longestWinningWordText, longestLosingWordText, mostPointsText, mostPointsWordText;
     public Toggle sfxToggle;
     public TMP_Dropdown difficultyDropdown;
 
@@ -48,6 +49,13 @@ public class SettingsPopUp : MonoBehaviour
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
         difficultyDropdown.interactable = gameManager.IsDoneRound();
 
+        // Set up stats
+        gamesPlayedText.text = saveObject.Statistics.GamesPlayed.ToString();
+        longestWinningWordText.text = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
+        longestLosingWordText.text = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
+        mostPointsText.text = saveObject.Statistics.MostPointsPerRound.ToString();
+        mostPointsWordText.text = string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord) ? "" : $"({saveObject.Statistics.MostPointsPerRoundWord})";
+
         SetFooterText();
 
         canvasGroup.interactable = true;
@@ -55,6 +63,12 @@ public class SettingsPopUp : MonoBehaviour
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
+    }
+
+    public void ShowSettings()
+    {
+        ShowSettings();
+        Show();
     }
 
     private IEnumerator FadeIn()
@@ -142,5 +156,25 @@ public class SettingsPopUp : MonoBehaviour
         string gameVersion = Application.version;
         string gameName = Application.productName;
         footerText.text = $"{gameName} © {currentYear} Green Tea Gaming - Version {gameVersion}";
+    }
+
+    public void PressSettingsTab()
+    {
+        clickAudioSource?.Play();
+
+        settingsButton.interactable = false;
+        statsButton.interactable = true;
+        settingsPage.gameObject.SetActive(true);
+        statsPage.gameObject.SetActive(false);
+    }
+
+    public void PressStatsTab()
+    {
+        clickAudioSource?.Play();
+
+        settingsButton.interactable = true;
+        statsButton.interactable = false;
+        settingsPage.gameObject.SetActive(false);
+        statsPage.gameObject.SetActive(true);
     }
 }
