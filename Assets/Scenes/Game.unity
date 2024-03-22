@@ -8712,8 +8712,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12605,7 +12605,6 @@ MonoBehaviour:
   confettiPS: {fileID: 184563833}
   playerLivesText: {fileID: 725569720}
   aiLivesText: {fileID: 1820997864}
-  nextRoundButton: {fileID: 213412184}
   playerIndicator: {fileID: 2045813791}
   aiIndicator: {fileID: 1336521940}
   challengeButton: {fileID: 1389336106}
@@ -12621,6 +12620,7 @@ MonoBehaviour:
     Difficulty: 0
   hintButton: {fileID: 1222778901}
   recapButton: {fileID: 623521830}
+  nextRoundButton: {fileID: 213412186}
   stars: {fileID: 1729231834}
   recapPopup: {fileID: 201053105}
   winSound: {fileID: 8300000, guid: 3ece9ada6261241b89f4b864c62ea9bf, type: 3}

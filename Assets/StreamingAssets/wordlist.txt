@@ -14679,6 +14679,7 @@ cousins
 couture
 couturier
 couturiers
+covalence
 covalent
 covariance
 covariant

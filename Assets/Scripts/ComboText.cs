@@ -18,6 +18,7 @@ public class ComboText : MonoBehaviour
         {'Q', 9}, {'R', 9}, {'S', 10}, {'T', 10}, {'U', 11}, {'V', 11}, {'W', 12}, {'X', 12},
         {'Y', 13}, {'Z', 13}
     };
+    private Coroutine newCombo;
 
     private class ComboChar
     {
@@ -40,7 +41,11 @@ public class ComboText : MonoBehaviour
 
     public void ChooseNewCombo()
     {
-        StartCoroutine(ChooseNewComboAnimation());
+        if (newCombo != null)
+        {
+            StopCoroutine(newCombo);
+        }
+        newCombo = StartCoroutine(ChooseNewComboAnimation());
     }
 
     private char WeightedRandomCharacter()

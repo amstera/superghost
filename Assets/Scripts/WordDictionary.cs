@@ -147,7 +147,7 @@ public class WordDictionary
         }
         else if (difficulty == Difficulty.Hard)
         {
-            probabilityOffSet = 0.65f;
+            probabilityOffSet = 0.6f;
         }
 
         double challengeProbability = Math.Max(0, probabilityOffSet - avgScore / maxCommonessThreshold);
@@ -216,7 +216,7 @@ public class WordDictionary
         List<string> oddLengthWords = new List<string>();
         foreach (var word in filteredWords)
         {
-            if (!anyEasyWordsRemain || (difficulty > Difficulty.Easy && isLosing) || commonWords.TryGetValue(word, out int frequency) && frequency >= minScore)
+            if (!anyEasyWordsRemain || (difficulty > Difficulty.Easy && isLosing) || (commonWords.TryGetValue(word, out int frequency) && frequency >= minScore))
             {
                 if (Math.Abs(word.Length - substring.Length) % 2 == 0)
                 {
@@ -251,14 +251,14 @@ public class WordDictionary
         return foundWord;
     }
 
-    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> filteredWords, bool isLosing, Difficulty difficulty)
+    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, bool isLosing, Difficulty difficulty)
     {
         bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isLosing, difficulty);
         var lettersPrimaryList = prioritizeStart ? lettersForStartWith : lettersForEndWith;
         var lettersSecondaryList  = prioritizeStart ? lettersForEndWith : lettersForStartWith;
 
         // First, try to find words with the possible priorizitation
-        var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, filteredWords);
+        var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, wordList, difficulty);
         if (string.IsNullOrEmpty(startWithResult))
         {
             if (difficulty == Difficulty.Easy)
@@ -275,7 +275,7 @@ public class WordDictionary
         }
 
         // If none found, fallback to the opposite prioritization
-        return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, filteredWords);
+        return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, wordList, difficulty);
     }
 
     private bool ShouldPrioritizeStart(int substringLength, bool isLosing, Difficulty difficulty)
@@ -285,20 +285,21 @@ public class WordDictionary
             return true;
         }
 
+        Random random = new Random();
+
         if (difficulty == Difficulty.Hard)
         {
-            return false;
+            return random.NextDouble() <= 0.15f;
         }
 
         if (substringLength <= 2) return true;
 
         // Otherwise chance it will
-        Random random = new Random();
         float odds = isLosing ? 0.6f : 0.85f;
         return random.NextDouble() <= odds;
     }
 
-    private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> filteredWords)
+    private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> wordList, Difficulty difficulty)
     {
         foreach (var letter in letters)
         {
@@ -306,11 +307,25 @@ public class WordDictionary
 
             foreach (var extension in extensions)
             {
-                var matchedWords = filteredWords.Where(w => (substring.Length < 3 || !IsWordReal(extension))
-                                                    && (prioritizeStart ? w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase) : w.Contains(extension, StringComparison.InvariantCultureIgnoreCase)));
-                if (matchedWords.Any())
+                var matchedWords = wordList.Any(w => (substring.Length < 3 || !IsWordReal(extension))
+                                                    && (prioritizeStart ? w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase) : w.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase)));
+                if (matchedWords)
                 {
                     return extension;
+                }
+            }
+
+            if (!prioritizeStart || difficulty == Difficulty.Hard)
+            {
+                // loop through it again but try with contains
+                foreach (var extension in extensions)
+                {
+                    var matchedWords = wordList.Any(w => (substring.Length < 3 || !IsWordReal(extension))
+                                                        && w.Contains(extension));
+                    if (matchedWords)
+                    {
+                        return extension;
+                    }
                 }
             }
         }

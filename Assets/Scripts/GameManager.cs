@@ -18,13 +18,13 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject nextRoundButton, playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText;
+    public GameObject playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, recapButton;
+    public Button hintButton, recapButton, nextRoundButton;
     public Stars stars;
     public RecapPopup recapPopup;
 
@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator NewGame()
     {
         clickAudioSource?.Play();
+        nextRoundButton.interactable = false;
 
         yield return new WaitForSeconds(0.15f);
         StartNewGame();
@@ -129,7 +130,8 @@ public class GameManager : MonoBehaviour
 
     private void StartNewGame()
     {
-        nextRoundButton.SetActive(false);
+        nextRoundButton.interactable = true;
+        nextRoundButton.gameObject.SetActive(false);
 
         if (gameOver)
         {
@@ -472,7 +474,7 @@ public class GameManager : MonoBehaviour
         ShowHistory();
         ghostAvatar.Hide();
         challengeButton.SetActive(false);
-        nextRoundButton.SetActive(true);
+        nextRoundButton.gameObject.SetActive(true);
         hintButton.interactable = false;
 
         if (roundPoints != 0 && playerWon)
