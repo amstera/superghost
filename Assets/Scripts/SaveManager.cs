@@ -51,7 +51,19 @@ public class SaveObject
 {
     public int HighScore;
     public bool EnableSound = true;
+    public bool HasSeenTutorial;
     public Difficulty Difficulty = Difficulty.Normal;
+    public Statistics Statistics;
+}
+
+[System.Serializable]
+public class Statistics
+{
+    public string LongestWinningWord = "";
+    public string LongestLosingWord = "";
+    public int MostPointsPerRound;
+    public string MostPointsPerRoundWord = "";
+    public int GamesPlayed;
 }
 
 

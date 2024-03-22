@@ -472,12 +472,12 @@ public class GameManager : MonoBehaviour
         wordDisplay.characterSpacing = -5f;
 
         ShowHistory();
-        ghostAvatar.Hide();
+        ghostAvatar.Hide();     
         challengeButton.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
         hintButton.interactable = false;
 
-        if (roundPoints != 0 && playerWon)
+        if (roundPoints != 0)
         {
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
@@ -487,11 +487,26 @@ public class GameManager : MonoBehaviour
         if (playerWon)
         {
             gameStatusAudioSource.clip = winSound;
+
+            if (isLastWordValid && gameWord.Length > saveObject.Statistics.LongestWinningWord.Length)
+            {
+                saveObject.Statistics.LongestWinningWord = gameWord.ToLower();
+            }
+            if (roundPoints > saveObject.Statistics.MostPointsPerRound)
+            {
+                saveObject.Statistics.MostPointsPerRound = roundPoints;
+                saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
+            }
         }
         else
         {
             gameStatusAudioSource.clip = loseSound;
             comboText.ResetPending();
+
+            if (isLastWordValid && gameWord.Length > saveObject.Statistics.LongestLosingWord.Length)
+            {
+                saveObject.Statistics.LongestLosingWord = gameWord.ToLower();
+            }
         }
         gameStatusAudioSource.Play();
 
@@ -513,7 +528,6 @@ public class GameManager : MonoBehaviour
                 if (points > saveObject.HighScore)
                 {
                     saveObject.HighScore = points;
-                    SaveManager.Save(saveObject);
                     newIndicator.SetActive(true);
 
                     Device.RequestStoreReview();
@@ -523,15 +537,18 @@ public class GameManager : MonoBehaviour
             {
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
+                pointsEarnedText.gameObject.SetActive(false);
                 if (saveObject.Difficulty > Difficulty.Easy)
                 {
                     difficultyText.gameObject.SetActive(true);
                 }
             }
 
-
+            saveObject.Statistics.GamesPlayed++;
             gameOver = true;
         }
+
+        SaveManager.Save(saveObject);
     }
 
     private void ShowHistory()
@@ -603,6 +620,7 @@ public class GameManager : MonoBehaviour
                     isPlayerTurn = false;
 
                     previousWords.Add(gameWord);
+                    gameWord = foundWord;
                     previousWords.Add(foundWord);
                     EndGame();
                 }

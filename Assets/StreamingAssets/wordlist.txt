@@ -3838,6 +3838,7 @@ auctions
 audacious
 audaciously
 audaciousness
+audacities
 audacity
 audibility
 audible
@@ -23814,6 +23815,8 @@ eyelid
 eyelids
 eyeliner
 eyeliners
+eyepatch
+eyepatches
 eyepiece
 eyepieces
 eyes
@@ -41227,6 +41230,8 @@ mixer
 mixers
 mixes
 mixing
+mixologist
+mixology
 mixture
 mixtures
 mizzen
@@ -73359,6 +73364,8 @@ webbed
 webbing
 webfeet
 webfoot
+webinar
+webinars
 webs
 wedded
 wedder

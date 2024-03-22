@@ -14,6 +14,7 @@ public class WordDictionary
     private readonly char[] consonants = "bcdfghjklmnpqrstvwxz".ToCharArray();
     private readonly char[] specialConsonants = "bcdgkpstw".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
+    private delegate bool MatchCondition(string w, string extension);
 
     public void LoadWords(string[] lines)
     {
@@ -139,18 +140,9 @@ public class WordDictionary
         }
 
         double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)filteredWords.Count);
+        var difficultSettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
 
-        float probabilityOffSet = 0.8f;
-        if (difficulty == Difficulty.Easy)
-        {
-            probabilityOffSet = 0.95f;
-        }
-        else if (difficulty == Difficulty.Hard)
-        {
-            probabilityOffSet = 0.6f;
-        }
-
-        double challengeProbability = Math.Max(0, probabilityOffSet - avgScore / maxCommonessThreshold);
+        double challengeProbability = Math.Max(0, difficultSettings.ProbabilityOffset - avgScore / maxCommonessThreshold);
 
         return rng.NextDouble() < challengeProbability;
     }
@@ -200,17 +192,18 @@ public class WordDictionary
             }
         }
 
-        int minScore = 400;
-        if (difficulty == Difficulty.Hard)
+        bool anyEasyWordsRemain = false;
+        int minScore = 0;
+        var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
+        foreach (var scoreThreshold in difficultySettings.ScoreThresholds)
         {
-            minScore = 50;
+            minScore = scoreThreshold;
+            anyEasyWordsRemain = filteredWords.Any(w => commonWords.TryGetValue(w, out int frequency) && frequency >= minScore);
+            if (anyEasyWordsRemain)
+            {
+                break;
+            }
         }
-        else if (difficulty == Difficulty.Easy)
-        {
-            minScore = 750;
-        }
-
-        bool anyEasyWordsRemain = filteredWords.Any(w => commonWords.TryGetValue(w, out int frequency) && frequency >= minScore);
 
         List<string> evenLengthWords = new List<string>();
         List<string> oddLengthWords = new List<string>();
@@ -304,12 +297,14 @@ public class WordDictionary
         foreach (var letter in letters)
         {
             string[] extensions = prioritizeStart ? new[] { substring + letter } : new[] { letter + substring };
+            MatchCondition initialCondition = (w, extension) => substring.Length < 3 || !IsWordReal(extension);
 
             foreach (var extension in extensions)
             {
-                var matchedWords = wordList.Any(w => (substring.Length < 3 || !IsWordReal(extension))
-                                                    && (prioritizeStart ? w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase) : w.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase)));
-                if (matchedWords)
+                if (wordList.Any(w => initialCondition(w, extension)
+                    && (prioritizeStart ?
+                        w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase)
+                        : w.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))))
                 {
                     return extension;
                 }
@@ -320,9 +315,8 @@ public class WordDictionary
                 // loop through it again but try with contains
                 foreach (var extension in extensions)
                 {
-                    var matchedWords = wordList.Any(w => (substring.Length < 3 || !IsWordReal(extension))
-                                                        && w.Contains(extension));
-                    if (matchedWords)
+                    if (wordList.Any(w => initialCondition(w, extension)
+                        && w.Contains(extension, StringComparison.InvariantCultureIgnoreCase)))
                     {
                         return extension;
                     }
@@ -380,5 +374,22 @@ public class WordDictionary
 
         // Convert the list to an array and return it
         return weightedList.ToArray();
+    }
+}
+
+public class DifficultySettings
+{
+    public float ProbabilityOffset { get; set; }
+    public int[] ScoreThresholds { get; set; }
+
+    public static DifficultySettings GetSettingsForDifficulty(Difficulty difficulty)
+    {
+        return difficulty switch
+        {
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 0.95f, ScoreThresholds = new[] { 800, 400, 50 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 400, 50 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 50 } },
+            _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
+        };
     }
 }
