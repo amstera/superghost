@@ -161,6 +161,11 @@ public class WordDictionary
             return weightedLetters[index].ToString();
         }
 
+        if (filteredWords.Count == 0) // no words match
+        {
+            return null;
+        }
+
         // Shuffle vowels and consonants separately
         ShuffleArray(vowels);
         ShuffleArray(consonants);
@@ -387,9 +392,9 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 500, 50 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 500, 50 } },
-            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 50 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 500, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 500, 100 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
     }

@@ -67,8 +67,8 @@ public class SettingsPopUp : MonoBehaviour
 
     public void ShowSettings()
     {
-        ShowSettings();
         Show();
+        PressSettingsTab();
     }
 
     private IEnumerator FadeIn()

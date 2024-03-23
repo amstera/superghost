@@ -15,8 +15,8 @@ public class ComboText : MonoBehaviour
         // Example weights, adjust as necessary
         {'A', 1}, {'B', 1}, {'C', 2}, {'D', 2}, {'E', 3}, {'F', 3}, {'G', 4}, {'H', 4},
         {'I', 5}, {'J', 5}, {'K', 6}, {'L', 6}, {'M', 7}, {'N', 7}, {'O', 8}, {'P', 8},
-        {'Q', 9}, {'R', 9}, {'S', 10}, {'T', 10}, {'U', 11}, {'V', 11}, {'W', 12}, {'X', 12},
-        {'Y', 13}, {'Z', 13}
+        {'Q', 9}, {'R', 9}, {'S', 10}, {'T', 10}, {'U', 10 }, {'V', 10}, {'W', 10}, {'X', 10},
+        {'Y', 10}, {'Z', 10}
     };
     private Coroutine newCombo;
 
@@ -138,9 +138,10 @@ public class ComboText : MonoBehaviour
     {
         comboChars.Clear();
         var selectedChars = new HashSet<char>();
+        var totalChars = 4;
 
         // Pre-select the characters to ensure they're unique
-        while (selectedChars.Count < 4)
+        while (selectedChars.Count < totalChars)
         {
             selectedChars.Add(WeightedRandomCharacter());
         }
@@ -156,7 +157,7 @@ public class ComboText : MonoBehaviour
         {
             // Generate a string of 4 random characters, each separated by a space
             string randomChars = "";
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < totalChars; i++)
             {
                 randomChars += WeightedRandomCharacter() + " ";
             }

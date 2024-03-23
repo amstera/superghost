@@ -18,13 +18,13 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText;
+    public GameObject playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText, fireBall;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, recapButton, nextRoundButton;
+    public Button hintButton, recapButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
 
@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
     {
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
+        tutorialButton.gameObject.SetActive(true);
 
         if (gameOver)
         {
@@ -260,7 +261,7 @@ public class GameManager : MonoBehaviour
     public void ShowHint(int points)
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Normal);
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
         if (string.IsNullOrEmpty(nextWord))
         {
             canPushWord = false;
@@ -475,6 +476,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Hide();     
         challengeButton.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
+        tutorialButton.gameObject.SetActive(false);
         hintButton.interactable = false;
 
         if (roundPoints != 0)
@@ -482,6 +484,7 @@ public class GameManager : MonoBehaviour
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
             pointsEarnedText.AddPoints(roundPoints, true);
+            fireBall.SetActive(roundPoints >= 75);
         }
 
         if (playerWon)

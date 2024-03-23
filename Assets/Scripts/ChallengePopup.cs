@@ -37,6 +37,8 @@ public class ChallengePopUp : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
+        substring = substring.ToLower().Trim();
+
         originalSubstring = substring;
         challengeText.text = $"CASP calls a bluff on\n<color=#FF3800>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
