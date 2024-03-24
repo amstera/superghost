@@ -18,13 +18,13 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, challengeButton, newIndicator, difficultyText, fireBall;
+    public GameObject playerIndicator, aiIndicator, newIndicator, difficultyText, fireBall;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, recapButton, nextRoundButton, tutorialButton;
+    public Button hintButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
 
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     private bool wordsRemaining = true;
     private bool isLastWordValid = true;
     private bool playerWon;
+    private bool isChallenging;
     private int points;
     private int roundPoints;
     private WordDictionary wordDictionary = new WordDictionary();
@@ -180,6 +181,7 @@ public class GameManager : MonoBehaviour
         roundPoints = 0;
         pointsEarnedText.Reset();
         pointsEarnedText.gameObject.SetActive(false);
+        comboText.ResetPending();
 
         keyboard.Show();
         previousWords.Clear();
@@ -246,9 +248,12 @@ public class GameManager : MonoBehaviour
 
     public void ChallengeWord()
     {
-        clickAudioSource?.Play();
+        if (!isChallenging)
+        {
+            clickAudioSource?.Play();
 
-        StartCoroutine(ProcessChallengeWord());
+            StartCoroutine(ProcessChallengeWord());
+        }
     }
 
     public void HintButtonPressed()
@@ -287,7 +292,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessChallengeWord()
     {
-        yield return new WaitForSeconds(0.15f);
+        isChallenging = true;
+        ghostAvatar.Think();
+
+        yield return new WaitForSeconds(0.25f);
+
+        isChallenging = false;
 
         if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
@@ -474,7 +484,7 @@ public class GameManager : MonoBehaviour
 
         ShowHistory();
         ghostAvatar.Hide();     
-        challengeButton.SetActive(false);
+        challengeButton.gameObject.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
         tutorialButton.gameObject.SetActive(false);
         hintButton.interactable = false;
@@ -484,7 +494,8 @@ public class GameManager : MonoBehaviour
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
             pointsEarnedText.AddPoints(roundPoints, true);
-            fireBall.SetActive(roundPoints >= 30 * ((int)saveObject.Difficulty) + 1);
+            int pointsForFire = 30 * ((int)saveObject.Difficulty + 1);
+            fireBall.SetActive(roundPoints >= pointsForFire);
         }
 
         if (playerWon)
@@ -650,7 +661,7 @@ public class GameManager : MonoBehaviour
         playerText.color = isPlayer ? Color.green : Color.white;
         aiText.color = isPlayer ? Color.white : Color.green;
 
-        challengeButton.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
+        challengeButton.gameObject.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
 
         if (isPlayer)
         {

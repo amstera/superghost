@@ -13,7 +13,7 @@ public class GhostAvatar : MonoBehaviour
     private float startYPosition;
     private bool isShowing = false;
     private float moveSpeed = 3f;
-    private Vector3 originalScale;
+    private Vector3 originalTextScale;
     private float popScale = 1.15f;
     private float popDuration = 0.2f;
     private bool isThinking = false; // Added to indicate if the thinking animation is running
@@ -21,7 +21,7 @@ public class GhostAvatar : MonoBehaviour
     void Start()
     {
         startYPosition = transform.localPosition.y;
-        originalScale = textMeshProUGUI.transform.localScale; // Store the original scale at start
+        originalTextScale = textMeshProUGUI.transform.localScale;
     }
 
     void Update()
@@ -98,13 +98,13 @@ public class GhostAvatar : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < popDuration)
         {
-            textMeshProUGUI.transform.localScale = Vector3.Lerp(originalScale, originalScale * popScale, elapsedTime / popDuration);
+            textMeshProUGUI.transform.localScale = Vector3.Lerp(originalTextScale, originalTextScale * popScale, elapsedTime / popDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         // Scale back to original after the pop effect
-        textMeshProUGUI.transform.localScale = originalScale;
+        textMeshProUGUI.transform.localScale = originalTextScale;
     }
 
     IEnumerator AnimateThinking()

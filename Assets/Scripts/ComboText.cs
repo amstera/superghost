@@ -9,6 +9,8 @@ public class ComboText : MonoBehaviour
 {
     public TextMeshProUGUI comboText;
 
+    public AudioSource shuffleAudioSource;
+
     private List<ComboChar> comboChars = new List<ComboChar>();
     private Dictionary<char, int> characterWeights = new Dictionary<char, int>
     {
@@ -19,6 +21,7 @@ public class ComboText : MonoBehaviour
         {'Y', 10}, {'Z', 10}
     };
     private Coroutine newCombo;
+    private int multiplier;
 
     private class ComboChar
     {
@@ -66,24 +69,33 @@ public class ComboText : MonoBehaviour
         return 'A'; // Fallback character, should never actually hit this.
     }
 
-    private void UpdateComboText()
+    private void UpdateComboText(bool isWin = false)
     {
         StringBuilder comboTextBuilder = new StringBuilder("2x Points: ");
+
+        string notUsedColor = "#FFFFFF"; // White
+        string pendingColor = "#FFFF00"; // Yellow
+        string earnedColor = "#00FF00"; // Green
 
         foreach (var comboChar in comboChars)
         {
             string colorCode = comboChar.State switch
             {
-                CharState.NotUsed => "#FFFFFF",
-                CharState.Pending => "#FFFF00", // Yellow
-                CharState.EarnedPoints => "#00FF00", // Green
-                _ => "#FFFFFF"
+                CharState.NotUsed => notUsedColor,
+                CharState.Pending => pendingColor,
+                CharState.EarnedPoints => earnedColor,
+                _ => notUsedColor
             };
 
             comboTextBuilder.Append($"<color={colorCode}>{comboChar.Character}</color> ");
         }
 
         comboText.text = comboTextBuilder.ToString().TrimEnd();
+        if (multiplier > 1)
+        {
+            string multiplierColor = isWin ? earnedColor : pendingColor;
+            comboText.text += $" <color={multiplierColor}>({multiplier}x)</color>";
+        }
     }
 
     public void UseCharacter(char character)
@@ -93,6 +105,7 @@ public class ComboText : MonoBehaviour
         if (comboChar != null && comboChar.State == CharState.NotUsed)
         {
             comboChar.State = CharState.Pending;
+            multiplier *= 2;
         }
 
         UpdateComboText();
@@ -100,6 +113,8 @@ public class ComboText : MonoBehaviour
 
     public void ResetPending()
     {
+        multiplier = 1;
+
         foreach (var comboChar in comboChars)
         {
             if (comboChar.State == CharState.Pending)
@@ -113,18 +128,16 @@ public class ComboText : MonoBehaviour
 
     public int GetWinMultiplier(string word)
     {
-        int multiplier = 1;
         foreach (char character in word.ToUpper())
         {
             var comboChar = comboChars.FirstOrDefault(c => c.Character == character);
             if (comboChar != null && comboChar.State == CharState.Pending)
             {
-                multiplier *= 2;
                 comboChar.State = CharState.EarnedPoints;
             }
         }
 
-        UpdateComboText();
+        UpdateComboText(true);
 
         return multiplier;
     }
@@ -136,7 +149,10 @@ public class ComboText : MonoBehaviour
 
     private IEnumerator ChooseNewComboAnimation()
     {
+        shuffleAudioSource?.Play();
+
         comboChars.Clear();
+        multiplier = 1;
         var selectedChars = new HashSet<char>();
         var totalChars = 4;
 
