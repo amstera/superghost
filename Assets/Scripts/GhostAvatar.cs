@@ -12,7 +12,7 @@ public class GhostAvatar : MonoBehaviour
 
     private float startYPosition;
     private bool isShowing = false;
-    private float moveSpeed = 3.5f;
+    private float moveSpeed = 3f;
     private Vector3 originalScale;
     private float popScale = 1.15f;
     private float popDuration = 0.2f;
@@ -28,7 +28,7 @@ public class GhostAvatar : MonoBehaviour
     {
         if (isShowing)
         {
-            float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2;
+            float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2.5f;
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
         }
     }

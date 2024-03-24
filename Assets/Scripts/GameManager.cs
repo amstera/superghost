@@ -484,7 +484,7 @@ public class GameManager : MonoBehaviour
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
             pointsEarnedText.AddPoints(roundPoints, true);
-            fireBall.SetActive(roundPoints >= 75);
+            fireBall.SetActive(roundPoints >= 30 * ((int)saveObject.Difficulty) + 1);
         }
 
         if (playerWon)
