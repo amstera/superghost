@@ -126,18 +126,21 @@ public class ComboText : MonoBehaviour
         UpdateComboText();
     }
 
-    public int GetWinMultiplier(string word)
+    public int GetWinMultiplier(string word, bool updateLetters = true)
     {
-        foreach (char character in word.ToUpper())
+        if (updateLetters)
         {
-            var comboChar = comboChars.FirstOrDefault(c => c.Character == character);
-            if (comboChar != null && comboChar.State == CharState.Pending)
+            foreach (char character in word.ToUpper())
             {
-                comboChar.State = CharState.EarnedPoints;
+                var comboChar = comboChars.FirstOrDefault(c => c.Character == character);
+                if (comboChar != null && comboChar.State == CharState.Pending)
+                {
+                    comboChar.State = CharState.EarnedPoints;
+                }
             }
-        }
 
-        UpdateComboText(true);
+            UpdateComboText(true);
+        }
 
         return multiplier;
     }

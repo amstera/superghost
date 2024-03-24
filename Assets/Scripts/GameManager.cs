@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public PointsText pointsText, totalPointsText, pointsEarnedText;
     public ChallengePopUp challengePopup;
     public HintPopUp hintPopUp;
-    public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText;
+    public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText, pointsCalculateText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
         tutorialButton.gameObject.SetActive(true);
+        pointsCalculateText.text = string.Empty;
 
         if (gameOver)
         {
@@ -481,6 +482,7 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
         keyboard.Hide();
         wordDisplay.characterSpacing = -5f;
+        pointsCalculateText.text = string.Empty;
 
         ShowHistory();
         ghostAvatar.Hide();     
@@ -663,6 +665,8 @@ public class GameManager : MonoBehaviour
 
         challengeButton.gameObject.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
 
+        SetPointsCalculatedText();
+
         if (isPlayer)
         {
             hintButton.interactable = true;
@@ -746,5 +750,32 @@ public class GameManager : MonoBehaviour
         string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
         string color = isWinning ? "green" : "red";
         return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=5> </size><color=#9AC2E0><size=25><voffset=5>(?)</voffset></size></color></link>";
+    }
+
+    private void SetPointsCalculatedText()
+    {
+        int multiplier = comboText.GetWinMultiplier(gameWord, false);
+        float difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 2 : saveObject.Difficulty == Difficulty.Easy ? 0.5f : 1;
+
+        string calculationText = string.Empty;
+
+        if (gameWord.Length > 0)
+        {
+            calculationText = $"({gameWord.Length}";
+
+            if (difficultyMultiplier != 1)
+            {
+                calculationText += $" x {difficultyMultiplier}";
+            }
+
+            if (multiplier != 1)
+            {
+                calculationText += $" x {multiplier}";
+            }
+
+            calculationText += ")";
+        }
+
+        pointsCalculateText.text = calculationText;
     }
 }

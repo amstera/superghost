@@ -18,6 +18,12 @@ public class TextWiggleEffect : MonoBehaviour
 
     void Update()
     {
+        if (string.IsNullOrEmpty(tmpUGUI.text))
+        {
+            tmpUGUI.canvasRenderer.SetMesh(null);
+            return;
+        }
+
         tmpUGUI.ForceMeshUpdate();
         mesh = tmpUGUI.mesh;
         vertices = mesh.vertices;
