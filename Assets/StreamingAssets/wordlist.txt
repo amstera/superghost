@@ -2607,6 +2607,7 @@ antitoxins
 antitrust
 antivenin
 antivenins
+antivenom
 antiviral
 antivirus
 antivivisectionist
@@ -11045,6 +11046,8 @@ churner
 churners
 churning
 churns
+churro
+churros
 chute
 chutes
 chutney
@@ -65858,6 +65861,8 @@ tagger
 taggers
 tagging
 tagliatelle
+tagline
+taglines
 tags
 taiga
 taigas

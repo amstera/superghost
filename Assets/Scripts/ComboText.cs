@@ -14,12 +14,13 @@ public class ComboText : MonoBehaviour
     private List<ComboChar> comboChars = new List<ComboChar>();
     private Dictionary<char, int> characterWeights = new Dictionary<char, int>
     {
-        // Example weights, adjust as necessary
-        {'A', 1}, {'B', 1}, {'C', 2}, {'D', 2}, {'E', 3}, {'F', 3}, {'G', 4}, {'H', 4},
-        {'I', 5}, {'J', 5}, {'K', 6}, {'L', 6}, {'M', 7}, {'N', 7}, {'O', 8}, {'P', 8},
-        {'Q', 9}, {'R', 9}, {'S', 10}, {'T', 10}, {'U', 10 }, {'V', 10}, {'W', 10}, {'X', 10},
-        {'Y', 10}, {'Z', 10}
+        {'A', 2}, {'B', 7}, {'C', 5}, {'D', 4}, {'E', 2}, {'F', 10}, {'G', 7},
+        {'H', 6}, {'I', 3}, {'J', 20}, {'K', 8}, {'L', 3}, {'M', 6}, {'N', 4},
+        {'O', 3}, {'P', 5}, {'Q', 12}, {'R', 3}, {'S', 2}, {'T', 3}, {'U', 4},
+        {'V', 10}, {'W', 12}, {'X', 12 }, {'Y', 5}, {'Z', 12}
     };
+    private List<char> vowels = new List<char> { 'A', 'E', 'I', 'O', 'U', 'Y' };
+
     private Coroutine newCombo;
     private int multiplier;
 
@@ -160,6 +161,7 @@ public class ComboText : MonoBehaviour
         var totalChars = 4;
 
         // Pre-select the characters to ensure they're unique
+        selectedChars.Add(vowels[Random.Range(0, vowels.Count)]);
         while (selectedChars.Count < totalChars)
         {
             selectedChars.Add(WeightedRandomCharacter());
