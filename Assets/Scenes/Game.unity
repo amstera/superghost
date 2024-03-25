@@ -725,7 +725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.4
+  amplitude: 0.45
 --- !u!1 &141982554
 GameObject:
   m_ObjectHideFlags: 0
@@ -6723,7 +6723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.5
+  amplitude: 0.6
 --- !u!1 &733385829
 GameObject:
   m_ObjectHideFlags: 0
@@ -11792,7 +11792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2735849, g: 0.26197046, b: 0.26197046, a: 1}
+  m_Color: {r: 0.18039216, g: 0.15686275, b: 0.14901961, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12525,8 +12525,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.000856895
-  m_Size: 0.3619281
+  m_Value: 0.000000058543076
+  m_Size: 0.3907445
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14712,7 +14712,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1043.4615}
+  m_AnchoredPosition: {x: 0, y: 1042.5681}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1755711959
@@ -15821,7 +15821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.5
+  amplitude: 0.6
 --- !u!1 &1827357048
 GameObject:
   m_ObjectHideFlags: 0
@@ -16741,7 +16741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.4
+  amplitude: 0.45
 --- !u!82 &1915652086
 AudioSource:
   m_ObjectHideFlags: 0

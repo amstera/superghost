@@ -180,7 +180,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.4f))
+        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.3f))
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
