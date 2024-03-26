@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
+using System;
+using Newtonsoft.Json;
 
 public class SaveManager : MonoBehaviour
 {
@@ -8,7 +11,7 @@ public class SaveManager : MonoBehaviour
 
     public static void Save(SaveObject saveObject)
     {
-        string json = JsonUtility.ToJson(saveObject);
+        string json = JsonConvert.SerializeObject(saveObject);
         string encryptedJson = CryptoManager.EncryptString(json);
         File.WriteAllText(saveFilePath, encryptedJson);
 
@@ -26,7 +29,7 @@ public class SaveManager : MonoBehaviour
         {
             string encryptedJson = File.ReadAllText(saveFilePath);
             string decryptedJson = CryptoManager.DecryptString(encryptedJson);
-            cachedSaveObject = JsonUtility.FromJson<SaveObject>(decryptedJson);
+            cachedSaveObject = JsonConvert.DeserializeObject<SaveObject>(decryptedJson);
             return cachedSaveObject;
         }
 
@@ -61,8 +64,14 @@ public class Statistics
 {
     public string LongestWinningWord = "";
     public string LongestLosingWord = "";
-    public int MostPointsPerRound;
     public string MostPointsPerRoundWord = "";
+    public Dictionary<string, int> FrequentStartingLetter = new Dictionary<string, int>();
+    public int MostPointsPerRound;
+    public int Skunks;
+    public DateTime LastIncrementDate = DateTime.MinValue;
+    public int DailyPlayStreak;
+    public int LongestWinStreak;
+    public int WinStreak;
     public int GamesPlayed;
 }
 

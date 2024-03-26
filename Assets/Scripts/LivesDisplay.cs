@@ -110,6 +110,11 @@ public class LivesDisplay : MonoBehaviour
         return livesString.Length - currentLifeIndex;
     }
 
+    public bool HasFullLives()
+    {
+        return currentLifeIndex == 0;
+    }
+
     public void ResetLives()
     {
         currentLifeIndex = 0;

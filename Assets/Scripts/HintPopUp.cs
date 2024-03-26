@@ -43,7 +43,7 @@ public class HintPopUp : MonoBehaviour
         currentPointsText.text = points == 1 ? "1 POINT" : $"{points} POINTS";
 
         string pointsAmount = cost == 1 ? "1 POINT" : $"{cost} POINTS";
-        pointsText.text = $"<color=#758073><size=30>COST</size></color>\n{pointsAmount}";
+        pointsText.text = $"<color=#FFFFFF><size=30>COST</size></color>\n{pointsAmount}";
 
         var colors = hintButton.colors;
         if (cost > points)
@@ -54,7 +54,7 @@ public class HintPopUp : MonoBehaviour
         }
         else
         {
-            pointsText.color = cost > points ? Color.red : new Color32(26, 135, 10, 255);
+            pointsText.color = cost > points ? Color.red : Color.green;
             colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.b, colors.normalColor.g, 1f);
             colors.selectedColor = new Color(colors.selectedColor.r, colors.selectedColor.b, colors.selectedColor.g, 1f);
         }

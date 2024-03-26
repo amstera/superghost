@@ -7,6 +7,8 @@ using UnityEngine.UI;
 using UnityEngine.iOS;
 using Unity.Services.Core;
 using Unity.Services.Analytics;
+using System;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
 
         if (saveObject.HasSeenTutorial)
         {
+            UpdateDailyGameStreak(false);
             StartNewGame();
         }
         else
@@ -223,7 +226,15 @@ public class GameManager : MonoBehaviour
 
     public void ProcessTurn(char character)
     {
-        previousWords.Add(gameWord);
+        if (string.IsNullOrEmpty(gameWord))
+        {
+            saveObject.Statistics.FrequentStartingLetter[character.ToString()] = saveObject.Statistics.FrequentStartingLetter.GetValueOrDefault(character.ToString()) + 1;
+            SaveManager.Save(saveObject);
+        }
+        else
+        {
+            previousWords.Add(gameWord);
+        }
         int newIndex = 0;
         switch (selectedPosition)
         {
@@ -511,7 +522,7 @@ public class GameManager : MonoBehaviour
             fireBall.SetActive(roundPoints >= pointsForFire);
         }
 
-        if (playerWon)
+        if (playerWon) // won round
         {
             gameStatusAudioSource.clip = winSound;
 
@@ -525,7 +536,7 @@ public class GameManager : MonoBehaviour
                 saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
             }
         }
-        else
+        else // lost round
         {
             gameStatusAudioSource.clip = loseSound;
             comboText.ResetPending();
@@ -539,13 +550,14 @@ public class GameManager : MonoBehaviour
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
+            UpdateDailyGameStreak(true);
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
             endGameText.gameObject.SetActive(true);
             comboText.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
 
-            if (playerWon)
+            if (playerWon) // won game
             {
                 endGameText.text = "Victory!";
                 endGameText.color = Color.green;
@@ -559,8 +571,19 @@ public class GameManager : MonoBehaviour
 
                     Device.RequestStoreReview();
                 }
+
+                if (playerLivesText.HasFullLives())
+                {
+                    saveObject.Statistics.Skunks++;
+                }
+
+                saveObject.Statistics.WinStreak++;
+                if (saveObject.Statistics.WinStreak > saveObject.Statistics.LongestWinStreak)
+                {
+                    saveObject.Statistics.LongestWinStreak = saveObject.Statistics.WinStreak;
+                }
             }
-            else
+            else // lost game
             {
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
@@ -569,6 +592,8 @@ public class GameManager : MonoBehaviour
                 {
                     difficultyText.gameObject.SetActive(true);
                 }
+
+                saveObject.Statistics.WinStreak = 0;
             }
 
             saveObject.Statistics.GamesPlayed++;
@@ -788,5 +813,48 @@ public class GameManager : MonoBehaviour
         }
 
         pointsCalculateText.text = calculationText;
+    }
+
+    private void UpdateDailyGameStreak(bool finishedGame)
+    {
+        var lastIncrementedDate = saveObject.Statistics.LastIncrementDate;
+        var currentStreak = saveObject.Statistics.DailyPlayStreak;
+
+        if (lastIncrementedDate == DateTime.MinValue)
+        {
+            if (finishedGame)
+            {
+                currentStreak = 1;
+                lastIncrementedDate = DateTime.Now;
+            }
+        }
+        else
+        {
+            var daysSinceLastIncrement = (DateTime.UtcNow - lastIncrementedDate).Days;
+
+            if (daysSinceLastIncrement == 1)
+            {
+                if (finishedGame)
+                {
+                    currentStreak++;
+                    lastIncrementedDate = DateTime.Now;
+                }
+            }
+            else if (daysSinceLastIncrement > 1)
+            {
+                if (finishedGame)
+                {
+                    currentStreak = 1;
+                    lastIncrementedDate = DateTime.Now;
+                }
+                else
+                {
+                    currentStreak = 0;
+                }
+            }
+        }
+
+        saveObject.Statistics.LastIncrementDate = lastIncrementedDate;
+        saveObject.Statistics.DailyPlayStreak = currentStreak;
     }
 }

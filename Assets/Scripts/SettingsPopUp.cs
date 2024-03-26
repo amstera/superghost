@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class SettingsPopUp : MonoBehaviour
 {
@@ -12,9 +13,12 @@ public class SettingsPopUp : MonoBehaviour
     public GameManager gameManager;
     public AudioManager audioManager;
 
-    public TextMeshProUGUI highScoreAmountText, footerText, gamesPlayedText, longestWinningWordText, longestLosingWordText, mostPointsText, mostPointsWordText;
+    public TextMeshProUGUI highScoreAmountText, footerText, statsText;
     public Toggle sfxToggle;
     public TMP_Dropdown difficultyDropdown;
+
+    public RectTransform statsContentRect;
+    public ScrollRect statsScrollRect;
 
     public AudioSource clickAudioSource;
 
@@ -50,11 +54,7 @@ public class SettingsPopUp : MonoBehaviour
         difficultyDropdown.interactable = gameManager.IsDoneRound();
 
         // Set up stats
-        gamesPlayedText.text = saveObject.Statistics.GamesPlayed.ToString();
-        longestWinningWordText.text = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
-        longestLosingWordText.text = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
-        mostPointsText.text = saveObject.Statistics.MostPointsPerRound.ToString();
-        mostPointsWordText.text = string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord) ? "" : $"({saveObject.Statistics.MostPointsPerRoundWord})";
+        ConfigureStats();
 
         SetFooterText();
 
@@ -178,5 +178,74 @@ public class SettingsPopUp : MonoBehaviour
         statsButton.interactable = false;
         settingsPage.gameObject.SetActive(false);
         statsPage.gameObject.SetActive(true);
+    }
+
+    private void ConfigureStats()
+    {
+        var regularLineBreak = "<line-height=15>\n</line-height>\n";
+        var text = "<size=45>Stats</size>";
+        text += "<line-height=20>\n</line-height>\n";
+        text += "<size=25>Games Played</size>\n";
+        text += $"<size=45>{saveObject.Statistics.GamesPlayed}</size>{regularLineBreak}";
+        text += "<size=25>Daily Play Streak</size>\n";
+        text += $"<size=45>{saveObject.Statistics.DailyPlayStreak}</size>{regularLineBreak}";
+        var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
+        text += "<size=25>Longest Winning Word</size>\n";
+        text += $"<color=green>{longestWinningWord}</color>{regularLineBreak}";
+        var longestLosingWord = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
+        text += "<size=25>Longest Losing Word</size>\n";
+        text += $"<color=red>{longestLosingWord}</color>{regularLineBreak}";
+        text += "<size=25>Most Points in a Round</size>\n";
+        text += $"<size=45>{saveObject.Statistics.MostPointsPerRound}</size>";
+        if (string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord))
+        {
+            text += regularLineBreak;
+        }
+        else
+        {
+            text += $"<line-height=0>\n</line-height>\n<size=25>({saveObject.Statistics.MostPointsPerRoundWord})</size>{regularLineBreak}";
+        }
+        text += "<size=25>Longest Win Streak</size>\n";
+        text += $"<size=45>{saveObject.Statistics.LongestWinStreak}</size>{regularLineBreak}";
+        text += "<size=25>Frequent 1st Letter</size>\n";
+        var frequentStartingLetter = GetFrequentStartingLetter(saveObject.Statistics.FrequentStartingLetter);
+        text += $"<size=45>{frequentStartingLetter}</size>{regularLineBreak}";
+        text += "<size=25>Skunks</size>\n";
+        text += $"<size=45>{saveObject.Statistics.Skunks}</size>{regularLineBreak}";
+
+        statsText.text = text;
+
+        statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 900);
+
+        StartCoroutine(ScrollToTop());
+    }
+
+    private IEnumerator ScrollToTop()
+    {
+        // Wait for end of frame to let the UI update
+        yield return new WaitForEndOfFrame();
+        statsScrollRect.verticalNormalizedPosition = 1.0f;
+    }
+
+    private string GetFrequentStartingLetter(Dictionary<string, int> dictionary)
+    {
+        if (dictionary == null || dictionary.Count == 0)
+        {
+            return "N/A";
+        }
+
+        string keyOfHighestValue = null;
+        int highestValue = int.MinValue;
+
+        foreach (var pair in dictionary)
+        {
+            if (pair.Value > highestValue)
+            {
+                highestValue = pair.Value;
+                keyOfHighestValue = pair.Key;
+            }
+        }
+
+        return keyOfHighestValue;
     }
 }

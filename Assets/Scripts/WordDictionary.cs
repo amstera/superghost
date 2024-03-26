@@ -260,7 +260,8 @@ public class WordDictionary
         var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, wordList, difficulty);
         if (string.IsNullOrEmpty(startWithResult))
         {
-            if (difficulty == Difficulty.Easy)
+            Random random = new Random();
+            if (difficulty == Difficulty.Easy || (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f))
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
