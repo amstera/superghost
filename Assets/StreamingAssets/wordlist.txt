@@ -23923,10 +23923,6 @@ fading
 fads
 faerie
 faeries
-fagot
-fagoting
-fagots
-fags
 faience
 fail
 failed
@@ -27225,6 +27221,7 @@ gamy
 gander
 ganders
 gang
+gangbuster
 gangbusters
 ganged
 ganging

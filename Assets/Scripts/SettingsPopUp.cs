@@ -145,6 +145,8 @@ public class SettingsPopUp : MonoBehaviour
 
     private void OnDifficultyChanged(int difficultyIndex)
     {
+        clickAudioSource?.Play();
+
         saveObject.Difficulty = (Difficulty)difficultyIndex;
         gameManager.saveObject = saveObject;
         SaveManager.Save(saveObject);

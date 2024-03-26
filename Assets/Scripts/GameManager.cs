@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public Button hintButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
+    public TutorialPopUp tutorialPopup;
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -112,7 +113,17 @@ public class GameManager : MonoBehaviour
 
         saveObject = SaveManager.Load();
 
-        StartNewGame();
+        if (saveObject.HasSeenTutorial)
+        {
+            StartNewGame();
+        }
+        else
+        {
+            tutorialPopup.Show(false);
+            saveObject.HasSeenTutorial = true;
+
+            SaveManager.Save(saveObject);
+        }
     }
 
     public void NewGamePressed()
@@ -236,8 +247,8 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = false;
         ghostAvatar.Think();
         UpdateWordDisplay(false, newIndex);
-        SetIndicators(isPlayerTurn);
         comboText.UseCharacter(character);
+        SetIndicators(isPlayerTurn);
 
         if (startText.gameObject.activeSelf)
         {
