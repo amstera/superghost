@@ -108,7 +108,7 @@ public class StatsPopup : MonoBehaviour
         }
         else
         {
-            text += $"<line-height=0>\n</line-height>\n<size=25>({saveObject.Statistics.MostPointsPerRoundWord})</size>{regularLineBreak}";
+            text += $"<line-height=0>\n</line-height>\n<size=25>(<color=green>{saveObject.Statistics.MostPointsPerRoundWord}</color>)</size>{regularLineBreak}";
         }
         text += "<size=25>Longest Win Streak</size>\n";
         text += $"<size=45>{saveObject.Statistics.LongestWinStreak}</size>{regularLineBreak}";

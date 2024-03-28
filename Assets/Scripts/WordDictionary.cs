@@ -4,8 +4,8 @@ using System.Linq;
 
 public class WordDictionary
 {
-    private HashSet<string> words = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-    private HashSet<string> filteredWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private List<string> words = new List<string>();
+    private List<string> filteredWords = new List<string>();
     private HashSet<string> lostChallengeSubstring = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> commonWords = new Dictionary<string, int>();
     private Random rng = new Random();
@@ -55,21 +55,26 @@ public class WordDictionary
         });
 
         // Reassign the sorted list back to words
-        words = sortedList.ToHashSet();
+        words = sortedList;
     }
 
     public void SetFilteredWords(string substring)
     {
-        filteredWords = filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToHashSet();
+        filteredWords = filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
     }
 
     public void ClearFilteredWords()
     {
-        filteredWords = new HashSet<string>(words);
+        filteredWords = new List<string>(words);
     }
 
-    public bool IsWordReal(string word)
+    public bool IsWordReal(string word, bool useEntireDictionary = false)
     {
+        if (useEntireDictionary)
+        {
+            return words.Contains(word.ToLower());
+        }
+
         return filteredWords.Contains(word.ToLower());
     }
 
@@ -93,6 +98,7 @@ public class WordDictionary
 
     public void AddLostChallengeWord(string word)
     {
+        word = word.ToLower();
         lostChallengeSubstring.Add(word);
     }
 
@@ -147,11 +153,11 @@ public class WordDictionary
         return rng.NextDouble() < challengeProbability;
     }
 
-    public string FindNextWord(string substring, bool isLosing, Difficulty difficulty)
+    public string FindNextWord(string substring, bool isAILosing, Difficulty difficulty)
     {
         if (difficulty == Difficulty.Easy)
         {
-            isLosing = false;
+            isAILosing = false;
         }
 
         substring = substring.ToLower();
@@ -222,7 +228,7 @@ public class WordDictionary
         List<string> oddLengthWords = new List<string>();
         foreach (var word in filteredWords)
         {
-            if (!anyEasyWordsRemain || (difficulty > Difficulty.Easy && isLosing) || (commonWords.TryGetValue(word, out int frequency) && frequency >= minScore))
+            if (!anyEasyWordsRemain || (difficulty > Difficulty.Easy && isAILosing) || (commonWords.TryGetValue(word, out int frequency) && frequency >= minScore))
             {
                 if (Math.Abs(word.Length - substring.Length) % 2 == 0)
                 {
@@ -236,15 +242,15 @@ public class WordDictionary
         }
 
         // Determine the priority order based on isLosing flag
-        var primaryList = isLosing || difficulty == Difficulty.Hard ? evenLengthWords : oddLengthWords;
-        var secondaryList = isLosing || difficulty == Difficulty.Hard ? oddLengthWords : evenLengthWords;
+        var primaryList = isAILosing || difficulty == Difficulty.Hard ? evenLengthWords : oddLengthWords;
+        var secondaryList = isAILosing || difficulty == Difficulty.Hard ? oddLengthWords : evenLengthWords;
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isLosing, difficulty);
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isAILosing, difficulty);
         if (foundWord == null)
         {
             Random random = new Random();
-            if (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.35f)
+            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.35f)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -252,15 +258,15 @@ public class WordDictionary
                 }
             }
 
-            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isLosing, difficulty);
+            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isAILosing, difficulty);
         }
 
         return foundWord;
     }
 
-    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, bool isLosing, Difficulty difficulty)
+    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, bool isAILosing, Difficulty difficulty)
     {
-        bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isLosing, difficulty);
+        bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isAILosing, difficulty);
         var lettersPrimaryList = prioritizeStart ? lettersForStartWith : lettersForEndWith;
         var lettersSecondaryList  = prioritizeStart ? lettersForEndWith : lettersForStartWith;
 
@@ -269,7 +275,7 @@ public class WordDictionary
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
-            if (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f)
+            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -286,7 +292,7 @@ public class WordDictionary
         return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, wordList, difficulty);
     }
 
-    private bool ShouldPrioritizeStart(int substringLength, bool isLosing, Difficulty difficulty)
+    private bool ShouldPrioritizeStart(int substringLength, bool isAILosing, Difficulty difficulty)
     {
         if (difficulty == Difficulty.Easy)
         {
@@ -303,7 +309,7 @@ public class WordDictionary
         if (substringLength <= 2) return true;
 
         // Otherwise chance it will
-        float odds = isLosing ? 0.6f : 0.85f;
+        float odds = isAILosing ? 0.6f : 0.85f;
         return random.NextDouble() <= odds;
     }
 

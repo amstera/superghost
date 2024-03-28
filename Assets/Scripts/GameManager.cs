@@ -26,10 +26,12 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, challengeButton, recapButton, shareButton, nextRoundButton, tutorialButton;
+    public Button hintButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
+    public Share shareButton;
+    public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound;
     public AudioSource clickAudioSource;
@@ -49,7 +51,6 @@ public class GameManager : MonoBehaviour
     private bool isChallenging;
     private int points;
     private int roundPoints;
-    private WordDictionary wordDictionary = new WordDictionary();
     public enum TextPosition { None, Left, Right }
 
     private const string separator = "_";
@@ -396,6 +397,11 @@ public class GameManager : MonoBehaviour
         recapPopup.Show(recap);
     }
 
+    public void ShareMessage()
+    {
+        shareButton.ShareMessage(recap);
+    }
+
     public bool IsDoneRound()
     {
         return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
@@ -610,6 +616,7 @@ public class GameManager : MonoBehaviour
     private void ShowHistory()
     {
         var previousWordsText = "";
+        var lastWord = "";
         int index = 0;
 
         previousWords.RemoveWhere(w => string.IsNullOrEmpty(w));
@@ -621,6 +628,7 @@ public class GameManager : MonoBehaviour
             if (index == previousWords.Count - 1)
             {
                 var color = playerWon ? "green" : "red";
+                lastWord = displayedWord;
                 if (isLastWordValid)
                 {
                     displayedWord = $"<color={color}>{displayedWord}</color>";
@@ -639,7 +647,7 @@ public class GameManager : MonoBehaviour
 
         recap.Add(new RecapObject
         {
-            GameWord = gameWord,
+            GameWord = lastWord,
             PlayerGhostString = playerLivesText.livesText.text,
             AIGhostString = aiLivesText.livesText.text,
             Points = points,

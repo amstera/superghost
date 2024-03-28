@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System;
+using Random = UnityEngine.Random;
 
 public class SettingsPopUp : MonoBehaviour
 {
@@ -12,9 +13,10 @@ public class SettingsPopUp : MonoBehaviour
     public GameManager gameManager;
     public AudioManager audioManager;
 
-    public TextMeshProUGUI highScoreAmountText, footerText, statsText;
+    public TextMeshProUGUI highScoreAmountText, footerText, dictionaryValidateText;
     public Toggle sfxToggle;
     public TMP_Dropdown difficultyDropdown;
+    public TMP_InputField inputField;
 
     public AudioSource clickAudioSource;
 
@@ -23,10 +25,12 @@ public class SettingsPopUp : MonoBehaviour
 
     private SaveObject saveObject;
     private Vector3 originalScale;
+    private Vector3 originalPos;
 
     private void Start()
     {
         originalScale = popUpGameObject.transform.localScale;
+        originalPos = popUpGameObject.transform.localPosition;
         ResetPopUp();
     }
 
@@ -48,6 +52,10 @@ public class SettingsPopUp : MonoBehaviour
         difficultyDropdown.value = (int)saveObject.Difficulty;
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
         difficultyDropdown.interactable = gameManager.IsDoneRound();
+
+        // Set up dictionary
+        inputField.text = "";
+        dictionaryValidateText.text = "";
 
         SetFooterText();
 
@@ -171,5 +179,58 @@ public class SettingsPopUp : MonoBehaviour
         dictionaryButton.interactable = false;
         settingsPage.gameObject.SetActive(false);
         dictionaryPage.gameObject.SetActive(true);
+    }
+
+    public void ValidateText()
+    {
+        clickAudioSource?.Play();
+
+        if (string.IsNullOrEmpty(inputField.text))
+        {
+            StartCoroutine(ShakePopup());
+            dictionaryValidateText.color = Color.red;
+            dictionaryValidateText.text = "You must enter a word";
+
+            return;
+        }
+
+        if (inputField.text.Length <= 3)
+        {
+            dictionaryValidateText.color = Color.red;
+            dictionaryValidateText.text = "Word must be at least 4 letters";
+
+            return;
+        }
+
+        if (gameManager.wordDictionary.IsWordReal(inputField.text, true))
+        {
+            dictionaryValidateText.color = Color.green;
+            dictionaryValidateText.text = $"{inputField.text.ToUpper()} is a valid word";
+        }
+        else
+        {
+            dictionaryValidateText.color = Color.red;
+            dictionaryValidateText.text = $"{inputField.text.ToUpper()} is not a valid word";
+        }
+
+        inputField.text = "";
+    }
+
+    private IEnumerator ShakePopup()
+    {
+        float elapsed = 0.0f;
+
+        while (elapsed < 0.25f)
+        {
+            float x = originalPos.x + Random.Range(-1f, 1f) * 10;
+            float y = originalPos.y + Random.Range(-1f, 1f) * 10;
+
+            popUpGameObject.transform.localPosition = new Vector3(x, y, originalPos.z);
+            elapsed += Time.deltaTime;
+
+            yield return null; // Wait until next frame
+        }
+
+        popUpGameObject.transform.localPosition = originalPos;
     }
 }
