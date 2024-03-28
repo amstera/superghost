@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
+    public Button hintButton, challengeButton, recapButton, shareButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
@@ -166,6 +166,8 @@ public class GameManager : MonoBehaviour
             points = 0;
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
+            shareButton.gameObject.SetActive(false);
+            hintButton.gameObject.SetActive(true);
             recap.Clear();
 
             gameOver = false;
@@ -556,6 +558,8 @@ public class GameManager : MonoBehaviour
             comboText.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
+            shareButton.gameObject.SetActive(true);
+            hintButton.gameObject.SetActive(false);
 
             if (playerWon) // won game
             {
@@ -635,10 +639,13 @@ public class GameManager : MonoBehaviour
 
         recap.Add(new RecapObject
         {
+            GameWord = gameWord,
             PlayerGhostString = playerLivesText.livesText.text,
             AIGhostString = aiLivesText.livesText.text,
             Points = points,
-            History = previousWordsText
+            History = previousWordsText,
+            PlayerLivesRemaining = playerLivesText.LivesRemaining(),
+            IsValidWord = isLastWordValid
         });
     }
 

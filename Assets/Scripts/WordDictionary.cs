@@ -166,6 +166,14 @@ public class WordDictionary
             return null;
         }
 
+        if (difficulty == Difficulty.Easy) // if it's easy and you can spell a word, just spell it
+        {
+            if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
+            {
+                return null;
+            }
+        }
+
         // Shuffle vowels and consonants separately
         ShuffleArray(vowels);
         ShuffleArray(consonants);
@@ -236,7 +244,7 @@ public class WordDictionary
         if (foundWord == null)
         {
             Random random = new Random();
-            if (difficulty == Difficulty.Easy || (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.35f))
+            if (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.35f)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -261,7 +269,7 @@ public class WordDictionary
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
-            if (difficulty == Difficulty.Easy || (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f))
+            if (!isLosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {

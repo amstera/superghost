@@ -3,9 +3,14 @@ using System.Collections;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Runtime.InteropServices;
+using System.Linq;
 
 public class RecapPopup : MonoBehaviour
 {
+    [DllImport("__Internal")]
+    private static extern void _Native_Share_iOS(string message);
+
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
     public TextMeshProUGUI recapText;
@@ -18,6 +23,7 @@ public class RecapPopup : MonoBehaviour
     public float scaleDuration = 0.5f;
 
     private Vector3 originalScale;
+    private string sharedMessage;
 
     private void Awake()
     {
@@ -30,6 +36,7 @@ public class RecapPopup : MonoBehaviour
         clickAudioSource?.Play();
 
         string recapString = ConvertHistoryListToString(recap);
+        sharedMessage = GetSharedMessage(recap);
         recapText.text = recapString;
 
         // Adjust content height here
@@ -44,6 +51,18 @@ public class RecapPopup : MonoBehaviour
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
+    }
+
+    public void ShareMessage()
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            _Native_Share_iOS(sharedMessage);
+        }
+        else
+        {
+            Debug.LogWarning("Native sharing is only available on iOS. Current platform: " + Application.platform);
+        }
     }
 
     private string ConvertHistoryListToString(List<RecapObject> recap)
@@ -81,6 +100,38 @@ public class RecapPopup : MonoBehaviour
         }
 
         return result;
+    }
+
+    private string GetSharedMessage(List<RecapObject> recap)
+    {
+        string message = $"Wordy Ghost - {recap.Last().Points}pts - {recap.Count} rounds";
+        foreach (var item in recap)
+        {
+            message += "\n";
+            if (item.PlayerLivesRemaining < 5)
+            {
+                for (int i = 0; i < 5 - item.PlayerLivesRemaining; i++)
+                {
+                    message += "🟥";
+                }
+            }
+            if (item.PlayerLivesRemaining > 0)
+            {
+                for (int i = 0; i < item.PlayerLivesRemaining; i++)
+                {
+                    message += "🟩";
+                }
+            }
+
+            message += $" {item.GameWord.ToUpper()}";
+            if (!item.IsValidWord)
+            {
+                message += " ❌";
+            }
+            message += $" ({item.Points})";
+        }
+
+        return message;
     }
 
     private IEnumerator ScrollToTop()
@@ -132,8 +183,11 @@ public class RecapPopup : MonoBehaviour
 
 public class RecapObject
 {
+    public string GameWord;
     public string PlayerGhostString;
     public string AIGhostString;
     public int Points;
     public string History;
+    public int PlayerLivesRemaining;
+    public bool IsValidWord;
 }
