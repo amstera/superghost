@@ -165,13 +165,13 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.DefaultCompany.com.unity.template.mobile2D
     Lumin: com.DefaultCompany.com.unity.template.mobile2D
-    Standalone: com.Green-Tea-Games.Superghost
+    Standalone: com.Green-Tea-Gaming.Wordy-Ghost
     iPhone: com.Green-Tea-Gaming.Wordy-Ghost
     tvOS: com.DefaultCompany.com.unity.template.mobile2D
   buildNumber:
     Standalone: 0
     VisionOS: 0
-    iPhone: 15
+    iPhone: 18
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
