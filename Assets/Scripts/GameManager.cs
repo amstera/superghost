@@ -100,6 +100,8 @@ public class GameManager : MonoBehaviour
 
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 120;
+
+        saveObject = SaveManager.Load();
     }
 
     IEnumerator Start()
@@ -114,8 +116,6 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(LoadCommonWords());
 
         wordDictionary.SortWordsByCommonality();
-
-        saveObject = SaveManager.Load();
 
         if (saveObject.HasSeenTutorial)
         {

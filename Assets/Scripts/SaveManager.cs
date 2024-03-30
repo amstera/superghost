@@ -30,6 +30,11 @@ public class SaveManager : MonoBehaviour
             string encryptedJson = File.ReadAllText(saveFilePath);
             string decryptedJson = CryptoManager.DecryptString(encryptedJson);
             cachedSaveObject = JsonConvert.DeserializeObject<SaveObject>(decryptedJson);
+            if (cachedSaveObject.Statistics == null)
+            {
+                cachedSaveObject.Statistics = new Statistics();
+            }
+
             return cachedSaveObject;
         }
 
@@ -56,7 +61,7 @@ public class SaveObject
     public bool EnableSound = true;
     public bool HasSeenTutorial;
     public Difficulty Difficulty = Difficulty.Normal;
-    public Statistics Statistics;
+    public Statistics Statistics = new Statistics();
 }
 
 [System.Serializable]

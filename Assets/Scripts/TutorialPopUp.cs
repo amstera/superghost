@@ -8,6 +8,7 @@ public class TutorialPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public GameObject[] pages;
     public Button previousButton, nextButton, closeButton;
+    public Slider progressBar;
     public float fadeDuration = 0.5f;
 
     public GameManager gameManager;
@@ -31,6 +32,7 @@ public class TutorialPopUp : MonoBehaviour
         currentPageIndex = 0; // Reset to the first page
         UpdatePageVisibility();
         UpdateButtonVisibility();
+        StartCoroutine(AnimateProgressBar());
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -70,6 +72,7 @@ public class TutorialPopUp : MonoBehaviour
         currentPageIndex = 0;
         UpdatePageVisibility();
         UpdateButtonVisibility();
+        StartCoroutine(AnimateProgressBar());
 
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
@@ -86,6 +89,7 @@ public class TutorialPopUp : MonoBehaviour
             currentPageIndex++;
             UpdatePageVisibility();
             UpdateButtonVisibility();
+            StartCoroutine(AnimateProgressBar());
         }
     }
 
@@ -98,6 +102,7 @@ public class TutorialPopUp : MonoBehaviour
             currentPageIndex--;
             UpdatePageVisibility();
             UpdateButtonVisibility();
+            StartCoroutine(AnimateProgressBar());
         }
     }
 
@@ -114,5 +119,24 @@ public class TutorialPopUp : MonoBehaviour
         previousButton.gameObject.SetActive(currentPageIndex > 0);
         nextButton.gameObject.SetActive(currentPageIndex < pages.Length - 1);
         closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == pages.Length - 1);
+    }
+
+    private IEnumerator AnimateProgressBar()
+    {
+        if (progressBar != null && pages.Length > 0)
+        {
+            float targetValue = (float)currentPageIndex / (pages.Length - 1);
+            float currentValue = progressBar.value;
+            float elapsedTime = 0;
+
+            while (elapsedTime < 0.15f)
+            {
+                elapsedTime += Time.deltaTime;
+                progressBar.value = Mathf.Lerp(currentValue, targetValue, elapsedTime / 0.15f);
+                yield return null;
+            }
+
+            progressBar.value = targetValue; // Ensure it ends exactly at the target value
+        }
     }
 }
