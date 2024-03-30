@@ -92,8 +92,10 @@ public class StatsPopup : MonoBehaviour
         text += $"<size=45>{saveObject.HighScore}</size>{regularLineBreak}";
         text += "<size=25>Daily Play Streak</size>\n";
         text += $"<size=45>{saveObject.Statistics.DailyPlayStreak}</size>{regularLineBreak}";
-        text += "<size=25>Games Played</size>\n";
-        text += $"<size=45>{saveObject.Statistics.GamesPlayed}</size>{regularLineBreak}";
+        text += "<size=25>Longest Win Streak</size>\n";
+        text += $"<size=45>{saveObject.Statistics.LongestWinStreak}</size>{regularLineBreak}";
+        text += "<size=25>Current Win Streak</size>\n";
+        text += $"<size=45>{saveObject.Statistics.WinStreak}</size>{regularLineBreak}";
         var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
         text += "<size=25>Longest Winning Word</size>\n";
         text += $"<color=green>{longestWinningWord}</color>{regularLineBreak}";
@@ -110,10 +112,8 @@ public class StatsPopup : MonoBehaviour
         {
             text += $"<line-height=0>\n</line-height>\n<size=25>(<color=green>{saveObject.Statistics.MostPointsPerRoundWord}</color>)</size>{regularLineBreak}";
         }
-        text += "<size=25>Longest Win Streak</size>\n";
-        text += $"<size=45>{saveObject.Statistics.LongestWinStreak}</size>{regularLineBreak}";
-        text += "<size=25>Current Win Streak</size>\n";
-        text += $"<size=45>{saveObject.Statistics.WinStreak}</size>{regularLineBreak}";
+        text += "<size=25>Games Played</size>\n";
+        text += $"<size=45>{saveObject.Statistics.GamesPlayed}</size>{regularLineBreak}";
         text += "<size=25>Frequent 1st Letter</size>\n";
         var frequentStartingLetter = GetFrequentStartingLetter(saveObject.Statistics.FrequentStartingLetter);
         text += $"<size=45>{frequentStartingLetter}</size>{regularLineBreak}";

@@ -10,7 +10,7 @@ public class ChallengePopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI challengeText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText;
+    public TextMeshProUGUI warningText, comboText;
 
     public AudioSource alertAudioSource;
 
@@ -43,6 +43,8 @@ public class ChallengePopUp : MonoBehaviour
         challengeText.text = $"CASP calls a bluff on\n<color=#FF3800>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = substring;
+
+        comboText.text = gameManager.comboText.GetString();
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

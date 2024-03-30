@@ -52,6 +52,11 @@ public class ComboText : MonoBehaviour
         newCombo = StartCoroutine(ChooseNewComboAnimation());
     }
 
+    public string GetString()
+    {
+        return comboText.text;
+    }
+
     private char WeightedRandomCharacter()
     {
         int totalWeight = characterWeights.Values.Sum();

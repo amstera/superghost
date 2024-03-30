@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     public PointsText pointsText, totalPointsText, pointsEarnedText;
     public ChallengePopUp challengePopup;
     public HintPopUp hintPopUp;
-    public TextMeshProUGUI historyText, playerText, aiText, startText, endGameText, pointsCalculateText;
+    public HistoryText historyText;
+    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -187,7 +188,7 @@ public class GameManager : MonoBehaviour
         wordDictionary.ClearFilteredWords();
         wordDisplay.characterSpacing = 0f;
         wordDisplay.text = isPlayerTurn ? $"<color=yellow>{separator}</color>" : separator;
-        historyText.text = "";
+        historyText.UpdateText("");
         gameWord = "";
         selectedPosition = TextPosition.None;
         wordsRemaining = true;
@@ -643,7 +644,7 @@ public class GameManager : MonoBehaviour
             index++;
         }
 
-        historyText.text = previousWordsText;
+        historyText.UpdateText(previousWordsText);
 
         recap.Add(new RecapObject
         {
