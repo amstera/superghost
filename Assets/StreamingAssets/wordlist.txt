@@ -29412,7 +29412,6 @@ gutting
 guttural
 gutturals
 gutty
-guvs
 guyed
 guying
 guys
@@ -32891,6 +32890,7 @@ impulsive
 impulsively
 impulsiveness
 impulsivity
+impunities
 impunity
 impure
 impurely
@@ -59462,7 +59462,6 @@ sheriff
 sheriffs
 sherries
 sherry
-shes
 shew
 shewed
 shewing
@@ -70861,6 +70860,7 @@ unnerved
 unnerves
 unnerving
 unnervingly
+unnilhexium
 unnoticeable
 unnoticed
 unnumbered

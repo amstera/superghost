@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
     private List<RecapObject> recap = new List<RecapObject>();
     private bool gameEnded = false;
     private bool gameOver = true;
-    private bool wordsRemaining = true;
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
@@ -191,7 +190,6 @@ public class GameManager : MonoBehaviour
         historyText.UpdateText("");
         gameWord = "";
         selectedPosition = TextPosition.None;
-        wordsRemaining = true;
         gameEnded = false;
         wordDisplay.canClickLeft = true;
         wordDisplay.canClickRight = true;
@@ -293,7 +291,12 @@ public class GameManager : MonoBehaviour
     public void ShowHint(int points)
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, saveObject.Difficulty);
+        if (string.IsNullOrEmpty(nextWord) && saveObject.Difficulty < Difficulty.Hard)
+        {
+            nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
+        }
+
         if (string.IsNullOrEmpty(nextWord))
         {
             canPushWord = false;
@@ -429,74 +432,13 @@ public class GameManager : MonoBehaviour
     {
         string displayText = gameWord.ToUpper();
         string underscore = updateColor ? $"<color=yellow>{separator}</color>" : separator;
-        wordsRemaining = false;
 
-        bool canExtendWordToLeft = wordDictionary.CanExtendWordToLeft(gameWord);
-        bool canExtendWordToRight = wordDictionary.CanExtendWordToRight(gameWord);
+        displayText = (selectedPosition == TextPosition.Left ? underscore : separator) + displayText;
+        displayText += selectedPosition == TextPosition.Right ? underscore : separator;
 
-        if (!canExtendWordToLeft && !canExtendWordToRight)
-        {
-            if (selectedPosition == TextPosition.Left)
-            {
-                displayText = underscore + displayText;
-            }
-            else if (selectedPosition == TextPosition.Right)
-            {
-                displayText += underscore;
-            }
-
-            wordDisplay.text = displayText;
-
-            return;
-        }
-
-        if (canExtendWordToLeft)
-        {
-            if (selectedPosition == TextPosition.Left)
-            {
-                displayText = underscore + displayText;
-            }
-            else
-            {
-                displayText = separator + displayText;
-            }
-            newWordIndex++;
-            wordsRemaining = true;
-        }
-        else
-        {
-            wordDisplay.canClickLeft = false;
-            selectedPosition = TextPosition.Right;
-        }
-
-        if (canExtendWordToRight)
-        {
-            if (selectedPosition == TextPosition.Right)
-            {
-                displayText += underscore;
-            }
-            else
-            {
-                displayText += separator;
-            }
-            wordsRemaining = true;
-        }
-        else
-        {
-            wordDisplay.canClickRight = false;
-            if (canExtendWordToLeft)
-            {
-                selectedPosition = TextPosition.Left;
-                displayText = underscore + gameWord.ToUpper();
-                newWordIndex++;
-            }
-            else
-            {
-                selectedPosition = TextPosition.None;
-            }
-        }
-
+        newWordIndex++;
         wordDisplay.text = displayText;
+
         if (!gameEnded && (!updateColor || !isPlayerTurn))
         {
             wordDisplay.HighlightNewLetterAtIndex(newWordIndex);
@@ -567,6 +509,8 @@ public class GameManager : MonoBehaviour
             recapButton.gameObject.SetActive(true);
             shareButton.gameObject.SetActive(true);
             hintButton.gameObject.SetActive(false);
+            playerIndicator.gameObject.SetActive(false);
+            aiIndicator.gameObject.SetActive(false);
 
             if (playerWon) // won game
             {
@@ -575,6 +519,9 @@ public class GameManager : MonoBehaviour
                 totalPointsText.gameObject.SetActive(true);
                 totalPointsText.AddPoints(points);
                 stars.Show(points);
+                playerText.color = Color.green;
+                aiText.color = Color.red;
+
                 if (points > saveObject.HighScore)
                 {
                     saveObject.HighScore = points;
@@ -599,6 +546,9 @@ public class GameManager : MonoBehaviour
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
                 pointsEarnedText.gameObject.SetActive(false);
+                playerText.color = Color.red;
+                aiText.color = Color.green;
+
                 if (saveObject.Difficulty > Difficulty.Easy)
                 {
                     difficultyText.gameObject.SetActive(true);
@@ -654,7 +604,8 @@ public class GameManager : MonoBehaviour
             Points = points,
             History = previousWordsText,
             PlayerLivesRemaining = playerLivesText.LivesRemaining(),
-            IsValidWord = isLastWordValid
+            IsValidWord = isLastWordValid,
+            PlayerWon = playerWon
         });
     }
 
@@ -664,11 +615,19 @@ public class GameManager : MonoBehaviour
 
         if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
-            challengePopup.Show(gameWord);
+            var word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
+            if (string.IsNullOrEmpty(word))
+            {
+                challengePopup.Show(gameWord);
+            }
+            else
+            {
+                PlayComputerWord(word);
+            }
         }
         else
         {
-            var word = wordsRemaining ? wordDictionary.FindNextWord(gameWord, IsPlayerWinning(), saveObject.Difficulty) : null;
+            var word = wordDictionary.FindNextWord(gameWord, IsPlayerWinning(), saveObject.Difficulty);
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord);
@@ -695,15 +654,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                keyAudioSource?.Play();
-                previousWords.Add(gameWord);
-                var addedLetter = FindAddedLetterAndIndex(word, gameWord);
-                ghostAvatar.Show(addedLetter.addedLetter);
-                gameWord = word;
-                wordDictionary.SetFilteredWords(gameWord);
-                UpdateWordDisplay(true, addedLetter.index);
-                isPlayerTurn = true;
-                SetIndicators(isPlayerTurn);
+                PlayComputerWord(word);
             }
         }
     }
@@ -872,5 +823,19 @@ public class GameManager : MonoBehaviour
 
         saveObject.Statistics.LastIncrementDate = lastIncrementedDate;
         saveObject.Statistics.DailyPlayStreak = currentStreak;
+    }
+
+    private void PlayComputerWord(string word)
+    {
+        keyAudioSource?.Play();
+
+        previousWords.Add(gameWord);
+        var addedLetter = FindAddedLetterAndIndex(word, gameWord);
+        ghostAvatar.Show(addedLetter.addedLetter);
+        gameWord = word;
+        wordDictionary.SetFilteredWords(gameWord);
+        UpdateWordDisplay(true, addedLetter.index);
+        isPlayerTurn = true;
+        SetIndicators(isPlayerTurn);
     }
 }

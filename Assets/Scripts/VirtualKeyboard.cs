@@ -95,6 +95,8 @@ public class VirtualKeyboard : MonoBehaviour
             return;
         }
 
+        buttonsDisabled = true;
+
         keyAudioSource?.Play();
         StartCoroutine(PopAnimation(btn.gameObject));
         StartCoroutine(WaitAndProcessTurn(letter));

@@ -96,10 +96,70 @@ public class WordDictionary
         return filteredWords.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) < w.Length - word.Length);
     }
 
-    public void AddLostChallengeWord(string word)
+    public void AddLostChallengeWord(string substring)
     {
-        word = word.ToLower();
-        lostChallengeSubstring.Add(word);
+        substring = substring.ToLower();
+        lostChallengeSubstring.Add(substring);
+    }
+
+    public string BluffWord(string substring, Difficulty difficulty)
+    {
+        substring = substring.ToLower();
+
+        var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
+
+        if (rng.NextDouble() < difficultySettings.ProbabilityOffset / 4)
+        {
+            char firstChar = substring[0];
+            char lastChar = substring[^1];
+            bool firstCharIsVowel = vowels.Contains(firstChar);
+            bool lastCharIsVowel = vowels.Contains(lastChar);
+
+            bool addAtEnd = true;
+            if (difficulty != Difficulty.Easy)
+            {
+                if (firstCharIsVowel && !lastCharIsVowel)
+                {
+                    addAtEnd = false;
+                }
+            }
+
+            if (filteredWords.Count > 0)
+            {
+                if (filteredWords.All(w => w.EndsWith(substring)))
+                {
+                    addAtEnd = false;
+                }
+                else if (filteredWords.All(w => w.StartsWith(substring)))
+                {
+                    addAtEnd = true;
+                }
+            }
+
+            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, lastChar, addAtEnd);
+
+            return addAtEnd ? substring + nextLetter : nextLetter + substring;
+        }
+
+        // return nothing if choosing not to bluff the word
+        return null;
+    }
+
+    private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, char lastChar, bool addAtEnd)
+    {
+        // Check if adding at the end and if the last character is not a vowel, favor adding 's'
+        if (!lastCharIsVowel && addAtEnd && lastChar != 's')
+        {
+            return 's';
+        }
+
+        // Determine the type of letter to add based on the position and whether the adjoining character is a vowel
+        bool shouldAddVowel = (firstCharIsVowel && !addAtEnd) || (lastCharIsVowel && addAtEnd) ? false : true;
+
+        // Filter the weightedLetters based on whether we should add a vowel or consonant
+        var possibleLetters = weightedLetters.Where(letter => (shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter))).ToArray();
+
+        return possibleLetters[rng.Next(possibleLetters.Length)];
     }
 
     public bool ShouldChallenge(string substring, Difficulty difficulty)
@@ -108,12 +168,12 @@ public class WordDictionary
 
         substring = substring.ToLower();
 
+        if (filteredWords.Count == 0) return true; // No possible words
+
         int minSubstringLength = 3;
         if (substring.Length < minSubstringLength) return false;
 
         if (lostChallengeSubstring.Contains(substring)) return false;
-
-        if (filteredWords.Count == 0) return true; // No possible words
 
         // Word Completion Percentage Check
         foreach (var word in filteredWords)
@@ -146,9 +206,9 @@ public class WordDictionary
         }
 
         double avgScore = Math.Min(maxCommonessThreshold, totalScore / (double)filteredWords.Count);
-        var difficultSettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
+        var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
 
-        double challengeProbability = Math.Max(0, difficultSettings.ProbabilityOffset - avgScore / maxCommonessThreshold);
+        double challengeProbability = Math.Max(0, difficultySettings.ProbabilityOffset - avgScore / maxCommonessThreshold);
 
         return rng.NextDouble() < challengeProbability;
     }

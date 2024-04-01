@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Linq;
 
 public class RecapPopup : MonoBehaviour
 {
@@ -53,7 +54,9 @@ public class RecapPopup : MonoBehaviour
         var lastPoints = 0;
         foreach (var item in recap)
         {
-            result += "<size=20>YOU                              CASP</size>\n";
+            var playerColor = item.PlayerWon ? "green" : "red";
+            var ghostColor = item.PlayerWon ? "red" : "green";
+            result += $"<size=20><color={playerColor}>YOU</color>                              <color={ghostColor}>CASP</color></size>\n";
             string pointsText = item.Points == 1 ? "1 Point" : $"{item.Points} Points";
             result += $"<size=30>{item.PlayerGhostString}            {item.AIGhostString}</size>\n<size=35>{pointsText}</size>\n";
 
@@ -139,4 +142,5 @@ public class RecapObject
     public string History;
     public int PlayerLivesRemaining;
     public bool IsValidWord;
+    public bool PlayerWon;
 }
