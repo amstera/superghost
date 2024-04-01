@@ -136,7 +136,7 @@ public class WordDictionary
                 }
             }
 
-            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, lastChar, addAtEnd);
+            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd);
 
             return addAtEnd ? substring + nextLetter : nextLetter + substring;
         }
@@ -145,14 +145,8 @@ public class WordDictionary
         return null;
     }
 
-    private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, char lastChar, bool addAtEnd)
+    private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, bool addAtEnd)
     {
-        // Check if adding at the end and if the last character is not a vowel, favor adding 's'
-        if (!lastCharIsVowel && addAtEnd && lastChar != 's')
-        {
-            return 's';
-        }
-
         // Determine the type of letter to add based on the position and whether the adjoining character is a vowel
         bool shouldAddVowel = (firstCharIsVowel && !addAtEnd) || (lastCharIsVowel && addAtEnd) ? false : true;
 

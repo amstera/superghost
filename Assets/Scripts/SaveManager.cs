@@ -78,6 +78,7 @@ public class Statistics
     public int LongestWinStreak;
     public int WinStreak;
     public int GamesPlayed;
+    public List<string> WinningWords = new List<string>();
 }
 
 

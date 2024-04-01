@@ -403,6 +403,8 @@ public class GameManager : MonoBehaviour
 
     public void ShareMessage()
     {
+        clickAudioSource?.Play();
+
         shareButton.ShareMessage(recap);
     }
 
@@ -485,6 +487,10 @@ public class GameManager : MonoBehaviour
             {
                 saveObject.Statistics.MostPointsPerRound = roundPoints;
                 saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
+            }
+            if (isLastWordValid)
+            {
+                saveObject.Statistics.WinningWords.Add(gameWord);
             }
         }
         else // lost round
@@ -708,7 +714,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePoints (float pointsChange)
     {
-        roundPoints = (int)pointsChange;
+        roundPoints = (int)Math.Round(pointsChange, MidpointRounding.AwayFromZero);
         pointsText.AddPoints(roundPoints);
         points = Mathf.Max(0, points + roundPoints);
     }
@@ -762,21 +768,29 @@ public class GameManager : MonoBehaviour
 
         string calculationText = string.Empty;
 
+        var showTotal = false;
         if (gameWord.Length > 0)
         {
+            float totalPoints = gameWord.Length;
             calculationText = $"({gameWord.Length}";
 
             if (difficultyMultiplier != 1)
             {
                 calculationText += $" x {difficultyMultiplier}";
+                totalPoints *= difficultyMultiplier;
+                showTotal = true;
             }
 
             if (multiplier != 1)
             {
                 calculationText += $" x {multiplier}";
+                totalPoints *= multiplier;
+                showTotal = true;
             }
 
-            calculationText += ")";
+            int pointsToShow = (int)Math.Round(totalPoints, MidpointRounding.AwayFromZero);
+
+            calculationText += showTotal ? $" = {pointsToShow})" : ")";
         }
 
         pointsCalculateText.text = calculationText;
