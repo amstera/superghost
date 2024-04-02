@@ -21114,7 +21114,6 @@ effortlessly
 effortlessness
 efforts
 effrontery
-effs
 effulgence
 effulgent
 effuse
@@ -23978,6 +23977,7 @@ faked
 faker
 fakers
 fakes
+fakest
 faking
 fakir
 fakirs
@@ -25980,6 +25980,10 @@ foreign
 foreigner
 foreigners
 foreignness
+forejudge
+forejudged
+forejudges
+forejudging
 foreknew
 foreknow
 foreknowing
@@ -33436,6 +33440,7 @@ indoctrinated
 indoctrinates
 indoctrinating
 indoctrination
+indoctrinations
 indolence
 indolent
 indolently
@@ -34788,6 +34793,7 @@ intransitive
 intransitively
 intrastate
 intrauterine
+intravascular
 intravenous
 intravenouses
 intravenously
@@ -46842,6 +46848,8 @@ patronage
 patronages
 patroness
 patronesses
+patronization
+patronizations
 patronize
 patronized
 patronizes
@@ -59794,6 +59802,8 @@ shows
 showstopper
 showstoppers
 showstopping
+showtime
+showtimes
 showy
 shrank
 shrapnel
@@ -68533,13 +68543,12 @@ transshipped
 transshipping
 transships
 transubstantiation
+transvaluation
+transvaluatons
 transversal
 transverse
 transversely
 transverses
-transvestism
-transvestite
-transvestites
 trap
 trapdoor
 trapdoors

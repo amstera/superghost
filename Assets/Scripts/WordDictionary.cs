@@ -209,11 +209,6 @@ public class WordDictionary
 
     public string FindNextWord(string substring, bool isAILosing, Difficulty difficulty)
     {
-        if (difficulty == Difficulty.Easy)
-        {
-            isAILosing = false;
-        }
-
         substring = substring.ToLower();
         if (substring.Length == 0)
         {
@@ -226,12 +221,17 @@ public class WordDictionary
             return null;
         }
 
-        if (difficulty == Difficulty.Easy) // if it's easy and you can spell a word, just spell it
+        if (!isAILosing && difficulty == Difficulty.Easy) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
             {
                 return null;
             }
+        }
+
+        if (difficulty == Difficulty.Easy)
+        {
+            isAILosing = false;
         }
 
         // Shuffle vowels and consonants separately

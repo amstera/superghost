@@ -758,7 +758,7 @@ public class GameManager : MonoBehaviour
     {
         string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
         string color = isWinning ? "green" : "red";
-        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=5> </size><color=#9AC2E0><size=25><voffset=5>(?)</voffset></size></color></link>";
+        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=25> </size><size=35><voffset=3.5><sprite name=magnify_glass></voffset></size></link>";
     }
 
     private void SetPointsCalculatedText()
