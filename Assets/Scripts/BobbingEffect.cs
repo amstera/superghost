@@ -9,13 +9,13 @@ public class BobbingEffect : MonoBehaviour
 
     void Start()
     {
-        originalY = transform.position.y;
+        originalY = transform.localPosition.y;
     }
 
     void Update()
     {
         // Calculate the new Y position
         float newY = originalY + Mathf.Sin(Time.time * bobbingSpeed) * bobbingHeight;
-        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
     }
 }

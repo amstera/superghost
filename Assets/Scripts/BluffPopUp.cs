@@ -2,17 +2,18 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
-public class ChallengePopUp : MonoBehaviour
+public class BluffPopUp : MonoBehaviour
 {
     public GameManager gameManager;
 
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public TextMeshProUGUI challengeText;
+    public TextMeshProUGUI bluffText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText, comboText;
+    public TextMeshProUGUI warningText;
 
-    public AudioSource alertAudioSource;
+    public AudioSource winAudioSource;
+    public ParticleSystem confetti;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
@@ -32,7 +33,8 @@ public class ChallengePopUp : MonoBehaviour
 
     public void Show(string substring)
     {
-        alertAudioSource?.Play();
+        winAudioSource?.Play();
+        confetti.Play();
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -40,11 +42,9 @@ public class ChallengePopUp : MonoBehaviour
         substring = substring.ToLower().Trim();
 
         originalSubstring = substring;
-        challengeText.text = $"CASP calls a bluff on\n<color=#FF3800>{substring.ToUpper()}</color>";
+        bluffText.text = $"Finish the word for extra points:\n<color=#FF3800>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = substring;
-
-        comboText.text = gameManager.comboText.GetString();
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
@@ -81,18 +81,30 @@ public class ChallengePopUp : MonoBehaviour
             warningText.text = $"Word must include {originalSubstring.ToUpper()}";
             warningText.gameObject.SetActive(true);
         }
+        else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
+        {
+            StartCoroutine(ShakePopup());
+            warningText.text = $"{inputField.text.ToUpper()} is not a valid word";
+            warningText.gameObject.SetActive(true);
+        }
         else
         {
             canvasGroup.interactable = false;
-            StartCoroutine(HandleChallenge());
+            StartCoroutine(HandleCompleteBluff());
         }
     }
 
-    private IEnumerator HandleChallenge()
+    public void Skip()
+    {
+        gameManager.BluffWin("");
+        Hide();
+    }
+
+    private IEnumerator HandleCompleteBluff()
     {
         yield return new WaitForSeconds(0.15f);
 
-        gameManager.HandleChallenge(inputField.text);
+        gameManager.BluffWin(inputField.text);
         Hide();
     }
 

@@ -9,6 +9,7 @@ using Unity.Services.Core;
 using Unity.Services.Analytics;
 using System;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
+    public BluffPopUp bluffPopup;
     public Share shareButton;
     public WordDictionary wordDictionary = new WordDictionary();
 
@@ -331,14 +333,8 @@ public class GameManager : MonoBehaviour
 
         if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
-            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
-            aiLivesText.LoseLife();
-            confettiPS.Play();
-            playerWon = true;
-            UpdatePoints(gameWord, 2);
-            isLastWordValid = false;
-            isPlayerTurn = false;
-            previousWords.Add(gameWord);
+            var previousWord = previousWords.LastOrDefault() ?? gameWord;
+            bluffPopup.Show(previousWord);
         }
         else
         {
@@ -347,13 +343,49 @@ public class GameManager : MonoBehaviour
             wordDisplay.text = $"CASP won!\nCASP thought\n{wordLink}";
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
-            UpdatePoints(gameWord, -2);
+            UpdatePoints(thoughtWord, -1);
             isPlayerTurn = true;
             previousWords.Add(gameWord);
             previousWords.Add(thoughtWord);
-        }
 
-        EndGame();
+            EndGame();
+        }
+    }
+
+    public void BluffWin(string word)
+    {
+        aiLivesText.LoseLife();
+        playerWon = true;
+        isPlayerTurn = false;
+
+        if (string.IsNullOrEmpty(word))
+        {
+            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
+            isLastWordValid = false;
+            previousWords.Add(gameWord);
+            UpdatePoints(gameWord, 1);
+
+            EndGame(false);
+        }
+        else
+        {
+            string wordLink = GenerateWordLink(word, true);
+            wordDisplay.text = $"You won with\n{wordLink}\nCASP was <color=green>bluffing</color>";
+
+            var previousWord = previousWords.LastOrDefault() ?? gameWord;
+            var addedChars = word.Replace(previousWord, "").ToCharArray();
+            foreach (var c in addedChars)
+            {
+                comboText.UseCharacter(c);
+            }
+
+            previousWords.Add(word);
+
+            UpdatePoints(word, 1);
+
+            confettiPS.Play();
+            EndGame();
+        }
     }
 
     public void HandleChallenge(string word)
@@ -380,7 +412,7 @@ public class GameManager : MonoBehaviour
                 comboText.UseCharacter(c);
             }
 
-            UpdatePoints(gameWord, 2);
+            UpdatePoints(gameWord, 1);
             previousWords.Add(gameWord);
         }
         else
@@ -390,7 +422,7 @@ public class GameManager : MonoBehaviour
             isLastWordValid = false;
             isPlayerTurn = true;
             previousWords.Add(gameWord);
-            UpdatePoints(gameWord, -2);
+            UpdatePoints(gameWord, -1);
         }
 
         EndGame();
@@ -452,7 +484,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void EndGame()
+    private void EndGame(bool playSound = true)
     {
         gameEnded = true;
         keyboard.Hide();
@@ -471,7 +503,7 @@ public class GameManager : MonoBehaviour
             pointsEarnedText.gameObject.SetActive(true);
             pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
             pointsEarnedText.AddPoints(roundPoints, true);
-            int pointsForFire = 30 * ((int)saveObject.Difficulty + 1);
+            int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
             fireBall.SetActive(roundPoints >= pointsForFire);
         }
 
@@ -503,7 +535,11 @@ public class GameManager : MonoBehaviour
                 saveObject.Statistics.LongestLosingWord = gameWord.ToLower();
             }
         }
-        gameStatusAudioSource.Play();
+
+        if (playSound)
+        {
+            gameStatusAudioSource.Play();
+        }
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
