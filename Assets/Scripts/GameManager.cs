@@ -354,6 +354,8 @@ public class GameManager : MonoBehaviour
 
     public void BluffWin(string word)
     {
+        clickAudioSource?.Play();
+
         aiLivesText.LoseLife();
         playerWon = true;
         isPlayerTurn = false;
@@ -365,7 +367,15 @@ public class GameManager : MonoBehaviour
             previousWords.Add(gameWord);
             UpdatePoints(gameWord, 1);
 
-            EndGame(false);
+            if (aiLivesText.IsGameOver())
+            {
+                confettiPS.Play();
+                EndGame();
+            }
+            else
+            {
+                EndGame(false);
+            }
         }
         else
         {
@@ -675,7 +685,15 @@ public class GameManager : MonoBehaviour
                 var foundWord = wordDictionary.FindWordContains(gameWord);
                 if (string.IsNullOrEmpty(foundWord))
                 {
-                    challengePopup.Show(gameWord);
+                    word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
+                    if (string.IsNullOrEmpty(word))
+                    {
+                        challengePopup.Show(gameWord);
+                    }
+                    else
+                    {
+                        PlayComputerWord(word);
+                    }
                 }
                 else
                 {

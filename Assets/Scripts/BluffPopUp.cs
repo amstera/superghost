@@ -8,7 +8,7 @@ public class BluffPopUp : MonoBehaviour
 
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public TextMeshProUGUI bluffText;
+    public TextMeshProUGUI bluffText, comboText;
     public TMP_InputField inputField;
     public TextMeshProUGUI warningText;
 
@@ -42,9 +42,11 @@ public class BluffPopUp : MonoBehaviour
         substring = substring.ToLower().Trim();
 
         originalSubstring = substring;
-        bluffText.text = $"Finish the word for extra points:\n<color=#FF3800>{substring.ToUpper()}</color>";
+        bluffText.text = $"Finish the word for extra points:\n<color=#03FF00>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = substring;
+
+        comboText.text = gameManager.comboText.GetString();
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

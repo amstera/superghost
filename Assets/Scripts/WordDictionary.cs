@@ -108,7 +108,7 @@ public class WordDictionary
 
         var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
 
-        if (rng.NextDouble() < difficultySettings.ProbabilityOffset / 4f)
+        if (rng.NextDouble() < difficultySettings.ProbabilityOffset / 5f)
         {
             char firstChar = substring[0];
             char lastChar = substring[^1];
@@ -462,7 +462,7 @@ public class DifficultySettings
         return difficulty switch
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.5f, ScoreThresholds = new[] { 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
