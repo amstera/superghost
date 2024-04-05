@@ -43,19 +43,14 @@ public class WordDictionary
 
     public void SortWordsByCommonality()
     {
-        // Convert HashSet to a List for sorting
-        var sortedList = words.ToList();
-
-        // Sort the list by commonality
-        sortedList.Sort((w1, w2) =>
+        // Sort the list by commonality, highest frequency first
+        words.Sort((w1, w2) =>
         {
-            int freq1 = commonWords.TryGetValue(w1, out var frequency1) ? frequency1 : int.MaxValue;
-            int freq2 = commonWords.TryGetValue(w2, out var frequency2) ? frequency2 : int.MaxValue;
-            return freq1.CompareTo(freq2);
-        });
+            int freq1 = commonWords.TryGetValue(w1, out var frequency1) ? frequency1 : 0; // Use 0 for not found to put these at the end after sorting
+            int freq2 = commonWords.TryGetValue(w2, out var frequency2) ? frequency2 : 0;
 
-        // Reassign the sorted list back to words
-        words = sortedList;
+            return freq2.CompareTo(freq1);
+        });
     }
 
     public void SetFilteredWords(string substring)
@@ -80,10 +75,10 @@ public class WordDictionary
 
     public string FindWordContains(string word)
     {
-        return filteredWords
+        var possibleWords = filteredWords
             .Where(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase))
-            .OrderBy(w => w.Length)
-            .FirstOrDefault();
+            .OrderBy(w => w.Length);
+        return possibleWords.FirstOrDefault();
     }
 
     public bool CanExtendWordToLeft(string word)
@@ -463,7 +458,7 @@ public class DifficultySettings
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250 } },
             Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
-            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.5f, ScoreThresholds = new[] { 400, 250, 100 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.55f, ScoreThresholds = new[] { 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
     }

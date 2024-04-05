@@ -14,9 +14,9 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText, pointsEarnedText;
+    public PointsText pointsText, totalPointsText, pointsEarnedText, currencyEarnedText;
     public ChallengePopUp challengePopup;
-    public HintPopUp hintPopUp;
+    public ShopPopUp shopPopUp;
     public HistoryText historyText;
     public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText;
     public ParticleSystem confettiPS;
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button hintButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
+    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
@@ -51,8 +51,9 @@ public class GameManager : MonoBehaviour
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
-    private int points;
-    private int roundPoints;
+    private int points, roundPoints;
+    private int currency = 5;
+    private int roundCurrency;
     public enum TextPosition { None, Left, Right }
 
     private const string separator = "_";
@@ -167,11 +168,13 @@ public class GameManager : MonoBehaviour
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
             points = 0;
+            currency = 5;
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
             shareButton.gameObject.SetActive(false);
-            hintButton.gameObject.SetActive(true);
+            shopButton.gameObject.SetActive(true);
             recap.Clear();
+            wordDisplay.transform.localPosition = Vector3.zero;
 
             gameOver = false;
         }
@@ -183,7 +186,6 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn)
         {
             startText.gameObject.SetActive(true);
-            hintButton.interactable = true;
         }
 
         wordDictionary.ClearFilteredWords();
@@ -198,8 +200,11 @@ public class GameManager : MonoBehaviour
         isLastWordValid = true;
         playerWon = false;
         roundPoints = 0;
+        roundCurrency = 0;
         pointsEarnedText.Reset();
         pointsEarnedText.gameObject.SetActive(false);
+        currencyEarnedText.Reset();
+        currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
 
         keyboard.Show();
@@ -283,11 +288,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void HintButtonPressed()
+    public void ShopButtonPressed()
     {
         clickAudioSource?.Play();
 
-        hintPopUp.Show(points, gameWord, saveObject.Difficulty);
+        shopPopUp.Show(currency, gameWord, saveObject.Difficulty);
     }
 
     public void ShowHint(int points)
@@ -506,7 +511,6 @@ public class GameManager : MonoBehaviour
         challengeButton.gameObject.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
         tutorialButton.gameObject.SetActive(false);
-        hintButton.interactable = false;
 
         if (roundPoints != 0)
         {
@@ -534,6 +538,9 @@ public class GameManager : MonoBehaviour
             {
                 saveObject.Statistics.WinningWords.Add(gameWord);
             }
+
+            currencyEarnedText.gameObject.SetActive(true);
+            currencyEarnedText.AddPoints(roundCurrency, true);
         }
         else // lost round
         {
@@ -560,9 +567,10 @@ public class GameManager : MonoBehaviour
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
             shareButton.gameObject.SetActive(true);
-            hintButton.gameObject.SetActive(false);
+            shopButton.gameObject.SetActive(false);
             playerIndicator.gameObject.SetActive(false);
             aiIndicator.gameObject.SetActive(false);
+            currencyEarnedText.gameObject.SetActive(false);
 
             if (playerWon) // won game
             {
@@ -573,6 +581,7 @@ public class GameManager : MonoBehaviour
                 stars.Show(points);
                 playerText.color = Color.green;
                 aiText.color = Color.red;
+                wordDisplay.transform.localPosition += Vector3.down * 50;
 
                 if (points > saveObject.HighScore)
                 {
@@ -604,6 +613,7 @@ public class GameManager : MonoBehaviour
                 if (saveObject.Difficulty > Difficulty.Easy)
                 {
                     difficultyText.gameObject.SetActive(true);
+                    wordDisplay.transform.localPosition += Vector3.down * 25;
                 }
 
                 saveObject.Statistics.WinStreak = 0;
@@ -732,8 +742,6 @@ public class GameManager : MonoBehaviour
 
         if (isPlayer)
         {
-            hintButton.interactable = true;
-
             if (string.IsNullOrEmpty(gameWord))
             {
                 keyboard.EnableAllButtons();
@@ -741,7 +749,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            hintButton.interactable = false;
             keyboard.DisableAllButtons();
         }
     }
@@ -771,6 +778,12 @@ public class GameManager : MonoBehaviour
         roundPoints = (int)Math.Round(pointsChange, MidpointRounding.AwayFromZero);
         pointsText.AddPoints(roundPoints);
         points = Mathf.Max(0, points + roundPoints);
+
+        if (pointsChange > 0)
+        {
+            roundCurrency = roundPoints / 5 + 1;
+            currency += roundCurrency;
+        }
     }
 
     private (string addedLetter, int index) FindAddedLetterAndIndex(string a, string b)

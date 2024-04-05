@@ -7,6 +7,7 @@ public class PointsText : MonoBehaviour
     public TextMeshProUGUI pointsText;
     public int points = 0;
     public Color normalColor = Color.white;
+    public bool IsCurrency;
     private float duration = 0.5f;
     private float colorDuration = 0.5f;
     private Color positiveColor = Color.green;
@@ -78,13 +79,20 @@ public class PointsText : MonoBehaviour
     void UpdatePointsText(int currentPoints)
     {
         var symbol = showSymbol && currentPoints > 0 ? "+" : "";
-        if (currentPoints == 1)
+        if (IsCurrency)
         {
-            pointsText.text = $"{symbol}1 POINT";
+            pointsText.text = $"{symbol}${currentPoints}";
         }
         else
         {
-            pointsText.text = $"{symbol}{currentPoints} POINTS";
+            if (currentPoints == 1)
+            {
+                pointsText.text = $"{symbol}1 POINT";
+            }
+            else
+            {
+                pointsText.text = $"{symbol}{currentPoints} POINTS";
+            }
         }
     }
 }
