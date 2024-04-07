@@ -86,20 +86,29 @@ public class ShopPopUp : MonoBehaviour
 
     private void SetUpHint()
     {
-        hintButton.interactable = gameManager.IsPlayerTurn() && currency >= hintCost;
-        hintTitleText.text = $"Hint - <color=green>${hintCost}</color>";
+        bool canAfford = currency >= hintCost;
+        string color = canAfford ? "green" : "red";
+
+        hintButton.interactable = gameManager.IsPlayerTurn() && canAfford;
+        hintTitleText.text = $"Hint - <color={color}>${hintCost}</color>";
     }
 
     private void SetUpShuffle()
     {
-        shuffleButton.interactable = gameManager.IsDoneRound() && currency >= shuffleCost;
-        shuffleTitleText.text = $"Shuffle Letters - <color=green>${shuffleCost}</color>";
+        bool canAfford = currency >= shuffleCost;
+        string color = canAfford ? "green" : "red";
+
+        shuffleButton.interactable = gameManager.IsDoneRound() && canAfford;
+        shuffleTitleText.text = $"Shuffle Letters - <color={color}>${shuffleCost}</color>";
     }
 
     private void SetUpMultiplier()
     {
-        multiplierButton.interactable = !gameManager.HasBonusMultiplier && !gameManager.IsGameEnded() && currency >= multiplierCost;
-        multiplierTitleText.text = $"2x Multiplier - <color=green>${multiplierCost}</color>";
+        bool canAfford = currency >= multiplierCost;
+        string color = canAfford ? "green" : "red";
+
+        multiplierButton.interactable = !gameManager.HasBonusMultiplier && !gameManager.IsGameEnded() && canAfford;
+        multiplierTitleText.text = $"2x Multiplier - <color={color}>${multiplierCost}</color>";
     }
 
     public void GetHint()
@@ -108,7 +117,7 @@ public class ShopPopUp : MonoBehaviour
         {
             moneyAudioSource?.Play();
 
-            currencyText.AddPoints(-hintCost);
+            RefreshPopUp(hintCost);
             hintButton.interactable = false;
             StartCoroutine(ShowHint());
         }
@@ -120,7 +129,7 @@ public class ShopPopUp : MonoBehaviour
         {
             moneyAudioSource?.Play();
 
-            currencyText.AddPoints(-shuffleCost);
+            RefreshPopUp(shuffleCost);
             shuffleButton.interactable = false;
             StartCoroutine(ShowShuffle());
         }
@@ -132,7 +141,7 @@ public class ShopPopUp : MonoBehaviour
         {
             moneyAudioSource?.Play();
 
-            currencyText.AddPoints(-multiplierCost);
+            RefreshPopUp(multiplierCost);
             multiplierButton.interactable = false;
             StartCoroutine(ShowMultiplier());
         }
@@ -180,5 +189,15 @@ public class ShopPopUp : MonoBehaviour
     private float GetTimeToWait(int cost)
     {
         return cost == 1 ? 0.2f : cost < 5 ? 0.35f : 0.65f;
+    }
+
+    private void RefreshPopUp(int cost)
+    {
+        currency -= cost;
+        currencyText.AddPoints(-cost);
+
+        SetUpHint();
+        SetUpShuffle();
+        SetUpMultiplier();
     }
 }

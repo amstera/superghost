@@ -300,7 +300,11 @@ public class GameManager : MonoBehaviour
     public void ShowHint(int cost)
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Normal);
+        if (string.IsNullOrEmpty(nextWord))
+        {
+            nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
+        }
 
         if (string.IsNullOrEmpty(nextWord))
         {
@@ -888,7 +892,7 @@ public class GameManager : MonoBehaviour
 
             if (HasBonusMultiplier)
             {
-                calculationText += $" x {2}";
+                calculationText += $" x 2";
                 totalPoints *= 2;
                 showTotal = true;
             }
