@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton;
+    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
@@ -153,6 +153,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
         tutorialButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
 
         if (gameOver)
@@ -542,6 +543,7 @@ public class GameManager : MonoBehaviour
         challengeButton.gameObject.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
         tutorialButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
 
         if (roundPoints != 0)
         {
