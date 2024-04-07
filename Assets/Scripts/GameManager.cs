@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public AudioSource keyAudioSource;
 
     public bool isPlayerTurn = true;
+    public bool HasBonusMultiplier;
 
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
@@ -206,6 +207,7 @@ public class GameManager : MonoBehaviour
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
+        HasBonusMultiplier = false;
 
         keyboard.Show();
         previousWords.Clear();
@@ -292,39 +294,54 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, saveObject.Difficulty);
+        shopPopUp.Show(currency, gameWord, saveObject.Difficulty, gameEnded);
     }
 
-    public void ShowHint(int points)
+    public void ShowHint(int cost)
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, saveObject.Difficulty);
-        if (string.IsNullOrEmpty(nextWord) && saveObject.Difficulty < Difficulty.Hard)
-        {
-            nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
-        }
+        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
 
         if (string.IsNullOrEmpty(nextWord))
         {
             canPushWord = false;
-            nextWord = wordDictionary.FindWordContains(gameWord);
+            nextWord = wordDictionary.FindWordContains(gameWord, false);
         }
 
-        var color = canPushWord ? Color.yellow : Color.red;
-
-        var nextLetter = FindAddedLetterAndIndex(gameWord, nextWord);
-        char letter = char.Parse(nextLetter.addedLetter.ToUpper());
-        keyboard.HighlightKey(letter, color);
-        UpdatePoints(points);
-
-        if (nextLetter.index == 0 && selectedPosition != TextPosition.Left)
+        if (!string.IsNullOrEmpty(nextWord))
         {
-            SelectPosition(TextPosition.Left);
+            var color = canPushWord ? Color.yellow : Color.red;
+
+            var nextLetter = FindAddedLetterAndIndex(gameWord, nextWord);
+            char letter = char.Parse(nextLetter.addedLetter.ToUpper());
+            keyboard.HighlightKey(letter, color);
+
+            if (nextLetter.index == 0 && selectedPosition != TextPosition.Left)
+            {
+                SelectPosition(TextPosition.Left);
+            }
+            else if (nextLetter.index > 0 && selectedPosition != TextPosition.Right)
+            {
+                SelectPosition(TextPosition.Right);
+            }
         }
-        else if (nextLetter.index > 0 && selectedPosition != TextPosition.Right)
-        {
-            SelectPosition(TextPosition.Right);
-        }
+
+        currency -= cost;
+    }
+
+    public void ShuffleComboLetters(int cost)
+    {
+        comboText.ChooseNewCombo();
+
+        currency -= cost;
+    }
+
+    public void EnableMultiplier(int cost)
+    {
+        HasBonusMultiplier = true;
+        SetPointsCalculatedText();
+
+        currency -= cost;
     }
 
     private IEnumerator ProcessChallengeWord()
@@ -343,7 +360,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            var thoughtWord = wordDictionary.FindWordContains(gameWord).ToUpper();
+            var thoughtWord = wordDictionary.FindWordContains(gameWord, true).ToUpper();
             string wordLink = GenerateWordLink(thoughtWord, false);
             wordDisplay.text = $"CASP won!\nCASP thought\n{wordLink}";
             wordDictionary.AddLostChallengeWord(gameWord);
@@ -458,6 +475,16 @@ public class GameManager : MonoBehaviour
     public bool IsDoneRound()
     {
         return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
+    }
+
+    public bool IsPlayerTurn()
+    {
+        return !gameOver && !gameEnded && isPlayerTurn;
+    }
+
+    public bool IsGameEnded()
+    {
+        return gameOver || gameEnded;
     }
 
     void CheckGameStatus()
@@ -692,7 +719,7 @@ public class GameManager : MonoBehaviour
             var word = wordDictionary.FindNextWord(gameWord, IsPlayerWinning(), saveObject.Difficulty);
             if (word == null)
             {
-                var foundWord = wordDictionary.FindWordContains(gameWord);
+                var foundWord = wordDictionary.FindWordContains(gameWord, false);
                 if (string.IsNullOrEmpty(foundWord))
                 {
                     word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
@@ -759,6 +786,10 @@ public class GameManager : MonoBehaviour
         if (pointsChange > 0)
         {
             pointsChange *= comboText.GetWinMultiplier(word);
+            if (HasBonusMultiplier)
+            {
+                pointsChange *= 2;
+            }
         }
 
         if (saveObject.Difficulty == Difficulty.Easy)
@@ -852,6 +883,13 @@ public class GameManager : MonoBehaviour
             {
                 calculationText += $" x {multiplier}";
                 totalPoints *= multiplier;
+                showTotal = true;
+            }
+
+            if (HasBonusMultiplier)
+            {
+                calculationText += $" x {2}";
+                totalPoints *= 2;
                 showTotal = true;
             }
 

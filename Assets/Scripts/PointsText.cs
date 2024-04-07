@@ -27,6 +27,13 @@ public class PointsText : MonoBehaviour
         StartCoroutine(CountPoints(amount));
     }
 
+    public void SetPoints(int amount)
+    {
+        pointsText.color = normalColor;
+        points = amount;
+        UpdatePointsText(points);
+    }
+
     public void Reset()
     {
         StopAllCoroutines();

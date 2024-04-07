@@ -170,7 +170,7 @@ public class VirtualKeyboard : MonoBehaviour
         colors.normalColor = color;
         btn.colors = colors;
 
-        ShakeAnimation(btn);
+        StartCoroutine(ShakeAnimation(btn));
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
