@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
-    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText;
+    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText, levelText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     public AudioSource keyAudioSource;
 
     public bool isPlayerTurn = true;
-    public bool HasBonusMultiplier;
+    public bool HasBonusMultiplier, HasEvenWordMultiplier;
 
     private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
-    private int points, roundPoints;
+    private int points, roundPoints, currentGame;
     private int currency = 5;
     private int roundCurrency;
     public enum TextPosition { None, Left, Right }
@@ -160,7 +160,6 @@ public class GameManager : MonoBehaviour
         {
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
-            pointsText.Reset();
             totalPointsText.Reset();
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
             endGameText.gameObject.SetActive(false);
@@ -169,20 +168,33 @@ public class GameManager : MonoBehaviour
             newIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
-            points = 0;
-            currency = 5;
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
-            shareButton.gameObject.SetActive(false);
+            //shareButton.gameObject.SetActive(false);
             shopButton.gameObject.SetActive(true);
             recap.Clear();
             wordDisplay.transform.localPosition = Vector3.zero;
+            pointsText.Reset();
+            points = 0;
+
+            if (playerWon)
+            {
+                currentGame++;
+            }
+            else
+            {
+                currentGame = 0;
+                currency = 5;
+            }
 
             gameOver = false;
         }
-        else if (comboText.IsCompleted())
+        else
         {
-            comboText.ChooseNewCombo();
+            if (comboText.IsCompleted())
+            {
+                comboText.ChooseNewCombo();
+            }
         }
 
         if (isPlayerTurn)
@@ -203,12 +215,13 @@ public class GameManager : MonoBehaviour
         playerWon = false;
         roundPoints = 0;
         roundCurrency = 0;
+        levelText.gameObject.SetActive(true);
+        levelText.text = $"Level {currentGame + 1}";
         pointsEarnedText.Reset();
         pointsEarnedText.gameObject.SetActive(false);
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
-        HasBonusMultiplier = false;
 
         keyboard.Show();
         previousWords.Clear();
@@ -295,7 +308,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, saveObject.Difficulty, gameEnded);
+        shopPopUp.Show(currency, gameWord, saveObject.Difficulty);
     }
 
     public void ShowHint(int cost)
@@ -344,7 +357,21 @@ public class GameManager : MonoBehaviour
     public void EnableMultiplier(int cost)
     {
         HasBonusMultiplier = true;
-        SetPointsCalculatedText();
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
+
+        currency -= cost;
+    }
+
+    public void EnableEvenMultiplier(int cost)
+    {
+        HasEvenWordMultiplier = true;
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
 
         currency -= cost;
     }
@@ -537,6 +564,8 @@ public class GameManager : MonoBehaviour
         keyboard.Hide();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
+        HasBonusMultiplier = false;
+        HasEvenWordMultiplier = false;
 
         ShowHistory();
         ghostAvatar.Hide();     
@@ -544,6 +573,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.gameObject.SetActive(true);
         tutorialButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
+        levelText.gameObject.SetActive(false);
 
         if (roundPoints != 0)
         {
@@ -594,16 +624,13 @@ public class GameManager : MonoBehaviour
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
             UpdateDailyGameStreak(true);
-            nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
             endGameText.gameObject.SetActive(true);
             comboText.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
-            shareButton.gameObject.SetActive(true);
-            shopButton.gameObject.SetActive(false);
+            //shareButton.gameObject.SetActive(true);
             playerIndicator.gameObject.SetActive(false);
             aiIndicator.gameObject.SetActive(false);
-            currencyEarnedText.gameObject.SetActive(false);
 
             if (playerWon) // won game
             {
@@ -615,6 +642,9 @@ public class GameManager : MonoBehaviour
                 playerText.color = Color.green;
                 aiText.color = Color.red;
                 wordDisplay.transform.localPosition += Vector3.down * 50;
+                shopPopUp.RefreshShop();
+
+                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
 
                 if (points > saveObject.HighScore)
                 {
@@ -642,6 +672,8 @@ public class GameManager : MonoBehaviour
                 pointsEarnedText.gameObject.SetActive(false);
                 playerText.color = Color.red;
                 aiText.color = Color.green;
+                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Game >";
+                shopButton.gameObject.SetActive(false);
 
                 if (saveObject.Difficulty > Difficulty.Easy)
                 {
@@ -796,6 +828,10 @@ public class GameManager : MonoBehaviour
             {
                 pointsChange *= 2;
             }
+            if (HasEvenWordMultiplier && word.Length % 2 == 0)
+            {
+                pointsChange *= 2;
+            }
         }
 
         if (saveObject.Difficulty == Difficulty.Easy)
@@ -893,6 +929,13 @@ public class GameManager : MonoBehaviour
             }
 
             if (HasBonusMultiplier)
+            {
+                calculationText += $" x 2";
+                totalPoints *= 2;
+                showTotal = true;
+            }
+
+            if (HasEvenWordMultiplier && gameWord.Length % 2 == 0)
             {
                 calculationText += $" x 2";
                 totalPoints *= 2;

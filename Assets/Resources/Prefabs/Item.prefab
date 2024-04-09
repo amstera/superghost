@@ -451,12 +451,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 26
   m_fontSizeBase: 25
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 22
+  m_fontSizeMax: 26
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -807,6 +807,7 @@ GameObject:
   - component: {fileID: 4492413922308345714}
   - component: {fileID: 638323163560052008}
   - component: {fileID: 8887786207181032624}
+  - component: {fileID: 4876657748069829519}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -891,3 +892,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: {x: 10, y: 10, z: 10, w: 10}
+--- !u!114 &4876657748069829519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9162004099354771038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67644f9f85cfc441bbc015dd4447f65d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  titleText: {fileID: 3991856166406186466}
+  bodyText: {fileID: 3572867988044167647}
+  warningText: {fileID: 3771152501812627697}
+  buyButton: {fileID: 4444880214771992134}

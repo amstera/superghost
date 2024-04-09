@@ -75,46 +75,12 @@ public class WordDictionary
 
     public string FindWordContains(string substring, bool isBluff)
     {
-        int maxLength = substring.Length + 3;
-        string bestStartsWith = null;
-        string bestContains = null;
-
-        foreach (var w in filteredWords)
+        if (isBluff)
         {
-            bool startsWith = w.StartsWith(substring, StringComparison.InvariantCultureIgnoreCase);
-            bool contains = w.Contains(substring, StringComparison.InvariantCultureIgnoreCase);
-
-            if (startsWith || contains)
-            {
-                if (isBluff)
-                {
-                    if (startsWith && w.Length <= maxLength)
-                    {
-                        return w;
-                    }
-                }
-                if (startsWith && (bestStartsWith == null || w.Length < bestStartsWith.Length))
-                {
-                    bestStartsWith = w;
-                }
-                if (bestContains == null || w.Length < bestContains.Length)
-                {
-                    bestContains = w;
-                }
-            }
+            return filteredWords.FirstOrDefault(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        if (!isBluff)
-        {
-            if (bestStartsWith != null && (bestContains == null || bestStartsWith.Length <= bestContains.Length))
-            {
-                return bestStartsWith;
-            }
-
-            return bestContains;
-        }
-
-        return bestStartsWith ?? bestContains;
+        return filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).OrderBy(w => w.Length).FirstOrDefault();
     }
 
     public bool CanExtendWordToLeft(string word)
@@ -493,7 +459,7 @@ public class DifficultySettings
         return difficulty switch
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.9f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.6f, ScoreThresholds = new[] { 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
