@@ -126,6 +126,7 @@ public class ShopPopUp : MonoBehaviour
         {
             RefreshShop();
             BuyItem(10, null);
+            StartCoroutine(ScrollToTop());
         }
     }
 
@@ -210,6 +211,12 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(cost, () => gameManager.EnableMultiplier(cost));
             case 3:
                 return DoAction(cost, () => gameManager.EnableEvenMultiplier(cost));
+            case 4:
+                return DoAction(cost, () => gameManager.EnableDoubleWealth(cost));
+            case 5:
+                return DoAction(cost, () => gameManager.DoDoubleTurn(cost));
+            case 6:
+                return DoAction(cost, () => gameManager.ResetWord(cost));
         }
 
         return null;
@@ -227,9 +234,15 @@ public class ShopPopUp : MonoBehaviour
             case 1:
                 return 5;
             case 2:
-                return gameManager.aiLivesText.IsGameOver() ? 5 : (roundsWon + 1) * 5;
+                return roundEnded ? 5 : (roundsWon + 1) * 4;
             case 3:
-                return gameManager.aiLivesText.IsGameOver() ? 3 : (roundsWon + 1) * 3;
+                return roundEnded ? 3 : (roundsWon + 1) * 3;
+            case 4:
+                return roundEnded ? 3 : (int)Mathf.Round((substring.Length + 1) * 3 * multiplier);
+            case 5:
+                return roundEnded ? 0 : (int)Mathf.Round((substring.Length + 1) * 3 * multiplier);
+            case 6:
+                return (gameManager.ResetWordUses + 1) * 5;
         }
 
         return -1;
@@ -247,6 +260,12 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.HasBonusMultiplier;
             case 3:
                 return !gameManager.HasEvenWordMultiplier;
+            case 4:
+                return !gameManager.HasDoubleWealth;
+            case 5:
+                return gameManager.IsPlayerTurn() && !gameManager.HasDoubleTurn;
+            case 6:
+                return gameManager.IsPlayerTurn();
         }
 
         return false;

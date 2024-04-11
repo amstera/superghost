@@ -7,21 +7,24 @@ public class PointsText : MonoBehaviour
     public TextMeshProUGUI pointsText;
     public int points = 0;
     public Color normalColor = Color.white;
-    public bool IsCurrency;
+    public bool makePostFixGreen;
+    public bool IsJustNumber, IsCurrency;
     private float duration = 0.5f;
     private float colorDuration = 0.5f;
     private Color positiveColor = Color.green;
     private Color negativeColor = Color.red;
     private bool showSymbol;
+    private string prefixText;
 
     private void Start()
     {
         UpdatePointsText(0);
     }
 
-    public void AddPoints(int amount, bool showSymbol = false)
+    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "")
     {
         this.showSymbol = showSymbol;
+        this.prefixText = prefixText;
         pointsText.color = normalColor;
         StopAllCoroutines(); // Stop any ongoing coroutines.
         StartCoroutine(CountPoints(amount));
@@ -85,21 +88,35 @@ public class PointsText : MonoBehaviour
 
     void UpdatePointsText(int currentPoints)
     {
+        string pointsDisplay;
         var symbol = showSymbol && currentPoints > 0 ? "+" : "";
-        if (IsCurrency)
+        if (IsJustNumber)
         {
-            pointsText.text = $"{symbol}${currentPoints}";
+            pointsDisplay = $"{symbol}{currentPoints}";
+        }
+        else if (IsCurrency)
+        {
+            pointsDisplay = $"{symbol}${currentPoints}";
         }
         else
         {
             if (currentPoints == 1)
             {
-                pointsText.text = $"{symbol}1 POINT";
+                pointsDisplay = $"{symbol}1 POINT";
             }
             else
             {
-                pointsText.text = $"{symbol}{currentPoints} POINTS";
+                pointsDisplay = $"{symbol}{currentPoints} POINTS";
             }
+        }
+
+        if (makePostFixGreen)
+        {
+            pointsText.text = $"{prefixText}<color=green>{pointsDisplay}</color>";
+        }
+        else
+        {
+            pointsText.text = $"{prefixText}{pointsDisplay}";
         }
     }
 }

@@ -25,6 +25,8 @@ public class Share : MonoBehaviour
 
     private string GetSharedMessage(List<RecapObject> recap)
     {
+        //todo: change this to give recap of entire run
+
         string pointsText = recap.Last().PlayerLivesRemaining == 0 ? "" : recap.Last().Points == 1 ? "1 pt - " : $"{recap.Last().Points} pts - ";
         string message = $"Wordy Ghost - {pointsText}{recap.Count} rounds";
         foreach (var item in recap)

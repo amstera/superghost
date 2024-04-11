@@ -10,6 +10,8 @@ public class ShopItem : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI bodyText;
     public TextMeshProUGUI warningText;
+    public Color normalWarningColor;
+    public Color blockedWarningColor;
     public Button buyButton;
 
     private int cost;
@@ -24,7 +26,15 @@ public class ShopItem : MonoBehaviour
         bool canAfford = currency >= cost;
         titleText.text = $"{title} - <color={(canAfford ? "green" : "red")}>${cost}</color>";
         bodyText.text = body;
-        warningText.text = $"<sprite index=0> {warning}";
+        if (interactable)
+        {
+            warningText.text = warning;
+        }
+        else
+        {
+            warningText.text = $"<sprite index=0> {warning}";
+        }
+        warningText.color = interactable ? normalWarningColor : blockedWarningColor;
         buyButton.interactable = interactable && canAfford;
 
         buyButton.onClick.RemoveAllListeners();

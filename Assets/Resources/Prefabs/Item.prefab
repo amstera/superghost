@@ -908,4 +908,6 @@ MonoBehaviour:
   titleText: {fileID: 3991856166406186466}
   bodyText: {fileID: 3572867988044167647}
   warningText: {fileID: 3771152501812627697}
+  normalWarningColor: {r: 0.9529412, g: 0.92156863, b: 0.32941177, a: 1}
+  blockedWarningColor: {r: 1, g: 0.21960784, b: 0, a: 1}
   buyButton: {fileID: 4444880214771992134}

@@ -10,6 +10,8 @@ public class Stars : MonoBehaviour
 
     public AudioClip starAudioClip;
 
+    private int starsToLight;
+
     private SaveObject saveObject;
 
     void Start()
@@ -20,15 +22,8 @@ public class Stars : MonoBehaviour
     public void Show(int score)
     {
         SetStarsColor(Color.white); // Immediate reset to white
-        StartCoroutine(ShowStarsCoroutine(score));
-    }
 
-    private IEnumerator ShowStarsCoroutine(int score)
-    {
-        yield return new WaitForSeconds(0.75f);
-
-        int starsToLight = 0;
-        bool diamond = false;
+        bool isDiamond = false;
 
         if (score < 50) starsToLight = 1;
         else if (score < 100) starsToLight = 2;
@@ -38,8 +33,20 @@ public class Stars : MonoBehaviour
         else
         {
             starsToLight = 5;
-            diamond = true;
+            isDiamond = true;
         }
+
+        StartCoroutine(ShowStarsCoroutine(score, isDiamond));
+    }
+
+    public int GetStars()
+    {
+        return starsToLight;
+    }
+
+    private IEnumerator ShowStarsCoroutine(int score, bool isDiamond)
+    {
+        yield return new WaitForSeconds(0.75f);
 
         // Light up stars in yellow, one by one
         for (int i = 0; i < starsToLight; i++)
@@ -48,7 +55,7 @@ public class Stars : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        if (diamond)
+        if (isDiamond)
         {
             yield return new WaitForSeconds(0.25f); // Brief pause
             // Change all stars to diamond simultaneously with a pop
