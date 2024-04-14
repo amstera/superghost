@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class BluffPopUp : MonoBehaviour
 {
@@ -23,6 +25,7 @@ public class BluffPopUp : MonoBehaviour
     private string originalSubstring;
     private Vector3 originalScale;
     private Vector3 originalPos;
+    private HashSet<char> restrictedLetters = new HashSet<char>();
 
     private void Awake()
     {
@@ -91,9 +94,30 @@ public class BluffPopUp : MonoBehaviour
         }
         else
         {
-            canvasGroup.interactable = false;
-            StartCoroutine(HandleCompleteBluff());
+            char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
+
+            if (invalidChar != '\0')
+            {
+                StartCoroutine(ShakePopup());
+                warningText.text = $"Word cannot contain {invalidChar.ToString().ToUpper()}";
+                warningText.gameObject.SetActive(true);
+            }
+            else
+            {
+                canvasGroup.interactable = false;
+                StartCoroutine(HandleCompleteBluff());
+            }
         }
+    }
+
+    public void AddRestrictedLetter(char c)
+    {
+        restrictedLetters.Add(c);
+    }
+
+    public void ClearRestrictions()
+    {
+        restrictedLetters.Clear();
     }
 
     public void Skip()

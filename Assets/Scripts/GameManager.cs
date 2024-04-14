@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, newIndicator, newLevelIndicator, difficultyText, fireBall;
+    public GameObject playerIndicator, aiIndicator, newIndicator, newLevelIndicator, shopNewIndicator, difficultyText, fireBall, fireBallCalculate;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public TutorialPopUp tutorialPopup;
     public BluffPopUp bluffPopup;
     public Share shareButton;
+    public CriteriaText criteriaText;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound;
@@ -42,10 +43,11 @@ public class GameManager : MonoBehaviour
     public AudioSource keyAudioSource;
 
     public bool isPlayerTurn = true;
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn;
+    public string gameWord = "";
+    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff;
     public int ResetWordUses;
+    public int currency = 5;
 
-    private string gameWord = "";
     private HashSet<string> previousWords = new HashSet<string>();
     private List<RecapObject> recap = new List<RecapObject>();
     private bool gameEnded = false;
@@ -55,7 +57,6 @@ public class GameManager : MonoBehaviour
     private bool isChallenging;
     private bool setLevelHighScore;
     private int points, roundPoints, currentGame;
-    private int currency = 5;
     private int roundCurrency;
     public enum TextPosition { None, Left, Right }
 
@@ -79,7 +80,7 @@ public class GameManager : MonoBehaviour
         wordDictionary.LoadCommonWords(commonLines);
     }
 
-    IEnumerator LoadFileLines(string filePath, System.Action<string[]> callback)
+    IEnumerator LoadFileLines(string filePath, Action<string[]> callback)
     {
         List<string> lines = new List<string>();
         using (StreamReader reader = new StreamReader(filePath))
@@ -107,6 +108,9 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 120;
 
         saveObject = SaveManager.Load();
+        currency = saveObject.Currency;
+        currentGame = saveObject.Statistics.WinStreak;
+        criteriaText.SetLevelCriteria(currentGame);
     }
 
     IEnumerator Start()
@@ -171,6 +175,7 @@ public class GameManager : MonoBehaviour
             finalLevelText.gameObject.SetActive(false);
             difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
+            shopNewIndicator.SetActive(false);
             newLevelIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
             comboText.ChooseNewCombo();
@@ -182,16 +187,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
             points = 0;
-
-            if (playerWon)
-            {
-                currentGame++;
-            }
-            else
-            {
-                currentGame = 0;
-                currency = 5;
-            }
+            AddRestrictions(criteriaText.GetCurrentCriteria());
 
             gameOver = false;
         }
@@ -206,6 +202,7 @@ public class GameManager : MonoBehaviour
         if (isPlayerTurn)
         {
             startText.gameObject.SetActive(true);
+            keyboard.EnableAllButtons();
         }
 
         wordDictionary.ClearFilteredWords();
@@ -215,12 +212,11 @@ public class GameManager : MonoBehaviour
         gameWord = "";
         selectedPosition = TextPosition.None;
         gameEnded = false;
-        wordDisplay.canClickLeft = true;
-        wordDisplay.canClickRight = true;
         isLastWordValid = true;
         playerWon = false;
         roundPoints = 0;
         roundCurrency = 0;
+        criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
         levelText.text = $"Level {currentGame + 1}";
         pointsEarnedText.Reset();
@@ -289,7 +285,11 @@ public class GameManager : MonoBehaviour
         UpdateWordDisplay(false, newIndex);
         comboText.UseCharacter(character);
 
-        if (!HasDoubleTurn)
+        if (HasDoubleTurn)
+        {
+            SetIndicators(true);
+        }
+        else
         {
             isPlayerTurn = false;
             ghostAvatar.Think();
@@ -321,7 +321,7 @@ public class GameManager : MonoBehaviour
         shopPopUp.Show(currency, gameWord, saveObject.Difficulty);
     }
 
-    public void ShowHint(int cost)
+    public void ShowHint()
     {
         bool canPushWord = true;
         var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Normal);
@@ -353,58 +353,79 @@ public class GameManager : MonoBehaviour
                 SelectPosition(TextPosition.Right);
             }
         }
-
-        currency -= cost;
     }
 
-    public void ShuffleComboLetters(int cost)
+    public void ShuffleComboLetters()
     {
         comboText.ChooseNewCombo();
-
-        currency -= cost;
     }
 
-    public void EnableMultiplier(int cost)
+    public void EnableMultiplier()
     {
         HasBonusMultiplier = true;
         if (!gameEnded)
         {
             SetPointsCalculatedText();
         }
-
-        currency -= cost;
     }
 
-    public void EnableEvenMultiplier(int cost)
+    public void EnableEvenMultiplier()
     {
         HasEvenWordMultiplier = true;
         if (!gameEnded)
         {
             SetPointsCalculatedText();
         }
-
-        currency -= cost;
     }
 
-    public void EnableDoubleWealth(int cost)
+    public void EnableLongWordMultiplier()
+    {
+        HasLongWordMultiplier = true;
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
+    public void EnableDoubleWealth()
     {
         HasDoubleWealth = true;
-        currency -= cost;
     }
 
-    public void DoDoubleTurn(int cost)
+    public void DoDoubleTurn()
     {
         HasDoubleTurn = true;
-        currency -= cost;
     }
 
-    public void ResetWord(int cost)
+    public void ResetWord()
     {
         ghostAvatar.Hide();
         StartNewGame();
         ResetWordUses++;
+    }
 
-        currency -= cost;
+    public void EnableDoubleBluff()
+    {
+        HasDoubleBluff = true;
+    }
+
+    public void UndoTurn()
+    {
+        if (previousWords.Count > 0)
+        {
+            gameWord = previousWords.Last();
+            if (string.IsNullOrEmpty(gameWord))
+            {
+                wordDisplay.text = $"<color=yellow>{separator}</color>";
+                keyboard.EnableAllButtons();
+            }
+            else
+            {
+                UpdateWordDisplay(false, 0);
+            }
+
+            SetPointsCalculatedText();
+        }
     }
 
     private IEnumerator ProcessChallengeWord()
@@ -450,7 +471,8 @@ public class GameManager : MonoBehaviour
             wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
             isLastWordValid = false;
             previousWords.Add(gameWord);
-            UpdatePoints(gameWord, 1);
+            int multiplier = HasDoubleBluff ? 2 : 1;
+            UpdatePoints(gameWord, multiplier);
 
             if (aiLivesText.IsGameOver())
             {
@@ -545,9 +567,14 @@ public class GameManager : MonoBehaviour
         return !gameOver && !gameEnded && isPlayerTurn;
     }
 
+    public bool IsRoundEnded()
+    {
+        return gameEnded;
+    }
+
     public bool IsGameEnded()
     {
-        return gameOver || gameEnded;
+        return gameOver;
     }
 
     void CheckGameStatus()
@@ -602,8 +629,11 @@ public class GameManager : MonoBehaviour
         keyboard.Hide();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
+        fireBallCalculate.SetActive(false);
         HasBonusMultiplier = false;
         HasEvenWordMultiplier = false;
+        HasLongWordMultiplier = false;
+        HasDoubleBluff = false;
         HasDoubleWealth = false;
         HasDoubleTurn = false;
 
@@ -660,10 +690,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (playSound)
-        {
-            gameStatusAudioSource.Play();
-        }
+        var gameState = GetGameState();
+        criteriaText.UpdateState(gameState);
 
         if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
         {
@@ -674,19 +702,20 @@ public class GameManager : MonoBehaviour
             recapButton.gameObject.SetActive(true);
             playerIndicator.gameObject.SetActive(false);
             aiIndicator.gameObject.SetActive(false);
+            shopPopUp.RefreshShop(playerWon);
 
-            if (playerWon) // won game
+            if (playerWon && criteriaText.AllMet(gameState)) // won game
             {
                 endGameText.text = "Victory!";
                 endGameText.color = Color.green;
                 totalPointsText.gameObject.SetActive(true);
                 totalPointsText.AddPoints(points);
+                shopNewIndicator.SetActive(true);
 
                 stars.Show(points);
                 playerText.color = Color.green;
                 aiText.color = Color.red;
                 wordDisplay.transform.localPosition += Vector3.down * 75;
-                shopPopUp.RefreshShop();
 
                 int gameWonCurrency = stars.GetStars() * 5;
                 bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ");
@@ -717,6 +746,8 @@ public class GameManager : MonoBehaviour
                     saveObject.Statistics.LongestWinStreak = saveObject.Statistics.WinStreak;
                     setLevelHighScore = true;
                 }
+
+                currentGame++;
             }
             else // lost game
             {
@@ -728,6 +759,8 @@ public class GameManager : MonoBehaviour
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
                 shopButton.gameObject.SetActive(false);
                 shareButton.gameObject.SetActive(true);
+                ResetWordUses = 0;
+                gameStatusAudioSource.clip = loseSound;
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
@@ -745,11 +778,25 @@ public class GameManager : MonoBehaviour
                         setLevelHighScore = false;
                     }
                 }
+
+                currentGame = 0;
+                currency = 5;
+                saveObject.ShopItemIds = new List<int>();
             }
 
+            saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
             gameOver = true;
+
+            criteriaText.SetLevelCriteria(currentGame);
         }
+
+        if (playSound)
+        {
+            gameStatusAudioSource.Play();
+        }
+
+        criteriaText.gameObject.SetActive(gameOver && !playerWon);
 
         SaveManager.Save(saveObject);
     }
@@ -895,6 +942,10 @@ public class GameManager : MonoBehaviour
             {
                 pointsChange *= 2;
             }
+            if (HasLongWordMultiplier && word.Length >= 10)
+            {
+                pointsChange *= 4;
+            }
         }
 
         if (saveObject.Difficulty == Difficulty.Easy)
@@ -1009,9 +1060,19 @@ public class GameManager : MonoBehaviour
                 showTotal = true;
             }
 
+            if (HasLongWordMultiplier && gameWord.Length >= 10)
+            {
+                calculationText += $" x 3";
+                totalPoints *= 4;
+                showTotal = true;
+            }
+
             int pointsToShow = (int)Math.Round(totalPoints, MidpointRounding.AwayFromZero);
 
             calculationText += showTotal ? $" = {pointsToShow})" : ")";
+
+            int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
+            fireBallCalculate.SetActive(pointsToShow >= pointsForFire);
         }
 
         pointsCalculateText.text = calculationText;
@@ -1072,5 +1133,41 @@ public class GameManager : MonoBehaviour
         UpdateWordDisplay(true, addedLetter.index);
         isPlayerTurn = true;
         SetIndicators(isPlayerTurn);
+    }
+
+    private GameState GetGameState()
+    {
+        return new GameState
+        {
+            Points = points,
+            EndGame = gameOver
+        };
+    }
+
+    private void AddRestrictions(List<GameCriterion> criteria)
+    {
+        keyboard.RemoveAllRestrictions();
+        challengePopup.ClearRestrictions();
+        bluffPopup.ClearRestrictions();
+
+        foreach (var criterion in criteria)
+        {
+            if (criterion.IsRestrictive)
+            {
+                if (criterion is NoUsingLetter noUsingLetter)
+                {
+                    var restrictedLetter = noUsingLetter.GetRestrictedLetter();
+                    keyboard.AddRestrictedLetter(restrictedLetter);
+                    wordDictionary.AddRestrictedLetter(restrictedLetter);
+                    challengePopup.AddRestrictedLetter(restrictedLetter);
+                    bluffPopup.AddRestrictedLetter(restrictedLetter);
+                }
+                else if (criterion is StartWithHandicap startWithHandicap)
+                {
+                    var amount = startWithHandicap.GetAmount();
+                    playerLivesText.AddHandicap(amount);
+                }
+            }
+        }
     }
 }

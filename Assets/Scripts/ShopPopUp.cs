@@ -56,22 +56,42 @@ public class ShopPopUp : MonoBehaviour
         StartCoroutine(ScrollToTop());
     }
 
-    public void RefreshShop()
+    public void RefreshShop(bool saveChanges)
     {
         visibleShopItems.Clear();
-        GetShopItems();
+        GetShopItems(saveChanges, true);
     }
 
-    private void GetShopItems()
+    private void GetShopItems(bool saveChanges = false, bool overrideExistingItems = false)
     {
         if (visibleShopItems.Count == 0)
         {
-            while (visibleShopItems.Count < 3)
+            var saveObject = SaveManager.Load();
+            if (overrideExistingItems && saveChanges)
             {
-                var randomShopItem = shopItems[Random.Range(0, shopItems.Count)];
-                if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
+                saveObject.ShopItemIds.Clear();
+            }
+
+            if (saveObject.ShopItemIds.Count == 0 || overrideExistingItems)
+            {
+                while (visibleShopItems.Count < 3)
                 {
-                    visibleShopItems.Add(randomShopItem);
+                    var randomShopItem = shopItems[Random.Range(0, shopItems.Count)];
+                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
+                    {
+                        visibleShopItems.Add(randomShopItem);
+                        if (saveChanges)
+                        {
+                            saveObject.ShopItemIds.Add(randomShopItem.id);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var id in saveObject.ShopItemIds)
+                {
+                    visibleShopItems.Add(shopItems.FirstOrDefault(s => s.id == id));
                 }
             }
         }
@@ -124,7 +144,7 @@ public class ShopPopUp : MonoBehaviour
     {
         if (currency >= 10)
         {
-            RefreshShop();
+            RefreshShop(false);
             BuyItem(10, null);
             StartCoroutine(ScrollToTop());
         }
@@ -174,6 +194,7 @@ public class ShopPopUp : MonoBehaviour
     private void RefreshPopUp(int cost)
     {
         currency -= cost;
+        gameManager.currency -= cost;
         currencyText.AddPoints(-cost);
 
         InitializeShopItems();
@@ -191,12 +212,12 @@ public class ShopPopUp : MonoBehaviour
         {
             var shopItem = visibleShopItems[i];
             int cost = GetCost(shopItem.id);
-            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
+            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), IsActive(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
         }
 
         bool canAffordReshuffle = currency >= 10;
         shuffleButton.interactable = canAffordReshuffle;
-        shuffleButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Re-Shuffle (<color={(canAffordReshuffle ? "green" : "red")}>$10</color>)";
+        shuffleButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>$10</color>)";
     }
 
     private IEnumerator GetCoroutine(int id, int cost)
@@ -204,19 +225,25 @@ public class ShopPopUp : MonoBehaviour
         switch (id)
         {
             case 0:
-                return DoAction(cost, () => gameManager.ShowHint(cost));
+                return DoAction(cost, () => gameManager.ShowHint());
             case 1:
-                return DoAction(cost, () => gameManager.ShuffleComboLetters(cost));
+                return DoAction(cost, () => gameManager.ShuffleComboLetters());
             case 2:
-                return DoAction(cost, () => gameManager.EnableMultiplier(cost));
+                return DoAction(cost, () => gameManager.EnableMultiplier());
             case 3:
-                return DoAction(cost, () => gameManager.EnableEvenMultiplier(cost));
+                return DoAction(cost, () => gameManager.EnableEvenMultiplier());
             case 4:
-                return DoAction(cost, () => gameManager.EnableDoubleWealth(cost));
+                return DoAction(cost, () => gameManager.EnableDoubleWealth());
             case 5:
-                return DoAction(cost, () => gameManager.DoDoubleTurn(cost));
+                return DoAction(cost, () => gameManager.DoDoubleTurn());
             case 6:
-                return DoAction(cost, () => gameManager.ResetWord(cost));
+                return DoAction(cost, () => gameManager.ResetWord());
+            case 7:
+                return DoAction(cost, () => gameManager.EnableLongWordMultiplier());
+            case 8:
+                return DoAction(cost, () => gameManager.UndoTurn());
+            case 9:
+                return DoAction(cost, () => gameManager.EnableDoubleBluff());
         }
 
         return null;
@@ -224,25 +251,38 @@ public class ShopPopUp : MonoBehaviour
 
     private int GetCost(int id)
     {
-        bool roundEnded = gameManager.IsGameEnded();
+        bool roundEnded = gameManager.IsRoundEnded();
+        bool gameEnded = gameManager.IsGameEnded();
         int roundsWon = gameManager.aiLivesText.GetStartLives() - gameManager.aiLivesText.LivesRemaining();
+
+        int substringLength = substring.Length;
+        if (roundEnded)
+        {
+            substringLength = 0;
+        }
 
         switch (id)
         {
             case 0:
-                return roundEnded ? 0 : (int)Mathf.Round(Mathf.Max(substring.Length * multiplier, 1));
+                return (int)Mathf.Round((substringLength + 1) * multiplier);
             case 1:
                 return 5;
             case 2:
-                return roundEnded ? 5 : (roundsWon + 1) * 4;
+                return gameEnded ? 4 : (roundsWon + 1) * 4;
             case 3:
-                return roundEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 4:
-                return roundEnded ? 3 : (int)Mathf.Round((substring.Length + 1) * 3 * multiplier);
+                return (int)(Mathf.Round(5 * multiplier));
             case 5:
-                return roundEnded ? 0 : (int)Mathf.Round((substring.Length + 1) * 3 * multiplier);
+                return (int)Mathf.Round((substringLength + 1) * multiplier);
             case 6:
                 return (gameManager.ResetWordUses + 1) * 5;
+            case 7:
+                return gameEnded ? 4 : (roundsWon + 1) * 4;
+            case 8:
+                return (int)Mathf.Round((substringLength + 1) * 2 * multiplier);
+            case 9:
+                return (int)Mathf.Round(5 * multiplier);
         }
 
         return -1;
@@ -266,6 +306,41 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.IsPlayerTurn() && !gameManager.HasDoubleTurn;
             case 6:
                 return gameManager.IsPlayerTurn();
+            case 7:
+                return !gameManager.HasLongWordMultiplier;
+            case 8:
+                return gameManager.IsPlayerTurn() && gameManager.gameWord.Length > 0;
+            case 9:
+                return !gameManager.HasDoubleBluff;
+        }
+
+        return false;
+    }
+
+    private bool IsActive(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return false;
+            case 1:
+                return false;
+            case 2:
+                return gameManager.HasBonusMultiplier;
+            case 3:
+                return gameManager.HasEvenWordMultiplier;
+            case 4:
+                return gameManager.HasDoubleWealth;
+            case 5:
+                return gameManager.HasDoubleTurn;
+            case 6:
+                return false;
+            case 7:
+                return gameManager.HasLongWordMultiplier;
+            case 8:
+                return false;
+            case 9:
+                return gameManager.HasDoubleBluff;
         }
 
         return false;

@@ -77,7 +77,10 @@ public class WordDictionary
     {
         if (isBluff)
         {
-            return filteredWords.FirstOrDefault(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase));
+            if (filteredWords.Any(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase) && commonWords.ContainsKey(w)))
+            {
+                return filteredWords.FirstOrDefault(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase));
+            }
         }
 
         return filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).OrderBy(w => w.Length).FirstOrDefault();
@@ -97,6 +100,11 @@ public class WordDictionary
     {
         substring = substring.ToLower();
         lostChallengeSubstring.Add(substring);
+    }
+
+    public void AddRestrictedLetter(char c)
+    {
+        filteredWords = filteredWords.Where(w => w.Contains(c, StringComparison.InvariantCultureIgnoreCase)).ToList();
     }
 
     public string BluffWord(string substring, Difficulty difficulty)

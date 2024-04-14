@@ -21,6 +21,12 @@ public class LivesDisplay : MonoBehaviour
         UpdateLivesDisplay();
     }
 
+    public void AddHandicap(int amount)
+    {
+        currentLifeIndex = Mathf.Min(livesString.Length, currentLifeIndex + amount);
+        UpdateLivesDisplay();
+    }
+
     public void LoseLife()
     {
         if (!IsGameOver())

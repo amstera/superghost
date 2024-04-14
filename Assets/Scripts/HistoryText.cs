@@ -16,8 +16,8 @@ public class HistoryText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     void Start()
     {
         // Add listeners to buttons
-        firstPageButton.onClick.AddListener(() => ShowPage(1));
-        secondPageButton.onClick.AddListener(() => ShowPage(2));
+        firstPageButton.onClick.AddListener(() => ShowPage(1, true));
+        secondPageButton.onClick.AddListener(() => ShowPage(2, true));
 
         // Initial setup
         UpdateText(textComponent.text);
@@ -34,15 +34,15 @@ public class HistoryText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         firstPageButton.gameObject.SetActive(showButtons);
         secondPageButton.gameObject.SetActive(showButtons);
 
-        if (showButtons)
-        {
-            ShowPage(1); // Go to the first page automatically when text changes
-        }
+        ShowPage(1, false);
     }
 
-    private void ShowPage(int pageNumber)
+    private void ShowPage(int pageNumber, bool playSound)
     {
-        clickAudioSource?.Play();
+        if (playSound)
+        {
+            clickAudioSource?.Play();
+        }
 
         textComponent.pageToDisplay = pageNumber;
 
@@ -75,11 +75,11 @@ public class HistoryText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             if (horizontalMovement > 0 && firstPageButton.gameObject.activeSelf && firstPageButton.interactable)
             {
-                ShowPage(1);
+                ShowPage(1, true);
             }
             else if (horizontalMovement < 0 && secondPageButton.gameObject.activeSelf && secondPageButton.interactable)
             {
-                ShowPage(2);
+                ShowPage(2, true);
             }
         }
     }

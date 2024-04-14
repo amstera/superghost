@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 {
     public GameManager gameManager; // Reference to the GameManager to call ProcessTurn
-    public bool canClickLeft = true;
-    public bool canClickRight = true;
 
     private Coroutine colorLerpCoroutine;
 
@@ -62,11 +60,11 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
             // Determine if the click is on the left or right half of the TextMeshProUGUI component
             bool isLeftSide = localCursor.x < 0; // Assuming pivot is at the center (0.5, 0.5)
 
-            if (isLeftSide && canClickLeft)
+            if (isLeftSide)
             {
                 gameManager.SelectPosition(GameManager.TextPosition.Left);
             }
-            else if (!isLeftSide && canClickRight)
+            else if (!isLeftSide)
             {
                 gameManager.SelectPosition(GameManager.TextPosition.Right);
             }

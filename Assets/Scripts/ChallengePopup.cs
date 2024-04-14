@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class ChallengePopUp : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class ChallengePopUp : MonoBehaviour
     private string originalSubstring;
     private Vector3 originalScale;
     private Vector3 originalPos;
+    private HashSet<char> restrictedLetters = new HashSet<char>();
 
     private void Awake()
     {
@@ -72,7 +75,6 @@ public class ChallengePopUp : MonoBehaviour
             yield return null;
         }
     }
-
     public void Send()
     {
         if (string.IsNullOrEmpty(inputField.text) || !inputField.text.Contains(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
@@ -83,9 +85,30 @@ public class ChallengePopUp : MonoBehaviour
         }
         else
         {
-            canvasGroup.interactable = false;
-            StartCoroutine(HandleChallenge());
+            char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
+
+            if (invalidChar != '\0')
+            {
+                StartCoroutine(ShakePopup());
+                warningText.text = $"Word cannot contain {invalidChar.ToString().ToUpper()}";
+                warningText.gameObject.SetActive(true);
+            }
+            else
+            {
+                canvasGroup.interactable = false;
+                StartCoroutine(HandleChallenge());
+            }
         }
+    }
+
+    public void AddRestrictedLetter(char c)
+    {
+        restrictedLetters.Add(c);
+    }
+
+    public void ClearRestrictions()
+    {
+        restrictedLetters.Clear();
     }
 
     private IEnumerator HandleChallenge()

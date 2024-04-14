@@ -60,6 +60,8 @@ public class SaveObject
     public int HighScore;
     public bool EnableSound = true;
     public bool HasSeenTutorial;
+    public int Currency = 5;
+    public List<int> ShopItemIds = new List<int>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
 }

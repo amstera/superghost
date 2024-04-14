@@ -23,10 +23,11 @@ public class VirtualKeyboard : MonoBehaviour
     private List<Button> allButtons = new List<Button>();
     private Dictionary<char, Button> buttonLetterMap = new Dictionary<char, Button>();
     private Dictionary<Button, Vector3> buttonOriginalPosMap = new Dictionary<Button, Vector3>();
+    private HashSet<char> restrictedLetters = new HashSet<char>();
     private bool buttonsDisabled = false;
     private Vector3 originalScale;
 
-    void Start()
+    void Awake()
     {
         GenerateKeyboard();
         originalScale = allButtons[0].transform.localScale;
@@ -112,16 +113,7 @@ public class VirtualKeyboard : MonoBehaviour
     {
         foreach (Button btn in allButtons)
         {
-            var colors = btn.colors;
-            colors.normalColor = colors.disabledColor;
-            colors.pressedColor = colors.disabledColor;
-            colors.selectedColor = colors.disabledColor;
-            btn.colors = colors;
-
-            var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
-            btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
-            btn.transform.localScale = originalScale;
-            btn.transform.localPosition = buttonOriginalPosMap[btn];
+            DisableButton(btn);
         }
         buttonsDisabled = true;
     }
@@ -130,16 +122,19 @@ public class VirtualKeyboard : MonoBehaviour
     {
         warningText.gameObject.SetActive(false);
 
-        foreach (Button btn in allButtons)
+        foreach (KeyValuePair<char, Button> entry in buttonLetterMap)
         {
-            var colors = btn.colors;
-            colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.g, colors.normalColor.b, 1f);
-            colors.pressedColor = colors.normalColor;
-            colors.selectedColor = colors.normalColor;
-            btn.colors = colors;
+            char letter = entry.Key;
+            Button btn = entry.Value;
 
-            var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
-            btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 1f);
+            if (!restrictedLetters.Contains(letter))
+            {
+                EnableButton(btn);
+            }
+            else
+            {
+                btn.interactable = false;
+            }
             btn.transform.localScale = originalScale;
             btn.transform.localPosition = buttonOriginalPosMap[btn];
         }
@@ -171,6 +166,34 @@ public class VirtualKeyboard : MonoBehaviour
         btn.colors = colors;
 
         StartCoroutine(ShakeAnimation(btn));
+    }
+
+    public void AddRestrictedLetter(char c)
+    {
+        if (buttonLetterMap.ContainsKey(c))
+        {
+            var btn = buttonLetterMap[c];
+            restrictedLetters.Add(c);
+            DisableButton(btn);
+            btn.interactable = false;
+        }
+    }
+
+    public void RemoveAllRestrictions()
+    {
+        foreach (char letter in restrictedLetters)
+        {
+            if (buttonLetterMap.ContainsKey(letter))
+            {
+                var btn = buttonLetterMap[letter];
+                if (!buttonsDisabled)
+                {
+                    EnableButton(btn);
+                }
+                btn.interactable = true;
+            }
+        }
+        restrictedLetters.Clear();  // Clear the restricted set
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
@@ -213,5 +236,32 @@ public class VirtualKeyboard : MonoBehaviour
         }
 
         btn.transform.localPosition = originalPosition; // Reset to original position
+    }
+
+    private void EnableButton(Button btn)
+    {
+        var colors = btn.colors;
+        colors.normalColor = new Color(colors.normalColor.r, colors.normalColor.g, colors.normalColor.b, 1f);
+        colors.pressedColor = colors.normalColor;
+        colors.selectedColor = colors.normalColor;
+        btn.colors = colors;
+
+        var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
+        btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 1f);
+        btn.interactable = true;
+    }
+
+    private void DisableButton(Button btn)
+    {
+        var colors = btn.colors;
+        colors.normalColor = colors.disabledColor;
+        colors.pressedColor = colors.disabledColor;
+        colors.selectedColor = colors.disabledColor;
+        btn.colors = colors;
+
+        var btnText = btn.GetComponentInChildren<TextMeshProUGUI>();
+        btnText.color = new Color(btnText.color.r, btnText.color.g, btnText.color.b, 0.25f);
+        btn.transform.localScale = originalScale;
+        btn.transform.localPosition = buttonOriginalPosMap[btn];
     }
 }

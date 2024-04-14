@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RestartPopUp : MonoBehaviour
 {
@@ -72,6 +73,15 @@ public class RestartPopUp : MonoBehaviour
     private IEnumerator RestartAfterDelay()
     {
         yield return new WaitForSeconds(0.1f);
+
+        SaveObject saveObject = SaveManager.Load();
+
+        saveObject.Currency = 5;
+        saveObject.Statistics.WinStreak = 0;
+        saveObject.ShopItemIds = new List<int>();
+
+        SaveManager.Save(saveObject);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
