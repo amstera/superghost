@@ -4820,8 +4820,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13.400002, y: -0.2998047}
-  m_SizeDelta: {x: -34.99997, y: -5}
+  m_AnchoredPosition: {x: -0.73, y: -0.2998047}
+  m_SizeDelta: {x: -9.67, y: -5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &309586923
 MonoBehaviour:
@@ -4843,7 +4843,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SHARE
+  m_text: Run INFO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -4870,8 +4870,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6230,6 +6230,7 @@ MonoBehaviour:
   scaleDuration: 0.25
   shakeDuration: 0.25
   shakeMagnitude: 10
+  minLength: 3
 --- !u!82 &392023648
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6444,8 +6445,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0006685
-  m_Size: 0.6792176
+  m_Value: 1.0000037
+  m_Size: 0.70097405
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9377,7 +9378,7 @@ GameObject:
   - component: {fileID: 599418576}
   - component: {fileID: 599418580}
   m_Layer: 5
-  m_Name: Share Button
+  m_Name: Run Info Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9396,7 +9397,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 309586922}
-  - {fileID: 1774435750}
   m_Father: {fileID: 1867108839}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -9495,7 +9495,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1816581304}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ShareMessage
+        m_MethodName: ShowRunInfo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9522,7 +9522,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 599418574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aaeadb3779c5475999b42bc613039d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 36a5e091eacfe473ebd82c98c6f2ca15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &611816045
@@ -10632,6 +10632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboText: {fileID: 672856225}
+  IsInactive: 0
   shuffleAudioSource: {fileID: 672856222}
 --- !u!114 &672856225
 MonoBehaviour:
@@ -13363,7 +13364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointsText: {fileID: 822566299}
   points: 0
-  normalColor: {r: 0.43529415, g: 1, b: 0, a: 1}
+  normalColor: {r: 1, g: 0.9803922, b: 0.003921569, a: 1}
   makePostFixGreen: 0
   IsJustNumber: 1
   IsCurrency: 0
@@ -13397,7 +13398,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278255472
-  m_fontColor: {r: 0.4398949, g: 1, b: 0, a: 1}
+  m_fontColor: {r: 1, g: 0.9803922, b: 0.003921569, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16575,6 +16576,7 @@ MonoBehaviour:
   scaleDuration: 0.25
   shakeDuration: 0.25
   shakeMagnitude: 10
+  minLength: 3
 --- !u!1 &1038344082
 GameObject:
   m_ObjectHideFlags: 0
@@ -17735,7 +17737,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: Level 1/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -23992,8 +23994,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0003656601
-  m_Size: 0.3664898
+  m_Value: -0.0000003512585
+  m_Size: 0.3907453
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -28259,7 +28261,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1042.9495}
+  m_AnchoredPosition: {x: 0, y: 1042.5686}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -29046,97 +29048,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1772416852}
   m_CullTransparentMesh: 1
---- !u!1 &1774435749
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1774435750}
-  - component: {fileID: 1774435753}
-  - component: {fileID: 1774435752}
-  - component: {fileID: 1774435751}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1774435750
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774435749}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 599418575}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38, y: 0}
-  m_SizeDelta: {x: 18, y: 18}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1774435751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774435749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
-  m_UseGraphicAlpha: 1
---- !u!114 &1774435752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774435749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4236e75b3407541fb8e65981af25d7fd, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1774435753
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774435749}
-  m_CullTransparentMesh: 1
 --- !u!1 &1776524683
 GameObject:
   m_ObjectHideFlags: 0
@@ -29702,8 +29613,8 @@ MonoBehaviour:
       MostPointsPerRound: 0
       Skunks: 0
       DailyPlayStreak: 0
-      LongestWinStreak: 0
-      WinStreak: 0
+      HighestLevel: 0
+      CurrentLevel: 0
       GamesPlayed: 0
       MostMoney: 0
       WinningWords: []
@@ -29717,7 +29628,7 @@ MonoBehaviour:
   recapPopup: {fileID: 201053105}
   tutorialPopup: {fileID: 2002843431}
   bluffPopup: {fileID: 1018245562}
-  shareButton: {fileID: 599418580}
+  runInfoButton: {fileID: 599418580}
   criteriaText: {fileID: 1323263477}
   winSound: {fileID: 8300000, guid: 3ece9ada6261241b89f4b864c62ea9bf, type: 3}
   loseSound: {fileID: 8300000, guid: ee235064e6428461ab57d9f47891eba7, type: 3}
@@ -31335,6 +31246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboText: {fileID: 1915652082}
+  IsInactive: 0
   shuffleAudioSource: {fileID: 1915652086}
 --- !u!114 &1915652085
 MonoBehaviour:
@@ -32165,6 +32077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboText: {fileID: 1993707889}
+  IsInactive: 0
   shuffleAudioSource: {fileID: 1993707886}
 --- !u!114 &1993707889
 MonoBehaviour:
@@ -32839,7 +32752,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 269.7211}
+  m_AnchoredPosition: {x: 0, y: 269.87418}
   m_SizeDelta: {x: 0, y: 770}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745

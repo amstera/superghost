@@ -93,7 +93,7 @@ public class StatsPopup : MonoBehaviour
         text += "<size=25>High Score</size>\n";
         text += $"<size=45>{saveObject.HighScore}</size>{regularLineBreak}";
         text += "<size=25>Highest Level</size>\n";
-        text += $"<size=45>{saveObject.Statistics.LongestWinStreak + 1}</size>{regularLineBreak}";
+        text += $"<size=45>{saveObject.Statistics.HighestLevel + 1}</size>{regularLineBreak}";
         text += "<size=25>Daily Play Streak</size>\n";
         text += $"<size=45>{saveObject.Statistics.DailyPlayStreak}</size>{regularLineBreak}";
         text += "<size=25>Most Money</size>\n";

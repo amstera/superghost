@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
     public BluffPopUp bluffPopup;
-    public Share shareButton;
+    public RunInfo runInfoButton;
     public CriteriaText criteriaText;
     public WordDictionary wordDictionary = new WordDictionary();
 
@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     private bool setLevelHighScore;
     private int points, roundPoints, currentGame;
     private int roundCurrency;
+    private int minLength = 3;
     public enum TextPosition { None, Left, Right }
 
     private const string separator = "_";
@@ -109,8 +110,7 @@ public class GameManager : MonoBehaviour
 
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;
-        currentGame = saveObject.Statistics.WinStreak;
-        criteriaText.SetLevelCriteria(currentGame);
+        currentGame = saveObject.Statistics.CurrentLevel;
     }
 
     IEnumerator Start()
@@ -178,16 +178,17 @@ public class GameManager : MonoBehaviour
             shopNewIndicator.SetActive(false);
             newLevelIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
-            comboText.ChooseNewCombo();
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
-            shareButton.gameObject.SetActive(false);
+            runInfoButton.gameObject.SetActive(false);
             shopButton.gameObject.SetActive(true);
             recap.Clear();
             wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
             points = 0;
+            criteriaText.SetLevelCriteria(currentGame);
             AddRestrictions(criteriaText.GetCurrentCriteria());
+            comboText.ChooseNewCombo();
 
             gameOver = false;
         }
@@ -218,7 +219,7 @@ public class GameManager : MonoBehaviour
         roundCurrency = 0;
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
-        levelText.text = $"Level {currentGame + 1}";
+        levelText.text = $"Level {currentGame + 1}/10";
         pointsEarnedText.Reset();
         pointsEarnedText.gameObject.SetActive(false);
         currencyEarnedText.Reset();
@@ -550,11 +551,11 @@ public class GameManager : MonoBehaviour
         recapPopup.Show(recap);
     }
 
-    public void ShareMessage()
+    public void ShowRunInfo()
     {
         clickAudioSource?.Play();
 
-        shareButton.ShareMessage(recap);
+        runInfoButton.ShareMessage(recap);
     }
 
     public bool IsDoneRound()
@@ -579,7 +580,7 @@ public class GameManager : MonoBehaviour
 
     void CheckGameStatus()
     {
-        if (gameWord.Length > 3 && wordDictionary.IsWordReal(gameWord))
+        if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
         {
             string wordLink = GenerateWordLink(gameWord, false);
             wordDisplay.text = $"CASP won with\n{wordLink}";
@@ -690,10 +691,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();
+
         var gameState = GetGameState();
+        bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.UpdateState(gameState);
 
-        if (playerLivesText.IsGameOver() || aiLivesText.IsGameOver())
+        if (gameOver)
         {
             UpdateDailyGameStreak(true);
             endGameText.gameObject.SetActive(true);
@@ -704,7 +708,7 @@ public class GameManager : MonoBehaviour
             aiIndicator.gameObject.SetActive(false);
             shopPopUp.RefreshShop(playerWon);
 
-            if (playerWon && criteriaText.AllMet(gameState)) // won game
+            if (playerWon && metCriteria) // won game
             {
                 endGameText.text = "Victory!";
                 endGameText.color = Color.green;
@@ -740,14 +744,13 @@ public class GameManager : MonoBehaviour
                     saveObject.Statistics.Skunks++;
                 }
 
-                saveObject.Statistics.WinStreak++;
-                if (saveObject.Statistics.WinStreak > saveObject.Statistics.LongestWinStreak)
+                currentGame++;
+                saveObject.Statistics.CurrentLevel++;
+                if (saveObject.Statistics.CurrentLevel > saveObject.Statistics.HighestLevel)
                 {
-                    saveObject.Statistics.LongestWinStreak = saveObject.Statistics.WinStreak;
+                    saveObject.Statistics.HighestLevel = saveObject.Statistics.CurrentLevel;
                     setLevelHighScore = true;
                 }
-
-                currentGame++;
             }
             else // lost game
             {
@@ -758,9 +761,10 @@ public class GameManager : MonoBehaviour
                 aiText.color = Color.green;
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
                 shopButton.gameObject.SetActive(false);
-                shareButton.gameObject.SetActive(true);
+                runInfoButton.gameObject.SetActive(true);
                 ResetWordUses = 0;
                 gameStatusAudioSource.clip = loseSound;
+                currencyEarnedText.gameObject.SetActive(false);
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
@@ -780,15 +784,13 @@ public class GameManager : MonoBehaviour
                 }
 
                 currentGame = 0;
+                saveObject.Statistics.CurrentLevel = 0;
                 currency = 5;
                 saveObject.ShopItemIds = new List<int>();
             }
 
             saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
-            gameOver = true;
-
-            criteriaText.SetLevelCriteria(currentGame);
         }
 
         if (playSound)
@@ -796,7 +798,9 @@ public class GameManager : MonoBehaviour
             gameStatusAudioSource.Play();
         }
 
-        criteriaText.gameObject.SetActive(gameOver && !playerWon);
+        bool lostRun = gameOver && (!playerWon || !metCriteria);
+        levelText.gameObject.SetActive(lostRun);
+        criteriaText.gameObject.SetActive(lostRun);
 
         SaveManager.Save(saveObject);
     }
@@ -1149,6 +1153,9 @@ public class GameManager : MonoBehaviour
         keyboard.RemoveAllRestrictions();
         challengePopup.ClearRestrictions();
         bluffPopup.ClearRestrictions();
+        wordDictionary.ClearRestrictions();
+        minLength = 3;
+        comboText.IsInactive = false;
 
         foreach (var criterion in criteria)
         {
@@ -1166,6 +1173,17 @@ public class GameManager : MonoBehaviour
                 {
                     var amount = startWithHandicap.GetAmount();
                     playerLivesText.AddHandicap(amount);
+                }
+                else if (criterion is MinLetters minLetters)
+                {
+                    minLength = minLetters.GetAmount() - 1;
+                    wordDictionary.SetMinLength(minLength);
+                    challengePopup.minLength = minLength;
+                    bluffPopup.minLength = minLength;
+                }
+                else if (criterion is NoComboLetters)
+                {
+                    comboText.IsInactive = true;
                 }
             }
         }

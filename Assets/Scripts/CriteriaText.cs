@@ -18,11 +18,36 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 1:
                 currentCriteria.Add(new ScoreAtLeastXPoints(50));
-                currentCriteria.Add(new NoUsingLetter('A'));
                 break;
             case 2:
+                currentCriteria.Add(new NoUsingLetter('A'));
+                break;
+            case 3:
                 currentCriteria.Add(new ScoreAtLeastXPoints(75));
                 currentCriteria.Add(new StartWithHandicap(1));
+                break;
+            case 4:
+                currentCriteria.Add(new NoUsingLetter('S'));
+                currentCriteria.Add(new MinLetters(5));
+                break;
+            case 5:
+                currentCriteria.Add(new ScoreAtLeastXPoints(125));
+                currentCriteria.Add(new StartWithHandicap(2));
+                break;
+            case 6:
+                currentCriteria.Add(new ScoreAtLeastXPoints(150));
+                currentCriteria.Add(new NoUsingLetter('E'));
+                break;
+            case 7:
+                currentCriteria.Add(new MinLetters(6));
+                currentCriteria.Add(new StartWithHandicap(2));
+                break;
+            case 8:
+                currentCriteria.Add(new ScoreAtLeastXPoints(200));
+                currentCriteria.Add(new NoComboLetters());
+                break;
+            case 9:
+                currentCriteria.Add(new ScoreAtLeastXPoints(350));
                 break;
         }
 

@@ -19,7 +19,7 @@ public class ScoreAtLeastXPoints : GameCriterion
 
     public override string GetDescription()
     {
-        return $"{points}+ Points";
+        return $"Get {points}+ PTS";
     }
 
     public override bool IsMet(GameState state)
@@ -78,6 +78,50 @@ public class StartWithHandicap : GameCriterion
     public int GetAmount()
     {
         return amount;
+    }
+}
+
+public class MinLetters : GameCriterion
+{
+    private int amount;
+
+    public MinLetters(int amount)
+    {
+        this.amount = amount;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"{amount}+ Letters";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+
+    public int GetAmount()
+    {
+        return amount;
+    }
+}
+
+public class NoComboLetters : GameCriterion
+{
+    public NoComboLetters()
+    {
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"No 2x Letters";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
     }
 }
 

@@ -77,8 +77,8 @@ public class Statistics
     public int Skunks;
     public DateTime LastIncrementDate = DateTime.MinValue;
     public int DailyPlayStreak;
-    public int LongestWinStreak;
-    public int WinStreak;
+    public int HighestLevel;
+    public int CurrentLevel;
     public int GamesPlayed;
     public int MostMoney = 5;
     public List<string> WinningWords = new List<string>();

@@ -8,6 +8,7 @@ using System.Collections;
 public class ComboText : MonoBehaviour
 {
     public TextMeshProUGUI comboText;
+    public bool IsInactive;
 
     public AudioSource shuffleAudioSource;
 
@@ -54,6 +55,11 @@ public class ComboText : MonoBehaviour
 
     public string GetString()
     {
+        if (IsInactive)
+        {
+            return "";
+        }
+
         return comboText.text;
     }
 
@@ -96,11 +102,14 @@ public class ComboText : MonoBehaviour
             comboTextBuilder.Append($"<color={colorCode}>{comboChar.Character}</color> ");
         }
 
-        comboText.text = comboTextBuilder.ToString().TrimEnd();
+        comboText.text = IsInactive ? "" : comboTextBuilder.ToString().TrimEnd();
         if (multiplier > 1)
         {
             string multiplierColor = isWin ? earnedColor : pendingColor;
-            comboText.text += $" <color={multiplierColor}>({multiplier}x)</color>";
+            if (!IsInactive)
+            {
+                comboText.text += $" <color={multiplierColor}>({multiplier}x)</color>";
+            }
         }
     }
 
@@ -134,6 +143,11 @@ public class ComboText : MonoBehaviour
 
     public int GetWinMultiplier(string word, bool updateLetters = true)
     {
+        if (IsInactive)
+        {
+            return 1;
+        }
+
         if (updateLetters)
         {
             foreach (char character in word.ToUpper())
@@ -158,7 +172,10 @@ public class ComboText : MonoBehaviour
 
     private IEnumerator ChooseNewComboAnimation()
     {
-        shuffleAudioSource?.Play();
+        if (!IsInactive)
+        {
+            shuffleAudioSource?.Play();
+        }
 
         comboChars.Clear();
         multiplier = 1;
@@ -188,7 +205,10 @@ public class ComboText : MonoBehaviour
                 randomChars += WeightedRandomCharacter() + " ";
             }
 
-            comboText.text = $"2x Points: <color=#FFFFFF>{randomChars.Trim()}</color>";
+            if (!IsInactive)
+            {
+                comboText.text = $"2x Points: <color=#FFFFFF>{randomChars.Trim()}</color>";
+            }
 
             totalTime -= updateInterval;
             yield return new WaitForSeconds(updateInterval);

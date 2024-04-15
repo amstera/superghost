@@ -7,6 +7,7 @@ public class WordDictionary
     private List<string> words = new List<string>();
     private List<string> filteredWords = new List<string>();
     private HashSet<string> lostChallengeSubstring = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    private HashSet<char> restrictedLetters = new HashSet<char>();
     private Dictionary<string, int> commonWords = new Dictionary<string, int>();
     private Random rng = new Random();
 
@@ -14,6 +15,7 @@ public class WordDictionary
     private readonly char[] consonants = "bcdfghjklmnpqrstvwxz".ToCharArray();
     private readonly char[] specialConsonants = "bcdgkpstw".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
+    private int minLength = 3;
     private delegate bool MatchCondition(string w, string extension);
 
     public void LoadWords(string[] lines)
@@ -55,12 +57,13 @@ public class WordDictionary
 
     public void SetFilteredWords(string substring)
     {
-        filteredWords = filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        filteredWords = filteredWords.Where(w => w.Length > minLength && w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
     }
 
     public void ClearFilteredWords()
     {
-        filteredWords = new List<string>(words);
+        filteredWords = words.Where(w => !restrictedLetters.Any(l => w.Contains(l, StringComparison.InvariantCultureIgnoreCase))).ToList();
+        minLength = 3;
     }
 
     public bool IsWordReal(string word, bool useEntireDictionary = false)
@@ -104,7 +107,17 @@ public class WordDictionary
 
     public void AddRestrictedLetter(char c)
     {
-        filteredWords = filteredWords.Where(w => w.Contains(c, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        restrictedLetters.Add(c);
+    }
+
+    public void ClearRestrictions()
+    {
+        restrictedLetters.Clear();
+    }
+
+    public void SetMinLength(int minLength)
+    {
+        this.minLength = minLength;
     }
 
     public string BluffWord(string substring, Difficulty difficulty)
@@ -156,7 +169,7 @@ public class WordDictionary
         bool shouldAddVowel = (firstCharIsVowel && !addAtEnd) || (lastCharIsVowel && addAtEnd) ? false : true;
 
         // Filter the weightedLetters based on whether we should add a vowel or consonant
-        var possibleLetters = weightedLetters.Where(letter => (shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter))).ToArray();
+        var possibleLetters = weightedLetters.Where(letter => !restrictedLetters.Contains(letter) && ((shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter)))).ToArray();
 
         return possibleLetters[rng.Next(possibleLetters.Length)];
     }
@@ -169,7 +182,7 @@ public class WordDictionary
 
         if (filteredWords.Count == 0) return true; // No possible words
 
-        int minSubstringLength = 3;
+        int minSubstringLength = minLength;
         if (substring.Length < minSubstringLength) return false;
 
         if (lostChallengeSubstring.Contains(substring)) return false;
@@ -377,7 +390,7 @@ public class WordDictionary
         foreach (var letter in letters)
         {
             string[] extensions = prioritizeStart ? new[] { substring + letter } : new[] { letter + substring };
-            MatchCondition initialCondition = (w, extension) => substring.Length < 3 || !IsWordReal(extension);
+            MatchCondition initialCondition = (w, extension) => substring.Length < minLength || !IsWordReal(extension);
 
             foreach (var extension in extensions)
             {

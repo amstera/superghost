@@ -21,6 +21,8 @@ public class ChallengePopUp : MonoBehaviour
     public float shakeDuration = 0.5f;
     public float shakeMagnitude = 0.1f;
 
+    public int minLength = 3;
+
     private string originalSubstring;
     private Vector3 originalScale;
     private Vector3 originalPos;
@@ -79,9 +81,11 @@ public class ChallengePopUp : MonoBehaviour
     {
         if (string.IsNullOrEmpty(inputField.text) || !inputField.text.Contains(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
         {
-            StartCoroutine(ShakePopup());
-            warningText.text = $"Word must include {originalSubstring.ToUpper()}";
-            warningText.gameObject.SetActive(true);
+            ShowWarning($"Word must include {originalSubstring.ToUpper()}");
+        }
+        else if (inputField.text.Length <= minLength)
+        {
+            ShowWarning($"Word must be {minLength + 1}+ letters");
         }
         else
         {
@@ -89,9 +93,7 @@ public class ChallengePopUp : MonoBehaviour
 
             if (invalidChar != '\0')
             {
-                StartCoroutine(ShakePopup());
-                warningText.text = $"Word cannot contain {invalidChar.ToString().ToUpper()}";
-                warningText.gameObject.SetActive(true);
+                ShowWarning($"Word cannot contain {invalidChar.ToString().ToUpper()}");
             }
             else
             {
@@ -109,6 +111,7 @@ public class ChallengePopUp : MonoBehaviour
     public void ClearRestrictions()
     {
         restrictedLetters.Clear();
+        minLength = 3;
     }
 
     private IEnumerator HandleChallenge()
@@ -150,5 +153,12 @@ public class ChallengePopUp : MonoBehaviour
         warningText.gameObject.SetActive(false);
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    private void ShowWarning(string text)
+    {
+        StartCoroutine(ShakePopup());
+        warningText.text = text;
+        warningText.gameObject.SetActive(true);
     }
 }

@@ -154,21 +154,32 @@ public class ShopPopUp : MonoBehaviour
     {
         moneyAudioSource?.Play();
 
-        RefreshPopUp(cost);
-
         if (item != null)
         {
             var coroutine = item.GetCoroutine();
             StartCoroutine(coroutine());
         }
+
+        RefreshPopUp(cost);
     }
 
-    private IEnumerator DoAction(int cost, Action action)
+    private IEnumerator DoAction(int cost, Action action, bool shouldHide)
     {
-        yield return new WaitForSeconds(GetTimeToWait(cost));
+        if (shouldHide)
+        {
+            yield return new WaitForSeconds(GetTimeToWait(cost));
+        }
 
         action();
-        Hide(false);
+
+        if (shouldHide)
+        {
+            Hide(false);
+        }
+        else
+        {
+            yield return null;
+        }
     }
 
     private void ResetPopUp()
@@ -188,7 +199,7 @@ public class ShopPopUp : MonoBehaviour
 
     private float GetTimeToWait(int cost)
     {
-        return cost == 1 ? 0.2f : cost < 5 ? 0.35f : 0.65f;
+        return cost == 1 ? 0.2f : cost < 5 ? 0.25f : 0.5f;
     }
 
     private void RefreshPopUp(int cost)
@@ -225,25 +236,25 @@ public class ShopPopUp : MonoBehaviour
         switch (id)
         {
             case 0:
-                return DoAction(cost, () => gameManager.ShowHint());
+                return DoAction(cost, () => gameManager.ShowHint(), true);
             case 1:
-                return DoAction(cost, () => gameManager.ShuffleComboLetters());
+                return DoAction(cost, () => gameManager.ShuffleComboLetters(), true);
             case 2:
-                return DoAction(cost, () => gameManager.EnableMultiplier());
+                return DoAction(cost, () => gameManager.EnableMultiplier(), false);
             case 3:
-                return DoAction(cost, () => gameManager.EnableEvenMultiplier());
+                return DoAction(cost, () => gameManager.EnableEvenMultiplier(), false);
             case 4:
-                return DoAction(cost, () => gameManager.EnableDoubleWealth());
+                return DoAction(cost, () => gameManager.EnableDoubleWealth(), false);
             case 5:
-                return DoAction(cost, () => gameManager.DoDoubleTurn());
+                return DoAction(cost, () => gameManager.DoDoubleTurn(), false);
             case 6:
-                return DoAction(cost, () => gameManager.ResetWord());
+                return DoAction(cost, () => gameManager.ResetWord(), true);
             case 7:
-                return DoAction(cost, () => gameManager.EnableLongWordMultiplier());
+                return DoAction(cost, () => gameManager.EnableLongWordMultiplier(), false);
             case 8:
-                return DoAction(cost, () => gameManager.UndoTurn());
+                return DoAction(cost, () => gameManager.UndoTurn(), true);
             case 9:
-                return DoAction(cost, () => gameManager.EnableDoubleBluff());
+                return DoAction(cost, () => gameManager.EnableDoubleBluff(), false);
         }
 
         return null;
