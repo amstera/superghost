@@ -169,7 +169,7 @@ public class WordDictionary
         bool shouldAddVowel = (firstCharIsVowel && !addAtEnd) || (lastCharIsVowel && addAtEnd) ? false : true;
 
         // Filter the weightedLetters based on whether we should add a vowel or consonant
-        var possibleLetters = weightedLetters.Where(letter => !restrictedLetters.Contains(letter) && ((shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter)))).ToArray();
+        var possibleLetters = weightedLetters.Where(letter => !restrictedLetters.Contains(char.ToUpper(letter)) && ((shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter)))).ToArray();
 
         return possibleLetters[rng.Next(possibleLetters.Length)];
     }
@@ -230,8 +230,9 @@ public class WordDictionary
         substring = substring.ToLower();
         if (substring.Length == 0)
         {
-            int index = rng.Next(weightedLetters.Length);
-            return weightedLetters[index].ToString();
+            var lettersToChoose = weightedLetters.Where(w => !restrictedLetters.Contains(char.ToUpper(w))).ToArray();
+            int index = rng.Next(lettersToChoose.Length);
+            return lettersToChoose[index].ToString();
         }
 
         if (filteredWords.Count == 0) // no words match

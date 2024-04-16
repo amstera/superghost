@@ -51,7 +51,7 @@ public class SettingsPopUp : MonoBehaviour
         // Set up Difficulty dropdown
         difficultyDropdown.value = (int)saveObject.Difficulty;
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
-        difficultyDropdown.interactable = gameManager.IsDoneRound();
+        difficultyDropdown.interactable = gameManager.IsRunEnded();
 
         // Set up dictionary
         inputField.text = "";

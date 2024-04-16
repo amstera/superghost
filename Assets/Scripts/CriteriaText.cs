@@ -18,19 +18,20 @@ public class CriteriaText : MonoBehaviour
     {
         currentCriteria.Clear();
         var letter = GetLetter(level);
+        var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.5f : saveObject.Difficulty == Difficulty.Easy ? 0.5f : 1;
 
         switch (level)
         {
             case 0:
                 break;
             case 1:
-                currentCriteria.Add(new ScoreAtLeastXPoints(50));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
                 break;
             case 2:
                 currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 3:
-                currentCriteria.Add(new ScoreAtLeastXPoints(75));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
                 currentCriteria.Add(new StartWithHandicap(1));
                 break;
             case 4:
@@ -38,11 +39,11 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new MinLetters(5));
                 break;
             case 5:
-                currentCriteria.Add(new ScoreAtLeastXPoints(125));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
                 currentCriteria.Add(new StartWithHandicap(2));
                 break;
             case 6:
-                currentCriteria.Add(new ScoreAtLeastXPoints(150));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
                 currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 7:
@@ -50,11 +51,11 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new StartWithHandicap(2));
                 break;
             case 8:
-                currentCriteria.Add(new ScoreAtLeastXPoints(200));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
                 currentCriteria.Add(new NoComboLetters());
                 break;
             case 9:
-                currentCriteria.Add(new ScoreAtLeastXPoints(350));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(300, difficultyMultiplier)));
                 break;
         }
 
@@ -131,5 +132,11 @@ public class CriteriaText : MonoBehaviour
         SaveManager.Save(saveObject);
 
         return saveObject.RestrictedChar.Char;
+    }
+
+    private int AdjustScore(int baseScore, float multiplier)
+    {
+        float scaledScore = baseScore * multiplier;
+        return (int)(Mathf.Round(scaledScore / 5) * 5);
     }
 }

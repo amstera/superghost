@@ -291,9 +291,9 @@ public class ShopPopUp : MonoBehaviour
             case 6:
                 return (gameManager.ResetWordUses + 1) * 5;
             case 7:
-                return gameEnded ? 4 : (roundsWon + 1) * 4;
+                return gameEnded ? 4 : (roundsWon + 1) * 3;
             case 8:
-                return (int)Mathf.Round((substringLength + 1) * 2 * multiplier);
+                return (int)Mathf.Round((substringLength + 1) * 1.5f * multiplier);
             case 9:
                 return (int)Mathf.Round(5 * multiplier);
         }

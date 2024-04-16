@@ -283,7 +283,7 @@ public class GameManager : MonoBehaviour
         }
 
         wordDictionary.SetFilteredWords(gameWord);
-        UpdateWordDisplay(false, newIndex);
+        UpdateWordDisplay(HasDoubleTurn, newIndex);
         comboText.UseCharacter(character);
 
         if (HasDoubleTurn)
@@ -422,7 +422,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                UpdateWordDisplay(false, 0);
+                UpdateWordDisplay(true, 0);
             }
 
             SetPointsCalculatedText();
@@ -578,6 +578,11 @@ public class GameManager : MonoBehaviour
         return gameOver;
     }
 
+    public bool IsRunEnded()
+    {
+        return gameOver || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord));
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
@@ -707,6 +712,7 @@ public class GameManager : MonoBehaviour
             playerIndicator.gameObject.SetActive(false);
             aiIndicator.gameObject.SetActive(false);
             shopPopUp.RefreshShop(playerWon);
+            wordDisplay.transform.localPosition += Vector3.down * 75;
 
             if (playerWon && metCriteria) // won game
             {
@@ -719,10 +725,9 @@ public class GameManager : MonoBehaviour
                 stars.Show(points);
                 playerText.color = Color.green;
                 aiText.color = Color.red;
-                wordDisplay.transform.localPosition += Vector3.down * 75;
 
                 int gameWonCurrency = stars.GetStars() * 5;
-                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", 0.25f);
+                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", 0.5f);
                 currency += gameWonCurrency;
                 if (currency > saveObject.Statistics.MostMoney)
                 {
@@ -730,6 +735,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
+
 
                 if (points > saveObject.HighScore)
                 {
@@ -846,7 +852,8 @@ public class GameManager : MonoBehaviour
             History = previousWordsText,
             PlayerLivesRemaining = playerLivesText.LivesRemaining(),
             IsValidWord = isLastWordValid,
-            PlayerWon = playerWon
+            PlayerWon = playerWon,
+            CurrentLevel = currentGame
         });
     }
 

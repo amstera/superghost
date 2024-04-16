@@ -52208,8 +52208,6 @@ quiets
 quietude
 quietus
 quietuses
-quiff
-quiffs
 quill
 quills
 quilt
@@ -59083,7 +59081,6 @@ setbacks
 sets
 setscrew
 setscrews
-sett
 settee
 settees
 setter
@@ -59098,7 +59095,6 @@ settler
 settlers
 settles
 settling
-setts
 setup
 setups
 seven
