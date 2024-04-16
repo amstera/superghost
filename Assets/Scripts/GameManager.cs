@@ -28,16 +28,16 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton;
+    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton, runInfoButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
     public BluffPopUp bluffPopup;
-    public RunInfo runInfoButton;
     public CriteriaText criteriaText;
+    public Vignette vignette;
     public WordDictionary wordDictionary = new WordDictionary();
 
-    public AudioClip winSound, loseSound;
+    public AudioClip winSound, loseSound, loseGameSound;
     public AudioSource clickAudioSource;
     public AudioSource gameStatusAudioSource;
     public AudioSource keyAudioSource;
@@ -189,6 +189,7 @@ public class GameManager : MonoBehaviour
             criteriaText.SetLevelCriteria(currentGame);
             AddRestrictions(criteriaText.GetCurrentCriteria());
             comboText.ChooseNewCombo();
+            vignette.Hide();
 
             gameOver = false;
         }
@@ -551,13 +552,6 @@ public class GameManager : MonoBehaviour
         recapPopup.Show(recap);
     }
 
-    public void ShowRunInfo()
-    {
-        clickAudioSource?.Play();
-
-        runInfoButton.ShareMessage(recap);
-    }
-
     public bool IsDoneRound()
     {
         return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
@@ -769,8 +763,9 @@ public class GameManager : MonoBehaviour
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
                 ResetWordUses = 0;
-                gameStatusAudioSource.clip = loseSound;
+                gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
+                vignette.Show(0.3f);
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
@@ -780,7 +775,7 @@ public class GameManager : MonoBehaviour
                 else if (currentGame > 0)
                 {
                     finalLevelText.gameObject.SetActive(true);
-                    finalLevelText.AddPoints(currentGame + 1, false, "Level ");
+                    finalLevelText.AddPoints(currentGame + 1, false, "Level ", overrideColor: Color.yellow);
 
                     if (setLevelHighScore)
                     {

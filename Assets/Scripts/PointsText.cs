@@ -21,13 +21,13 @@ public class PointsText : MonoBehaviour
         UpdatePointsText(0);
     }
 
-    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "", float delay = 0)
+    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "", float delay = 0, Color? overrideColor = null)
     {
         this.showSymbol = showSymbol;
         this.prefixText = prefixText;
         pointsText.color = normalColor;
         StopAllCoroutines(); // Stop any ongoing coroutines.
-        StartCoroutine(CountPoints(amount, delay));
+        StartCoroutine(CountPoints(amount, delay, overrideColor));
     }
 
     public void SetPoints(int amount)
@@ -45,7 +45,7 @@ public class PointsText : MonoBehaviour
         UpdatePointsText(points);
     }
 
-    IEnumerator CountPoints(int amount, float delay)
+    IEnumerator CountPoints(int amount, float delay, Color? overrideColor)
     {
         yield return new WaitForSeconds(delay);
 
@@ -54,7 +54,7 @@ public class PointsText : MonoBehaviour
         float timer = 0;
 
         // Determine the target color based on the amount being positive or negative.
-        Color targetColor = amount > 0 ? positiveColor : negativeColor;
+        Color targetColor = overrideColor != null ? overrideColor.Value : amount > 0 ? positiveColor : negativeColor;
 
         // Start counting.
         while (points != endPoints)

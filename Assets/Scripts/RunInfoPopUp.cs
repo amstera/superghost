@@ -3,7 +3,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class RunInfo : MonoBehaviour
+public class RunInfoPopUp : MonoBehaviour
 {
     [DllImport("__Internal")]
     private static extern void _Native_Share_iOS(string message);
