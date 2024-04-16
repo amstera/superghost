@@ -77,7 +77,7 @@ public class RestartPopUp : MonoBehaviour
         SaveObject saveObject = SaveManager.Load();
 
         saveObject.Currency = 5;
-        saveObject.Statistics.CurrentLevel = 0;
+        saveObject.CurrentLevel = 0;
         saveObject.ShopItemIds = new List<int>();
 
         SaveManager.Save(saveObject);

@@ -28,6 +28,7 @@ public class ShopPopUp : MonoBehaviour
     private float multiplier;
     private string substring;
     private List<ShopItemInfo> visibleShopItems = new List<ShopItemInfo>();
+    private HashSet<int> previousShopItemIds = new HashSet<int>();
 
     private void Awake()
     {
@@ -58,6 +59,7 @@ public class ShopPopUp : MonoBehaviour
 
     public void RefreshShop(bool saveChanges)
     {
+        previousShopItemIds = visibleShopItems.Select(s => s.id).ToHashSet();
         visibleShopItems.Clear();
         GetShopItems(saveChanges, true);
     }
@@ -77,7 +79,7 @@ public class ShopPopUp : MonoBehaviour
                 while (visibleShopItems.Count < 3)
                 {
                     var randomShopItem = shopItems[Random.Range(0, shopItems.Count)];
-                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
+                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id) && !previousShopItemIds.Any(p => p == randomShopItem.id))
                     {
                         visibleShopItems.Add(randomShopItem);
                         if (saveChanges)

@@ -7,10 +7,17 @@ public class CriteriaText : MonoBehaviour
 {
     public TextMeshProUGUI criteriaText;
     private List<GameCriterion> currentCriteria = new List<GameCriterion>();
+    private SaveObject saveObject;
+
+    public void Awake()
+    {
+        saveObject = SaveManager.Load();
+    }
 
     public void SetLevelCriteria(int level)
     {
         currentCriteria.Clear();
+        var letter = GetLetter(level);
 
         switch (level)
         {
@@ -20,14 +27,14 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new ScoreAtLeastXPoints(50));
                 break;
             case 2:
-                currentCriteria.Add(new NoUsingLetter('A'));
+                currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 3:
                 currentCriteria.Add(new ScoreAtLeastXPoints(75));
                 currentCriteria.Add(new StartWithHandicap(1));
                 break;
             case 4:
-                currentCriteria.Add(new NoUsingLetter('S'));
+                currentCriteria.Add(new NoUsingLetter(letter));
                 currentCriteria.Add(new MinLetters(5));
                 break;
             case 5:
@@ -36,7 +43,7 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 6:
                 currentCriteria.Add(new ScoreAtLeastXPoints(150));
-                currentCriteria.Add(new NoUsingLetter('E'));
+                currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 7:
                 currentCriteria.Add(new MinLetters(6));
@@ -106,5 +113,23 @@ public class CriteriaText : MonoBehaviour
         }
 
         return true;
+    }
+
+    private char GetLetter(int level)
+    {
+        if (saveObject.RestrictedChar.Level == level && saveObject.RestrictedChar.Char != '\0')
+        {
+            return saveObject.RestrictedChar.Char;
+        }
+
+        var possibleLetters = new List<char> { 'A', 'E', 'O', 'I', 'R', 'T', 'S' };
+        if (saveObject.RestrictedChar.Char != '\0')
+        {
+            possibleLetters.Remove(saveObject.RestrictedChar.Char);
+        }
+        saveObject.RestrictedChar = new(possibleLetters[Random.Range(0, possibleLetters.Count)], level);
+        SaveManager.Save(saveObject);
+
+        return saveObject.RestrictedChar.Char;
     }
 }

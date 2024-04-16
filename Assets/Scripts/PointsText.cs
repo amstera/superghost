@@ -21,13 +21,13 @@ public class PointsText : MonoBehaviour
         UpdatePointsText(0);
     }
 
-    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "")
+    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "", float delay = 0)
     {
         this.showSymbol = showSymbol;
         this.prefixText = prefixText;
         pointsText.color = normalColor;
         StopAllCoroutines(); // Stop any ongoing coroutines.
-        StartCoroutine(CountPoints(amount));
+        StartCoroutine(CountPoints(amount, delay));
     }
 
     public void SetPoints(int amount)
@@ -45,8 +45,10 @@ public class PointsText : MonoBehaviour
         UpdatePointsText(points);
     }
 
-    IEnumerator CountPoints(int amount)
+    IEnumerator CountPoints(int amount, float delay)
     {
+        yield return new WaitForSeconds(delay);
+
         int startPoints = points;
         int endPoints = showSymbol ? points + amount : Mathf.Max(0, points + amount);
         float timer = 0;

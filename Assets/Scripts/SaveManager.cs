@@ -54,19 +54,21 @@ public class SaveManager : MonoBehaviour
 
 }
 
-[System.Serializable]
+[Serializable]
 public class SaveObject
 {
     public int HighScore;
     public bool EnableSound = true;
     public bool HasSeenTutorial;
     public int Currency = 5;
+    public int CurrentLevel;
     public List<int> ShopItemIds = new List<int>();
+    public (char Char, int Level) RestrictedChar;
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
 }
 
-[System.Serializable]
+[Serializable]
 public class Statistics
 {
     public string LongestWinningWord = "";
@@ -78,7 +80,6 @@ public class Statistics
     public DateTime LastIncrementDate = DateTime.MinValue;
     public int DailyPlayStreak;
     public int HighestLevel;
-    public int CurrentLevel;
     public int GamesPlayed;
     public int MostMoney = 5;
     public List<string> WinningWords = new List<string>();

@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;
-        currentGame = saveObject.Statistics.CurrentLevel;
+        currentGame = saveObject.CurrentLevel;
     }
 
     IEnumerator Start()
@@ -722,7 +722,7 @@ public class GameManager : MonoBehaviour
                 wordDisplay.transform.localPosition += Vector3.down * 75;
 
                 int gameWonCurrency = stars.GetStars() * 5;
-                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ");
+                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", 0.25f);
                 currency += gameWonCurrency;
                 if (currency > saveObject.Statistics.MostMoney)
                 {
@@ -745,10 +745,10 @@ public class GameManager : MonoBehaviour
                 }
 
                 currentGame++;
-                saveObject.Statistics.CurrentLevel++;
-                if (saveObject.Statistics.CurrentLevel > saveObject.Statistics.HighestLevel)
+                saveObject.CurrentLevel++;
+                if (saveObject.CurrentLevel > saveObject.Statistics.HighestLevel)
                 {
-                    saveObject.Statistics.HighestLevel = saveObject.Statistics.CurrentLevel;
+                    saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
                     setLevelHighScore = true;
                 }
             }
@@ -784,7 +784,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 currentGame = 0;
-                saveObject.Statistics.CurrentLevel = 0;
+                saveObject.CurrentLevel = 0;
                 currency = 5;
                 saveObject.ShopItemIds = new List<int>();
             }
