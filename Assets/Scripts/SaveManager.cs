@@ -64,6 +64,7 @@ public class SaveObject
     public int CurrentLevel;
     public List<int> ShopItemIds = new List<int>();
     public (char Char, int Level) RestrictedChar;
+    public HashSet<char> UsedLetters = new HashSet<char>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
 }

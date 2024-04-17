@@ -79,6 +79,7 @@ public class RestartPopUp : MonoBehaviour
         saveObject.Currency = 5;
         saveObject.CurrentLevel = 0;
         saveObject.ShopItemIds = new List<int>();
+        saveObject.UsedLetters = new HashSet<char>();
 
         SaveManager.Save(saveObject);
 

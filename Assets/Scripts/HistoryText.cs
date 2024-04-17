@@ -29,6 +29,16 @@ public class HistoryText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         Canvas.ForceUpdateCanvases(); // Ensure layout recalculates to get accurate page count
         int totalPages = textComponent.textInfo.pageCount;
 
+
+        if (totalPages == 1)
+        {
+            textComponent.alignment = TextAlignmentOptions.Center;
+        }
+        else
+        {
+            textComponent.alignment = TextAlignmentOptions.Top;
+        }
+
         // Hide or show buttons based on page count
         bool showButtons = totalPages > 1;
         firstPageButton.gameObject.SetActive(showButtons);

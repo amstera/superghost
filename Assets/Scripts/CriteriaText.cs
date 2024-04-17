@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 public class CriteriaText : MonoBehaviour
 {
@@ -123,15 +124,25 @@ public class CriteriaText : MonoBehaviour
             return saveObject.RestrictedChar.Char;
         }
 
-        var possibleLetters = new List<char> { 'A', 'E', 'O', 'I', 'R', 'T', 'S' };
+        var possibleLetters = new List<char> { 'A', 'E', 'O', 'I', 'R', 'T', 'S', 'N', 'L', 'H' };
         if (saveObject.RestrictedChar.Char != '\0')
         {
             possibleLetters.Remove(saveObject.RestrictedChar.Char);
         }
-        saveObject.RestrictedChar = new(possibleLetters[Random.Range(0, possibleLetters.Count)], level);
+
+        List<char> unusedLetters = possibleLetters.Where(c => !saveObject.UsedLetters.Contains(c)).ToList();
+        if (unusedLetters.Count == 0)
+        {
+            unusedLetters = possibleLetters;
+            saveObject.UsedLetters.Clear();
+        }
+        char nextChar = unusedLetters[Random.Range(0, unusedLetters.Count)];
+        saveObject.UsedLetters.Add(nextChar);
+
+        saveObject.RestrictedChar = new(nextChar, level);
         SaveManager.Save(saveObject);
 
-        return saveObject.RestrictedChar.Char;
+        return nextChar;
     }
 
     private int AdjustScore(int baseScore, float multiplier)

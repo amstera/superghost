@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     public bool isPlayerTurn = true;
     public string gameWord = "";
     public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff;
+    public float ChanceMultiplier = 1;
     public int ResetWordUses;
     public int currency = 5;
 
@@ -389,6 +390,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnableChanceMultiplier()
+    {
+        ChanceMultiplier = Random.Range(0, 2) == 1 ? 2f : 0.5f;
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
     public void EnableDoubleWealth()
     {
         HasDoubleWealth = true;
@@ -446,9 +456,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            var caspString = GetCaspText();
             var thoughtWord = wordDictionary.FindWordContains(gameWord, true).ToUpper();
             string wordLink = GenerateWordLink(thoughtWord, false);
-            wordDisplay.text = $"CASP won!\nCASP thought\n{wordLink}";
+            wordDisplay.text = $"{caspString} won!\nThey thought\n{wordLink}";
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(thoughtWord, -1);
@@ -468,9 +479,10 @@ public class GameManager : MonoBehaviour
         playerWon = true;
         isPlayerTurn = false;
 
+        var caspString = GetCaspText(false);
         if (string.IsNullOrEmpty(word))
         {
-            wordDisplay.text = $"You won!\nCASP was <color=green>bluffing</color>";
+            wordDisplay.text = $"You won!\n{caspString} was <color=green>bluffing</color>";
             isLastWordValid = false;
             previousWords.Add(gameWord);
             int multiplier = HasDoubleBluff ? 2 : 1;
@@ -489,7 +501,7 @@ public class GameManager : MonoBehaviour
         else
         {
             string wordLink = GenerateWordLink(word, true);
-            wordDisplay.text = $"You won with\n{wordLink}\nCASP was <color=green>bluffing</color>";
+            wordDisplay.text = $"You won with\n{wordLink}\n{caspString} was <color=green>bluffing</color>";
 
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             var addedChars = word.Replace(previousWord, "").ToCharArray();
@@ -536,7 +548,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            wordDisplay.text = $"CASP won!\n<color=red>{word.ToUpper()}</color>\nis not a word";
+            var caspString = GetCaspText();
+            wordDisplay.text = $"{caspString} won!\n<color=red>{word.ToUpper()}</color>\nis not a word";
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -582,7 +595,8 @@ public class GameManager : MonoBehaviour
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
         {
             string wordLink = GenerateWordLink(gameWord, false);
-            wordDisplay.text = $"CASP won with\n{wordLink}";
+            var caspString = GetCaspText();
+            wordDisplay.text = $"{caspString} won with\n{wordLink}";
             playerLivesText.LoseLife();
             isPlayerTurn = true;
             previousWords.Add(gameWord);
@@ -636,6 +650,7 @@ public class GameManager : MonoBehaviour
         HasDoubleBluff = false;
         HasDoubleWealth = false;
         HasDoubleTurn = false;
+        ChanceMultiplier = 1;
 
         ShowHistory();
         ghostAvatar.Hide();     
@@ -765,7 +780,7 @@ public class GameManager : MonoBehaviour
                 ResetWordUses = 0;
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
-                vignette.Show(0.3f);
+                vignette.Show(0.25f);
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
@@ -788,6 +803,7 @@ public class GameManager : MonoBehaviour
                 saveObject.CurrentLevel = 0;
                 currency = 5;
                 saveObject.ShopItemIds = new List<int>();
+                saveObject.UsedLetters = new HashSet<char>();
             }
 
             saveObject.Currency = currency;
@@ -952,6 +968,10 @@ public class GameManager : MonoBehaviour
             {
                 pointsChange *= 4;
             }
+            if (ChanceMultiplier != 1)
+            {
+                pointsChange *= ChanceMultiplier;
+            }
         }
 
         if (saveObject.Difficulty == Difficulty.Easy)
@@ -1022,7 +1042,12 @@ public class GameManager : MonoBehaviour
     {
         string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
         string color = isWinning ? "green" : "red";
-        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=25> </size><size=35><voffset=3.5><sprite name=magnify_glass></voffset></size></link>";
+        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
+    }
+
+    private string GetCaspText(bool isHappy = true)
+    {
+        return $"<size=55><sprite={(isHappy ? 2 : 1)}></size><color=yellow>CASP</color>";
     }
 
     private void SetPointsCalculatedText()
@@ -1040,36 +1065,38 @@ public class GameManager : MonoBehaviour
 
             if (difficultyMultiplier != 1)
             {
-                calculationText += $" x {difficultyMultiplier}";
+                calculationText += difficultyMultiplier < 1 ? $" x <color=red>{difficultyMultiplier}</color>" : $" x {difficultyMultiplier}";
                 totalPoints *= difficultyMultiplier;
                 showTotal = true;
             }
-
             if (multiplier != 1)
             {
                 calculationText += $" x {multiplier}";
                 totalPoints *= multiplier;
                 showTotal = true;
             }
-
             if (HasBonusMultiplier)
             {
                 calculationText += $" x 2";
                 totalPoints *= 2;
                 showTotal = true;
             }
-
             if (HasEvenWordMultiplier && gameWord.Length % 2 == 0)
             {
                 calculationText += $" x 2";
                 totalPoints *= 2;
                 showTotal = true;
             }
-
             if (HasLongWordMultiplier && gameWord.Length >= 10)
             {
                 calculationText += $" x 3";
                 totalPoints *= 4;
+                showTotal = true;
+            }
+            if (ChanceMultiplier != 1)
+            {
+                calculationText += ChanceMultiplier < 1 ? $" x <color=red>{ChanceMultiplier}</color>" : $" x {ChanceMultiplier}";
+                totalPoints *= ChanceMultiplier;
                 showTotal = true;
             }
 

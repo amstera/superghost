@@ -17,6 +17,7 @@ public class ShopPopUp : MonoBehaviour
     public Button shuffleButton;
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
+    public List<Color> colors = new List<Color>();
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -62,6 +63,13 @@ public class ShopPopUp : MonoBehaviour
         previousShopItemIds = visibleShopItems.Select(s => s.id).ToHashSet();
         visibleShopItems.Clear();
         GetShopItems(saveChanges, true);
+
+        Shuffle(colors);
+        for(int i = 0; i < shopItemPrefabs.Count; i++)
+        {
+            var shopItem = shopItemPrefabs[i];
+            shopItem.backgroundImage.color = colors[i];
+        }
     }
 
     private void GetShopItems(bool saveChanges = false, bool overrideExistingItems = false)
@@ -257,6 +265,8 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(cost, () => gameManager.UndoTurn(), true);
             case 9:
                 return DoAction(cost, () => gameManager.EnableDoubleBluff(), false);
+            case 10:
+                return DoAction(cost, () => gameManager.EnableChanceMultiplier(), false);
         }
 
         return null;
@@ -281,7 +291,7 @@ public class ShopPopUp : MonoBehaviour
             case 1:
                 return 5;
             case 2:
-                return gameEnded ? 4 : (roundsWon + 1) * 4;
+                return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 3:
                 return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 4:
@@ -289,13 +299,15 @@ public class ShopPopUp : MonoBehaviour
             case 5:
                 return (int)Mathf.Round((substringLength + 1) * multiplier);
             case 6:
-                return (gameManager.ResetWordUses + 1) * 5;
+                return (gameManager.ResetWordUses + 1) * 4;
             case 7:
-                return gameEnded ? 4 : (roundsWon + 1) * 3;
+                return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 8:
                 return (int)Mathf.Round((substringLength + 1) * 1.5f * multiplier);
             case 9:
                 return (int)Mathf.Round(5 * multiplier);
+            case 10:
+                return 5;
         }
 
         return -1;
@@ -325,6 +337,8 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.IsPlayerTurn() && gameManager.gameWord.Length > 0;
             case 9:
                 return !gameManager.HasDoubleBluff;
+            case 10:
+                return gameManager.ChanceMultiplier == 1;
         }
 
         return false;
@@ -354,8 +368,23 @@ public class ShopPopUp : MonoBehaviour
                 return false;
             case 9:
                 return gameManager.HasDoubleBluff;
+            case 10:
+                return gameManager.ChanceMultiplier != 1;
         }
 
         return false;
+    }
+
+    private void Shuffle<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int randomIndex = Random.Range(0, i + 1);
+
+            // Swap elements
+            T temp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
     }
 }

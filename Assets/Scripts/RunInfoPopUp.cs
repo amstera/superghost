@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using TMPro;
 using UnityEngine;
 
 public class RunInfoPopUp : MonoBehaviour
@@ -8,7 +10,86 @@ public class RunInfoPopUp : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void _Native_Share_iOS(string message);
 
-    public void ShareMessage(List<RecapObject> recap)
+    public CanvasGroup canvasGroup;
+    public GameObject popUpGameObject;
+    public TextMeshProUGUI statsText;
+
+    public AudioSource clickAudioSource;
+
+    public float fadeDuration = 0.5f;
+    public float scaleDuration = 0.5f;
+
+    private SaveObject saveObject;
+    private Vector3 originalScale;
+
+    private void Start()
+    {
+        originalScale = popUpGameObject.transform.localScale;
+        ResetPopUp();
+    }
+
+    public void Show()
+    {
+        clickAudioSource?.Play();
+
+        // Load settings
+        saveObject = SaveManager.Load();
+
+        // Set up stats
+        ConfigureStats();
+
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        StartCoroutine(FadeIn());
+        StartCoroutine(ScaleIn());
+    }
+
+    private IEnumerator FadeIn()
+    {
+        float currentTime = 0;
+        while (currentTime < fadeDuration)
+        {
+            currentTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(0, 1, currentTime / fadeDuration);
+            yield return null;
+        }
+    }
+
+    private IEnumerator ScaleIn()
+    {
+        popUpGameObject.transform.localScale = Vector3.zero; // Ensure it starts from zero
+        float currentTime = 0;
+        while (currentTime < scaleDuration)
+        {
+            currentTime += Time.deltaTime;
+            popUpGameObject.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, currentTime / scaleDuration);
+            yield return null;
+        }
+    }
+
+    public void Hide()
+    {
+        clickAudioSource?.Play();
+
+        StopAllCoroutines();
+        ResetPopUp();
+    }
+
+    private void ResetPopUp()
+    {
+        popUpGameObject.transform.localScale = Vector3.zero;
+        canvasGroup.alpha = 0;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    private void ConfigureStats()
+    {
+        
+    }
+
+    private void ShareMessage(List<RecapObject> recap)
     {
         var sharedMessage = GetSharedMessage(recap);
 
