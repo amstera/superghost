@@ -30,10 +30,12 @@ public class ShopPopUp : MonoBehaviour
     private string substring;
     private List<ShopItemInfo> visibleShopItems = new List<ShopItemInfo>();
     private HashSet<int> previousShopItemIds = new HashSet<int>();
+    private SaveObject saveObject;
 
     private void Awake()
     {
         originalScale = popUpGameObject.transform.localScale;
+        saveObject = SaveManager.Load();
         ResetPopUp();
     }
 
@@ -168,6 +170,10 @@ public class ShopPopUp : MonoBehaviour
         {
             var coroutine = item.GetCoroutine();
             StartCoroutine(coroutine());
+
+            saveObject.Statistics.UsedShopItemIds[item.id] = saveObject.Statistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
+            saveObject.RunStatistics.UsedShopItemIds[item.id] = saveObject.RunStatistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
+            SaveManager.Save(saveObject);
         }
 
         RefreshPopUp(cost);

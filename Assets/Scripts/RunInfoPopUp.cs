@@ -13,6 +13,7 @@ public class RunInfoPopUp : MonoBehaviour
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
     public TextMeshProUGUI statsText;
+    public GameManager gameManager;
 
     public AudioSource clickAudioSource;
 
@@ -86,7 +87,57 @@ public class RunInfoPopUp : MonoBehaviour
 
     private void ConfigureStats()
     {
-        
+        var regularLineBreak = "<line-height=10>\n</line-height>\n";
+        string text = "";
+
+        text += "Final Level\n";
+        text += $"<color=green>{saveObject.RunStatistics.HighestLevel + 1}/10</color>";
+        text += regularLineBreak;
+
+        text += "Best Game Score\n";
+        text += $"<color=green>{saveObject.RunStatistics.HighScore}</color>";
+        text += regularLineBreak;
+
+        text += "Final Money\n";
+        text += $"<color=green>${saveObject.RunStatistics.MostMoney}</color>";
+        text += regularLineBreak;
+
+        var mostUsedItem = GetMostUsedItem(saveObject.RunStatistics.UsedShopItemIds);
+        text += "Most Used Item\n";
+        text += $"<color=green>{mostUsedItem}</color>";
+        text += regularLineBreak;
+
+        text += "Best Round Score\n";
+        text += $"<color=green>{saveObject.RunStatistics.MostPointsPerRound}</color>";
+        if (!string.IsNullOrEmpty(saveObject.RunStatistics.MostPointsPerRoundWord))
+        {
+            text += "<line-height=0>\n</line-height>\n";
+            text += $"({saveObject.RunStatistics.MostPointsPerRoundWord})";
+        }
+
+        statsText.text = text;
+    }
+
+    private string GetMostUsedItem(Dictionary<int, int> dictionary)
+    {
+        if (dictionary == null || dictionary.Count == 0)
+        {
+            return "N/A";
+        }
+
+        int idOfHighestValue = 0;
+        int highestValue = int.MinValue;
+
+        foreach (var pair in dictionary)
+        {
+            if (pair.Value > highestValue)
+            {
+                highestValue = pair.Value;
+                idOfHighestValue = pair.Key;
+            }
+        }
+
+        return gameManager.shopPopUp.shopItems.FirstOrDefault(s => s.id == idOfHighestValue)?.title ?? "N/A";
     }
 
     private void ShareMessage(List<RecapObject> recap)

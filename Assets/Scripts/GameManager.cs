@@ -192,6 +192,11 @@ public class GameManager : MonoBehaviour
             comboText.ChooseNewCombo();
             vignette.Hide();
 
+            if (currentGame == 0)
+            {
+                saveObject.RunStatistics = new Statistics();
+            }
+
             gameOver = false;
         }
         else
@@ -478,6 +483,7 @@ public class GameManager : MonoBehaviour
         aiLivesText.LoseLife();
         playerWon = true;
         isPlayerTurn = false;
+        int multiplier = HasDoubleBluff ? 2 : 1;
 
         var caspString = GetCaspText(false);
         if (string.IsNullOrEmpty(word))
@@ -485,7 +491,6 @@ public class GameManager : MonoBehaviour
             wordDisplay.text = $"You won!\n{caspString} was <color=green>bluffing</color>";
             isLastWordValid = false;
             previousWords.Add(gameWord);
-            int multiplier = HasDoubleBluff ? 2 : 1;
             UpdatePoints(gameWord, multiplier);
 
             if (aiLivesText.IsGameOver())
@@ -511,8 +516,7 @@ public class GameManager : MonoBehaviour
             }
 
             previousWords.Add(word);
-
-            UpdatePoints(word, 1);
+            UpdatePoints(word, multiplier);
 
             confettiPS.Play();
             EndGame();
@@ -682,6 +686,11 @@ public class GameManager : MonoBehaviour
                 saveObject.Statistics.MostPointsPerRound = roundPoints;
                 saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
             }
+            if (roundPoints > saveObject.RunStatistics.MostPointsPerRound)
+            {
+                saveObject.RunStatistics.MostPointsPerRound = roundPoints;
+                saveObject.RunStatistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
+            }
             if (isLastWordValid)
             {
                 saveObject.Statistics.WinningWords.Add(gameWord);
@@ -714,7 +723,6 @@ public class GameManager : MonoBehaviour
         if (gameOver)
         {
             UpdateDailyGameStreak(true);
-            endGameText.gameObject.SetActive(true);
             comboText.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
@@ -742,16 +750,24 @@ public class GameManager : MonoBehaviour
                 {
                     saveObject.Statistics.MostMoney = currency;
                 }
+                if (currency > saveObject.RunStatistics.MostMoney)
+                {
+                    saveObject.RunStatistics.MostMoney = currency;
+                }
 
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
 
 
-                if (points > saveObject.HighScore)
+                if (points > saveObject.Statistics.HighScore)
                 {
-                    saveObject.HighScore = points;
+                    saveObject.Statistics.HighScore = points;
                     newIndicator.SetActive(true);
 
                     Device.RequestStoreReview();
+                }
+                if (points > saveObject.RunStatistics.HighScore)
+                {
+                    saveObject.RunStatistics.HighScore = points;
                 }
 
                 if (playerLivesText.HasFullLives())
@@ -765,6 +781,10 @@ public class GameManager : MonoBehaviour
                 {
                     saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
                     setLevelHighScore = true;
+                }
+                if (saveObject.CurrentLevel > saveObject.RunStatistics.HighestLevel)
+                {
+                    saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
                 }
             }
             else // lost game
@@ -780,14 +800,14 @@ public class GameManager : MonoBehaviour
                 ResetWordUses = 0;
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
-                vignette.Show(0.25f);
+                vignette.Show(0.2f);
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
                     difficultyText.gameObject.SetActive(true);
                     wordDisplay.transform.localPosition += Vector3.down * 25;
                 }
-                else if (currentGame > 0)
+                else
                 {
                     finalLevelText.gameObject.SetActive(true);
                     finalLevelText.AddPoints(currentGame + 1, false, "Level ", overrideColor: Color.yellow);
@@ -806,6 +826,7 @@ public class GameManager : MonoBehaviour
                 saveObject.UsedLetters = new HashSet<char>();
             }
 
+            endGameText.gameObject.SetActive(true);
             saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
         }

@@ -89,42 +89,62 @@ public class StatsPopup : MonoBehaviour
     {
         var regularLineBreak = "<line-height=10>\n</line-height>\n";
         string text = "";
-        int titleSize = 30;
 
-        text += $"<size={titleSize}>High Score</size>\n";
-        text += $"<size=45>{saveObject.HighScore}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Highest Level</size>\n";
-        text += $"<size=45>{saveObject.Statistics.HighestLevel + 1}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Daily Play Streak</size>\n";
-        text += $"<size=45>{saveObject.Statistics.DailyPlayStreak}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Most Money</size>\n";
-        text += $"<size=45>${saveObject.Statistics.MostMoney}</size>{regularLineBreak}";
+        text += "High Score\n";
+        text += $"<color=green>{saveObject.Statistics.HighScore}</color>";
+        text += regularLineBreak;
+
+        text += "Highest Level\n";
+        text += $"<color=green>{saveObject.Statistics.HighestLevel + 1}/10</color>";
+        text += regularLineBreak;
+
+        text += "Daily Play Streak\n";
+        text += $"<color=green>{saveObject.Statistics.DailyPlayStreak}</color>";
+        text += regularLineBreak;
+
+        text += "Most Money\n";
+        text += $"<color=green>${saveObject.Statistics.MostMoney}</color>";
+        text += regularLineBreak;
+
         var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
-        text += $"<size={titleSize}>Longest Winning Word</size>\n";
-        text += $"<color=green>{longestWinningWord}</color>{regularLineBreak}";
+        text += "Max. Winning Word\n";
+        text += $"<color=green>{saveObject.Statistics.LongestWinningWord}</color>";
+        text += regularLineBreak;
+
         var longestLosingWord = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
-        text += $"<size={titleSize}>Longest Losing Word</size>\n";
-        text += $"<color=red>{longestLosingWord}</color>{regularLineBreak}";
-        text += $"<size={titleSize}>Most Points in a Round</size>\n";
-        text += $"<size=45>{saveObject.Statistics.MostPointsPerRound}</size>";
+        text += "Min. Losing Word\n";
+        text += $"<color=red>{saveObject.Statistics.LongestLosingWord}</color>";
+        text += regularLineBreak;
+
+        text += "Most Points / Round\n";
+        text += $"<color=green>{saveObject.Statistics.MostPointsPerRound}</color>";
         if (string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord))
         {
             text += regularLineBreak;
         }
         else
         {
-            text += $"<line-height=-5>\n</line-height>\n<size=30>(<color=green>{saveObject.Statistics.MostPointsPerRoundWord}</color>)</size>{regularLineBreak}";
+            text += "<line-height=-5>\n</line-height>\n";
+            text += $"(<color=green>{saveObject.Statistics.MostPointsPerRoundWord}</color>)";
+            text += regularLineBreak;
         }
-        text += $"<size={titleSize}>Games Played</size>\n";
-        text += $"<size=45>{saveObject.Statistics.GamesPlayed}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Avg. Winning Word Length</size>\n";
-        var lengthOfAverageWinningWord = saveObject.Statistics.WinningWords.Count > 0 ? saveObject.Statistics.WinningWords.Average(w => w.Length) : 0;
-        text += $"<size=45>{Math.Round(lengthOfAverageWinningWord)}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Frequent 1st Letter</size>\n";
+
+        text += "Games Played\n";
+        text += $"<color=green>{saveObject.Statistics.GamesPlayed}</color>";
+        text += regularLineBreak;
+
+        var lengthOfAverageWinningWord = saveObject.Statistics.WinningWords.Count > 0 ? Math.Round(saveObject.Statistics.WinningWords.Average(w => w.Length)) : 0;
+        text += "Avg. Winning Word Length\n";
+        text += $"<color=green>{lengthOfAverageWinningWord}</color>";
+        text += regularLineBreak;
+
         var frequentStartingLetter = GetFrequentStartingLetter(saveObject.Statistics.FrequentStartingLetter);
-        text += $"<size=45>{frequentStartingLetter}</size>{regularLineBreak}";
-        text += $"<size={titleSize}>Skunks</size>\n";
-        text += $"<size=45>{saveObject.Statistics.Skunks}</size>{regularLineBreak}";
+        text += "Frequent 1st Letter\n";
+        text += $"<color=green>{frequentStartingLetter}</color>";
+        text += regularLineBreak;
+
+        text += "Skunks\n";
+        text += $"<color=green>{saveObject.Statistics.Skunks}</color>";
 
         statsText.text = text;
 

@@ -42,7 +42,7 @@ public class SettingsPopUp : MonoBehaviour
         saveObject = SaveManager.Load();
 
         // Set up High Score Amount text
-        highScoreAmountText.text = $"{saveObject.HighScore}";
+        highScoreAmountText.text = $"{saveObject.Statistics.HighScore}";
 
         // Set up SFX toggle
         sfxToggle.isOn = saveObject.EnableSound;

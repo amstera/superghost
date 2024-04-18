@@ -57,7 +57,6 @@ public class SaveManager : MonoBehaviour
 [Serializable]
 public class SaveObject
 {
-    public int HighScore;
     public bool EnableSound = true;
     public bool HasSeenTutorial;
     public int Currency = 5;
@@ -67,11 +66,13 @@ public class SaveObject
     public HashSet<char> UsedLetters = new HashSet<char>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
+    public Statistics RunStatistics = new Statistics();
 }
 
 [Serializable]
 public class Statistics
 {
+    public int HighScore;
     public string LongestWinningWord = "";
     public string LongestLosingWord = "";
     public string MostPointsPerRoundWord = "";
@@ -83,6 +84,7 @@ public class Statistics
     public int HighestLevel;
     public int GamesPlayed;
     public int MostMoney = 5;
+    public Dictionary<int, int> UsedShopItemIds = new Dictionary<int, int>();
     public List<string> WinningWords = new List<string>();
 }
 
