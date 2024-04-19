@@ -326,7 +326,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, saveObject.Difficulty);
+        shopPopUp.Show(currency, gameWord, saveObject.Difficulty, shopNewIndicator.activeSelf);
     }
 
     public void ShowHint()

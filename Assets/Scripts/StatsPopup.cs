@@ -94,12 +94,24 @@ public class StatsPopup : MonoBehaviour
         text += $"<color=green>{saveObject.Statistics.HighScore}</color>";
         text += regularLineBreak;
 
-        text += "Highest Level\n";
-        text += $"<color=green>{saveObject.Statistics.HighestLevel + 1}/10</color>";
-        text += regularLineBreak;
-
         text += "Daily Play Streak\n";
         text += $"<color=green>{saveObject.Statistics.DailyPlayStreak}</color>";
+        text += regularLineBreak;
+
+        text += "<color=yellow>Normal</color> Run Wins\n";
+        text += $"<color=green>{saveObject.Statistics.NormalWins}</color>";
+        text += regularLineBreak;
+
+        text += "<color=red>Hard</color> Run Wins\n";
+        text += $"<color=green>{saveObject.Statistics.HardWins}</color>";
+        text += regularLineBreak;
+
+        text += "<color=green>Easy</color> Run Wins\n";
+        text += $"<color=green>{saveObject.Statistics.EasyWins}</color>";
+        text += regularLineBreak;
+
+        text += "Games Played\n";
+        text += $"<color=green>{saveObject.Statistics.GamesPlayed}</color>";
         text += regularLineBreak;
 
         text += "Most Money\n";
@@ -107,12 +119,12 @@ public class StatsPopup : MonoBehaviour
         text += regularLineBreak;
 
         var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
-        text += "Max. Winning Word\n";
+        text += "Longest Win Word\n";
         text += $"<color=green>{saveObject.Statistics.LongestWinningWord}</color>";
         text += regularLineBreak;
 
         var longestLosingWord = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
-        text += "Min. Losing Word\n";
+        text += "Longest Loss Word\n";
         text += $"<color=red>{saveObject.Statistics.LongestLosingWord}</color>";
         text += regularLineBreak;
 
@@ -129,10 +141,6 @@ public class StatsPopup : MonoBehaviour
             text += regularLineBreak;
         }
 
-        text += "Games Played\n";
-        text += $"<color=green>{saveObject.Statistics.GamesPlayed}</color>";
-        text += regularLineBreak;
-
         var lengthOfAverageWinningWord = saveObject.Statistics.WinningWords.Count > 0 ? Math.Round(saveObject.Statistics.WinningWords.Average(w => w.Length)) : 0;
         text += "Avg. Winning Word Length\n";
         text += $"<color=green>{lengthOfAverageWinningWord}</color>";
@@ -148,7 +156,7 @@ public class StatsPopup : MonoBehaviour
 
         statsText.text = text;
 
-        statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 1100);
+        statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 1275);
 
         StartCoroutine(ScrollToTop());
     }

@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 
 public class RunInfoPopUp : MonoBehaviour
 {
-    [DllImport("__Internal")]
-    private static extern void _Native_Share_iOS(string message);
-
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
     public TextMeshProUGUI statsText;
@@ -94,6 +90,21 @@ public class RunInfoPopUp : MonoBehaviour
         text += $"<color=green>{saveObject.RunStatistics.HighestLevel + 1}/10</color>";
         text += regularLineBreak;
 
+        text += "Difficulty\n";
+        if (saveObject.Difficulty == Difficulty.Easy)
+        {
+            text += $"<color=green>EASY</color>";
+        }
+        else if (saveObject.Difficulty == Difficulty.Normal)
+        {
+            text += $"<color=yellow>NORMAL</color>";
+        }
+        else
+        {
+            text += $"<color=red>HARD</color>";
+        }
+        text += regularLineBreak;
+
         text += "Best Game Score\n";
         text += $"<color=green>{saveObject.RunStatistics.HighScore}</color>";
         text += regularLineBreak;
@@ -138,55 +149,5 @@ public class RunInfoPopUp : MonoBehaviour
         }
 
         return gameManager.shopPopUp.shopItems.FirstOrDefault(s => s.id == idOfHighestValue)?.title ?? "N/A";
-    }
-
-    private void ShareMessage(List<RecapObject> recap)
-    {
-        var sharedMessage = GetSharedMessage(recap);
-
-        if (Application.platform == RuntimePlatform.IPhonePlayer)
-        {
-            _Native_Share_iOS(sharedMessage);
-        }
-        else
-        {
-            GUIUtility.systemCopyBuffer = sharedMessage;
-            Debug.LogWarning("Native sharing is only available on iOS. Current platform: " + Application.platform); ;
-        }
-    }
-
-    private string GetSharedMessage(List<RecapObject> recap)
-    {
-        //todo: change this to give recap of entire run
-
-        string pointsText = recap.Last().PlayerLivesRemaining == 0 ? "" : recap.Last().Points == 1 ? "1 pt - " : $"{recap.Last().Points} pts - ";
-        string message = $"Wordy Ghost - {pointsText}{recap.Count} rounds";
-        foreach (var item in recap)
-        {
-            message += "\n";
-            if (item.PlayerLivesRemaining < 5)
-            {
-                for (int i = 0; i < 5 - item.PlayerLivesRemaining; i++)
-                {
-                    message += "🟥";
-                }
-            }
-            if (item.PlayerLivesRemaining > 0)
-            {
-                for (int i = 0; i < item.PlayerLivesRemaining; i++)
-                {
-                    message += "🟩";
-                }
-            }
-
-            message += $" {item.GameWord.ToUpper()}";
-            if (!item.IsValidWord)
-            {
-                message += " ❌";
-            }
-            message += $" ({item.Points})";
-        }
-
-        return message;
     }
 }

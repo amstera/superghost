@@ -8,7 +8,7 @@ public class GhostAvatar : MonoBehaviour
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
     public Image ghostImage;
-    public Sprite normalGhost, angryGhost;
+    public Sprite normalGhost, angryGhost, thinkingGhost;
 
     private float startYPosition;
     private bool isShowing = false;
@@ -16,7 +16,8 @@ public class GhostAvatar : MonoBehaviour
     private Vector3 originalTextScale;
     private float popScale = 1.15f;
     private float popDuration = 0.2f;
-    private bool isThinking = false; // Added to indicate if the thinking animation is running
+    private bool isThinking = false;
+    private bool isLosing;
 
     void Start()
     {
@@ -41,6 +42,7 @@ public class GhostAvatar : MonoBehaviour
             isThinking = false;
         }
 
+        UpdateState(isLosing);
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
     }
@@ -62,12 +64,15 @@ public class GhostAvatar : MonoBehaviour
         if (!isThinking)
         {
             StartCoroutine("AnimateThinking");
+            ghostImage.sprite = thinkingGhost;
             isThinking = true;
         }
     }
 
     public void UpdateState(bool isLosing)
     {
+        this.isLosing = isLosing;
+
         if (isLosing)
         {
             ghostImage.sprite = angryGhost;

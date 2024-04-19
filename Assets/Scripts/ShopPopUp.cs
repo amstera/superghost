@@ -18,6 +18,7 @@ public class ShopPopUp : MonoBehaviour
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
+    public GameObject newIndicator;
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -39,10 +40,11 @@ public class ShopPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Show(int currency, string substring, Difficulty difficulty)
+    public void Show(int currency, string substring, Difficulty difficulty, bool showNewIndicator)
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+        newIndicator.SetActive(showNewIndicator);
 
         this.currency = currency;
         this.substring = substring;
@@ -156,8 +158,7 @@ public class ShopPopUp : MonoBehaviour
     {
         if (currency >= 10)
         {
-            RefreshShop(false);
-            BuyItem(10, null);
+            StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(10, null)));
             StartCoroutine(ScrollToTop());
         }
     }
@@ -225,6 +226,56 @@ public class ShopPopUp : MonoBehaviour
         currencyText.AddPoints(-cost);
 
         InitializeShopItems();
+    }
+
+    public IEnumerator RefreshShopWithAnimation(bool saveChanges, Action action)
+    {
+        var scaleTime = scaleDuration * 0.5f;
+
+        // Scale out all shop items
+        foreach (var itemPrefab in shopItemPrefabs)
+        {
+            StartCoroutine(ScaleOut(itemPrefab.gameObject, scaleTime));
+        }
+
+        // Wait for all to scale out
+        yield return new WaitForSeconds(scaleTime);
+
+        // Proceed with refreshing the shop
+        RefreshShop(saveChanges);
+        action?.Invoke();
+
+        // Scale in all shop items
+        foreach (var itemPrefab in shopItemPrefabs)
+        {
+            StartCoroutine(ScaleIn(itemPrefab.gameObject, scaleTime));
+        }
+    }
+
+
+    private IEnumerator ScaleOut(GameObject target, float duration)
+    {
+        float currentTime = 0;
+        Vector3 startScale = target.transform.localScale;
+        while (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+            target.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, currentTime / duration);
+            yield return null;
+        }
+        target.transform.localScale = Vector3.zero;
+    }
+
+    private IEnumerator ScaleIn(GameObject target, float duration)
+    {
+        float currentTime = 0;
+        while (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+            target.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, currentTime / duration);
+            yield return null;
+        }
+        target.transform.localScale = originalScale;
     }
 
     private void InitializeShopItems()

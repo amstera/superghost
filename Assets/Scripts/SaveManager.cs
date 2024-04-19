@@ -84,6 +84,9 @@ public class Statistics
     public int HighestLevel;
     public int GamesPlayed;
     public int MostMoney = 5;
+    public int HardWins;
+    public int NormalWins;
+    public int EasyWins;
     public Dictionary<int, int> UsedShopItemIds = new Dictionary<int, int>();
     public List<string> WinningWords = new List<string>();
 }
