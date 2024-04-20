@@ -52,7 +52,7 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new StartWithHandicap(2));
                 break;
             case 8:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
                 currentCriteria.Add(new NoComboLetters());
                 break;
             case 9:

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
-    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText, levelText;
+    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText, levelText, endingPointsText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -182,6 +182,7 @@ public class GameManager : MonoBehaviour
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
             runInfoButton.gameObject.SetActive(false);
+            endingPointsText.gameObject.SetActive(false);
             shopButton.gameObject.SetActive(true);
             recap.Clear();
             wordDisplay.transform.localPosition = Vector3.zero;
@@ -431,6 +432,7 @@ public class GameManager : MonoBehaviour
         if (previousWords.Count > 0)
         {
             gameWord = previousWords.Last();
+            wordDictionary.ClearFilteredWords();
             if (string.IsNullOrEmpty(gameWord))
             {
                 wordDisplay.text = $"<color=yellow>{separator}</color>";
@@ -438,6 +440,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                wordDictionary.SetFilteredWords(gameWord);
                 UpdateWordDisplay(true, 0);
             }
 
@@ -809,6 +812,8 @@ public class GameManager : MonoBehaviour
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
+                endingPointsText.gameObject.SetActive(true);
+                endingPointsText.text = $"{points} PTS";
                 ResetWordUses = 0;
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);

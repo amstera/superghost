@@ -63,7 +63,6 @@ public class WordDictionary
     public void ClearFilteredWords()
     {
         filteredWords = words.Where(w => !restrictedLetters.Any(l => w.Contains(l, StringComparison.InvariantCultureIgnoreCase))).ToList();
-        minLength = 3;
     }
 
     public bool IsWordReal(string word, bool useEntireDictionary = false)
@@ -113,6 +112,7 @@ public class WordDictionary
     public void ClearRestrictions()
     {
         restrictedLetters.Clear();
+        minLength = 3;
     }
 
     public void SetMinLength(int minLength)

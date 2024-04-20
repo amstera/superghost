@@ -15156,6 +15156,7 @@ cringe
 cringed
 cringes
 cringing
+cringy
 crinkle
 crinkled
 crinkles
@@ -62050,6 +62051,10 @@ spading
 spadix
 spaghetti
 spake
+spam
+spammed
+spamming
+spams
 span
 spandex
 spangle

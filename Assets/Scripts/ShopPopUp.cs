@@ -344,7 +344,7 @@ public class ShopPopUp : MonoBehaviour
         switch (id)
         {
             case 0:
-                return (int)Mathf.Round((substringLength + 1) * multiplier);
+                return (int)RoundHalfUp((substringLength + 1) * multiplier);
             case 1:
                 return 5;
             case 2:
@@ -352,17 +352,17 @@ public class ShopPopUp : MonoBehaviour
             case 3:
                 return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 4:
-                return (int)(Mathf.Round(5 * multiplier));
+                return (int)RoundHalfUp(5 * multiplier);
             case 5:
-                return (int)Mathf.Round((substringLength + 1) * multiplier);
+                return (int)RoundHalfUp((substringLength + 1) * multiplier);
             case 6:
                 return (gameManager.ResetWordUses + 1) * 4;
             case 7:
                 return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 8:
-                return (int)Mathf.Round((substringLength + 1) * 1.5f * multiplier);
+                return (int)RoundHalfUp((substringLength + 1) * 1.5f * multiplier);
             case 9:
-                return (int)Mathf.Round(5 * multiplier);
+                return (int)RoundHalfUp(5 * multiplier);
             case 10:
                 return 5;
         }
@@ -443,5 +443,10 @@ public class ShopPopUp : MonoBehaviour
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
         }
+    }
+
+    float RoundHalfUp(float number)
+    {
+        return Mathf.Floor(number + 0.5f);
     }
 }
