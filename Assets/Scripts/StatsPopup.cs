@@ -90,7 +90,7 @@ public class StatsPopup : MonoBehaviour
         var regularLineBreak = "<line-height=10>\n</line-height>\n";
         string text = "";
 
-        text += "High Score\n";
+        text += "Game High Score\n";
         text += $"<color=green>{saveObject.Statistics.HighScore}</color>";
         text += regularLineBreak;
 
@@ -100,14 +100,20 @@ public class StatsPopup : MonoBehaviour
 
         text += "<color=yellow>Normal</color> Run Wins\n";
         text += $"<color=green>{saveObject.Statistics.NormalWins}</color>";
+        text += "<line-height=-5>\n</line-height>\n";
+        text += $"<size=30>(<color=green>{saveObject.Statistics.HighestLevel + 1}/10</color>)</size>";
         text += regularLineBreak;
 
         text += "<color=red>Hard</color> Run Wins\n";
         text += $"<color=green>{saveObject.Statistics.HardWins}</color>";
+        text += "<line-height=-5>\n</line-height>\n";
+        text += $"<size=30>(<color=green>{saveObject.Statistics.HardHighestLevel + 1}/10</color>)</size>";
         text += regularLineBreak;
 
         text += "<color=green>Easy</color> Run Wins\n";
         text += $"<color=green>{saveObject.Statistics.EasyWins}</color>";
+        text += "<line-height=-5>\n</line-height>\n";
+        text += $"<size=30>(<color=green>{saveObject.Statistics.EasyHighestLevel + 1}/10</color>)</size>";
         text += regularLineBreak;
 
         text += "Games Played\n";
@@ -137,7 +143,7 @@ public class StatsPopup : MonoBehaviour
         else
         {
             text += "<line-height=-5>\n</line-height>\n";
-            text += $"(<color=green>{saveObject.Statistics.MostPointsPerRoundWord}</color>)";
+            text += $"(<color=green><size=30>{saveObject.Statistics.MostPointsPerRoundWord}</size></color>)";
             text += regularLineBreak;
         }
 
@@ -156,7 +162,7 @@ public class StatsPopup : MonoBehaviour
 
         statsText.text = text;
 
-        statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 1275);
+        statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 1375);
 
         StartCoroutine(ScrollToTop());
     }

@@ -82,6 +82,8 @@ public class Statistics
     public DateTime LastIncrementDate = DateTime.MinValue;
     public int DailyPlayStreak;
     public int HighestLevel;
+    public int EasyHighestLevel;
+    public int HardHighestLevel;
     public int GamesPlayed;
     public int MostMoney = 5;
     public int HardWins;

@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
 
-        ghostAvatar.UpdateState(IsPlayerWinning());
+        ghostAvatar.UpdateState(IsPlayerWinning(), currentGame);
 
         if (!isPlayerTurn)
         {
@@ -743,16 +743,12 @@ public class GameManager : MonoBehaviour
                 playerText.color = Color.green;
                 aiText.color = Color.red;
 
-                int gameWonCurrency = stars.GetStars() * 5;
+                int gameWonCurrency = stars.GetStars() * 5 + (currentGame + 1) * 3;
                 bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", 0.5f);
                 currency += gameWonCurrency;
                 if (currency > saveObject.Statistics.MostMoney)
                 {
                     saveObject.Statistics.MostMoney = currency;
-                }
-                if (currency > saveObject.RunStatistics.MostMoney)
-                {
-                    saveObject.RunStatistics.MostMoney = currency;
                 }
 
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
@@ -777,15 +773,31 @@ public class GameManager : MonoBehaviour
 
                 currentGame++;
                 saveObject.CurrentLevel++;
-                if (saveObject.CurrentLevel > saveObject.Statistics.HighestLevel)
+
+                Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
                 {
-                    saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
+                    { Difficulty.Normal, saveObject.Statistics.HighestLevel },
+                    { Difficulty.Easy, saveObject.Statistics.EasyHighestLevel },
+                    { Difficulty.Hard, saveObject.Statistics.HardHighestLevel }
+                };
+                if (saveObject.CurrentLevel > highestLevelMap[saveObject.Difficulty])
+                {
+                    switch (saveObject.Difficulty)
+                    {
+                        case Difficulty.Normal:
+                            saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
+                            break;
+                        case Difficulty.Easy:
+                            saveObject.Statistics.EasyHighestLevel = saveObject.CurrentLevel;
+                            break;
+                        case Difficulty.Hard:
+                            saveObject.Statistics.HardHighestLevel = saveObject.CurrentLevel;
+                            break;
+                    }
                     setLevelHighScore = true;
                 }
-                if (saveObject.CurrentLevel > saveObject.RunStatistics.HighestLevel)
-                {
-                    saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
-                }
+
+                saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
             }
             else // lost game
             {
@@ -818,6 +830,8 @@ public class GameManager : MonoBehaviour
                         setLevelHighScore = false;
                     }
                 }
+
+                saveObject.RunStatistics.MostMoney = currency;
 
                 currentGame = 0;
                 saveObject.CurrentLevel = 0;

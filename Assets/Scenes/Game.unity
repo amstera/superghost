@@ -4510,7 +4510,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999423
+  m_Size: 0.9999747
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6877,8 +6877,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.7009355
+  m_Value: 1.0000005
+  m_Size: 0.7009649
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15299,6 +15299,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vignetteImage: {fileID: 892349762}
+--- !u!1 &900126821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 900126824}
+  - component: {fileID: 900126823}
+  - component: {fileID: 900126822}
+  m_Layer: 5
+  m_Name: Ghost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &900126822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900126821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a467554c328c44162b284f6e00ae01ca, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &900126823
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900126821}
+  m_CullTransparentMesh: 1
+--- !u!224 &900126824
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900126821}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1444670326}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &902705910
 GameObject:
   m_ObjectHideFlags: 0
@@ -25272,7 +25347,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
   m_Value: -0.00000017562927
-  m_Size: 0.39071542
+  m_Size: 0.39073515
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -25585,7 +25660,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1444670326}
   - component: {fileID: 1444670328}
-  - component: {fileID: 1444670327}
   - component: {fileID: 1444670329}
   - component: {fileID: 1444670330}
   m_Layer: 5
@@ -25607,6 +25681,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 900126824}
   - {fileID: 1755711960}
   m_Father: {fileID: 1867108839}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25615,36 +25690,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -257}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1444670327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444670325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.9411765}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a467554c328c44162b284f6e00ae01ca, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1444670328
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25679,10 +25724,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textMeshProUGUI: {fileID: 910018486}
   canvasGroup: {fileID: 1444670329}
-  ghostImage: {fileID: 1444670327}
+  ghostImage: {fileID: 900126822}
+  flame: {fileID: 0}
   normalGhost: {fileID: 21300000, guid: a467554c328c44162b284f6e00ae01ca, type: 3}
   angryGhost: {fileID: 21300000, guid: 92a5c3db22efd4ee78ecf02f34eea63e, type: 3}
   thinkingGhost: {fileID: 21300000, guid: 29208d21ec0964369a2a2a9ead9d1999, type: 3}
+  currentLevel: 0
 --- !u!1 &1445248638
 GameObject:
   m_ObjectHideFlags: 0
@@ -27110,7 +27157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.000044510634}
+  m_AnchoredPosition: {x: 5, y: 0.00017340359}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -29749,7 +29796,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1042.5682}
+  m_AnchoredPosition: {x: 0, y: 1042.5684}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -31136,8 +31183,13 @@ MonoBehaviour:
       Skunks: 0
       DailyPlayStreak: 0
       HighestLevel: 0
+      EasyHighestLevel: 0
+      HardHighestLevel: 0
       GamesPlayed: 0
       MostMoney: 0
+      HardWins: 0
+      NormalWins: 0
+      EasyWins: 0
       WinningWords: []
     RunStatistics:
       HighScore: 0
@@ -31148,8 +31200,13 @@ MonoBehaviour:
       Skunks: 0
       DailyPlayStreak: 0
       HighestLevel: 0
+      EasyHighestLevel: 0
+      HardHighestLevel: 0
       GamesPlayed: 0
       MostMoney: 5
+      HardWins: 0
+      NormalWins: 0
+      EasyWins: 0
       WinningWords: []
   shopButton: {fileID: 1222778901}
   challengeButton: {fileID: 1389336110}
@@ -34577,7 +34634,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 269.875}
+  m_AnchoredPosition: {x: 0, y: 269.8749}
   m_SizeDelta: {x: 0, y: 770}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745

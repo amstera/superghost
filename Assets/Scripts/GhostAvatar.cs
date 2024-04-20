@@ -18,6 +18,7 @@ public class GhostAvatar : MonoBehaviour
     private float popDuration = 0.2f;
     private bool isThinking = false;
     private bool isLosing;
+    public int currentLevel;
 
     void Start()
     {
@@ -31,6 +32,8 @@ public class GhostAvatar : MonoBehaviour
         {
             float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2.5f;
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
+
+            UpdateGhostColor();
         }
     }
 
@@ -42,7 +45,7 @@ public class GhostAvatar : MonoBehaviour
             isThinking = false;
         }
 
-        UpdateState(isLosing);
+        UpdateState(isLosing, currentLevel);
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
     }
@@ -69,9 +72,10 @@ public class GhostAvatar : MonoBehaviour
         }
     }
 
-    public void UpdateState(bool isLosing)
+    public void UpdateState(bool isLosing, int currentLevel)
     {
         this.isLosing = isLosing;
+        this.currentLevel = currentLevel;
 
         if (isLosing)
         {
@@ -81,6 +85,24 @@ public class GhostAvatar : MonoBehaviour
         {
             ghostImage.sprite = normalGhost;
         }
+    }
+
+    private void UpdateGhostColor()
+    {
+        // Define base colors
+        Color yellow = new Color(1, 1, 0);
+        Color orange = new Color(1, 0.65f, 0);
+        Color red = new Color(0.9f, 0, 0);
+
+        // Calculate the phase for color lerp transitions
+        float phase = (Mathf.Sin(Time.time * 2) + 1) / 2; // Normalize to 0-1
+
+        // Determine transition colors based on phase
+        Color transitionColor = phase < 0.5 ? Color.Lerp(yellow, orange, phase * 2) : Color.Lerp(orange, red, (phase - 0.5f) * 2);
+
+        // Apply level-based blending with white
+        float levelIntensity = currentLevel / 9f; // Scale factor based on current level
+        ghostImage.color = Color.Lerp(Color.white, transitionColor, levelIntensity);
     }
 
     IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.5f)
