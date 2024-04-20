@@ -21,6 +21,7 @@ public class Stars : MonoBehaviour
 
     public void Show(int score)
     {
+        gameObject.SetActive(true);
         SetStarsColor(Color.white); // Immediate reset to white
 
         bool isDiamond = false;
@@ -37,6 +38,12 @@ public class Stars : MonoBehaviour
         }
 
         StartCoroutine(ShowStarsCoroutine(score, isDiamond));
+    }
+
+    public void Hide()
+    {
+        StopAllCoroutines();
+        gameObject.SetActive(false);
     }
 
     public int GetStars()

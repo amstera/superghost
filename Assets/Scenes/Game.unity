@@ -4510,7 +4510,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9168834
+  m_Size: 0.92192745
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6877,8 +6877,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: -0.00034884815
-  m_Size: 0.66752076
+  m_Value: -0.0013103009
+  m_Size: 0.672346
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18808,6 +18808,7 @@ GameObject:
   - component: {fileID: 1097254608}
   - component: {fileID: 1097254607}
   - component: {fileID: 1097254606}
+  - component: {fileID: 1097254609}
   m_Layer: 5
   m_Name: Level Text
   m_TagString: Untagged
@@ -18945,6 +18946,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097254604}
   m_CullTransparentMesh: 1
+--- !u!114 &1097254609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097254604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02e563b53dbc45e79188ebb232818fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.2
 --- !u!1 &1102137707
 GameObject:
   m_ObjectHideFlags: 0
@@ -22911,6 +22925,7 @@ GameObject:
   - component: {fileID: 1323263476}
   - component: {fileID: 1323263475}
   - component: {fileID: 1323263477}
+  - component: {fileID: 1323263478}
   m_Layer: 5
   m_Name: Criteria Text
   m_TagString: Untagged
@@ -23047,6 +23062,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   criteriaText: {fileID: 1323263475}
+--- !u!114 &1323263478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323263472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02e563b53dbc45e79188ebb232818fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.2
 --- !u!1 &1323359623
 GameObject:
   m_ObjectHideFlags: 0
@@ -25346,8 +25374,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.00018089813
-  m_Size: 0.35539645
+  m_Value: -0.0007117668
+  m_Size: 0.3590608
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27156,7 +27184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.11996969}
+  m_AnchoredPosition: {x: 5, y: 0.494738}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -29944,7 +29972,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1042.7567}
+  m_AnchoredPosition: {x: 0, y: 1043.3102}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -30610,6 +30638,7 @@ GameObject:
   - component: {fileID: 1772416854}
   - component: {fileID: 1772416856}
   - component: {fileID: 1772416857}
+  - component: {fileID: 1772416858}
   m_Layer: 5
   m_Name: End Game Text
   m_TagString: Untagged
@@ -30764,6 +30793,19 @@ MonoBehaviour:
   duration: 0.25
   echoDelay: 0.05
   echoDuration: 0.5
+--- !u!114 &1772416858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772416852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17cd2209170ee486d85a28f4555be66d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColor: {r: 0.4392157, g: 1, b: 0, a: 1}
 --- !u!1 &1776524683
 GameObject:
   m_ObjectHideFlags: 0
@@ -31373,6 +31415,7 @@ MonoBehaviour:
   winSound: {fileID: 8300000, guid: 3ece9ada6261241b89f4b864c62ea9bf, type: 3}
   loseSound: {fileID: 8300000, guid: ee235064e6428461ab57d9f47891eba7, type: 3}
   loseGameSound: {fileID: 8300000, guid: ea0368f9db6fb46a99be43220323081e, type: 3}
+  winRunSound: {fileID: 8300000, guid: fe96a87576a294dd89923e27e9fecdb4, type: 3}
   clickAudioSource: {fileID: 1816581306}
   gameStatusAudioSource: {fileID: 1816581307}
   keyAudioSource: {fileID: 1816581308}
@@ -34784,7 +34827,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 500.2053}
+  m_AnchoredPosition: {x: 0, y: 500.4267}
   m_SizeDelta: {x: 0, y: 770}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745

@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public Vignette vignette;
     public WordDictionary wordDictionary = new WordDictionary();
 
-    public AudioClip winSound, loseSound, loseGameSound;
+    public AudioClip winSound, loseSound, loseGameSound, winRunSound;
     public AudioSource clickAudioSource;
     public AudioSource gameStatusAudioSource;
     public AudioSource keyAudioSource;
@@ -192,6 +192,10 @@ public class GameManager : MonoBehaviour
             AddRestrictions(criteriaText.GetCurrentCriteria());
             comboText.ChooseNewCombo();
             vignette.Hide();
+            endGameText.GetComponent<ColorCycleEffect>().enabled = false;
+
+            var main = confettiPS.main;
+            main.loop = false;
 
             if (currentGame == 0)
             {
@@ -801,6 +805,40 @@ public class GameManager : MonoBehaviour
                 }
 
                 saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
+
+                if (currentGame == 10) // won run
+                {
+                    endGameText.text = "You Win!";
+                    endGameText.GetComponent<ColorCycleEffect>().enabled = true;
+
+                    var main = confettiPS.main;
+                    main.loop = true;
+                    confettiPS.Play();
+
+                    shopNewIndicator.SetActive(false);
+                    shopButton.gameObject.SetActive(false);
+                    nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
+                    bonusCurrencyEarnedText.Reset();
+                    currencyEarnedText.gameObject.SetActive(false);
+                    runInfoButton.gameObject.SetActive(true);
+                    stars.Hide();
+                    gameStatusAudioSource.clip = winRunSound;
+
+                    switch (saveObject.Difficulty)
+                    {
+                        case Difficulty.Normal:
+                            saveObject.Statistics.NormalWins++;
+                            break;
+                        case Difficulty.Easy:
+                            saveObject.Statistics.EasyWins++;
+                            break;
+                        case Difficulty.Hard:
+                            saveObject.Statistics.HardWins++;
+                            break;
+                    }
+
+                    ResetRun();
+                }
             }
             else // lost game
             {
@@ -814,7 +852,6 @@ public class GameManager : MonoBehaviour
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);
                 endingPointsText.text = $"{points} PTS";
-                ResetWordUses = 0;
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.2f);
@@ -836,13 +873,7 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                saveObject.RunStatistics.MostMoney = currency;
-
-                currentGame = 0;
-                saveObject.CurrentLevel = 0;
-                currency = 5;
-                saveObject.ShopItemIds = new List<int>();
-                saveObject.UsedLetters = new HashSet<char>();
+                ResetRun();
             }
 
             endGameText.gameObject.SetActive(true);
@@ -1206,6 +1237,19 @@ public class GameManager : MonoBehaviour
         UpdateWordDisplay(true, addedLetter.index);
         isPlayerTurn = true;
         SetIndicators(isPlayerTurn);
+    }
+
+    private void ResetRun()
+    {
+        isPlayerTurn = true;
+        ResetWordUses = 0;
+        saveObject.RunStatistics.MostMoney = currency;
+
+        currentGame = 0;
+        saveObject.CurrentLevel = 0;
+        currency = 5;
+        saveObject.ShopItemIds = new List<int>();
+        saveObject.UsedLetters = new HashSet<char>();
     }
 
     private GameState GetGameState()
