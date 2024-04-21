@@ -14,8 +14,8 @@ public class GhostAvatar : MonoBehaviour
     private bool isShowing = false;
     private float moveSpeed = 3f;
     private Vector3 originalTextScale;
-    private float popScale = 1.15f;
-    private float popDuration = 0.2f;
+    private float popScale = 1.25f;
+    private float popDuration = 0.1f;
     private bool isThinking = false;
     private bool isLosing;
     public int currentLevel;
@@ -125,12 +125,27 @@ public class GhostAvatar : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < popDuration)
         {
-            textMeshProUGUI.transform.localScale = Vector3.Lerp(originalTextScale, originalTextScale * popScale, elapsedTime / popDuration);
+            // Apply ease-out effect (quadratic)
+            float proportionCompleted = elapsedTime / popDuration;
+            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2);
+
+            textMeshProUGUI.transform.localScale = Vector3.Lerp(originalTextScale, originalTextScale * popScale, easeOutProgress);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Scale back to original after the pop effect
+        // Smooth interpolation back to the original scale
+        elapsedTime = 0f;
+        var poppedScale = textMeshProUGUI.transform.localScale;
+        while (elapsedTime < popDuration)
+        {
+            // Smoothly lerp back using linear interpolation (could use easing here as well)
+            textMeshProUGUI.transform.localScale = Vector3.Lerp(poppedScale, originalTextScale, elapsedTime / popDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure it sets back to original exactly
         textMeshProUGUI.transform.localScale = originalTextScale;
     }
 

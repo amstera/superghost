@@ -15855,6 +15855,7 @@ cutworms
 cyan
 cyanide
 cyanobacteria
+cyber
 cybernetic
 cybernetics
 cyberpunk

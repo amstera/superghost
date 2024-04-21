@@ -465,6 +465,7 @@ GameObject:
   - component: {fileID: 27335233}
   - component: {fileID: 27335232}
   - component: {fileID: 27335231}
+  - component: {fileID: 27335234}
   m_Layer: 5
   m_Name: Points Calculate Text
   m_TagString: Untagged
@@ -603,6 +604,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 27335229}
   m_CullTransparentMesh: 1
+--- !u!114 &27335234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27335229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2bae7b8fa5a45969833d415517dc75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 27335232}
+  bumpHeight: 1.75
+  animationDuration: 0.2
 --- !u!1 &43440747
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,7 +4526,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.92192745
+  m_Size: 0.9949465
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4749,7 +4765,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<sprite=1><color=yellow>CASP</color> won!\nThey thought \n<color=red>SPHINX</color>\n\nP\nPH\nPHI\nPHIN\n<color=red>SPHINX</color>"
+  m_text: '<size=40><sprite=1></size><color=yellow>CASP</color> won with
+
+    <color=red>SPHINX</color>
+
+
+    P
+
+    PH
+
+    PHI
+
+    PHIN
+
+    <color=red>SPHINX</color>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -6877,8 +6906,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: -0.0013103009
-  m_Size: 0.672346
+  m_Value: -0.0000034460675
+  m_Size: 0.69914013
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14693,10 +14722,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1867108839}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 425, y: 138}
+  m_SizeDelta: {x: -40, y: 138}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &863971982
 CanvasRenderer:
@@ -25374,8 +25403,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0007117668
-  m_Size: 0.3590608
+  m_Value: -0.0000020490081
+  m_Size: 0.38870496
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27184,7 +27213,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.494738}
+  m_AnchoredPosition: {x: 5, y: 0.0013605533}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -29972,7 +30001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1043.3102}
+  m_AnchoredPosition: {x: 0, y: 1042.5702}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -30902,7 +30931,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You won!
 
-    <sprite=1><color=yellow>CASP</color> was <color=green>bluffing</color>
+    <size=40><sprite=1></size><color=yellow>CASP</color> was
+    <color=green>bluffing</color>
 
 
     P
@@ -34827,7 +34857,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 500.4267}
+  m_AnchoredPosition: {x: 0, y: 500.1258}
   m_SizeDelta: {x: 0, y: 770}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745
