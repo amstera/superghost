@@ -41,6 +41,9 @@ public class ShopItem : MonoBehaviour
         warningText.color = interactable ? normalWarningColor : blockedWarningColor;
         buyButton.interactable = interactable && canAfford;
 
+        var buyButtonText = buyButton.GetComponentInChildren<TextMeshProUGUI>();
+        buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, interactable && canAfford ? 1 : 0.5f);
+
         iconImage.sprite = iconSprite;
 
         buyButton.onClick.RemoveAllListeners();

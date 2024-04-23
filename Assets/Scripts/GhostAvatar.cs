@@ -72,6 +72,66 @@ public class GhostAvatar : MonoBehaviour
         }
     }
 
+    public void Pop()
+    {
+        StartCoroutine(PopEffect());
+        StartCoroutine(Shake());
+    }
+
+    IEnumerator PopEffect()
+    {
+        var originalScale = transform.localScale;
+        var duration = 0.15f;
+        var popEffectScale = 1.2f;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            // Apply ease-out effect (quadratic)
+            float proportionCompleted = elapsedTime / duration;
+            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2);
+
+            transform.localScale = Vector3.Lerp(originalTextScale, originalScale * popEffectScale, easeOutProgress);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Smooth interpolation back to the original scale
+        elapsedTime = 0f;
+        var poppedScale = transform.localScale;
+        while (elapsedTime < duration)
+        {
+            // Smoothly lerp back using linear interpolation (could use easing here as well)
+            transform.localScale = Vector3.Lerp(poppedScale, originalScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure it sets back to original exactly
+        transform.localScale = originalScale;
+    }
+
+    private IEnumerator Shake()
+    {
+        float elapsed = 0.0f;
+        var originalPos = transform.localPosition;
+        var shakeDuration = 0.25f;
+        var shakeMagnitude = 3f;
+
+        while (elapsed < shakeDuration)
+        {
+            float x = originalPos.x + Random.Range(-1f, 1f) * shakeMagnitude;
+            float y = originalPos.y + Random.Range(-1f, 1f) * shakeMagnitude;
+
+            transform.localPosition = new Vector3(x, y, originalPos.z);
+            elapsed += Time.deltaTime;
+
+            yield return null; // Wait until next frame
+        }
+
+        transform.localPosition = originalPos;
+    }
+
     public void UpdateState(bool isLosing, int currentLevel)
     {
         this.isLosing = isLosing;

@@ -5,13 +5,12 @@ using UnityEngine.EventSystems;
 
 public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 {
-    public GameManager gameManager; // Reference to the GameManager to call ProcessTurn
+    public GameManager gameManager;
 
     private Coroutine colorLerpCoroutine;
     private Coroutine popCoroutine;
 
-    private float popScale = 1.05f;
-    private float popDuration = 0.15f;
+    private float popDuration;
 
     public override string text
     {
@@ -85,8 +84,10 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         colorLerpCoroutine = StartCoroutine(LerpLetterColorAtIndex(newIndex, 0.5f));
     }
 
-    public void Pop()
+    public void Pop(float duration = 0.2f)
     {
+        popDuration = duration;
+
         if (popCoroutine != null)
         {
             StopCoroutine(popCoroutine);
@@ -144,31 +145,34 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 
     IEnumerator PopEffect()
     {
-        var originalScale = transform.localScale;
+        Vector3 zeroScale = Vector3.zero;  // Start from absolute zero
+        var originalScale = transform.localScale; // Store the original scale
+        Vector3 overshootScale = originalScale * 1.1f; // Slightly larger than original for overshoot
         float elapsedTime = 0f;
-        while (elapsedTime < popDuration)
-        {
-            // Apply ease-out effect (quadratic)
-            float proportionCompleted = elapsedTime / popDuration;
-            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2);
 
-            transform.localScale = Vector3.Lerp(originalScale, originalScale * popScale, easeOutProgress);
+        // Scale up from zero to overshoot scale
+        while (elapsedTime < popDuration * 0.6f) // Faster to overshoot
+        {
+            float proportionCompleted = elapsedTime / (popDuration * 0.6f);
+            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2); // Applying ease-out quadratic effect
+
+            transform.localScale = Vector3.Lerp(zeroScale, overshootScale, easeOutProgress);
             elapsedTime += Time.deltaTime;
+
             yield return null;
         }
 
-        // Smooth interpolation back to the original scale
+        // Settle back to the original scale
         elapsedTime = 0f;
-        var poppedScale = transform.localScale;
-        while (elapsedTime < popDuration)
+        while (elapsedTime < popDuration * 0.4f) // Slower to settle
         {
-            // Smoothly lerp back using linear interpolation (could use easing here as well)
-            transform.localScale = Vector3.Lerp(poppedScale, originalScale, elapsedTime / popDuration);
+            transform.localScale = Vector3.Lerp(overshootScale, originalScale, elapsedTime / (popDuration * 0.4f));
             elapsedTime += Time.deltaTime;
+
             yield return null;
         }
 
-        // Ensure it sets back to original exactly
+        // Ensure it sets back to original scale
         transform.localScale = originalScale;
     }
 }

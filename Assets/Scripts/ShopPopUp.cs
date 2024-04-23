@@ -295,7 +295,9 @@ public class ShopPopUp : MonoBehaviour
 
         bool canAffordReshuffle = currency >= 10;
         shuffleButton.interactable = canAffordReshuffle;
-        shuffleButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>$10</color>)";
+        var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
+        reshuffleText.text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>$10</color>)";
+        reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
     }
 
     private IEnumerator GetCoroutine(int id, int cost)

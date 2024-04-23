@@ -37,10 +37,8 @@ public class GameManager : MonoBehaviour
     public Vignette vignette;
     public WordDictionary wordDictionary = new WordDictionary();
 
-    public AudioClip winSound, loseSound, loseGameSound, winRunSound;
-    public AudioSource clickAudioSource;
-    public AudioSource gameStatusAudioSource;
-    public AudioSource keyAudioSource;
+    public AudioClip winSound, loseSound, loseGameSound, winRunSound, fireballSound;
+    public AudioSource clickAudioSource, gameStatusAudioSource, keyAudioSource, challengeAudioSource;
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
@@ -454,12 +452,20 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessChallengeWord()
     {
+        challengeAudioSource?.Play();
+
         isChallenging = true;
         ghostAvatar.Think();
+        challengeButton.interactable = false;
+        var challengeButtonText = challengeButton.GetComponentInChildren<TextMeshProUGUI>();
+        challengeButtonText.color = new Color(challengeButtonText.color.r, challengeButtonText.color.g, challengeButtonText.color.b, 0.5f);
+        ghostAvatar.Pop();
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.45f);
 
         isChallenging = false;
+        challengeButton.interactable = true;
+        challengeButtonText.color = new Color(challengeButtonText.color.r, challengeButtonText.color.g, challengeButtonText.color.b, 1f);
 
         if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
@@ -471,8 +477,7 @@ public class GameManager : MonoBehaviour
             var caspString = GetCaspText();
             var thoughtWord = wordDictionary.FindWordContains(gameWord, true).ToUpper();
             string wordLink = GenerateWordLink(thoughtWord, false);
-            wordDisplay.text = $"{caspString} wins with\n{wordLink}";
-            wordDisplay.Pop();
+            wordDisplay.text = $"{caspString} countered with\n{wordLink}";
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(thoughtWord, -1);
@@ -529,8 +534,6 @@ public class GameManager : MonoBehaviour
             confettiPS.Play();
             EndGame();
         }
-
-        wordDisplay.Pop();
     }
 
     public void HandleChallenge(string word)
@@ -570,8 +573,6 @@ public class GameManager : MonoBehaviour
             previousWords.Add(gameWord);
             UpdatePoints(gameWord, -1);
         }
-
-        wordDisplay.Pop();
 
         EndGame();
     }
@@ -613,7 +614,6 @@ public class GameManager : MonoBehaviour
             string wordLink = GenerateWordLink(gameWord, false);
             var caspString = GetCaspText();
             wordDisplay.text = $"{caspString} wins with\n{wordLink}";
-            wordDisplay.Pop();
             playerLivesText.LoseLife();
             isPlayerTurn = true;
             previousWords.Add(gameWord);
@@ -660,6 +660,10 @@ public class GameManager : MonoBehaviour
         keyboard.Hide();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
+        if (fireBallCalculate.activeSelf)
+        {
+            AudioSource.PlayClipAtPoint(fireballSound, Vector3.zero);
+        }
         fireBallCalculate.SetActive(false);
         HasBonusMultiplier = false;
         HasEvenWordMultiplier = false;
@@ -1119,12 +1123,14 @@ public class GameManager : MonoBehaviour
     {
         string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
         string color = isWinning ? "green" : "red";
-        return $"<link={link}><color={color}>{gameWord.ToUpper()}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
+        string displayWord = gameWord.ToUpper();
+
+        return $"<link={link}><color={color}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
     }
 
     private string GetCaspText(bool isHappy = true)
     {
-        return $"<size=55><sprite={(isHappy ? 2 : 1)}></size><color=yellow>CASP</color>";
+        return $"<voffset=2><size=50><sprite={(isHappy ? 2 : 1)}></size></voffset><color=yellow>CASP</color>";
     }
 
     private void SetPointsCalculatedText()
