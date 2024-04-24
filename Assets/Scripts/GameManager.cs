@@ -14,7 +14,7 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText, pointsEarnedText, currencyEarnedText, bonusCurrencyEarnedText, finalLevelText;
+    public PointsText pointsText, totalPointsText, pointsEarnedText, currencyEarnedText, bonusCurrencyEarnedText;
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, newIndicator, newLevelIndicator, shopNewIndicator, difficultyText, fireBall, fireBallCalculate;
+    public GameObject playerIndicator, aiIndicator, newIndicator, shopNewIndicator, difficultyText, fireBall, fireBallCalculate;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
-    private bool setLevelHighScore;
     private int points, roundPoints, currentGame;
     private int roundCurrency;
     private int minLength = 3;
@@ -166,16 +165,15 @@ public class GameManager : MonoBehaviour
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
             totalPointsText.Reset();
+            bonusCurrencyEarnedText.gameObject.SetActive(true);
             bonusCurrencyEarnedText.Reset();
-            finalLevelText.Reset();
+            runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 113);
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
-            finalLevelText.gameObject.SetActive(false);
             difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
             shopNewIndicator.SetActive(false);
-            newLevelIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
@@ -811,7 +809,6 @@ public class GameManager : MonoBehaviour
                             saveObject.Statistics.HardHighestLevel = saveObject.CurrentLevel;
                             break;
                     }
-                    setLevelHighScore = true;
                 }
 
                 saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
@@ -827,12 +824,13 @@ public class GameManager : MonoBehaviour
 
                     shopNewIndicator.SetActive(false);
                     shopButton.gameObject.SetActive(false);
-                    nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
-                    bonusCurrencyEarnedText.Reset();
+                    nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
+                    bonusCurrencyEarnedText.gameObject.SetActive(false);
                     currencyEarnedText.gameObject.SetActive(false);
                     runInfoButton.gameObject.SetActive(true);
                     stars.Hide();
                     gameStatusAudioSource.clip = winRunSound;
+                    runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 56);
 
                     switch (saveObject.Difficulty)
                     {
@@ -857,7 +855,7 @@ public class GameManager : MonoBehaviour
                 pointsEarnedText.gameObject.SetActive(false);
                 playerText.color = Color.red;
                 aiText.color = Color.green;
-                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "New Run >";
+                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);
@@ -873,14 +871,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    finalLevelText.gameObject.SetActive(true);
-                    finalLevelText.AddPoints(currentGame + 1, false, "Level ", overrideColor: Color.yellow);
-
-                    if (setLevelHighScore)
-                    {
-                        newLevelIndicator.gameObject.SetActive(true);
-                        setLevelHighScore = false;
-                    }
+                    wordDisplay.transform.localPosition += Vector3.up * 25;
                 }
 
                 ResetRun();
