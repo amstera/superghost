@@ -398,7 +398,9 @@ public class GameManager : MonoBehaviour
 
     public void EnableChanceMultiplier()
     {
-        ChanceMultiplier = Random.Range(0, 2) == 1 ? 2f : 0.5f;
+        var values = new float[] { 0.5f, 1.5f, 2 };
+        var index = Random.Range(0, values.Length);
+        ChanceMultiplier = values[index];
         if (!gameEnded)
         {
             SetPointsCalculatedText();
@@ -658,7 +660,7 @@ public class GameManager : MonoBehaviour
         keyboard.Hide();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
-        if (fireBallCalculate.activeSelf)
+        if (fireBallCalculate.activeSelf && playerWon)
         {
             AudioSource.PlayClipAtPoint(fireballSound, Vector3.zero);
         }

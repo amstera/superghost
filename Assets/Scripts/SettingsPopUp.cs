@@ -13,8 +13,8 @@ public class SettingsPopUp : MonoBehaviour
     public GameManager gameManager;
     public AudioManager audioManager;
 
-    public TextMeshProUGUI highScoreAmountText, footerText, dictionaryValidateText;
-    public Toggle sfxToggle;
+    public TextMeshProUGUI footerText, dictionaryValidateText;
+    public Toggle sfxToggle, adsToggle;
     public TMP_Dropdown difficultyDropdown;
     public TMP_InputField inputField;
 
@@ -31,6 +31,10 @@ public class SettingsPopUp : MonoBehaviour
     {
         originalScale = popUpGameObject.transform.localScale;
         originalPos = popUpGameObject.transform.localPosition;
+
+        sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
+        difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
+
         ResetPopUp();
     }
 
@@ -41,16 +45,11 @@ public class SettingsPopUp : MonoBehaviour
         // Load settings
         saveObject = SaveManager.Load();
 
-        // Set up High Score Amount text
-        highScoreAmountText.text = $"{saveObject.Statistics.HighScore}";
-
         // Set up SFX toggle
         sfxToggle.isOn = saveObject.EnableSound;
-        sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
 
         // Set up Difficulty dropdown
         difficultyDropdown.value = (int)saveObject.Difficulty;
-        difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
         difficultyDropdown.interactable = gameManager.IsRunEnded();
 
         // Set up dictionary

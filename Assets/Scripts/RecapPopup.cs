@@ -49,7 +49,7 @@ public class RecapPopup : MonoBehaviour
 
     private string ConvertHistoryListToString(List<RecapObject> recap)
     {
-        string result = $"<size=35><color=yellow>Level {recap.First().CurrentLevel + 1}/10</color></size>\n\n";
+        string result = $"<size=35><color=yellow>Level {recap.First().CurrentLevel + 1}/10</color></size><size=5>\n </size>\n";
 
         var lastPoints = 0;
         foreach (var item in recap)
