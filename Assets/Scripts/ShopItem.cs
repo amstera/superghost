@@ -73,5 +73,14 @@ public class ShopItemInfo
 {
     public int id;
     public string title, body, warning;
+    public ShopItemType type;
     public Sprite iconSprite;
+}
+
+[Serializable]
+public enum ShopItemType
+{
+    Points = 0,
+    Helper = 1,
+    Money = 2
 }

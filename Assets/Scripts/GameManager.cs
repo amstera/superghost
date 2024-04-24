@@ -528,6 +528,7 @@ public class GameManager : MonoBehaviour
                 comboText.UseCharacter(c);
             }
 
+            gameWord = word;
             previousWords.Add(word);
             UpdatePoints(word, multiplier);
 
@@ -1254,7 +1255,6 @@ public class GameManager : MonoBehaviour
         saveObject.CurrentLevel = 0;
         currency = 5;
         saveObject.ShopItemIds = new List<int>();
-        saveObject.UsedLetters = new HashSet<char>();
     }
 
     private GameState GetGameState()

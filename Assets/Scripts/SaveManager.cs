@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 public class SaveManager : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class SaveManager : MonoBehaviour
 
 }
 
+[Preserve]
 [Serializable]
 public class SaveObject
 {
@@ -62,13 +64,13 @@ public class SaveObject
     public int Currency = 5;
     public int CurrentLevel;
     public List<int> ShopItemIds = new List<int>();
-    public (char Char, int Level) RestrictedChar;
-    public HashSet<char> UsedLetters = new HashSet<char>();
+    public Dictionary<int, char> RestrictedChars = new Dictionary<int, char>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
     public Statistics RunStatistics = new Statistics();
 }
 
+[Preserve]
 [Serializable]
 public class Statistics
 {
@@ -94,7 +96,8 @@ public class Statistics
 }
 
 
-[System.Serializable]
+[Preserve]
+[Serializable]
 public enum Difficulty
 {
     Easy = 0,

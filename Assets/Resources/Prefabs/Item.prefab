@@ -990,7 +990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bobbingSpeed: 2
-  bobbingHeight: 1.5
+  bobbingHeight: 2
 --- !u!1 &9162004099354771038
 GameObject:
   m_ObjectHideFlags: 0

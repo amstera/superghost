@@ -88,10 +88,15 @@ public class ShopPopUp : MonoBehaviour
 
             if (saveObject.ShopItemIds.Count == 0 || overrideExistingItems)
             {
+                var availableShopitems = shopItems.Where(item => !previousShopItemIds.Contains(item.id)).ToList();
+                var unusedHelpers = availableShopitems.Where(item => item.type == ShopItemType.Helper).ToList();
+
                 while (visibleShopItems.Count < 3)
                 {
-                    var randomShopItem = shopItems[Random.Range(0, shopItems.Count)];
-                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id) && !previousShopItemIds.Any(p => p == randomShopItem.id))
+                    bool ensureOneHelper = visibleShopItems.Count == 2 && visibleShopItems.Count(v => v.type == ShopItemType.Helper) == 0;
+                    var randomShopItem = ensureOneHelper ? unusedHelpers[Random.Range(0, unusedHelpers.Count)] : availableShopitems[Random.Range(0, availableShopitems.Count)];
+
+                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
                     {
                         visibleShopItems.Add(randomShopItem);
                         if (saveChanges)

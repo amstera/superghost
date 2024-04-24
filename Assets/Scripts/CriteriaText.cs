@@ -2,7 +2,6 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 
 public class CriteriaText : MonoBehaviour
 {
@@ -119,27 +118,32 @@ public class CriteriaText : MonoBehaviour
 
     private char GetLetter(int level)
     {
-        if (saveObject.RestrictedChar.Level == level && saveObject.RestrictedChar.Char != '\0')
+        if (level == 0 && saveObject.RestrictedChars.Count > 0)
         {
-            return saveObject.RestrictedChar.Char;
+            saveObject.RestrictedChars.Clear();
+        }
+
+        char restrictedChar;
+        if (saveObject.RestrictedChars.TryGetValue(level, out restrictedChar) && restrictedChar != '\0')
+        {
+            return restrictedChar;
         }
 
         var possibleLetters = new List<char> { 'A', 'E', 'O', 'I', 'R', 'T', 'S', 'N', 'L', 'H' };
-        if (saveObject.RestrictedChar.Char != '\0')
+        List<char> unusedLetters = new List<char>(possibleLetters);
+        foreach (var pair in saveObject.RestrictedChars)
         {
-            possibleLetters.Remove(saveObject.RestrictedChar.Char);
+            unusedLetters.Remove(pair.Value);
         }
 
-        List<char> unusedLetters = possibleLetters.Where(c => !saveObject.UsedLetters.Contains(c)).ToList();
         if (unusedLetters.Count == 0)
         {
             unusedLetters = possibleLetters;
-            saveObject.UsedLetters.Clear();
         }
-        char nextChar = unusedLetters[Random.Range(0, unusedLetters.Count)];
-        saveObject.UsedLetters.Add(nextChar);
 
-        saveObject.RestrictedChar = new(nextChar, level);
+        char nextChar = unusedLetters[Random.Range(0, unusedLetters.Count)];
+
+        saveObject.RestrictedChars[level] = nextChar;
         SaveManager.Save(saveObject);
 
         return nextChar;

@@ -49,7 +49,11 @@ public class RecapPopup : MonoBehaviour
 
     private string ConvertHistoryListToString(List<RecapObject> recap)
     {
-        string result = $"<size=35><color=yellow>Level {recap.First().CurrentLevel + 1}/10</color></size><size=5>\n </size>\n";
+        var smallBreak = "<size=5>\n </size>\n";
+        string result = "RECAP";
+        result += smallBreak;
+        result += $"<size=35><color=yellow>Level {recap.First().CurrentLevel + 1}/10</color></size>";
+        result += smallBreak;
 
         var lastPoints = 0;
         foreach (var item in recap)
@@ -63,7 +67,7 @@ public class RecapPopup : MonoBehaviour
             var pointDiff = item.Points - lastPoints;
             if (pointDiff == 0)
             {
-                result += "\n";
+                result += smallBreak;
             }
             else
             {
@@ -76,7 +80,8 @@ public class RecapPopup : MonoBehaviour
                 {
                     pointsDiffText = $"<color=red>{pointDiff}</color>";
                 }
-                result += $"<size=25>{pointsDiffText}</size>\n\n";
+                result += $"<size=25>{pointsDiffText}</size>";
+                result += smallBreak;
             }
             lastPoints = item.Points;
 

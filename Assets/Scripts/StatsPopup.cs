@@ -126,12 +126,12 @@ public class StatsPopup : MonoBehaviour
 
         var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;
         text += "Longest Win Word\n";
-        text += $"<color=green>{saveObject.Statistics.LongestWinningWord}</color>";
+        text += $"<color=green>{longestWinningWord}</color>";
         text += regularLineBreak;
 
         var longestLosingWord = string.IsNullOrEmpty(saveObject.Statistics.LongestLosingWord) ? "N/A" : saveObject.Statistics.LongestLosingWord;
-        text += "Longest Loss Word\n";
-        text += $"<color=red>{saveObject.Statistics.LongestLosingWord}</color>";
+        text += "Longest Lose Word\n";
+        text += $"<color=red>{longestLosingWord}</color>";
         text += regularLineBreak;
 
         text += "Most Points / Round\n";
