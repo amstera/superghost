@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class ColorCycleEffect : MonoBehaviour
@@ -22,6 +23,12 @@ public class ColorCycleEffect : MonoBehaviour
         // Convert default color to HSV
         Color.RGBToHSV(defaultColor, out hue, out saturation, out brightness);
         textMesh.color = defaultColor; // Set initial color
+
+        var textWiggle = GetComponent<TextWiggleEffect>();
+        if (textWiggle != null)
+        {
+            StartCoroutine(ToggleTextWiggle(textWiggle));
+        }
     }
 
     void Update()
@@ -44,5 +51,14 @@ public class ColorCycleEffect : MonoBehaviour
     void OnDisable()
     {
         textMesh.color = defaultColor;
+    }
+
+    private IEnumerator ToggleTextWiggle(TextWiggleEffect textWiggle)
+    {
+        textWiggle.enabled = false;
+
+        yield return new WaitForEndOfFrame();
+
+        textWiggle.enabled = true;
     }
 }

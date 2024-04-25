@@ -42,9 +42,9 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff;
+    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney;
     public float ChanceMultiplier = 1;
-    public int ResetWordUses;
+    public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses;
     public int currency = 5;
 
     private HashSet<string> previousWords = new HashSet<string>();
@@ -238,7 +238,8 @@ public class GameManager : MonoBehaviour
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
 
-        ghostAvatar.UpdateState(IsPlayerWinning(), currentGame);
+        bool isAILosing = GetPlayerAIWinDifference() > 0;
+        ghostAvatar.UpdateState(isAILosing, currentGame);
 
         if (!isPlayerTurn)
         {
@@ -333,10 +334,10 @@ public class GameManager : MonoBehaviour
     public void ShowHint()
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Normal);
+        var nextWord = wordDictionary.FindNextWord(gameWord, 1, Difficulty.Normal);
         if (string.IsNullOrEmpty(nextWord))
         {
-            nextWord = wordDictionary.FindNextWord(gameWord, true, Difficulty.Hard);
+            nextWord = wordDictionary.FindNextWord(gameWord, 1, Difficulty.Hard);
         }
 
         if (string.IsNullOrEmpty(nextWord))
@@ -407,6 +408,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void RestoreLife(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            playerLivesText.GainLife();
+            PlayerRestoreLivesUses++;
+        }
+        else
+        {
+            aiLivesText.GainLife();
+            AIRestoreLivesUses++;
+        }
+    }
+
     public void EnableDoubleWealth()
     {
         HasDoubleWealth = true;
@@ -427,6 +442,11 @@ public class GameManager : MonoBehaviour
     public void EnableDoubleBluff()
     {
         HasDoubleBluff = true;
+    }
+
+    public void EnableMoneyLose()
+    {
+        HasLoseMoney = true;
     }
 
     public void UndoTurn()
@@ -670,7 +690,6 @@ public class GameManager : MonoBehaviour
         HasEvenWordMultiplier = false;
         HasLongWordMultiplier = false;
         HasDoubleBluff = false;
-        HasDoubleWealth = false;
         HasDoubleTurn = false;
         ChanceMultiplier = 1;
 
@@ -690,6 +709,27 @@ public class GameManager : MonoBehaviour
             int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
             fireBall.SetActive(roundPoints >= pointsForFire);
         }
+
+        gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();
+
+        if (HasLoseMoney)
+        {
+            if (!playerWon && !gameOver)
+            {
+                int loseMoney = 10;
+                if (HasDoubleWealth)
+                {
+                    loseMoney *= 2;
+                }
+
+                currencyEarnedText.gameObject.SetActive(true);
+                currencyEarnedText.AddPoints(loseMoney, true);
+                currency += loseMoney;
+            }
+
+            HasLoseMoney = false;
+        }
+        HasDoubleWealth = false;
 
         if (playerWon) // won round
         {
@@ -732,8 +772,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();
-
         var gameState = GetGameState();
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.UpdateState(gameState);
@@ -748,6 +786,8 @@ public class GameManager : MonoBehaviour
             aiIndicator.gameObject.SetActive(false);
             shopPopUp.RefreshShop(playerWon);
             wordDisplay.transform.localPosition += Vector3.down * 75;
+            PlayerRestoreLivesUses = 0;
+            AIRestoreLivesUses = 0;
 
             if (playerWon && metCriteria) // won game
             {
@@ -965,7 +1005,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            var word = wordDictionary.FindNextWord(gameWord, IsPlayerWinning(), saveObject.Difficulty);
+            var word = wordDictionary.FindNextWord(gameWord, GetPlayerAIWinDifference(), saveObject.Difficulty);
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord, false);
@@ -1112,9 +1152,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool IsPlayerWinning()
+    private int GetPlayerAIWinDifference()
     {
-        return playerLivesText.LivesRemaining() > aiLivesText.LivesRemaining();
+        return playerLivesText.LivesRemaining() - aiLivesText.LivesRemaining();
     }
 
     private string GenerateWordLink(string gameWord, bool isWinning)
@@ -1247,6 +1287,7 @@ public class GameManager : MonoBehaviour
         UpdateWordDisplay(true, addedLetter.index);
         isPlayerTurn = true;
         SetIndicators(isPlayerTurn);
+        shopPopUp.RefreshView();
     }
 
     private void ResetRun()

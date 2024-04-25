@@ -225,7 +225,7 @@ public class WordDictionary
         return rng.NextDouble() < challengeProbability;
     }
 
-    public string FindNextWord(string substring, bool isAILosing, Difficulty difficulty)
+    public string FindNextWord(string substring, int playerAIWinDifference, Difficulty difficulty)
     {
         substring = substring.ToLower();
         if (substring.Length == 0)
@@ -239,6 +239,8 @@ public class WordDictionary
         {
             return null;
         }
+
+        bool isAILosing = playerAIWinDifference > 0;
 
         if (!isAILosing && difficulty == Difficulty.Easy) // if it's easy and you can spell a word, just spell it
         {
@@ -267,7 +269,8 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= 0.3f))
+        float ratio = 0.3f + playerAIWinDifference * 0.025f;
+        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= ratio))
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
@@ -323,7 +326,8 @@ public class WordDictionary
         if (foundWord == null)
         {
             Random random = new Random();
-            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.3f)
+            ratio = 0.3f - playerAIWinDifference * 0.025f;
+            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -481,8 +485,8 @@ public class DifficultySettings
         return difficulty switch
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.9f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
-            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.6f, ScoreThresholds = new[] { 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.92f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
     }

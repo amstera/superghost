@@ -38,6 +38,16 @@ public class LivesDisplay : MonoBehaviour
         }
     }
 
+    public void GainLife()
+    {
+        if (!IsGameOver())
+        {
+            currentLifeIndex--;
+            UpdateLivesDisplay();
+            StartCoroutine(PopAnimation());
+        }
+    }
+
     IEnumerator ColorLerpAnimation(int index, Color fromColor, Color toColor, float duration)
     {
         float timer = 0;

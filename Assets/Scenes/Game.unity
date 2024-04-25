@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 27335232}
-  bumpHeight: 1.75
+  bumpHeight: 2
   animationDuration: 0.2
 --- !u!1 &43440747
 GameObject:
@@ -1406,6 +1406,24 @@ MonoBehaviour:
     warning: Only one use per round
     type: 0
     iconSprite: {fileID: 21300000, guid: a9c45170dfeca4085b5985f97b7c5b2b, type: 3}
+  - id: 11
+    title: Life Saver
+    body: Get rid of your last <color=red>GHOST</color> letter
+    warning: Must use during your turn
+    type: 1
+    iconSprite: {fileID: 21300000, guid: b9880fa795a484afbaee35742af3b274, type: 3}
+  - id: 12
+    title: Odd Ally
+    body: Get rid of CASP's last <color=red>GHOST</color> letter
+    warning: Must use during your turn
+    type: 0
+    iconSprite: {fileID: 21300000, guid: 5cb665f109d8f4a4a88037aead4de143, type: 3}
+  - id: 13
+    title: Wealth Insurance
+    body: Get <color=green>$10</color> if you lose the round
+    warning: Only one use per round
+    type: 2
+    iconSprite: {fileID: 21300000, guid: 4a464094f2dac4cdb9b46f91f6091b5a, type: 3}
   shopItemPrefabs:
   - {fileID: 6471958011589242375}
   - {fileID: 2111350996}
@@ -4373,7 +4391,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.93139905
+  m_Size: 0.99993396
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6769,8 +6787,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: -0.018257536
-  m_Size: 0.676178
+  m_Value: -0.000098610544
+  m_Size: 0.7009432
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11492,7 +11510,7 @@ GameObject:
   - component: {fileID: 685720371}
   - component: {fileID: 685720370}
   - component: {fileID: 685720369}
-  - component: {fileID: 685720368}
+  - component: {fileID: 685720372}
   m_Layer: 5
   m_Name: Restock Text
   m_TagString: Untagged
@@ -11519,20 +11537,6 @@ RectTransform:
   m_AnchoredPosition: {x: 127, y: 18}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &685720368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685720366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df5ed2bbd01d4eb39550c3011380c53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bobbingSpeed: 3
-  bobbingHeight: 2
 --- !u!114 &685720369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11594,8 +11598,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11604,7 +11608,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: -3
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -11644,6 +11648,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685720366}
   m_CullTransparentMesh: 1
+--- !u!114 &685720372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685720366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3bc6edf38ec84032a155c7a6edf1fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minScale: 0.95
+  maxScale: 1.05
+  speed: 1.25
 --- !u!1 &698631789
 GameObject:
   m_ObjectHideFlags: 0
@@ -12716,8 +12735,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 303}
-  m_SizeDelta: {x: 325, y: 55}
+  m_AnchoredPosition: {x: 0, y: 302}
+  m_SizeDelta: {x: 325, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &772861084
 MonoBehaviour:
@@ -14010,7 +14029,7 @@ GameObject:
   - component: {fileID: 817700323}
   - component: {fileID: 817700322}
   m_Layer: 5
-  m_Name: Procedural Image
+  m_Name: Outline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14061,7 +14080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.39551443, g: 0.7619871, b: 0.8301887, a: 1}
+  m_Color: {r: 0.20754717, g: 0.6886791, b: 0.8301887, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -14078,7 +14097,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 2
+  borderWidth: 3
   falloffDistance: 1
 --- !u!222 &817700324
 CanvasRenderer:
@@ -14259,7 +14278,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 2
+  borderWidth: 1.6
   falloffDistance: 1
 --- !u!222 &835974148
 CanvasRenderer:
@@ -18555,7 +18574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.13207817, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.12156863, g: 0.74509805, b: 0.24313726, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19263,7 +19282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.5
+  amplitude: 0.45
 --- !u!1 &1123825652
 GameObject:
   m_ObjectHideFlags: 0
@@ -25154,8 +25173,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.009990203
-  m_Size: 0.363101
+  m_Value: -0.00003038386
+  m_Size: 0.39072594
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27205,7 +27224,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 6.9931903}
+  m_AnchoredPosition: {x: 5, y: 0.029290697}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -29844,7 +29863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1052.9835}
+  m_AnchoredPosition: {x: 0, y: 1042.5999}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -31301,8 +31320,11 @@ MonoBehaviour:
   HasDoubleTurn: 0
   HasLongWordMultiplier: 0
   HasDoubleBluff: 0
+  HasLoseMoney: 0
   ChanceMultiplier: 1
   ResetWordUses: 0
+  PlayerRestoreLivesUses: 0
+  AIRestoreLivesUses: 0
   currency: 5
 --- !u!4 &1816581305
 Transform:
@@ -34782,7 +34804,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 504.32874}
+  m_AnchoredPosition: {x: 0, y: 500.14774}
   m_SizeDelta: {x: 0, y: 770}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745

@@ -76,6 +76,14 @@ public class ShopPopUp : MonoBehaviour
         }
     }
 
+    public void RefreshView()
+    {
+        if (canvasGroup.interactable) // if it's showing
+        {
+            InitializeShopItems();
+        }
+    }
+
     private void GetShopItems(bool saveChanges = false, bool overrideExistingItems = false)
     {
         if (visibleShopItems.Count == 0)
@@ -95,6 +103,14 @@ public class ShopPopUp : MonoBehaviour
                 {
                     bool ensureOneHelper = visibleShopItems.Count == 2 && visibleShopItems.Count(v => v.type == ShopItemType.Helper) == 0;
                     var randomShopItem = ensureOneHelper ? unusedHelpers[Random.Range(0, unusedHelpers.Count)] : availableShopitems[Random.Range(0, availableShopitems.Count)];
+                    if (randomShopItem.type == ShopItemType.Money)
+                    {
+                        bool moneyItemExists = visibleShopItems.Any(v => v.type == ShopItemType.Money);
+                        if (moneyItemExists)
+                        {
+                            continue;
+                        }
+                    }
 
                     if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
                     {
@@ -331,6 +347,12 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(cost, () => gameManager.EnableDoubleBluff(), false);
             case 10:
                 return DoAction(cost, () => gameManager.EnableChanceMultiplier(), false);
+            case 11:
+                return DoAction(cost, () => gameManager.RestoreLife(true), true);
+            case 12:
+                return DoAction(cost, () => gameManager.RestoreLife(false), true);
+            case 13:
+                return DoAction(cost, () => gameManager.EnableMoneyLose(), false);
         }
 
         return null;
@@ -372,6 +394,12 @@ public class ShopPopUp : MonoBehaviour
                 return (int)RoundHalfUp(5 * multiplier);
             case 10:
                 return 5;
+            case 11:
+                return (int)Math.Pow(2, gameManager.PlayerRestoreLivesUses) * 5;
+            case 12:
+                return (int)Math.Pow(2, gameManager.AIRestoreLivesUses) * 5;
+            case 13:
+                return 5;
         }
 
         return -1;
@@ -403,6 +431,12 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.HasDoubleBluff;
             case 10:
                 return gameManager.ChanceMultiplier == 1;
+            case 11:
+                return gameManager.IsPlayerTurn() && !gameManager.playerLivesText.HasFullLives();
+            case 12:
+                return gameManager.IsPlayerTurn() && !gameManager.aiLivesText.HasFullLives();
+            case 13:
+                return !gameManager.HasLoseMoney;
         }
 
         return false;
@@ -434,6 +468,12 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.HasDoubleBluff;
             case 10:
                 return gameManager.ChanceMultiplier != 1;
+            case 11:
+                return false;
+            case 12:
+                return false;
+            case 13:
+                return gameManager.HasLoseMoney;
         }
 
         return false;
