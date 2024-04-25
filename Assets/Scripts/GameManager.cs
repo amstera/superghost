@@ -757,6 +757,11 @@ public class GameManager : MonoBehaviour
                 totalPointsText.AddPoints(points);
                 shopNewIndicator.SetActive(true);
 
+                if (historyText.textComponent.alignment == TextAlignmentOptions.Center)
+                {
+                    wordDisplay.transform.localPosition += Vector3.down * 15;
+                }
+
                 stars.Show(points);
                 playerText.color = Color.green;
                 aiText.color = Color.red;
@@ -770,7 +775,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
-
 
                 if (points > saveObject.Statistics.HighScore)
                 {
@@ -870,7 +874,7 @@ public class GameManager : MonoBehaviour
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
                     difficultyText.gameObject.SetActive(true);
-                    wordDisplay.transform.localPosition += Vector3.down * 25;
+                    wordDisplay.transform.localPosition += Vector3.down * 15;
                 }
                 else
                 {

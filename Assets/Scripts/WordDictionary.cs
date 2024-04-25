@@ -323,7 +323,7 @@ public class WordDictionary
         if (foundWord == null)
         {
             Random random = new Random();
-            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.35f)
+            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.3f)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {

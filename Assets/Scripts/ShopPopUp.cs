@@ -18,7 +18,7 @@ public class ShopPopUp : MonoBehaviour
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
-    public GameObject newIndicator;
+    public TextMeshProUGUI shopNewItemsText;
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -44,7 +44,7 @@ public class ShopPopUp : MonoBehaviour
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-        newIndicator.SetActive(showNewIndicator);
+        shopNewItemsText.gameObject.SetActive(showNewIndicator);
 
         this.currency = currency;
         this.substring = substring;
