@@ -1005,7 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3df5ed2bbd01d4eb39550c3011380c53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bobbingSpeed: 2
+  bobbingSpeed: 3
   bobbingHeight: 2
 --- !u!1 &9162004099354771038
 GameObject:
@@ -1020,6 +1020,7 @@ GameObject:
   - component: {fileID: 638323163560052008}
   - component: {fileID: 8887786207181032624}
   - component: {fileID: 4876657748069829519}
+  - component: {fileID: 8512413080343071364}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -1127,3 +1128,16 @@ MonoBehaviour:
   buyButton: {fileID: 4444880214771992134}
   backgroundImage: {fileID: 638323163560052008}
   iconImage: {fileID: 3089914831039648283}
+--- !u!114 &8512413080343071364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9162004099354771038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1

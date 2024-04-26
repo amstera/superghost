@@ -200,6 +200,8 @@ public class GameManager : MonoBehaviour
             }
 
             gameOver = false;
+
+            shopPopUp.RefreshView();
         }
         else
         {
@@ -681,6 +683,7 @@ public class GameManager : MonoBehaviour
     {
         gameEnded = true;
         keyboard.Hide();
+        keyboard.DisableAllButtons();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
         if (fireBallCalculate.activeSelf && playerWon)

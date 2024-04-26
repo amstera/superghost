@@ -80,6 +80,8 @@ public class ShopPopUp : MonoBehaviour
     {
         if (canvasGroup.interactable) // if it's showing
         {
+            currency = gameManager.currency;
+            currencyText.SetPoints(currency);
             InitializeShopItems();
         }
     }
@@ -96,29 +98,27 @@ public class ShopPopUp : MonoBehaviour
 
             if (saveObject.ShopItemIds.Count == 0 || overrideExistingItems)
             {
-                var availableShopitems = shopItems.Where(item => !previousShopItemIds.Contains(item.id)).ToList();
-                var unusedHelpers = availableShopitems.Where(item => item.type == ShopItemType.Helper).ToList();
+                var availableShopItems = shopItems.Where(item => !previousShopItemIds.Contains(item.id)).ToList();
+                var helpers = availableShopItems.Where(item => item.type == ShopItemType.Helper).ToList();
+                var pointsItems = availableShopItems.Where(item => item.type == ShopItemType.Points).ToList();
 
-                while (visibleShopItems.Count < 3)
+                var chosenHelper = helpers[Random.Range(0, helpers.Count)];
+                var chosenPointsItem = pointsItems[Random.Range(0, pointsItems.Count)];
+
+                availableShopItems.Remove(chosenHelper);
+                availableShopItems.Remove(chosenPointsItem);
+
+                var chosenThirdItem = availableShopItems[Random.Range(0, availableShopItems.Count)];
+
+                var chosenItems = new List<ShopItemInfo> {chosenHelper, chosenPointsItem, chosenThirdItem};
+                Shuffle(chosenItems);
+
+                foreach (var item in chosenItems)
                 {
-                    bool ensureOneHelper = visibleShopItems.Count == 2 && visibleShopItems.Count(v => v.type == ShopItemType.Helper) == 0;
-                    var randomShopItem = ensureOneHelper ? unusedHelpers[Random.Range(0, unusedHelpers.Count)] : availableShopitems[Random.Range(0, availableShopitems.Count)];
-                    if (randomShopItem.type == ShopItemType.Money)
+                    visibleShopItems.Add(item);
+                    if (saveChanges)
                     {
-                        bool moneyItemExists = visibleShopItems.Any(v => v.type == ShopItemType.Money);
-                        if (moneyItemExists)
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (!visibleShopItems.Any(v => v.id == randomShopItem.id))
-                    {
-                        visibleShopItems.Add(randomShopItem);
-                        if (saveChanges)
-                        {
-                            saveObject.ShopItemIds.Add(randomShopItem.id);
-                        }
+                        saveObject.ShopItemIds.Add(item.id);
                     }
                 }
             }
