@@ -20,7 +20,7 @@ public class ShopItem : MonoBehaviour
     private int cost;
     private Func<IEnumerator> coroutine;
 
-    public void Initialize(int id, string title, string body, string warning, int cost, int currency, bool interactable, bool isActive, Sprite iconSprite, Action<ShopItem> onBuyPressed, Func<IEnumerator> coroutine)
+    public void Initialize(int id, string title, string body, string warning, int cost, int currency, bool interactable, bool additionalInteractableCriteria, bool isActive, Sprite iconSprite, Action<ShopItem> onBuyPressed, Func<IEnumerator> coroutine)
     {
         this.id = id;
         this.cost = cost;
@@ -39,10 +39,10 @@ public class ShopItem : MonoBehaviour
             warningText.text = $"<sprite index=0> {warning}";
         }
         warningText.color = interactable ? normalWarningColor : blockedWarningColor;
-        buyButton.interactable = interactable && canAfford;
+        buyButton.interactable = interactable && canAfford && additionalInteractableCriteria;
 
         var buyButtonText = buyButton.GetComponentInChildren<TextMeshProUGUI>();
-        buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, interactable && canAfford ? 1 : 0.5f);
+        buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, buyButton.interactable ? 1 : 0.5f);
 
         iconImage.sprite = iconSprite;
 

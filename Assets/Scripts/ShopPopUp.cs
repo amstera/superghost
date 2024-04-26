@@ -311,7 +311,7 @@ public class ShopPopUp : MonoBehaviour
         {
             var shopItem = visibleShopItems[i];
             int cost = GetCost(shopItem.id);
-            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), IsActive(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
+            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), GetAdditionalInteractableCriteria(shopItem.id), IsActive(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
         }
 
         bool canAffordReshuffle = currency >= 10;
@@ -412,7 +412,7 @@ public class ShopPopUp : MonoBehaviour
             case 0:
                 return gameManager.IsPlayerTurn();
             case 1:
-                return gameManager.IsDoneRound() && gameManager.comboText.gameObject.activeSelf;
+                return gameManager.IsDoneRound();
             case 2:
                 return !gameManager.HasBonusMultiplier;
             case 3:
@@ -420,23 +420,60 @@ public class ShopPopUp : MonoBehaviour
             case 4:
                 return !gameManager.HasDoubleWealth;
             case 5:
-                return gameManager.IsPlayerTurn() && !gameManager.HasDoubleTurn;
+                return gameManager.IsPlayerTurn();
             case 6:
                 return gameManager.IsPlayerTurn();
             case 7:
                 return !gameManager.HasLongWordMultiplier;
             case 8:
-                return gameManager.IsPlayerTurn() && gameManager.gameWord.Length > 0;
+                return gameManager.IsPlayerTurn();
             case 9:
                 return !gameManager.HasDoubleBluff;
             case 10:
                 return gameManager.ChanceMultiplier == 1;
             case 11:
-                return gameManager.IsPlayerTurn() && !gameManager.playerLivesText.HasFullLives();
+                return gameManager.IsPlayerTurn();
             case 12:
-                return gameManager.IsPlayerTurn() && !gameManager.aiLivesText.HasFullLives();
+                return gameManager.IsPlayerTurn();
             case 13:
                 return !gameManager.HasLoseMoney;
+        }
+
+        return false;
+    }
+
+    private bool GetAdditionalInteractableCriteria(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return true;
+            case 1:
+                return gameManager.comboText.gameObject.activeSelf;
+            case 2:
+                return true;
+            case 3:
+                return true;
+            case 4:
+                return true;
+            case 5:
+                return !gameManager.HasDoubleTurn;
+            case 6:
+                return gameManager.gameWord.Length > 0;
+            case 7:
+                return true;
+            case 8:
+                return gameManager.gameWord.Length > 0;
+            case 9:
+                return true;
+            case 10:
+                return true;
+            case 11:
+                return !gameManager.playerLivesText.HasFullLives();
+            case 12:
+                return !gameManager.aiLivesText.HasFullLives();
+            case 13:
+                return true;
         }
 
         return false;

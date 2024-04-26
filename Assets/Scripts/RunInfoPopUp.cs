@@ -10,6 +10,7 @@ public class RunInfoPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI statsText;
     public GameManager gameManager;
+    public Difficulty difficulty;
 
     public AudioSource clickAudioSource;
 
@@ -91,11 +92,11 @@ public class RunInfoPopUp : MonoBehaviour
         text += regularLineBreak;
 
         text += "Difficulty\n";
-        if (saveObject.Difficulty == Difficulty.Easy)
+        if (difficulty== Difficulty.Easy)
         {
             text += $"<color=green>EASY</color>";
         }
-        else if (saveObject.Difficulty == Difficulty.Normal)
+        else if (difficulty == Difficulty.Normal)
         {
             text += $"<color=yellow>NORMAL</color>";
         }

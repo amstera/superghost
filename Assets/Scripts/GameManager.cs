@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
     public BluffPopUp bluffPopup;
+    public RunInfoPopUp runInfoPopup;
     public CriteriaText criteriaText;
     public Vignette vignette;
     public WordDictionary wordDictionary = new WordDictionary();
@@ -467,6 +468,7 @@ public class GameManager : MonoBehaviour
             }
 
             SetPointsCalculatedText();
+            wordDisplay.Pop();
         }
     }
 
@@ -788,6 +790,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.transform.localPosition += Vector3.down * 75;
             PlayerRestoreLivesUses = 0;
             AIRestoreLivesUses = 0;
+            runInfoPopup.difficulty = saveObject.Difficulty;
 
             if (playerWon && metCriteria) // won game
             {
@@ -928,6 +931,8 @@ public class GameManager : MonoBehaviour
             saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
         }
+
+        shopPopUp.RefreshView();
 
         if (playSound)
         {
