@@ -242,7 +242,8 @@ public class WordDictionary
 
         bool isAILosing = playerAIWinDifference > 0;
 
-        if (!isAILosing && difficulty == Difficulty.Easy) // if it's easy and you can spell a word, just spell it
+        float ratio = 0.5f - playerAIWinDifference * 0.1f;
+        if (!isAILosing && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
             {
@@ -269,7 +270,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        float ratio = 0.3f + playerAIWinDifference * 0.025f;
+        ratio = 0.3f + playerAIWinDifference * 0.025f;
         if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= ratio))
         {
             ShuffleArray(lettersForStartWith);
@@ -322,7 +323,7 @@ public class WordDictionary
         var secondaryList = isAILosing || difficulty == Difficulty.Hard ? oddLengthWords : evenLengthWords;
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, isAILosing, difficulty);
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, playerAIWinDifference, difficulty);
         if (foundWord == null)
         {
             Random random = new Random();
@@ -335,14 +336,15 @@ public class WordDictionary
                 }
             }
 
-            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, isAILosing, difficulty);
+            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, playerAIWinDifference, difficulty);
         }
 
         return foundWord;
     }
 
-    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, bool isAILosing, Difficulty difficulty)
+    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, int playerAIWinDifference, Difficulty difficulty)
     {
+        bool isAILosing = playerAIWinDifference > 0;
         bool prioritizeStart = ShouldPrioritizeStart(substring.Length, isAILosing, difficulty);
         var lettersPrimaryList = prioritizeStart ? lettersForStartWith : lettersForEndWith;
         var lettersSecondaryList  = prioritizeStart ? lettersForEndWith : lettersForStartWith;
@@ -352,7 +354,8 @@ public class WordDictionary
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
-            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= 0.15f)
+            float ratio = 0.15f - playerAIWinDifference * 0.0125f;
+            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -380,7 +383,7 @@ public class WordDictionary
 
         if (difficulty == Difficulty.Hard)
         {
-            return random.NextDouble() <= 0.25f;
+            return random.NextDouble() <= 0.3f;
         }
 
         if (substringLength <= 2) return true;

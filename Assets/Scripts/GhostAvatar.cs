@@ -2,13 +2,15 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class GhostAvatar : MonoBehaviour
+public class GhostAvatar : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
     public Image ghostImage;
     public Sprite normalGhost, angryGhost, thinkingGhost;
+    public int currentLevel;
 
     private float startYPosition;
     private bool isShowing = false;
@@ -18,7 +20,7 @@ public class GhostAvatar : MonoBehaviour
     private float popDuration = 0.1f;
     private bool isThinking = false;
     private bool isLosing;
-    public int currentLevel;
+    private Coroutine shakingTouchedCoroutine;
 
     void Start()
     {
@@ -178,6 +180,16 @@ public class GhostAvatar : MonoBehaviour
         }
 
         canvasGroup.alpha = targetAlpha;
+        if (canvasGroup.alpha == 1)
+        {
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+        else
+        {
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
     }
 
     IEnumerator PopTextEffect()
@@ -220,5 +232,15 @@ public class GhostAvatar : MonoBehaviour
             index++;
             yield return new WaitForSeconds(0.25f);
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (shakingTouchedCoroutine != null)
+        {
+            StopCoroutine(shakingTouchedCoroutine);
+        }
+
+        shakingTouchedCoroutine = StartCoroutine(Shake());
     }
 }

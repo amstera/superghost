@@ -29,7 +29,9 @@ public class ShopItem : MonoBehaviour
         bool canAfford = currency >= cost;
         var costText = isActive ? "<sprite=0>" : $"${cost}";
         titleText.text = $"{title} - <color={(canAfford ? "green" : "red")}>{costText}</color>";
+
         bodyText.text = body;
+
         if (interactable)
         {
             warningText.text = warning;
@@ -39,8 +41,8 @@ public class ShopItem : MonoBehaviour
             warningText.text = $"<sprite index=0> {warning}";
         }
         warningText.color = interactable ? normalWarningColor : blockedWarningColor;
-        buyButton.interactable = interactable && canAfford && additionalInteractableCriteria;
 
+        buyButton.interactable = interactable && canAfford && additionalInteractableCriteria;
         var buyButtonText = buyButton.GetComponentInChildren<TextMeshProUGUI>();
         buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, buyButton.interactable ? 1 : 0.5f);
 
