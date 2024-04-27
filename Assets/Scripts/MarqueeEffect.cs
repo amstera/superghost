@@ -1,12 +1,20 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI.ProceduralImage;
 
 public class MarqueeEffect : MonoBehaviour
 {
-    public ProceduralImage[] proceduralImages;
-    private float highlightDuration = 0.3f;
+    private List<ProceduralImage> proceduralImages;
+    private float highlightDuration = 0.4f;
     private float delayBetween = 0.1f;
+
+    private void Awake()
+    {
+        proceduralImages = GetComponentsInChildren<ProceduralImage>().ToList();
+        proceduralImages.Remove(GetComponent<ProceduralImage>()); // exclude parent
+    }
 
     private void OnEnable()
     {

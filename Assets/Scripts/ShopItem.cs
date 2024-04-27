@@ -9,6 +9,7 @@ public class ShopItem : MonoBehaviour
 {
     public int id;
     public TextMeshProUGUI titleText;
+    public TextMeshProUGUI titleTextOverlay;
     public TextMeshProUGUI bodyText;
     public TextMeshProUGUI warningText;
     public Color normalWarningColor;
@@ -28,7 +29,15 @@ public class ShopItem : MonoBehaviour
 
         bool canAfford = currency >= cost;
         var costText = isActive ? "<sprite=0>" : $"${cost}";
-        titleText.text = $"{title} - <color={(canAfford ? "green" : "red")}>{costText}</color>";
+
+        Color.RGBToHSV(backgroundImage.color, out float H, out float S, out float V);
+        V = Mathf.Clamp(V + 0.25f, 0, 1);
+        Color brighterColor = Color.HSVToRGB(H, S, V);
+        var color = ColorUtility.ToHtmlStringRGB(brighterColor);
+
+        string coloredCostText = $"<color={(canAfford ? "green" : "red")}>{costText}</color>";
+        titleText.text = $"<mark color=#{color} padding=\"20, 20, 12, 12\">{title}</mark> - {coloredCostText}";
+        titleTextOverlay.text = $"{title} - {coloredCostText}";
 
         bodyText.text = body;
 
