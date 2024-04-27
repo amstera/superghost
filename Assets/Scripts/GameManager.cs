@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public TutorialPopUp tutorialPopup;
     public BluffPopUp bluffPopup;
     public RunInfoPopUp runInfoPopup;
+    public SettingsPopUp settingsPopup;
     public CriteriaText criteriaText;
     public Vignette vignette;
     public WordDictionary wordDictionary = new WordDictionary();
@@ -201,6 +202,7 @@ public class GameManager : MonoBehaviour
 
             gameOver = false;
 
+            settingsPopup.difficultyDropdown.interactable = IsRunEnded();
             shopPopUp.RefreshView();
         }
         else
@@ -452,6 +454,11 @@ public class GameManager : MonoBehaviour
         HasLoseMoney = true;
     }
 
+    public void LoseLifeMoney()
+    {
+        playerLivesText.LoseLife();
+    }
+
     public void UndoTurn()
     {
         if (previousWords.Count > 0)
@@ -629,7 +636,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsRunEnded()
     {
-        return gameOver || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord));
+        return (gameOver && !playerWon) || (gameOver && currentGame == 10) || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord));
     }
 
     void CheckGameStatus()
@@ -915,7 +922,7 @@ public class GameManager : MonoBehaviour
                 endingPointsText.text = $"{points} PTS";
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
-                vignette.Show(0.2f);
+                vignette.Show(0.15f);
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {

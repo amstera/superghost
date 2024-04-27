@@ -31,10 +31,7 @@ public class LivesDisplay : MonoBehaviour
     {
         if (!IsGameOver())
         {
-            StartCoroutine(ColorLerpAnimation(currentLifeIndex, defaultColor, lostLifeColor, 0.3f));
-            currentLifeIndex++;
-            UpdateLivesDisplay();
-            StartCoroutine(PopAnimation());
+            StartCoroutine(LoseLifeAnimation());
         }
     }
 
@@ -46,6 +43,15 @@ public class LivesDisplay : MonoBehaviour
             UpdateLivesDisplay();
             StartCoroutine(PopAnimation());
         }
+    }
+
+    IEnumerator LoseLifeAnimation()
+    {
+        currentLifeIndex++;
+        StartCoroutine(PopAnimation());
+        yield return StartCoroutine(ColorLerpAnimation(currentLifeIndex - 1, defaultColor, lostLifeColor, 0.3f));
+
+        UpdateLivesDisplay();
     }
 
     IEnumerator ColorLerpAnimation(int index, Color fromColor, Color toColor, float duration)
@@ -76,7 +82,7 @@ public class LivesDisplay : MonoBehaviour
     {
         float animationTime = 0.3f;
         Vector3 originalScale = livesText.transform.localScale;
-        Vector3 targetScale = originalScale * 1.2f;
+        Vector3 targetScale = originalScale * 1.25f;
 
         // Scale up
         float timer = 0;

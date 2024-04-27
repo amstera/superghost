@@ -237,7 +237,8 @@ public class ShopPopUp : MonoBehaviour
 
     private float GetTimeToWait(int cost)
     {
-        return cost == 1 ? 0.2f : cost < 5 ? 0.25f : 0.5f;
+        cost = Math.Abs(cost);
+        return cost == 0 ? 0 : cost == 1 ? 0.2f : cost < 5 ? 0.25f : 0.6f;
     }
 
     private void RefreshPopUp(int cost)
@@ -353,6 +354,8 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(cost, () => gameManager.RestoreLife(false), true);
             case 13:
                 return DoAction(cost, () => gameManager.EnableMoneyLose(), false);
+            case 14:
+                return DoAction(cost, () => gameManager.LoseLifeMoney(), true);
         }
 
         return null;
@@ -400,6 +403,8 @@ public class ShopPopUp : MonoBehaviour
                 return (int)Math.Pow(2, gameManager.AIRestoreLivesUses) * 5;
             case 13:
                 return 5;
+            case 14:
+                return -10;
         }
 
         return -1;
@@ -437,6 +442,8 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.IsPlayerTurn();
             case 13:
                 return !gameManager.HasLoseMoney;
+            case 14:
+                return gameManager.IsPlayerTurn();
         }
 
         return false;
@@ -474,6 +481,8 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.aiLivesText.HasFullLives();
             case 13:
                 return true;
+            case 14:
+                return gameManager.playerLivesText.LivesRemaining() > 1;
         }
 
         return false;
@@ -511,6 +520,8 @@ public class ShopPopUp : MonoBehaviour
                 return false;
             case 13:
                 return gameManager.HasLoseMoney;
+            case 14:
+                return false;
         }
 
         return false;

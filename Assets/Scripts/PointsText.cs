@@ -10,7 +10,7 @@ public class PointsText : MonoBehaviour
     public bool makePostFixGreen;
     public bool IsJustNumber, IsCurrency;
     private float duration = 0.5f;
-    private float colorDuration = 0.5f;
+    private float colorDuration = 0.35f;
     private Color positiveColor = Color.green;
     private Color negativeColor = Color.red;
     private bool showSymbol;
@@ -81,6 +81,16 @@ public class PointsText : MonoBehaviour
 
         // Wait a little longer after counting is done before changing the color back.
         yield return new WaitForSeconds(colorDuration);
+
+        var lerpBackTime = 0.1f;
+        timer = 0;
+        while (timer < lerpBackTime)
+        {
+            timer += Time.deltaTime;
+            float percentageComplete = timer / lerpBackTime;
+            pointsText.color = Color.Lerp(targetColor, normalColor, percentageComplete);
+            yield return null;
+        }
 
         // Finally, reset the points and color.
         points = endPoints;
