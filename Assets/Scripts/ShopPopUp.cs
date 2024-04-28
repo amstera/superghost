@@ -19,6 +19,7 @@ public class ShopPopUp : MonoBehaviour
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
     public TextMeshProUGUI shopNewItemsText;
+    public ActiveEffectsText activeEffectsText;
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -201,11 +202,19 @@ public class ShopPopUp : MonoBehaviour
         RefreshPopUp(cost);
     }
 
-    private IEnumerator DoAction(int cost, Action action, bool shouldHide)
+    private IEnumerator DoAction(int id, int cost, Action action, bool shouldHide, bool shouldAddEffect)
     {
         if (shouldHide)
         {
             yield return new WaitForSeconds(GetTimeToWait(cost));
+        }
+
+        if (shouldAddEffect)
+        {
+            var shopItem = shopItemPrefabs.Find(s => s.id == id);
+            var shopItemInfo = shopItems.Find(s => s.id == id);
+            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItem.backgroundImage.color);
+            activeEffectsText.AddEffect(details);
         }
 
         action();
@@ -327,35 +336,35 @@ public class ShopPopUp : MonoBehaviour
         switch (id)
         {
             case 0:
-                return DoAction(cost, () => gameManager.ShowHint(), true);
+                return DoAction(id, cost, () => gameManager.ShowHint(), true, false);
             case 1:
-                return DoAction(cost, () => gameManager.ShuffleComboLetters(), true);
+                return DoAction(id, cost, () => gameManager.ShuffleComboLetters(), true, false);
             case 2:
-                return DoAction(cost, () => gameManager.EnableMultiplier(), false);
+                return DoAction(id, cost, () => gameManager.EnableMultiplier(), false, true);
             case 3:
-                return DoAction(cost, () => gameManager.EnableEvenMultiplier(), false);
+                return DoAction(id, cost, () => gameManager.EnableEvenMultiplier(), false, true);
             case 4:
-                return DoAction(cost, () => gameManager.EnableDoubleWealth(), false);
+                return DoAction(id, cost, () => gameManager.EnableDoubleWealth(), false, true);
             case 5:
-                return DoAction(cost, () => gameManager.DoDoubleTurn(), false);
+                return DoAction(id, cost, () => gameManager.DoDoubleTurn(), false, true);
             case 6:
-                return DoAction(cost, () => gameManager.ResetWord(), true);
+                return DoAction(id, cost, () => gameManager.ResetWord(), true, false);
             case 7:
-                return DoAction(cost, () => gameManager.EnableLongWordMultiplier(), false);
+                return DoAction(id, cost, () => gameManager.EnableLongWordMultiplier(), false, true);
             case 8:
-                return DoAction(cost, () => gameManager.UndoTurn(), true);
+                return DoAction(id, cost, () => gameManager.UndoTurn(), true, false);
             case 9:
-                return DoAction(cost, () => gameManager.EnableDoubleBluff(), false);
+                return DoAction(id, cost, () => gameManager.EnableDoubleBluff(), false, true);
             case 10:
-                return DoAction(cost, () => gameManager.EnableChanceMultiplier(), false);
+                return DoAction(id, cost, () => gameManager.EnableChanceMultiplier(), false, true);
             case 11:
-                return DoAction(cost, () => gameManager.RestoreLife(true), true);
+                return DoAction(id, cost, () => gameManager.RestoreLife(true), true, false);
             case 12:
-                return DoAction(cost, () => gameManager.RestoreLife(false), true);
+                return DoAction(id, cost, () => gameManager.RestoreLife(false), true, false);
             case 13:
-                return DoAction(cost, () => gameManager.EnableMoneyLose(), false);
+                return DoAction(id, cost, () => gameManager.EnableMoneyLose(), false, true);
             case 14:
-                return DoAction(cost, () => gameManager.LoseLifeMoney(), true);
+                return DoAction(id, cost, () => gameManager.LoseLifeMoney(), true, false);
         }
 
         return null;

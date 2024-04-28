@@ -14,15 +14,16 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText, pointsEarnedText, currencyEarnedText, bonusCurrencyEarnedText;
+    public PointsText pointsText, totalPointsText,currencyEarnedText, bonusCurrencyEarnedText;
+    public PointsExtendedText pointsEarnedText;
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
-    public TextMeshProUGUI playerText, aiText, startText, endGameText, pointsCalculateText, levelText, endingPointsText;
+    public TextMeshProUGUI playerText, aiText, endGameText, pointsCalculateText, levelText, endingPointsText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, newIndicator, shopNewIndicator, difficultyText, fireBall, fireBallCalculate;
+    public GameObject playerIndicator, aiIndicator, newIndicator, startText, shopNewIndicator, difficultyText, fireBallCalculate;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -37,9 +38,10 @@ public class GameManager : MonoBehaviour
     public SettingsPopUp settingsPopup;
     public CriteriaText criteriaText;
     public Vignette vignette;
+    public ActiveEffectsText activeEffectsText;
     public WordDictionary wordDictionary = new WordDictionary();
 
-    public AudioClip winSound, loseSound, loseGameSound, winRunSound, fireballSound;
+    public AudioClip winSound, loseSound, loseGameSound, winRunSound;
     public AudioSource clickAudioSource, gameStatusAudioSource, keyAudioSource, challengeAudioSource;
 
     public bool isPlayerTurn = true;
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     private HashSet<string> previousWords = new HashSet<string>();
     private List<RecapObject> recap = new List<RecapObject>();
+    private List<float> pointsBreakdown = new List<float>();
     private bool gameEnded = false;
     private bool gameOver = true;
     private bool isLastWordValid = true;
@@ -177,6 +180,7 @@ public class GameManager : MonoBehaviour
             newIndicator.SetActive(false);
             shopNewIndicator.SetActive(false);
             comboText.gameObject.SetActive(true);
+            activeEffectsText.gameObject.SetActive(true);
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
             runInfoButton.gameObject.SetActive(false);
@@ -215,7 +219,7 @@ public class GameManager : MonoBehaviour
 
         if (isPlayerTurn)
         {
-            startText.gameObject.SetActive(true);
+            startText.SetActive(true);
             keyboard.EnableAllButtons();
         }
 
@@ -233,7 +237,6 @@ public class GameManager : MonoBehaviour
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
         levelText.text = $"Level {currentGame + 1}/10";
-        pointsEarnedText.Reset();
         pointsEarnedText.gameObject.SetActive(false);
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
@@ -311,9 +314,9 @@ public class GameManager : MonoBehaviour
             SetIndicators(isPlayerTurn);
         }
 
-        if (startText.gameObject.activeSelf)
+        if (startText.activeSelf)
         {
-            startText.gameObject.SetActive(false);
+            startText.SetActive(false);
         }
 
         CheckGameStatus();
@@ -636,7 +639,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsRunEnded()
     {
-        return (gameOver && !playerWon) || (gameOver && currentGame == 10) || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord));
+        return (gameOver && !playerWon) || (gameOver && currentGame == 10) || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord) && playerLivesText.HasFullLives() && aiLivesText.HasFullLives());
     }
 
     void CheckGameStatus()
@@ -656,6 +659,7 @@ public class GameManager : MonoBehaviour
             if (HasDoubleTurn)
             {
                 HasDoubleTurn = false;
+                activeEffectsText.RemoveEffect(5);
             }
             else
             {
@@ -693,10 +697,6 @@ public class GameManager : MonoBehaviour
         keyboard.DisableAllButtons();
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
-        if (fireBallCalculate.activeSelf && playerWon)
-        {
-            AudioSource.PlayClipAtPoint(fireballSound, Vector3.zero);
-        }
         fireBallCalculate.SetActive(false);
         HasBonusMultiplier = false;
         HasEvenWordMultiplier = false;
@@ -712,14 +712,13 @@ public class GameManager : MonoBehaviour
         tutorialButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
         levelText.gameObject.SetActive(false);
+        activeEffectsText.ClearAll();
 
         if (roundPoints != 0)
         {
-            pointsEarnedText.gameObject.SetActive(true);
-            pointsEarnedText.normalColor = roundPoints > 0 ? Color.green : Color.red;
-            pointsEarnedText.AddPoints(roundPoints, true);
             int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
-            fireBall.SetActive(roundPoints >= pointsForFire);
+            pointsEarnedText.gameObject.SetActive(true);
+            pointsEarnedText.AddPoints(pointsBreakdown, roundPoints >= pointsForFire);
         }
 
         gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();
@@ -801,6 +800,7 @@ public class GameManager : MonoBehaviour
             PlayerRestoreLivesUses = 0;
             AIRestoreLivesUses = 0;
             runInfoPopup.difficulty = saveObject.Difficulty;
+            activeEffectsText.gameObject.SetActive(false);
 
             if (playerWon && metCriteria) // won game
             {
@@ -1086,35 +1086,53 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePoints(string word, float bonus)
     {
+        pointsBreakdown = new List<float>();
+        pointsBreakdown.Add(bonus < 0 ? -word.Length : word.Length);
+        if (bonus > 1)
+        {
+            pointsBreakdown.Add(bonus);
+        }
+
         float pointsChange = word.Length * bonus;
         if (pointsChange > 0)
         {
-            pointsChange *= comboText.GetWinMultiplier(word);
+            var comboMultiplier = comboText.GetWinMultiplier(word);
+            if (comboMultiplier != 1)
+            {
+                pointsBreakdown.Add(comboMultiplier);
+                pointsChange *= comboMultiplier;
+            }
             if (HasBonusMultiplier)
             {
                 pointsChange *= 2;
+                pointsBreakdown.Add(2);
             }
             if (HasEvenWordMultiplier && word.Length % 2 == 0)
             {
                 pointsChange *= 2;
+                pointsBreakdown.Add(2);
             }
             if (HasLongWordMultiplier && word.Length >= 10)
             {
                 pointsChange *= 4;
+                pointsBreakdown.Add(4);
             }
             if (ChanceMultiplier != 1)
             {
                 pointsChange *= ChanceMultiplier;
+                pointsBreakdown.Add(ChanceMultiplier);
             }
         }
 
         if (saveObject.Difficulty == Difficulty.Easy)
         {
             pointsChange *= 0.5f;
+            pointsBreakdown.Add(0.5f);
         }
         else if (saveObject.Difficulty == Difficulty.Hard)
         {
             pointsChange *= 2f;
+            pointsBreakdown.Add(2);
         }
 
         UpdatePoints(pointsChange);
