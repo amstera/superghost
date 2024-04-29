@@ -467,21 +467,26 @@ public class GameManager : MonoBehaviour
         if (previousWords.Count > 0)
         {
             gameWord = previousWords.Last();
-            wordDictionary.ClearFilteredWords();
-            if (string.IsNullOrEmpty(gameWord))
-            {
-                wordDisplay.text = $"<color=yellow>{separator}</color>";
-                keyboard.EnableAllButtons();
-            }
-            else
-            {
-                wordDictionary.SetFilteredWords(gameWord);
-                UpdateWordDisplay(true, 0);
-            }
-
-            SetPointsCalculatedText();
-            wordDisplay.Pop();
+            previousWords.Remove(gameWord);
         }
+        else
+        {
+            gameWord = "";
+        }
+        wordDictionary.ClearFilteredWords();
+        if (string.IsNullOrEmpty(gameWord))
+        {
+            wordDisplay.text = $"<color=yellow>{separator}</color>";
+            keyboard.EnableAllButtons();
+        }
+        else
+        {
+            wordDictionary.SetFilteredWords(gameWord);
+            UpdateWordDisplay(true, 0);
+        }
+
+        SetPointsCalculatedText();
+        wordDisplay.Pop();
     }
 
     private IEnumerator ProcessChallengeWord()
@@ -716,9 +721,8 @@ public class GameManager : MonoBehaviour
 
         if (roundPoints != 0)
         {
-            int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
             pointsEarnedText.gameObject.SetActive(true);
-            pointsEarnedText.AddPoints(pointsBreakdown, roundPoints >= pointsForFire);
+            pointsEarnedText.AddPoints(pointsBreakdown, saveObject.Difficulty);
         }
 
         gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();

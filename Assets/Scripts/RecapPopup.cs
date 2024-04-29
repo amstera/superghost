@@ -50,8 +50,7 @@ public class RecapPopup : MonoBehaviour
     private string ConvertHistoryListToString(List<RecapObject> recap)
     {
         var smallBreak = "<size=5>\n </size>\n";
-        string result = "RECAP";
-        result += smallBreak;
+        string result = "";
         result += $"<size=35><color=yellow>Level {recap.First().CurrentLevel + 1}/10</color></size>";
         result += smallBreak;
 

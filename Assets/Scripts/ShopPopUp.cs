@@ -163,7 +163,6 @@ public class ShopPopUp : MonoBehaviour
             clickAudioSource?.Play();
         }
 
-        StopAllCoroutines();
         ResetPopUp();
     }
 

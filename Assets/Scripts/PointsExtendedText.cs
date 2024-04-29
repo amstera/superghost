@@ -23,16 +23,18 @@ public class PointsExtendedText : MonoBehaviour
         pointsText.transform.localScale = originalTextScale;
     }
 
-    public void AddPoints(List<float> numbers, bool showFireball)
+    public void AddPoints(List<float> numbers, Difficulty difficulty)
     {
         if (numbers == null || numbers.Count == 0)
             return;
 
         fireball.SetActive(false);
-        StartCoroutine(DisplayPointsRoutine(numbers, showFireball));
+        incrementAudioSource.pitch = 1;
+        int pointsForFire = 20 * ((int)difficulty + 1);
+        StartCoroutine(DisplayPointsRoutine(numbers, pointsForFire));
     }
 
-    private IEnumerator DisplayPointsRoutine(List<float> numbers, bool showFireball)
+    private IEnumerator DisplayPointsRoutine(List<float> numbers, int pointsForFire)
     {
         yield return new WaitForEndOfFrame();
 
@@ -42,21 +44,27 @@ public class PointsExtendedText : MonoBehaviour
             for (int i = 1; i < numbers.Count; i++)
             {
                 pointsText.text = total.ToString("F0") + " x " + numbers[i].ToString();
+                fireball.SetActive(total >= pointsForFire);
                 total *= numbers[i];
                 UpdateTextColor(total);
                 incrementAudioSource?.Play();
+                incrementAudioSource.pitch *= 1.5f;
+
                 yield return StartCoroutine(PopTextEffect());
                 yield return new WaitForSeconds(displaySpeed);
             }
         }
 
-        fireball.SetActive(showFireball);
+        fireball.SetActive(total >= pointsForFire);
 
         int finalPoints = (int)Math.Round(total, MidpointRounding.AwayFromZero);
         string symbol = finalPoints < 0 ? "" : "+";
-        pointsText.text = $"{symbol}{finalPoints} PTS";
+        pointsText.text = Math.Abs(finalPoints) == 1 ? $"{symbol}1 PT" : $"{symbol}{finalPoints} PTS";
         UpdateTextColor(finalPoints);
-        incrementAudioSource?.Play();
+        if (numbers.Count > 1)
+        {
+            incrementAudioSource?.Play();
+        }
         yield return StartCoroutine(PopTextEffect());
     }
 
