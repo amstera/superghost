@@ -27,10 +27,10 @@ public class CriteriaText : MonoBehaviour
                 canSkip = true;
                 break;
             case 1:
-                canSkip = true;
                 currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 2:
+                canSkip = true;
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
                 break;
             case 3:
@@ -38,21 +38,21 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 4:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
-                currentCriteria.Add(new StartWithHandicap(1));
-                break;
-            case 5:
                 canSkip = true;
                 currentCriteria.Add(new MinLetters(5));
                 break;
+            case 5:
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
+                currentCriteria.Add(new StartWithHandicap(1));
+                break;
             case 6:
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                currentCriteria.Add(new MinLetters(6));
+                break;
+            case 7:
                 canSkip = true;
                 currentCriteria.Add(new NoUsingLetter(letter));
                 currentCriteria.Add(new StartWithHandicap(2));
-                break;
-            case 7:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
-                currentCriteria.Add(new MinLetters(6));
                 break;
             case 8:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));

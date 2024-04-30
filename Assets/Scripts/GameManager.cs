@@ -14,12 +14,12 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText,currencyEarnedText, bonusCurrencyEarnedText;
+    public PointsText pointsText, totalPointsText,currencyEarnedText, bonusCurrencyEarnedText, endingPointsText;
     public PointsExtendedText pointsEarnedText;
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
-    public TextMeshProUGUI playerText, aiText, endGameText, pointsCalculateText, levelText, endingPointsText;
+    public TextMeshProUGUI playerText, aiText, endGameText, pointsCalculateText, levelText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -185,6 +185,7 @@ public class GameManager : MonoBehaviour
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
             runInfoButton.gameObject.SetActive(false);
+            endingPointsText.Reset();
             endingPointsText.gameObject.SetActive(false);
             shopButton.gameObject.SetActive(true);
             recap.Clear();
@@ -197,6 +198,7 @@ public class GameManager : MonoBehaviour
             comboText.ChooseNewCombo();
             vignette.Hide();
             endGameText.GetComponent<ColorCycleEffect>().enabled = false;
+            isPlayerTurn = true;
 
             var main = confettiPS.main;
             main.loop = false;
@@ -240,6 +242,7 @@ public class GameManager : MonoBehaviour
         levelText.gameObject.SetActive(true);
         levelText.text = $"Level {currentGame + 1}/10";
         levelText.color = Color.green;
+        skipButton.gameObject.SetActive(true);
         pointsEarnedText.gameObject.SetActive(false);
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
@@ -936,7 +939,7 @@ public class GameManager : MonoBehaviour
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);
-                endingPointsText.text = $"{points} PTS";
+                endingPointsText.AddPoints(points, overrideColor: Color.red);
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.15f);
@@ -971,6 +974,7 @@ public class GameManager : MonoBehaviour
         if (lostRun)
         {
             levelText.color = Color.yellow;
+            skipButton.gameObject.SetActive(false);
         }
         criteriaText.gameObject.SetActive(lostRun);
 
