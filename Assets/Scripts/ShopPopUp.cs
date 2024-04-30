@@ -364,6 +364,8 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(id, cost, () => gameManager.EnableMoneyLose(), false, true);
             case 14:
                 return DoAction(id, cost, () => gameManager.LoseLifeMoney(), true, false);
+            case 15:
+                return DoAction(id, cost, () => gameManager.EnableOddMultiplier(), false, true);
         }
 
         return null;
@@ -413,6 +415,8 @@ public class ShopPopUp : MonoBehaviour
                 return 5;
             case 14:
                 return -10;
+            case 15:
+                return gameEnded ? 3 : (roundsWon + 1) * 3;
         }
 
         return -1;
@@ -452,6 +456,8 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.HasLoseMoney;
             case 14:
                 return gameManager.IsPlayerTurn();
+            case 15:
+                return !gameManager.HasOddWordMultiplier;
         }
 
         return false;
@@ -491,6 +497,8 @@ public class ShopPopUp : MonoBehaviour
                 return true;
             case 14:
                 return gameManager.playerLivesText.LivesRemaining() > 1;
+            case 15:
+                return true;
         }
 
         return false;
@@ -530,6 +538,8 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.HasLoseMoney;
             case 14:
                 return false;
+            case 15:
+                return gameManager.HasOddWordMultiplier;
         }
 
         return false;

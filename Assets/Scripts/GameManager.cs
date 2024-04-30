@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
     public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton, runInfoButton;
+    public SkipButton skipButton;
     public Stars stars;
     public RecapPopup recapPopup;
     public TutorialPopUp tutorialPopup;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney;
+    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney;
     public float ChanceMultiplier = 1;
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses;
     public int currency = 5;
@@ -190,7 +191,8 @@ public class GameManager : MonoBehaviour
             wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
             points = 0;
-            criteriaText.SetLevelCriteria(currentGame);
+            bool canSkip = criteriaText.SetLevelCriteria(currentGame);
+            skipButton.Set(canSkip);
             AddRestrictions(criteriaText.GetCurrentCriteria());
             comboText.ChooseNewCombo();
             vignette.Hide();
@@ -237,6 +239,7 @@ public class GameManager : MonoBehaviour
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
         levelText.text = $"Level {currentGame + 1}/10";
+        levelText.color = Color.green;
         pointsEarnedText.gameObject.SetActive(false);
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
@@ -396,6 +399,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnableOddMultiplier()
+    {
+        HasOddWordMultiplier = true;
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
     public void EnableLongWordMultiplier()
     {
         HasLongWordMultiplier = true;
@@ -407,7 +419,7 @@ public class GameManager : MonoBehaviour
 
     public void EnableChanceMultiplier()
     {
-        var values = new float[] { 0.5f, 1.5f, 2 };
+        var values = new float[] { 0.5f, 1.5f, 2.5f };
         var index = Random.Range(0, values.Length);
         ChanceMultiplier = values[index];
         if (!gameEnded)
@@ -706,6 +718,7 @@ public class GameManager : MonoBehaviour
         HasBonusMultiplier = false;
         HasEvenWordMultiplier = false;
         HasLongWordMultiplier = false;
+        HasOddWordMultiplier = false;
         HasDoubleBluff = false;
         HasDoubleTurn = false;
         ChanceMultiplier = 1;
@@ -955,6 +968,10 @@ public class GameManager : MonoBehaviour
 
         bool lostRun = gameOver && (!playerWon || !metCriteria);
         levelText.gameObject.SetActive(lostRun);
+        if (lostRun)
+        {
+            levelText.color = Color.yellow;
+        }
         criteriaText.gameObject.SetActive(lostRun);
 
         SaveManager.Save(saveObject);
@@ -1116,6 +1133,11 @@ public class GameManager : MonoBehaviour
                 pointsChange *= 2;
                 pointsBreakdown.Add(2);
             }
+            if (HasOddWordMultiplier && word.Length % 2 != 0)
+            {
+                pointsChange *= 2;
+                pointsBreakdown.Add(2);
+            }
             if (HasLongWordMultiplier && word.Length >= 10)
             {
                 pointsChange *= 4;
@@ -1245,6 +1267,12 @@ public class GameManager : MonoBehaviour
                 totalPoints *= 2;
                 showTotal = true;
             }
+            if (HasOddWordMultiplier && gameWord.Length % 2 != 0)
+            {
+                calculationText += $" x 2";
+                totalPoints *= 2;
+                showTotal = true;
+            }
             if (HasLongWordMultiplier && gameWord.Length >= 10)
             {
                 calculationText += $" x 3";
@@ -1364,10 +1392,7 @@ public class GameManager : MonoBehaviour
                 if (criterion is NoUsingLetter noUsingLetter)
                 {
                     var restrictedLetter = noUsingLetter.GetRestrictedLetter();
-                    keyboard.AddRestrictedLetter(restrictedLetter);
-                    wordDictionary.AddRestrictedLetter(restrictedLetter);
-                    challengePopup.AddRestrictedLetter(restrictedLetter);
-                    bluffPopup.AddRestrictedLetter(restrictedLetter);
+                    AddRestrictedLetter(restrictedLetter);
                 }
                 else if (criterion is StartWithHandicap startWithHandicap)
                 {
@@ -1387,5 +1412,22 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+    }
+
+    private void AddRestrictedLetter(char restrictedLetter)
+    {
+        keyboard.AddRestrictedLetter(restrictedLetter);
+        wordDictionary.AddRestrictedLetter(restrictedLetter);
+        challengePopup.AddRestrictedLetter(restrictedLetter);
+        bluffPopup.AddRestrictedLetter(restrictedLetter);
+    }
+
+    private void RemoveRestrictedLetters()
+    {
+        keyboard.RemoveAllRestrictions();
+        challengePopup.ClearRestrictions();
+        bluffPopup.ClearRestrictions();
+        wordDictionary.ClearRestrictions();
     }
 }

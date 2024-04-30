@@ -40,7 +40,7 @@ public class NoUsingLetter : GameCriterion
 
     public override string GetDescription()
     {
-        return $"No Using '{letter}'";
+        return $"No Using <color=white>{letter}</color>";
     }
 
     public override bool IsMet(GameState state)

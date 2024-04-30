@@ -14,41 +14,45 @@ public class CriteriaText : MonoBehaviour
         saveObject = SaveManager.Load();
     }
 
-    public void SetLevelCriteria(int level)
+    public bool SetLevelCriteria(int level)
     {
         currentCriteria.Clear();
         var letter = GetLetter(level);
         var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.5f : saveObject.Difficulty == Difficulty.Easy ? 0.4f : 1;
+        bool canSkip = false;
 
         switch (level)
         {
             case 0:
+                canSkip = true;
                 break;
             case 1:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                canSkip = true;
+                currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 2:
-                currentCriteria.Add(new NoUsingLetter(letter));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
                 break;
             case 3:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
-                currentCriteria.Add(new StartWithHandicap(1));
+                currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 4:
-                currentCriteria.Add(new NoUsingLetter(letter));
-                currentCriteria.Add(new MinLetters(5));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
+                currentCriteria.Add(new StartWithHandicap(1));
                 break;
             case 5:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
-                currentCriteria.Add(new StartWithHandicap(2));
+                canSkip = true;
+                currentCriteria.Add(new MinLetters(5));
                 break;
             case 6:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                canSkip = true;
                 currentCriteria.Add(new NoUsingLetter(letter));
+                currentCriteria.Add(new StartWithHandicap(2));
                 break;
             case 7:
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
                 currentCriteria.Add(new MinLetters(6));
-                currentCriteria.Add(new StartWithHandicap(2));
                 break;
             case 8:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
@@ -60,6 +64,8 @@ public class CriteriaText : MonoBehaviour
         }
 
         UpdateText();
+
+        return canSkip;
     }
 
     private void UpdateText()
@@ -72,6 +78,7 @@ public class CriteriaText : MonoBehaviour
         }
 
         criteriaText.text = sb.ToString();
+        criteriaText.fontSize = currentCriteria.Count < 2 ? 24 : 22;
     }
 
     public void UpdateState(GameState state)

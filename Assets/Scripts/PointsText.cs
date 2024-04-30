@@ -26,7 +26,7 @@ public class PointsText : MonoBehaviour
         this.showSymbol = showSymbol;
         this.prefixText = prefixText;
         pointsText.color = normalColor;
-        StopAllCoroutines(); // Stop any ongoing coroutines.
+        StopAllCoroutines(); // Stop any ongoing coroutines
         StartCoroutine(CountPoints(amount, delay, overrideColor));
     }
 

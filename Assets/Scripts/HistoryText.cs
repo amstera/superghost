@@ -29,6 +29,14 @@ public class HistoryText : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         Canvas.ForceUpdateCanvases(); // Ensure layout recalculates to get accurate page count
         int totalPages = textComponent.textInfo.pageCount;
 
+        if (totalPages > 2)
+        {
+            textComponent.fontSizeMin = 26;
+        }
+        else
+        {
+            textComponent.fontSizeMin = 30;
+        }
 
         if (totalPages == 1)
         {
