@@ -87,6 +87,11 @@ public class ShopPopUp : MonoBehaviour
         }
     }
 
+    public List<ShopItemInfo> GetVisibleShopItems()
+    {
+        return visibleShopItems;
+    }
+
     private void GetShopItems(bool saveChanges = false, bool overrideExistingItems = false)
     {
         if (visibleShopItems.Count == 0)

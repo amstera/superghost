@@ -662,6 +662,34 @@ public class GameManager : MonoBehaviour
         return (gameOver && !playerWon) || (gameOver && currentGame == 10) || (currentGame == 0 && isPlayerTurn && string.IsNullOrEmpty(gameWord) && playerLivesText.HasFullLives() && aiLivesText.HasFullLives());
     }
 
+    public void UpdateLevelStats()
+    {
+        Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
+        {
+            { Difficulty.Normal, saveObject.Statistics.HighestLevel },
+            { Difficulty.Easy, saveObject.Statistics.EasyHighestLevel },
+            { Difficulty.Hard, saveObject.Statistics.HardHighestLevel }
+        };
+
+        if (saveObject.CurrentLevel > highestLevelMap[saveObject.Difficulty])
+        {
+            switch (saveObject.Difficulty)
+            {
+                case Difficulty.Normal:
+                    saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
+                    break;
+                case Difficulty.Easy:
+                    saveObject.Statistics.EasyHighestLevel = saveObject.CurrentLevel;
+                    break;
+                case Difficulty.Hard:
+                    saveObject.Statistics.HardHighestLevel = saveObject.CurrentLevel;
+                    break;
+            }
+        }
+
+        saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
@@ -869,29 +897,7 @@ public class GameManager : MonoBehaviour
                 currentGame++;
                 saveObject.CurrentLevel++;
 
-                Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
-                {
-                    { Difficulty.Normal, saveObject.Statistics.HighestLevel },
-                    { Difficulty.Easy, saveObject.Statistics.EasyHighestLevel },
-                    { Difficulty.Hard, saveObject.Statistics.HardHighestLevel }
-                };
-                if (saveObject.CurrentLevel > highestLevelMap[saveObject.Difficulty])
-                {
-                    switch (saveObject.Difficulty)
-                    {
-                        case Difficulty.Normal:
-                            saveObject.Statistics.HighestLevel = saveObject.CurrentLevel;
-                            break;
-                        case Difficulty.Easy:
-                            saveObject.Statistics.EasyHighestLevel = saveObject.CurrentLevel;
-                            break;
-                        case Difficulty.Hard:
-                            saveObject.Statistics.HardHighestLevel = saveObject.CurrentLevel;
-                            break;
-                    }
-                }
-
-                saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
+                UpdateLevelStats();
 
                 if (currentGame == 10) // won run
                 {
@@ -943,6 +949,12 @@ public class GameManager : MonoBehaviour
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.15f);
+
+                if (playerWon)
+                {
+                    wordDisplay.text = wordDisplay.text.Replace("<color=green>", "<color=#8C8C8C>");
+                    historyText.textComponent.text = historyText.textComponent.text.Replace("<color=green>", "<color=#8C8C8C>");
+                }
 
                 if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
                 {
@@ -1425,13 +1437,5 @@ public class GameManager : MonoBehaviour
         wordDictionary.AddRestrictedLetter(restrictedLetter);
         challengePopup.AddRestrictedLetter(restrictedLetter);
         bluffPopup.AddRestrictedLetter(restrictedLetter);
-    }
-
-    private void RemoveRestrictedLetters()
-    {
-        keyboard.RemoveAllRestrictions();
-        challengePopup.ClearRestrictions();
-        bluffPopup.ClearRestrictions();
-        wordDictionary.ClearRestrictions();
     }
 }

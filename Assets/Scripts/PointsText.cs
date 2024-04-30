@@ -9,6 +9,8 @@ public class PointsText : MonoBehaviour
     public Color normalColor = Color.white;
     public bool makePostFixGreen;
     public bool IsJustNumber, IsCurrency;
+    public bool IncludePop = true;
+
     private float duration = 0.5f;
     private float colorDuration = 0.35f;
     private Color positiveColor = Color.green;
@@ -16,8 +18,13 @@ public class PointsText : MonoBehaviour
     private bool showSymbol;
     private string prefixText;
 
+    private float popDuration = 0.1f;
+    private float popScale = 1.2f;
+    private Vector3 originalTextScale;
+
     private void Start()
     {
+        originalTextScale = Vector3.one;
         UpdatePointsText(0);
     }
 
@@ -80,16 +87,23 @@ public class PointsText : MonoBehaviour
         }
 
         // Wait a little longer after counting is done before changing the color back.
+        if (IncludePop)
+        {
+            StartCoroutine(PopTextEffect());
+        }
         yield return new WaitForSeconds(colorDuration);
 
-        var lerpBackTime = 0.1f;
-        timer = 0;
-        while (timer < lerpBackTime)
+        if (startPoints != endPoints)
         {
-            timer += Time.deltaTime;
-            float percentageComplete = timer / lerpBackTime;
-            pointsText.color = Color.Lerp(targetColor, normalColor, percentageComplete);
-            yield return null;
+            var lerpBackTime = 0.1f;
+            timer = 0;
+            while (timer < lerpBackTime)
+            {
+                timer += Time.deltaTime;
+                float percentageComplete = timer / lerpBackTime;
+                pointsText.color = Color.Lerp(targetColor, normalColor, percentageComplete);
+                yield return null;
+            }
         }
 
         // Finally, reset the points and color.
@@ -130,5 +144,29 @@ public class PointsText : MonoBehaviour
         {
             pointsText.text = $"{prefixText}{pointsDisplay}";
         }
+    }
+
+    private IEnumerator PopTextEffect()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < popDuration)
+        {
+            float proportionCompleted = elapsedTime / popDuration;
+            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2);
+            pointsText.transform.localScale = Vector3.Lerp(originalTextScale, originalTextScale * popScale, easeOutProgress);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        elapsedTime = 0f;
+        var poppedScale = pointsText.transform.localScale;
+        while (elapsedTime < popDuration)
+        {
+            pointsText.transform.localScale = Vector3.Lerp(poppedScale, originalTextScale, elapsedTime / popDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        pointsText.transform.localScale = originalTextScale; // Ensure it sets back to original exactly
     }
 }

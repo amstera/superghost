@@ -11,9 +11,9 @@ public class PointsExtendedText : MonoBehaviour
     public AudioSource incrementAudioSource;
 
     public float displaySpeed = 0.3f; // Time between number updates
-    private float popDuration = 0.12f; // Duration of the pop effect
-    private float popScale = 1.2f; // Scale factor for the pop effect
 
+    private float popDuration = 0.12f;
+    private float popScale = 1.2f;
     private Vector3 originalTextScale;
 
     private void Start()

@@ -1,24 +1,30 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine.UI;
 
-public class RestartPopUp : MonoBehaviour
+public class SkipPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public Button restartButton;
+    public TextMeshProUGUI bodyText;
+    public PointsText currencyText;
+    public Button skipButton;
+    public GameManager gameManager;
 
-    public AudioSource clickAudioSource;
+    public AudioSource clickAudioSource, moneyAudioSource;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
 
     private Vector3 originalScale;
+    private SaveObject saveObject;
 
     private void Awake()
     {
+        saveObject = SaveManager.Load();
         originalScale = popUpGameObject.transform.localScale;
         ResetPopUp();
     }
@@ -26,6 +32,9 @@ public class RestartPopUp : MonoBehaviour
     public void Show()
     {
         clickAudioSource?.Play();
+
+        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>$10</color>";
+        currencyText.SetPoints(gameManager.currency);
 
         StopAllCoroutines(); // Ensure no other animations are running
         canvasGroup.interactable = true;
@@ -65,24 +74,34 @@ public class RestartPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Restart()
+    public void Skip()
     {
-        clickAudioSource?.Play();
-        restartButton.interactable = false;
+        moneyAudioSource?.Play();
+        currencyText.AddPoints(10);
+        skipButton.interactable = false;
 
-        StartCoroutine(RestartAfterDelay());
+        StartCoroutine(SkipAfterDelay());
     }
 
-    private IEnumerator RestartAfterDelay()
+    private IEnumerator SkipAfterDelay()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.75f);
 
-        SaveObject saveObject = SaveManager.Load();
+        saveObject.Currency = gameManager.currency + 10;
+        saveObject.CurrentLevel++;
+        var visibleShopItems = gameManager.shopPopUp.GetVisibleShopItems();
+        if (visibleShopItems.Count > 0)
+        {
+            saveObject.ShopItemIds.Clear();
+            saveObject.ShopItemIds = visibleShopItems.Select(s => s.id).ToList();
+        }
 
-        saveObject.Currency = 5;
-        saveObject.CurrentLevel = 0;
-        saveObject.ShopItemIds = new List<int>();
-        saveObject.RunStatistics = new Statistics();
+        if (saveObject.Currency > saveObject.Statistics.MostMoney)
+        {
+            saveObject.Statistics.MostMoney = saveObject.Currency;
+        }
+
+        gameManager.UpdateLevelStats();
 
         SaveManager.Save(saveObject);
 

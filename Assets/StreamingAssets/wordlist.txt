@@ -60490,6 +60490,7 @@ skins
 skint
 skintight
 skip
+skippable
 skipped
 skipper
 skippered

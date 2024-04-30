@@ -320,8 +320,9 @@ public class WordDictionary
 
         // Determine the priority order based on isLosing flag
         ratio = 0.5f + playerAIWinDifference * 0.1f;
-        var primaryList = isAILosing || (difficulty == Difficulty.Hard && rng.NextDouble() <= ratio) ? evenLengthWords : oddLengthWords;
-        var secondaryList = isAILosing || (difficulty == Difficulty.Hard && rng.NextDouble() <= ratio) ? oddLengthWords : evenLengthWords;
+        bool primaryIsEven = isAILosing || (difficulty == Difficulty.Hard && rng.NextDouble() <= ratio);
+        var primaryList = primaryIsEven ? evenLengthWords : oddLengthWords;
+        var secondaryList = primaryIsEven ? oddLengthWords : evenLengthWords;
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
         string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, playerAIWinDifference, difficulty);
