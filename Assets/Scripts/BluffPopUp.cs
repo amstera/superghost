@@ -12,7 +12,7 @@ public class BluffPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI bluffText, comboText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText;
+    public TextMeshProUGUI warningText, pointsCalculateText;
 
     public AudioSource winAudioSource;
     public ParticleSystem confetti;
@@ -52,6 +52,7 @@ public class BluffPopUp : MonoBehaviour
         inputField.text = substring;
 
         comboText.text = gameManager.comboText.GetString();
+        pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

@@ -527,6 +527,8 @@ public class GameManager : MonoBehaviour
         if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
         {
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
+            gameWord = previousWord;
+            SetPointsCalculatedText();
             bluffPopup.Show(previousWord);
         }
         else
@@ -694,6 +696,23 @@ public class GameManager : MonoBehaviour
         saveObject.RunStatistics.HighestLevel = saveObject.CurrentLevel;
     }
 
+    public void ClearActiveEffects(bool includeSpecial = false)
+    {
+        HasBonusMultiplier = false;
+        HasEvenWordMultiplier = false;
+        HasLongWordMultiplier = false;
+        HasOddWordMultiplier = false;
+        HasDoubleBluff = false;
+        HasDoubleTurn = false;
+        ChanceMultiplier = 1;
+
+        if (includeSpecial)
+        {
+            HasLoseMoney = false;
+            HasDoubleWealth = false;
+        }
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
@@ -750,12 +769,7 @@ public class GameManager : MonoBehaviour
         wordDisplay.characterSpacing = -5f;
         pointsCalculateText.text = string.Empty;
         fireBallCalculate.SetActive(false);
-        HasBonusMultiplier = false;
-        HasEvenWordMultiplier = false;
-        HasLongWordMultiplier = false;
-        HasOddWordMultiplier = false;
-        HasDoubleBluff = false;
-        HasDoubleTurn = false;
+        ClearActiveEffects();
         ChanceMultiplier = 1;
 
         ShowHistory();
