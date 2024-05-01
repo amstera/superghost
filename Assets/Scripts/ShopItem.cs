@@ -17,11 +17,12 @@ public class ShopItem : MonoBehaviour
     public Button buyButton;
     public ProceduralImage backgroundImage;
     public Image iconImage;
+    public TextMeshProUGUI extraInfoText;
 
     private int cost;
     private Func<IEnumerator> coroutine;
 
-    public void Initialize(int id, string title, string body, string warning, int cost, int currency, bool interactable, bool additionalInteractableCriteria, bool isActive, Sprite iconSprite, Action<ShopItem> onBuyPressed, Func<IEnumerator> coroutine)
+    public void Initialize(int id, string title, string body, string warning, int cost, int currency, bool interactable, bool additionalInteractableCriteria, bool isActive, string extraInfoText, Sprite iconSprite, Action<ShopItem> onBuyPressed, Func<IEnumerator> coroutine)
     {
         this.id = id;
         this.cost = cost;
@@ -57,6 +58,15 @@ public class ShopItem : MonoBehaviour
         buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, buyButton.interactable ? 1 : 0.5f);
 
         iconImage.sprite = iconSprite;
+
+        if (isActive && !string.IsNullOrEmpty(extraInfoText))
+        {
+            this.extraInfoText.text = extraInfoText;
+        }
+        else
+        {
+            this.extraInfoText.text = "";
+        }
 
         buyButton.onClick.RemoveAllListeners();
         if (onBuyPressed != null)

@@ -348,10 +348,10 @@ public class GameManager : MonoBehaviour
     public void ShowHint()
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, 1, Difficulty.Normal);
-        if (string.IsNullOrEmpty(nextWord))
+        var nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Normal);
+        if (string.IsNullOrEmpty(nextWord) || (nextWord.Length - gameWord.Length) % 2 != 0)
         {
-            nextWord = wordDictionary.FindNextWord(gameWord, 1, Difficulty.Hard);
+            nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Hard);
         }
 
         if (string.IsNullOrEmpty(nextWord))

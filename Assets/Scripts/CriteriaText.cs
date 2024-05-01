@@ -59,7 +59,7 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new NoComboLetters());
                 break;
             case 9:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(250, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
                 break;
         }
 

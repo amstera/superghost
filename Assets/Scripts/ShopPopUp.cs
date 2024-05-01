@@ -325,7 +325,7 @@ public class ShopPopUp : MonoBehaviour
         {
             var shopItem = visibleShopItems[i];
             int cost = GetCost(shopItem.id);
-            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), GetAdditionalInteractableCriteria(shopItem.id), IsActive(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
+            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), GetAdditionalInteractableCriteria(shopItem.id), IsActive(shopItem.id), GetExtraInfoText(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
         }
 
         bool canAffordReshuffle = currency >= 10;
@@ -548,6 +548,21 @@ public class ShopPopUp : MonoBehaviour
         }
 
         return false;
+    }
+
+    private string GetExtraInfoText(int id)
+    {
+        switch (id)
+        {
+            case 10:
+                if (gameManager.ChanceMultiplier < 1)
+                {
+                    return $"<color=red>{gameManager.ChanceMultiplier}x</color>";
+                }
+                return $"{gameManager.ChanceMultiplier}x";
+        }
+
+        return "";
     }
 
     private void Shuffle<T>(List<T> list)
