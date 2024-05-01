@@ -205,6 +205,9 @@ public class GameManager : MonoBehaviour
 
             if (currentGame == 0)
             {
+                runInfoPopup.newHighLevel = false;
+                runInfoPopup.newHighScore = false;
+                runInfoPopup.newHighRoundScore = false;
                 saveObject.RunStatistics = new Statistics();
             }
 
@@ -673,6 +676,7 @@ public class GameManager : MonoBehaviour
 
         if (saveObject.CurrentLevel > highestLevelMap[saveObject.Difficulty])
         {
+            runInfoPopup.newHighLevel = true;
             switch (saveObject.Difficulty)
             {
                 case Difficulty.Normal:
@@ -802,6 +806,7 @@ public class GameManager : MonoBehaviour
             {
                 saveObject.Statistics.MostPointsPerRound = roundPoints;
                 saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
+                runInfoPopup.newHighRoundScore = true;
             }
             if (roundPoints > saveObject.RunStatistics.MostPointsPerRound)
             {
@@ -881,6 +886,7 @@ public class GameManager : MonoBehaviour
                 {
                     saveObject.Statistics.HighScore = points;
                     newIndicator.SetActive(true);
+                    runInfoPopup.newHighScore = true;
 
                     Device.RequestStoreReview();
                 }

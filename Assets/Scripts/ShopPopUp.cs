@@ -49,7 +49,7 @@ public class ShopPopUp : MonoBehaviour
 
         this.currency = currency;
         this.substring = substring;
-        multiplier = difficulty == Difficulty.Hard ? 2 : difficulty == Difficulty.Easy ? 0.5f : 1;
+        multiplier = difficulty == Difficulty.Hard ? 1.5f : difficulty == Difficulty.Easy ? 0.5f : 1;
 
         GetShopItems();
 

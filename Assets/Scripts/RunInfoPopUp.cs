@@ -11,6 +11,9 @@ public class RunInfoPopUp : MonoBehaviour
     public TextMeshProUGUI statsText;
     public GameManager gameManager;
     public Difficulty difficulty;
+    public bool newHighLevel, newHighScore, newHighRoundScore;
+
+    public GameObject newLevel, newGameScore, newRoundScore;
 
     public AudioSource clickAudioSource;
 
@@ -91,6 +94,8 @@ public class RunInfoPopUp : MonoBehaviour
         text += $"<color=green>{saveObject.RunStatistics.HighestLevel + 1}/10</color>";
         text += regularLineBreak;
 
+        newLevel.SetActive(newHighLevel);
+
         text += "Difficulty\n";
         if (difficulty== Difficulty.Easy)
         {
@@ -110,6 +115,8 @@ public class RunInfoPopUp : MonoBehaviour
         text += $"<color=green>{saveObject.RunStatistics.HighScore}</color>";
         text += regularLineBreak;
 
+        newGameScore.SetActive(newHighScore);
+
         text += "Final Money\n";
         text += $"<color=green>${saveObject.RunStatistics.MostMoney}</color>";
         text += regularLineBreak;
@@ -126,6 +133,8 @@ public class RunInfoPopUp : MonoBehaviour
             text += "<line-height=0>\n</line-height>\n";
             text += $"({saveObject.RunStatistics.MostPointsPerRoundWord})";
         }
+
+        newRoundScore.SetActive(newHighRoundScore);
 
         statsText.text = text;
     }

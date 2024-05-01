@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI.ProceduralImage;
 
 public class ActiveEffectsText : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI textOverlay;
+    public ProceduralImage background;
+    public GameObject deleteButton;
 
     private List<ShopItemEffectDetails> activeEffects = new List<ShopItemEffectDetails>();
 
@@ -45,6 +48,9 @@ public class ActiveEffectsText : MonoBehaviour
 
         text.text.Trim();
         textOverlay.text.Trim();
+
+        deleteButton.SetActive(activeEffects.Count > 0);
+        background.color = new Color(background.color.r, background.color.g, background.color.b, activeEffects.Count > 0 ? 1 : 0);
     }
 
     private string GetShortTitle(string title)
