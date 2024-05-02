@@ -35,6 +35,9 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2.5f;
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
 
+            float rotationY = Mathf.Sin(Time.time * 0.5f) * 12;
+            transform.localRotation = Quaternion.Euler(0, rotationY, 0);
+
             UpdateGhostColor();
         }
     }

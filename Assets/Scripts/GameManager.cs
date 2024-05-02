@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney;
+    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasDoubleEndedMultiplier;
     public float ChanceMultiplier = 1;
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses;
     public int currency = 5;
@@ -414,6 +414,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnableDoubleEnded()
+    {
+        HasDoubleEndedMultiplier = true;
+        if (!gameEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
     public void EnableLongWordMultiplier()
     {
         HasLongWordMultiplier = true;
@@ -702,6 +711,7 @@ public class GameManager : MonoBehaviour
         HasEvenWordMultiplier = false;
         HasLongWordMultiplier = false;
         HasOddWordMultiplier = false;
+        HasDoubleEndedMultiplier = false;
         HasDoubleBluff = false;
         HasDoubleTurn = false;
         ChanceMultiplier = 1;
@@ -1053,8 +1063,8 @@ public class GameManager : MonoBehaviour
         recap.Add(new RecapObject
         {
             GameWord = lastWord,
-            PlayerGhostString = playerLivesText.livesText.text,
-            AIGhostString = aiLivesText.livesText.text,
+            PlayerGhostString = playerLivesText.GetCurrentLivesString(),
+            AIGhostString = aiLivesText.GetCurrentLivesString(),
             Points = points,
             History = previousWordsText,
             PlayerLivesRemaining = playerLivesText.LivesRemaining(),
@@ -1178,6 +1188,11 @@ public class GameManager : MonoBehaviour
             {
                 pointsChange *= 2;
                 pointsBreakdown.Add(2);
+            }
+            if (HasDoubleEndedMultiplier && word.Length > 0 && char.ToLower(word[0]) == char.ToLower(word[word.Length - 1]))
+            {
+                pointsChange *= 4f;
+                pointsBreakdown.Add(4f);
             }
             if (HasLongWordMultiplier && word.Length >= 10)
             {
@@ -1312,6 +1327,12 @@ public class GameManager : MonoBehaviour
             {
                 calculationText += $" x 2";
                 totalPoints *= 2;
+                showTotal = true;
+            }
+            if (HasDoubleEndedMultiplier && gameWord.Length > 0 && char.ToLower(gameWord[0]) == char.ToLower(gameWord[gameWord.Length - 1]))
+            {
+                calculationText += $" x 4";
+                totalPoints *= 4f;
                 showTotal = true;
             }
             if (HasLongWordMultiplier && gameWord.Length >= 10)

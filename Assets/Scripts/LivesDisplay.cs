@@ -8,6 +8,7 @@ public class LivesDisplay : MonoBehaviour
     public string livesString = "GHOST";
     public Color defaultColor = new Color(0.2392157f, 0.2392157f, 0.2392157f); // #3D3D3D
     public Color lostLifeColor = Color.red;
+    public GameObject flames;
     private int currentLifeIndex = 0;
 
     void Start()
@@ -43,6 +44,11 @@ public class LivesDisplay : MonoBehaviour
             UpdateLivesDisplay();
             StartCoroutine(PopAnimation());
         }
+    }
+
+    public string GetCurrentLivesString()
+    {
+        return GetDisplayText();
     }
 
     IEnumerator LoseLifeAnimation()
@@ -107,6 +113,14 @@ public class LivesDisplay : MonoBehaviour
 
     void UpdateLivesDisplay()
     {
+        livesText.text = GetDisplayText();
+        var livesRemaining = LivesRemaining();
+        flames.SetActive(LivesRemaining() <= 1);
+        flames.transform.GetChild(flames.transform.childCount - 1).gameObject.SetActive(livesRemaining == 0);
+    }
+
+    string GetDisplayText()
+    {
         string displayText = "";
         for (int i = 0; i < livesString.Length; i++)
         {
@@ -119,7 +133,8 @@ public class LivesDisplay : MonoBehaviour
                 displayText += $"<color=#{ColorUtility.ToHtmlStringRGB(defaultColor)}>{livesString[i]}</color>";
             }
         }
-        livesText.text = displayText;
+
+        return displayText;
     }
 
     public bool IsGameOver()
