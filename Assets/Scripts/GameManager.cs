@@ -710,6 +710,10 @@ public class GameManager : MonoBehaviour
         {
             HasLoseMoney = false;
             HasDoubleWealth = false;
+        }
+
+        if (!gameEnded)
+        {
             SetPointsCalculatedText();
         }
     }

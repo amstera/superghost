@@ -10,9 +10,8 @@ public class BluffPopUp : MonoBehaviour
 
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public TextMeshProUGUI bluffText, comboText;
+    public TextMeshProUGUI warningText, pointsText, bluffText, comboText, pointsCalculateText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText, pointsCalculateText;
 
     public AudioSource winAudioSource;
     public ParticleSystem confetti;
@@ -44,6 +43,7 @@ public class BluffPopUp : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
+        pointsText.text = gameManager.pointsText.pointsText.text;
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         substring = substring.ToLower().Trim();
