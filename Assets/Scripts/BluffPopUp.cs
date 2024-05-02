@@ -44,6 +44,8 @@ public class BluffPopUp : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
+        pointsCalculateText.text = gameManager.pointsCalculateText.text;
+
         substring = substring.ToLower().Trim();
 
         originalSubstring = substring;
@@ -52,7 +54,6 @@ public class BluffPopUp : MonoBehaviour
         inputField.text = substring;
 
         comboText.text = gameManager.comboText.GetString();
-        pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

@@ -12,7 +12,7 @@ public class ChallengePopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI challengeText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText, comboText;
+    public TextMeshProUGUI warningText, comboText, pointsCalculateText;
 
     public AudioSource alertAudioSource;
 
@@ -41,6 +41,8 @@ public class ChallengePopUp : MonoBehaviour
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+
+        pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         substring = substring.ToLower().Trim();
 
