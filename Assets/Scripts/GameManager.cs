@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     private HashSet<string> previousWords = new HashSet<string>();
     private List<RecapObject> recap = new List<RecapObject>();
     private List<float> pointsBreakdown = new List<float>();
-    private bool gameEnded = false;
+    private bool roundEnded = false;
     private bool gameOver = true;
     private bool isLastWordValid = true;
     private bool playerWon;
@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
         historyText.UpdateText("");
         gameWord = "";
         selectedPosition = TextPosition.None;
-        gameEnded = false;
+        roundEnded = false;
         isLastWordValid = true;
         playerWon = false;
         roundPoints = 0;
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
 
     public void SelectPosition(TextPosition position)
     {
-        if (gameWord.Length == 0 || gameEnded || selectedPosition == position)
+        if (gameWord.Length == 0 || roundEnded || selectedPosition == position)
         {
             return;
         }
@@ -390,7 +390,7 @@ public class GameManager : MonoBehaviour
     public void EnableMultiplier()
     {
         HasBonusMultiplier = true;
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -399,7 +399,7 @@ public class GameManager : MonoBehaviour
     public void EnableEvenMultiplier()
     {
         HasEvenWordMultiplier = true;
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -408,7 +408,7 @@ public class GameManager : MonoBehaviour
     public void EnableOddMultiplier()
     {
         HasOddWordMultiplier = true;
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -417,7 +417,7 @@ public class GameManager : MonoBehaviour
     public void EnableDoubleEnded()
     {
         HasDoubleEndedMultiplier = true;
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -426,7 +426,7 @@ public class GameManager : MonoBehaviour
     public void EnableLongWordMultiplier()
     {
         HasLongWordMultiplier = true;
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -434,10 +434,10 @@ public class GameManager : MonoBehaviour
 
     public void EnableChanceMultiplier()
     {
-        var values = new float[] { 0.5f, 1.5f, 2.5f };
+        var values = playerLivesText.LivesRemaining() == 1 && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 2.5f };
         var index = Random.Range(0, values.Length);
         ChanceMultiplier = values[index];
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -653,17 +653,17 @@ public class GameManager : MonoBehaviour
 
     public bool IsDoneRound()
     {
-        return gameOver || gameEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
+        return gameOver || roundEnded || (isPlayerTurn && string.IsNullOrEmpty(gameWord));
     }
 
     public bool IsPlayerTurn()
     {
-        return !gameOver && !gameEnded && isPlayerTurn;
+        return !gameOver && !roundEnded && isPlayerTurn;
     }
 
     public bool IsRoundEnded()
     {
-        return gameEnded;
+        return roundEnded;
     }
 
     public bool IsGameEnded()
@@ -714,6 +714,7 @@ public class GameManager : MonoBehaviour
         HasDoubleEndedMultiplier = false;
         HasDoubleBluff = false;
         HasDoubleTurn = false;
+        shopPopUp.ApplyDiscount(1);
         ChanceMultiplier = 1;
 
         if (includeSpecial)
@@ -722,7 +723,7 @@ public class GameManager : MonoBehaviour
             HasDoubleWealth = false;
         }
 
-        if (!gameEnded)
+        if (!roundEnded)
         {
             SetPointsCalculatedText();
         }
@@ -740,7 +741,7 @@ public class GameManager : MonoBehaviour
             previousWords.Add(gameWord);
             EndGame();
         }
-        else if (!gameEnded)
+        else if (!roundEnded)
         {
             if (HasDoubleTurn)
             {
@@ -765,7 +766,7 @@ public class GameManager : MonoBehaviour
         newWordIndex++;
         wordDisplay.text = displayText;
 
-        if (!gameEnded && (!updateColor || !isPlayerTurn))
+        if (!roundEnded && (!updateColor || !isPlayerTurn))
         {
             wordDisplay.HighlightNewLetterAtIndex(newWordIndex);
         }
@@ -778,7 +779,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame(bool playSound = true)
     {
-        gameEnded = true;
+        roundEnded = true;
         keyboard.Hide();
         keyboard.DisableAllButtons();
         wordDisplay.characterSpacing = -5f;
@@ -884,7 +885,7 @@ public class GameManager : MonoBehaviour
             runInfoPopup.difficulty = saveObject.Difficulty;
             activeEffectsText.gameObject.SetActive(false);
 
-            if (playerWon && metCriteria) // won game
+            if (playerWon && metCriteria) // win game
             {
                 endGameText.text = "Victory!";
                 endGameText.color = Color.green;
@@ -934,7 +935,7 @@ public class GameManager : MonoBehaviour
 
                 UpdateLevelStats();
 
-                if (currentGame == 10) // won run
+                if (currentGame == 10) // win run
                 {
                     endGameText.text = "You Win!";
                     endGameText.GetComponent<ColorCycleEffect>().enabled = true;
@@ -969,7 +970,7 @@ public class GameManager : MonoBehaviour
                     ResetRun();
                 }
             }
-            else // lost game
+            else // lose game
             {
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
@@ -1139,7 +1140,7 @@ public class GameManager : MonoBehaviour
         playerText.color = isPlayer ? Color.green : Color.white;
         aiText.color = isPlayer ? Color.white : Color.green;
 
-        challengeButton.gameObject.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !gameEnded);
+        challengeButton.gameObject.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !roundEnded);
 
         SetPointsCalculatedText();
 

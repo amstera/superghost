@@ -97,6 +97,7 @@ public class ShopItemInfo
     public string title, body, warning;
     public ShopItemType type;
     public Sprite iconSprite;
+    public bool isFavored;
 }
 
 [Serializable]

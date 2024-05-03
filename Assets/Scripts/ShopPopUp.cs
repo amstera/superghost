@@ -18,7 +18,7 @@ public class ShopPopUp : MonoBehaviour
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
-    public TextMeshProUGUI shopNewItemsText;
+    public TextMeshProUGUI shopNewItemsText, discountText;
     public ActiveEffectsText activeEffectsText;
 
     public AudioSource clickAudioSource, moneyAudioSource;
@@ -30,6 +30,7 @@ public class ShopPopUp : MonoBehaviour
     private int currency;
     private float multiplier;
     private string substring;
+    private float totalCostPercentage = 1;
     private List<ShopItemInfo> visibleShopItems = new List<ShopItemInfo>();
     private HashSet<int> previousShopItemIds = new HashSet<int>();
     private SaveObject saveObject;
@@ -105,16 +106,38 @@ public class ShopPopUp : MonoBehaviour
             if (saveObject.ShopItemIds.Count == 0 || overrideExistingItems)
             {
                 var availableShopItems = shopItems.Where(item => !previousShopItemIds.Contains(item.id)).ToList();
+                FilterAvailableShopItems(availableShopItems);
+                Shuffle(availableShopItems);
+
                 var helpers = availableShopItems.Where(item => item.type == ShopItemType.Helper).ToList();
                 var pointsItems = availableShopItems.Where(item => item.type == ShopItemType.Points).ToList();
 
-                var chosenHelper = helpers[Random.Range(0, helpers.Count)];
-                var chosenPointsItem = pointsItems[Random.Range(0, pointsItems.Count)];
+                ShopItemInfo SelectWeightedRandom(List<ShopItemInfo> items, float favoredWeight = 1.2f)
+                {
+                    ShopItemInfo selected = null;
+                    double maxWeight = 0;
+                    double weight;
+
+                    foreach (var item in items)
+                    {
+                        weight = Random.Range(0, item.isFavored ? favoredWeight : 1);
+                        if (weight > maxWeight)
+                        {
+                            maxWeight = weight;
+                            selected = item;
+                        }
+                    }
+
+                    return selected;
+                }
+
+                var chosenHelper = SelectWeightedRandom(helpers);
+                var chosenPointsItem = SelectWeightedRandom(pointsItems);
 
                 availableShopItems.Remove(chosenHelper);
                 availableShopItems.Remove(chosenPointsItem);
 
-                var chosenThirdItem = availableShopItems[Random.Range(0, availableShopItems.Count)];
+                var chosenThirdItem = SelectWeightedRandom(availableShopItems);
 
                 var chosenItems = new List<ShopItemInfo> {chosenHelper, chosenPointsItem, chosenThirdItem};
                 Shuffle(chosenItems);
@@ -182,7 +205,8 @@ public class ShopPopUp : MonoBehaviour
 
     public void ReShuffle()
     {
-        if (currency >= 10)
+        int restockCost = (int)RoundHalfUp(10 * totalCostPercentage);
+        if (currency >= restockCost)
         {
             StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(10, null)));
             StartCoroutine(ScrollToTop());
@@ -287,6 +311,19 @@ public class ShopPopUp : MonoBehaviour
         }
     }
 
+    public void ApplyDiscount(float amount)
+    {
+        totalCostPercentage = amount;
+        if (amount == 1)
+        {
+            discountText.gameObject.SetActive(false);
+        }
+        else
+        {
+            discountText.gameObject.SetActive(true);
+            discountText.text = $"{(1 - amount) * 100}% Off";
+        }
+    }
 
     private IEnumerator ScaleOut(GameObject target, float duration)
     {
@@ -313,6 +350,18 @@ public class ShopPopUp : MonoBehaviour
         target.transform.localScale = originalScale;
     }
 
+    private void FilterAvailableShopItems(List<ShopItemInfo> availableShopItems)
+    {
+        if (currency <= 5)
+        {
+            availableShopItems.RemoveAll(s => s.id == 17); // remove Price Cut if you don't have enough currency
+        }
+        if (gameManager.criteriaText.GetCurrentCriteria().Any(c => c is NoComboLetters))
+        {
+            availableShopItems.RemoveAll(s => s.id == 1); // remove Shuffle 2x Points if it's that criteria level
+        }
+    }
+
     private void InitializeShopItems()
     {
         if (visibleShopItems.Count != shopItemPrefabs.Count)
@@ -324,14 +373,15 @@ public class ShopPopUp : MonoBehaviour
         for (int i = 0; i < shopItemPrefabs.Count; i++)
         {
             var shopItem = visibleShopItems[i];
-            int cost = GetCost(shopItem.id);
+            int cost = (int)RoundHalfUp(GetCost(shopItem.id) * totalCostPercentage);
             shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), GetAdditionalInteractableCriteria(shopItem.id), IsActive(shopItem.id), GetExtraInfoText(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
         }
 
-        bool canAffordReshuffle = currency >= 10;
+        int restockCost = (int)RoundHalfUp(10 * totalCostPercentage);
+        bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
-        reshuffleText.text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>$10</color>)";
+        reshuffleText.text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>${restockCost}</color>)";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
     }
 
@@ -373,6 +423,8 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(id, cost, () => gameManager.EnableOddMultiplier(), false, true);
             case 16:
                 return DoAction(id, cost, () => gameManager.EnableDoubleEnded(), false, true);
+            case 17:
+                return DoAction(id, cost, () => ApplyDiscount(0.5f), false, true);
         }
 
         return null;
@@ -399,7 +451,7 @@ public class ShopPopUp : MonoBehaviour
             case 2:
                 return gameEnded ? 3 : (roundsWon + 1) * 3;
             case 3:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 4:
                 return (int)RoundHalfUp(5 * multiplier);
             case 5:
@@ -407,13 +459,13 @@ public class ShopPopUp : MonoBehaviour
             case 6:
                 return (gameManager.ResetWordUses + 1) * 4;
             case 7:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 8:
                 return (int)RoundHalfUp((substringLength + 1) * 1.5f * multiplier);
             case 9:
                 return (int)RoundHalfUp(5 * multiplier);
             case 10:
-                return 5;
+                return 5 + (int)RoundHalfUp(roundsWon * 1.5f);
             case 11:
                 return (int)Math.Pow(2, gameManager.PlayerRestoreLivesUses) * 5;
             case 12:
@@ -423,9 +475,11 @@ public class ShopPopUp : MonoBehaviour
             case 14:
                 return -10;
             case 15:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 16:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 2 : (roundsWon + 1) * 2;
+            case 17:
+                return 5;
         }
 
         return -1;
@@ -469,6 +523,8 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.HasOddWordMultiplier;
             case 16:
                 return !gameManager.HasDoubleEndedMultiplier;
+            case 17:
+                return totalCostPercentage == 1;
         }
 
         return false;
@@ -511,6 +567,8 @@ public class ShopPopUp : MonoBehaviour
             case 15:
                 return true;
             case 16:
+                return true;
+            case 17:
                 return true;
         }
 
@@ -555,6 +613,8 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.HasOddWordMultiplier;
             case 16:
                 return gameManager.HasDoubleEndedMultiplier;
+            case 17:
+                return totalCostPercentage != 1;
         }
 
         return false;
