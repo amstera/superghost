@@ -20,6 +20,11 @@ public class ActiveEffectsText : MonoBehaviour
         UpdateDisplay();
     }
 
+    public List<ShopItemEffectDetails> GetEffects()
+    {
+        return activeEffects;
+    }
+
     public void RemoveEffect(int id)
     {
         activeEffects.RemoveAll(e => e.id == id);
@@ -42,8 +47,8 @@ public class ActiveEffectsText : MonoBehaviour
             var shortTitle = GetShortTitle(effect.title);
             var color = GetColor(effect.color);
 
-            text.text += $"<mark=#{color} padding=15,15,15,15>{shortTitle}</mark> ";
-            textOverlay.text += $"{shortTitle} ";
+            text.text += $"<mark=#{color} padding=15,15,15,15>{shortTitle}</mark>  ";
+            textOverlay.text += $"{shortTitle}  ";
         }
 
         text.text.Trim();
@@ -77,14 +82,16 @@ public class ActiveEffectsText : MonoBehaviour
 
 public class ShopItemEffectDetails
 {
-    public ShopItemEffectDetails(int id, string title, Color color)
+    public ShopItemEffectDetails(int id, string title, Color color, int cost)
     {
         this.id = id;
         this.title = title;
         this.color = color;
+        this.cost = cost;
     }
 
     public int id;
     public string title;
+    public int cost;
     public Color color;
 }

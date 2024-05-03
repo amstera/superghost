@@ -208,7 +208,7 @@ public class ShopPopUp : MonoBehaviour
         int restockCost = (int)RoundHalfUp(10 * totalCostPercentage);
         if (currency >= restockCost)
         {
-            StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(10, null)));
+            StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(restockCost, null)));
             StartCoroutine(ScrollToTop());
         }
     }
@@ -241,7 +241,7 @@ public class ShopPopUp : MonoBehaviour
         {
             var shopItem = shopItemPrefabs.Find(s => s.id == id);
             var shopItemInfo = shopItems.Find(s => s.id == id);
-            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItem.backgroundImage.color);
+            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItem.backgroundImage.color, cost);
             activeEffectsText.AddEffect(details);
         }
 
@@ -352,6 +352,8 @@ public class ShopPopUp : MonoBehaviour
 
     private void FilterAvailableShopItems(List<ShopItemInfo> availableShopItems)
     {
+        availableShopItems.RemoveAll(a => IsActive(a.id)); // remove any shop items from being chosen if they're currently active
+
         if (currency <= 5)
         {
             availableShopItems.RemoveAll(s => s.id == 17); // remove Price Cut if you don't have enough currency
@@ -463,7 +465,7 @@ public class ShopPopUp : MonoBehaviour
             case 8:
                 return (int)RoundHalfUp((substringLength + 1) * 1.5f * multiplier);
             case 9:
-                return (int)RoundHalfUp(5 * multiplier);
+                return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 10:
                 return 5 + (int)RoundHalfUp(roundsWon * 1.5f);
             case 11:

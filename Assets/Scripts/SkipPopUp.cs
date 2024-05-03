@@ -70,7 +70,6 @@ public class SkipPopUp : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        StopAllCoroutines();
         ResetPopUp();
     }
 
