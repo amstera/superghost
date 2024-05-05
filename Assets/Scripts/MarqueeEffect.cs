@@ -6,13 +6,14 @@ using UnityEngine.UI.ProceduralImage;
 
 public class MarqueeEffect : MonoBehaviour
 {
+    public GameObject circles;
     private List<ProceduralImage> proceduralImages;
     private float highlightDuration = 0.4f;
     private float delayBetween = 0.1f;
 
     private void Awake()
     {
-        proceduralImages = GetComponentsInChildren<ProceduralImage>().ToList();
+        proceduralImages = circles.GetComponentsInChildren<ProceduralImage>().ToList();
         proceduralImages.Remove(GetComponent<ProceduralImage>()); // exclude parent
     }
 

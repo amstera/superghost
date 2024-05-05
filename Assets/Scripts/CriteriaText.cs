@@ -18,7 +18,7 @@ public class CriteriaText : MonoBehaviour
     {
         currentCriteria.Clear();
         var letter = GetLetter(level);
-        var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.5f : saveObject.Difficulty == Difficulty.Easy ? 0.4f : 1;
+        var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.25f : saveObject.Difficulty == Difficulty.Easy ? 0.75f : 1;
         bool canSkip = false;
 
         switch (level)

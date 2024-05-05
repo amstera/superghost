@@ -345,7 +345,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, saveObject.Difficulty, shopNewIndicator.activeSelf);
+        shopPopUp.Show(currency, gameWord, shopNewIndicator.activeSelf);
     }
 
     public void ShowHint()
@@ -800,7 +800,7 @@ public class GameManager : MonoBehaviour
         if (roundPoints != 0)
         {
             pointsEarnedText.gameObject.SetActive(true);
-            pointsEarnedText.AddPoints(pointsBreakdown, saveObject.Difficulty);
+            pointsEarnedText.AddPoints(pointsBreakdown);
         }
 
         gameOver = playerLivesText.IsGameOver() || aiLivesText.IsGameOver();
@@ -1207,17 +1207,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (saveObject.Difficulty == Difficulty.Easy)
-        {
-            pointsChange *= 0.5f;
-            pointsBreakdown.Add(0.5f);
-        }
-        else if (saveObject.Difficulty == Difficulty.Hard)
-        {
-            pointsChange *= 2f;
-            pointsBreakdown.Add(2);
-        }
-
         UpdatePoints(pointsChange);
     }
 
@@ -1290,7 +1279,6 @@ public class GameManager : MonoBehaviour
     private void SetPointsCalculatedText()
     {
         int multiplier = comboText.GetWinMultiplier(gameWord, false);
-        float difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 2 : saveObject.Difficulty == Difficulty.Easy ? 0.5f : 1;
 
         string calculationText = string.Empty;
 
@@ -1300,12 +1288,6 @@ public class GameManager : MonoBehaviour
             float totalPoints = gameWord.Length;
             calculationText = $"({gameWord.Length}";
 
-            if (difficultyMultiplier != 1)
-            {
-                calculationText += difficultyMultiplier < 1 ? $" x <color=red>{difficultyMultiplier}</color>" : $" x {difficultyMultiplier}";
-                totalPoints *= difficultyMultiplier;
-                showTotal = true;
-            }
             if (multiplier != 1)
             {
                 calculationText += $" x {multiplier}";
@@ -1353,7 +1335,7 @@ public class GameManager : MonoBehaviour
 
             calculationText += showTotal ? $" = {pointsToShow})" : ")";
 
-            int pointsForFire = 20 * ((int)saveObject.Difficulty + 1);
+            int pointsForFire = 40;
             fireBallCalculate.SetActive(pointsToShow >= pointsForFire);
         }
 

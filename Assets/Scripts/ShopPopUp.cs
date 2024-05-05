@@ -28,7 +28,6 @@ public class ShopPopUp : MonoBehaviour
 
     private Vector3 originalScale;
     private int currency;
-    private float multiplier;
     private string substring;
     private float totalCostPercentage = 1;
     private List<ShopItemInfo> visibleShopItems = new List<ShopItemInfo>();
@@ -42,7 +41,7 @@ public class ShopPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Show(int currency, string substring, Difficulty difficulty, bool showNewIndicator)
+    public void Show(int currency, string substring, bool showNewIndicator)
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -50,7 +49,6 @@ public class ShopPopUp : MonoBehaviour
 
         this.currency = currency;
         this.substring = substring;
-        multiplier = difficulty == Difficulty.Hard ? 1.5f : difficulty == Difficulty.Easy ? 0.5f : 1;
 
         GetShopItems();
 
@@ -447,7 +445,7 @@ public class ShopPopUp : MonoBehaviour
         switch (id)
         {
             case 0:
-                return (int)RoundHalfUp((substringLength + 1) * multiplier);
+                return substringLength + 1;
             case 1:
                 return 5;
             case 2:
@@ -455,15 +453,15 @@ public class ShopPopUp : MonoBehaviour
             case 3:
                 return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 4:
-                return (int)RoundHalfUp(5 * multiplier);
+                return 5;
             case 5:
-                return (int)RoundHalfUp((substringLength + 1) * multiplier);
+                return substringLength + 1;
             case 6:
                 return (gameManager.ResetWordUses + 1) * 4;
             case 7:
                 return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 8:
-                return (int)RoundHalfUp((substringLength + 1) * 1.5f * multiplier);
+                return (int)RoundHalfUp((substringLength + 1) * 1.25f);
             case 9:
                 return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 10:

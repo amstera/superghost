@@ -29,11 +29,12 @@ public class RemoveEffectsPopUp : MonoBehaviour
     public void Show()
     {
         clickAudioSource?.Play();
+
+        sellButton.interactable = true;
         currencyText.SetPoints(gameManager.currency);
         int sellMoney = GetValueOfItems();
         bodyText.text = $"Remove all active items and get <color=green>${sellMoney}</color>";
 
-        StopAllCoroutines(); // Ensure no other animations are running
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         StartCoroutine(FadeIn());

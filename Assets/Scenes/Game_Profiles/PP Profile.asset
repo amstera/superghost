@@ -131,13 +131,13 @@ MonoBehaviour:
     value: 8
   brightness:
     overrideState: 1
-    value: 14
+    value: 18
   postExposure:
     overrideState: 0
     value: 0
   contrast:
     overrideState: 1
-    value: 12
+    value: 16
   mixerRedOutRedIn:
     overrideState: 0
     value: 100

@@ -23,14 +23,14 @@ public class PointsExtendedText : MonoBehaviour
         pointsText.transform.localScale = originalTextScale;
     }
 
-    public void AddPoints(List<float> numbers, Difficulty difficulty)
+    public void AddPoints(List<float> numbers)
     {
         if (numbers == null || numbers.Count == 0)
             return;
 
         fireball.SetActive(false);
         incrementAudioSource.pitch = 1;
-        int pointsForFire = 20 * ((int)difficulty + 1);
+        int pointsForFire = 40;
         StartCoroutine(DisplayPointsRoutine(numbers, pointsForFire));
     }
 
