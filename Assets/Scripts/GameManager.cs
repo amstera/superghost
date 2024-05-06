@@ -903,7 +903,7 @@ public class GameManager : MonoBehaviour
                 aiText.color = Color.red;
 
                 int gameWonCurrency = stars.GetStars() * 5 + (currentGame + 1) * 3;
-                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", 0.5f);
+                bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", delay: 0.5f);
                 currency += gameWonCurrency;
                 if (currency > saveObject.Statistics.MostMoney)
                 {
@@ -953,6 +953,9 @@ public class GameManager : MonoBehaviour
                     stars.Hide();
                     gameStatusAudioSource.clip = winRunSound;
                     runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 56);
+                    endingPointsText.gameObject.SetActive(true);
+                    endingPointsText.normalColor = Color.green;
+                    endingPointsText.AddPoints(currency, prefixText: "$", overrideColor: Color.green);
 
                     switch (saveObject.Difficulty)
                     {
@@ -981,7 +984,8 @@ public class GameManager : MonoBehaviour
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);
-                endingPointsText.AddPoints(points, overrideColor: Color.red);
+                endingPointsText.normalColor = Color.red;
+                endingPointsText.AddPoints(points, endingText: " PTS", overrideColor: Color.red);
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.15f);

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI.ProceduralImage;
 
-public class ActiveEffectsText : MonoBehaviour
+public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI textOverlay;
     public ProceduralImage background;
     public GameObject deleteButton;
+    public EffectsPopUp effectsPopUp;
 
     private List<ShopItemEffectDetails> activeEffects = new List<ShopItemEffectDetails>();
 
@@ -37,6 +39,33 @@ public class ActiveEffectsText : MonoBehaviour
         UpdateDisplay();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(textOverlay, eventData.position, Camera.main);
+        if (linkIndex != -1)
+        {
+            // Get the link info and parse the link id, which is the effect id
+            TMP_LinkInfo linkInfo = textOverlay.textInfo.linkInfo[linkIndex];
+            int effectId = int.Parse(linkInfo.GetLinkID());
+
+            // Find and log the effect based on the effectId
+            var clickedEffect = activeEffects.FirstOrDefault(effect => effect.id == effectId);
+            if (clickedEffect != null)
+            {
+                Vector2 localPos;
+                RectTransform textOverlayRect = textOverlay.GetComponent<RectTransform>();
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(textOverlayRect, eventData.position, eventData.pressEventCamera, out localPos);
+                localPos.y -= 65f;
+
+                effectsPopUp.Show(clickedEffect.title, localPos, clickedEffect.color);
+            }
+        }
+        else
+        {
+            effectsPopUp.Hide();
+        }
+    }
+
     private void UpdateDisplay()
     {
         text.text = "";
@@ -48,7 +77,7 @@ public class ActiveEffectsText : MonoBehaviour
             var color = GetColor(effect.color);
 
             text.text += $"<mark=#{color} padding=15,15,15,15>{shortTitle}</mark>  ";
-            textOverlay.text += $"{shortTitle}  ";
+            textOverlay.text += $"<link=\"{effect.id}\">{shortTitle}</link>  ";
         }
 
         text.text.Trim();

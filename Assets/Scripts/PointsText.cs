@@ -17,6 +17,7 @@ public class PointsText : MonoBehaviour
     private Color negativeColor = Color.red;
     private bool showSymbol;
     private string prefixText;
+    private string endingText;
 
     private float popDuration = 0.1f;
     private float popScale = 1.2f;
@@ -28,10 +29,11 @@ public class PointsText : MonoBehaviour
         UpdatePointsText(0);
     }
 
-    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "", float delay = 0, Color? overrideColor = null)
+    public void AddPoints(int amount, bool showSymbol = false, string prefixText = "", string endingText = "", float delay = 0, Color? overrideColor = null)
     {
         this.showSymbol = showSymbol;
         this.prefixText = prefixText;
+        this.endingText = endingText;
         pointsText.color = normalColor;
         StopAllCoroutines(); // Stop any ongoing coroutines
         StartCoroutine(CountPoints(amount, delay, overrideColor));
@@ -138,12 +140,19 @@ public class PointsText : MonoBehaviour
 
         if (makePostFixGreen)
         {
-            pointsText.text = $"{prefixText}<color=green>{pointsDisplay}</color>";
+            pointsDisplay = $"<color=green>{pointsDisplay}</color>";
         }
-        else
+
+        if (!string.IsNullOrEmpty(prefixText))
         {
-            pointsText.text = $"{prefixText}{pointsDisplay}";
+            pointsDisplay = $"{prefixText}{pointsDisplay}";
         }
+        if (!string.IsNullOrEmpty(endingText))
+        {
+            pointsDisplay = $"{pointsDisplay}{endingText}";
+        }
+
+        pointsText.text = pointsDisplay;
     }
 
     private IEnumerator PopTextEffect()
