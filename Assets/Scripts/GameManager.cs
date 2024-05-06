@@ -537,8 +537,8 @@ public class GameManager : MonoBehaviour
         {
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             gameWord = previousWord;
-            SetPointsCalculatedText();
             bluffPopup.Show(previousWord);
+            SetPointsCalculatedText();
         }
         else
         {
@@ -1320,7 +1320,7 @@ public class GameManager : MonoBehaviour
             }
             if (HasLongWordMultiplier && gameWord.Length >= 10)
             {
-                calculationText += $" x 3";
+                calculationText += $" x 4";
                 totalPoints *= 4;
                 showTotal = true;
             }
@@ -1328,6 +1328,12 @@ public class GameManager : MonoBehaviour
             {
                 calculationText += ChanceMultiplier < 1 ? $" x <color=red>{ChanceMultiplier}</color>" : $" x {ChanceMultiplier}";
                 totalPoints *= ChanceMultiplier;
+                showTotal = true;
+            }
+            if (HasDoubleBluff && bluffPopup.canvasGroup.alpha > 0)
+            {
+                calculationText += $" x 2";
+                totalPoints *= 2;
                 showTotal = true;
             }
 
@@ -1340,6 +1346,14 @@ public class GameManager : MonoBehaviour
         }
 
         pointsCalculateText.text = calculationText;
+        if (challengePopup.canvasGroup.alpha > 0)
+        {
+            challengePopup.pointsCalculateText.text = calculationText;
+        }
+        if (bluffPopup.canvasGroup.alpha > 0)
+        {
+            bluffPopup.pointsCalculateText.text = calculationText;
+        }
     }
 
     private void UpdateDailyGameStreak(bool finishedGame)

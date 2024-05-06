@@ -71,7 +71,10 @@ public class TextBumpAnimation : MonoBehaviour
                     Vector3[] vertices = originalVertices[textInfo.characterInfo[index].materialReferenceIndex];
                     for (int j = 0; j < 4; j++)
                     {
-                        textInfo.meshInfo[textInfo.characterInfo[index].materialReferenceIndex].vertices[vertexIndex + j] = vertices[vertexIndex + j] + new Vector3(0, bumpAmount, 0);
+                        if (vertexIndex + j < vertices.Length)
+                        {
+                            textInfo.meshInfo[textInfo.characterInfo[index].materialReferenceIndex].vertices[vertexIndex + j] = vertices[vertexIndex + j] + new Vector3(0, bumpAmount, 0);
+                        }
                     }
                 }
             }
