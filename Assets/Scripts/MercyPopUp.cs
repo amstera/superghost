@@ -1,14 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
-public class RestartPopUp : MonoBehaviour
+public class MercyPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public Button restartButton;
+    public GameManager gameManager;
 
     public AudioSource clickAudioSource;
 
@@ -61,34 +58,13 @@ public class RestartPopUp : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        StopAllCoroutines();
         ResetPopUp();
     }
 
-    public void Restart()
+    public void Mercy()
     {
-        clickAudioSource?.Play();
-        restartButton.interactable = false;
-
-        StartCoroutine(RestartAfterDelay());
-    }
-
-    private IEnumerator RestartAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        SaveObject saveObject = SaveManager.Load();
-
-        saveObject.Currency = 5;
-        saveObject.CurrentLevel = 0;
-        saveObject.RunStatistics = new Statistics();
-        saveObject.ShopItemIds.Clear();
-        saveObject.RestrictedChars.Clear();
-        saveObject.ChosenCriteria.Clear();
-
-        SaveManager.Save(saveObject);
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        gameManager.Mercy();
+        Hide();
     }
 
     private void ResetPopUp()

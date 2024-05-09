@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
+    private bool aiAlwaysStarts;
     private int points, roundPoints, currentGame;
     private int roundCurrency;
     private int minLength = 3;
@@ -215,6 +216,7 @@ public class GameManager : MonoBehaviour
 
             settingsPopup.difficultyDropdown.interactable = IsRunEnded();
             shopPopUp.RefreshView();
+            ghostAvatar.SetFlag(GetGameState());
         }
         else
         {
@@ -222,6 +224,11 @@ public class GameManager : MonoBehaviour
             {
                 comboText.ChooseNewCombo();
             }
+        }
+
+        if (aiAlwaysStarts)
+        {
+            isPlayerTurn = false;
         }
 
         if (isPlayerTurn)
@@ -729,6 +736,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Mercy()
+    {
+        confettiPS.Play();
+        playerWon = true;
+        aiLivesText.LoseAllLives();
+        var caspString = GetCaspText();
+        wordDisplay.text = $"You win!\n{caspString} <color=green>gave up</color>";
+        isLastWordValid = false;
+        if (!string.IsNullOrEmpty(gameWord))
+        {
+            previousWords.Add(gameWord);
+        }
+
+        EndGame();
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
@@ -925,11 +948,6 @@ public class GameManager : MonoBehaviour
                     saveObject.RunStatistics.HighScore = points;
                 }
 
-                if (playerLivesText.HasFullLives())
-                {
-                    saveObject.Statistics.Skunks++;
-                }
-
                 currentGame++;
                 saveObject.CurrentLevel++;
 
@@ -1015,6 +1033,7 @@ public class GameManager : MonoBehaviour
         }
 
         shopPopUp.RefreshView();
+        ghostAvatar.SetFlag(gameState);
 
         if (playSound)
         {
@@ -1186,13 +1205,13 @@ public class GameManager : MonoBehaviour
             }
             if (HasEvenWordMultiplier && word.Length % 2 == 0)
             {
-                pointsChange *= 2;
-                pointsBreakdown.Add(2);
+                pointsChange *= 2.5f;
+                pointsBreakdown.Add(2.5f);
             }
             if (HasOddWordMultiplier && word.Length % 2 != 0)
             {
-                pointsChange *= 2;
-                pointsBreakdown.Add(2);
+                pointsChange *= 2.5f;
+                pointsBreakdown.Add(2.5f);
             }
             if (HasDoubleEndedMultiplier && word.Length > 0 && char.ToLower(word[0]) == char.ToLower(word[word.Length - 1]))
             {
@@ -1306,14 +1325,14 @@ public class GameManager : MonoBehaviour
             }
             if (HasEvenWordMultiplier && gameWord.Length % 2 == 0)
             {
-                calculationText += $" x 2";
-                totalPoints *= 2;
+                calculationText += $" x 2.5";
+                totalPoints *= 2.5f;
                 showTotal = true;
             }
             if (HasOddWordMultiplier && gameWord.Length % 2 != 0)
             {
-                calculationText += $" x 2";
-                totalPoints *= 2;
+                calculationText += $" x 2.5";
+                totalPoints *= 2.5f;
                 showTotal = true;
             }
             if (HasDoubleEndedMultiplier && gameWord.Length > 0 && char.ToLower(gameWord[0]) == char.ToLower(gameWord[gameWord.Length - 1]))
@@ -1427,7 +1446,9 @@ public class GameManager : MonoBehaviour
         currentGame = 0;
         saveObject.CurrentLevel = 0;
         currency = 5;
-        saveObject.ShopItemIds = new List<int>();
+        saveObject.ShopItemIds.Clear();
+        saveObject.RestrictedChars.Clear();
+        saveObject.ChosenCriteria.Clear();
     }
 
     private GameState GetGameState()
@@ -1445,8 +1466,10 @@ public class GameManager : MonoBehaviour
         challengePopup.ClearRestrictions();
         bluffPopup.ClearRestrictions();
         wordDictionary.ClearRestrictions();
+        comboText.ClearRestrictions();
         minLength = 3;
         comboText.IsInactive = false;
+        aiAlwaysStarts = false;
 
         foreach (var criterion in criteria)
         {
@@ -1473,6 +1496,22 @@ public class GameManager : MonoBehaviour
                 {
                     comboText.IsInactive = true;
                 }
+                else if (criterion is OddLetters oddLetters)
+                {
+                    wordDictionary.SetNumberCriteria(oddLetters.GetCriteria());
+                    challengePopup.AddNumberCriteria(oddLetters.GetCriteria());
+                    bluffPopup.AddNumberCriteria(oddLetters.GetCriteria());
+                }
+                else if (criterion is EvenLetters evenLetters)
+                {
+                    wordDictionary.SetNumberCriteria(evenLetters.GetCriteria());
+                    challengePopup.AddNumberCriteria(evenLetters.GetCriteria());
+                    bluffPopup.AddNumberCriteria(evenLetters.GetCriteria());
+                }
+                else if (criterion is AIStarts)
+                {
+                    aiAlwaysStarts = true;
+                }
             }
         }
 
@@ -1484,5 +1523,6 @@ public class GameManager : MonoBehaviour
         wordDictionary.AddRestrictedLetter(restrictedLetter);
         challengePopup.AddRestrictedLetter(restrictedLetter);
         bluffPopup.AddRestrictedLetter(restrictedLetter);
+        comboText.AddRestrictedLetter(restrictedLetter);
     }
 }

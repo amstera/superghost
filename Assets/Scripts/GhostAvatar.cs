@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 
 public class GhostAvatar : MonoBehaviour, IPointerClickHandler
 {
+    public GameManager gameManager;
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
     public Image ghostImage;
-    public Sprite normalGhost, angryGhost, thinkingGhost;
+    public GameObject flag, mercyButton;
+    public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost;
     public int currentLevel;
 
     private float startYPosition;
@@ -20,6 +22,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     private float popDuration = 0.1f;
     private bool isThinking = false;
     private bool isLosing;
+    private bool shouldShowFlag;
     private Coroutine shakingTouchedCoroutine;
 
     void Start()
@@ -36,7 +39,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
 
             float rotationY = Mathf.Sin(Time.time * 0.5f) * 14;
-            transform.localRotation = Quaternion.Euler(0, rotationY, 0);
+            ghostImage.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
 
             UpdateGhostColor();
         }
@@ -51,6 +54,10 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         }
 
         UpdateState(isLosing, currentLevel);
+        if (flag.activeSelf)
+        {
+            ghostImage.sprite = sadGhost;
+        }
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
     }
@@ -59,6 +66,8 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     {
         StartCoroutine(FadeCanvasGroup(0, 0.1f)); // Fade out
         isShowing = false;
+        mercyButton.SetActive(false);
+        flag.SetActive(false);
     }
 
     public void Think()
@@ -69,12 +78,24 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             isShowing = true;
         }
 
+        if (shouldShowFlag && !flag.activeSelf)
+        {
+            flag.SetActive(true);
+            mercyButton.SetActive(true);
+        }
+
         if (!isThinking)
         {
             StartCoroutine("AnimateThinking");
             ghostImage.sprite = thinkingGhost;
             isThinking = true;
         }
+    }
+
+    public void SetFlag(GameState gameState)
+    {
+        int livesDiff = gameManager.playerLivesText.LivesRemaining() - gameManager.aiLivesText.LivesRemaining();
+        shouldShowFlag = livesDiff >= 3 && gameManager.criteriaText.GetCurrentCriteria().TrueForAll(c => c.IsMet(gameState));
     }
 
     public void Pop()

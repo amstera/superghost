@@ -356,9 +356,21 @@ public class ShopPopUp : MonoBehaviour
         {
             availableShopItems.RemoveAll(s => s.id == 17); // remove Price Cut if you don't have enough currency
         }
-        if (gameManager.criteriaText.GetCurrentCriteria().Any(c => c is NoComboLetters))
+
+        foreach (var criteria in gameManager.criteriaText.GetCurrentCriteria())
         {
-            availableShopItems.RemoveAll(s => s.id == 1); // remove Shuffle 2x Points if it's that criteria level
+            if (criteria is NoComboLetters)
+            {
+                availableShopItems.RemoveAll(s => s.id == 1); // remove Shuffle 2x Points if it's that criteria level
+            }
+            else if (criteria is OddLetters)
+            {
+                availableShopItems.RemoveAll(s => s.id == 3); // remove Even Flow if it's that criteria level
+            }
+            else if (criteria is EvenLetters)
+            {
+                availableShopItems.RemoveAll(s => s.id == 15); // remove Odd Flow if it's that criteria level
+            }
         }
     }
 
@@ -465,7 +477,7 @@ public class ShopPopUp : MonoBehaviour
             case 9:
                 return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 10:
-                return 5 + (int)RoundHalfUp(roundsWon * 1.5f);
+                return gameEnded ? 5 : 5 + (int)RoundHalfUp(roundsWon * 1.5f);
             case 11:
                 return (int)Math.Pow(2, gameManager.PlayerRestoreLivesUses) * 5;
             case 12:

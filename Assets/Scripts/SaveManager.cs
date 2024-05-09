@@ -9,14 +9,17 @@ public class SaveManager : MonoBehaviour
 {
     private static string saveFilePath = Application.persistentDataPath + "/savefile.json";
     private static SaveObject cachedSaveObject = null;
+    private static object saveLock = new object();
 
     public static void Save(SaveObject saveObject)
     {
-        string json = JsonConvert.SerializeObject(saveObject);
-        string encryptedJson = CryptoManager.EncryptString(json);
-        File.WriteAllText(saveFilePath, encryptedJson);
-
-        cachedSaveObject = saveObject;
+        lock (saveLock)
+        {
+            string json = JsonConvert.SerializeObject(saveObject);
+            string encryptedJson = CryptoManager.EncryptString(json);
+            File.WriteAllText(saveFilePath, encryptedJson);
+            cachedSaveObject = saveObject;
+        }
     }
 
     public static SaveObject Load()
@@ -45,14 +48,16 @@ public class SaveManager : MonoBehaviour
 
     public static void Clear()
     {
-        cachedSaveObject = new SaveObject();
-
-        if (File.Exists(saveFilePath))
+        lock (saveLock)
         {
-            File.Delete(saveFilePath);
+            cachedSaveObject = new SaveObject();
+
+            if (File.Exists(saveFilePath))
+            {
+                File.Delete(saveFilePath);
+            }
         }
     }
-
 }
 
 [Preserve]
@@ -63,6 +68,7 @@ public class SaveObject
     public bool HasSeenTutorial;
     public int Currency = 5;
     public int CurrentLevel;
+    public Dictionary<int, List<int>> ChosenCriteria = new Dictionary<int, List<int>>();
     public List<int> ShopItemIds = new List<int>();
     public Dictionary<int, char> RestrictedChars = new Dictionary<int, char>();
     public Difficulty Difficulty = Difficulty.Normal;
@@ -80,7 +86,6 @@ public class Statistics
     public string MostPointsPerRoundWord = "";
     public Dictionary<string, int> FrequentStartingLetter = new Dictionary<string, int>();
     public int MostPointsPerRound;
-    public int Skunks;
     public DateTime LastIncrementDate = DateTime.MinValue;
     public int DailyPlayStreak;
     public int HighestLevel;

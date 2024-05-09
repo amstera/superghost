@@ -21,6 +21,7 @@ public class SkipPopUp : MonoBehaviour
 
     private Vector3 originalScale;
     private SaveObject saveObject;
+    private int amountToEarn;
 
     private void Awake()
     {
@@ -33,7 +34,8 @@ public class SkipPopUp : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>$10</color>";
+        amountToEarn = 5 * saveObject.CurrentLevel + 5;
+        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>${amountToEarn}</color>";
         currencyText.SetPoints(gameManager.currency);
 
         StopAllCoroutines(); // Ensure no other animations are running
@@ -76,7 +78,7 @@ public class SkipPopUp : MonoBehaviour
     public void Skip()
     {
         moneyAudioSource?.Play();
-        currencyText.AddPoints(10);
+        currencyText.AddPoints(amountToEarn);
         skipButton.interactable = false;
 
         StartCoroutine(SkipAfterDelay());
@@ -86,7 +88,7 @@ public class SkipPopUp : MonoBehaviour
     {
         yield return new WaitForSeconds(0.75f);
 
-        saveObject.Currency = gameManager.currency + 10;
+        saveObject.Currency = gameManager.currency + amountToEarn;
         saveObject.CurrentLevel++;
         var visibleShopItems = gameManager.shopPopUp.GetVisibleShopItems();
         if (visibleShopItems.Count > 0)

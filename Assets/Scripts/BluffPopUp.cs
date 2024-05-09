@@ -26,6 +26,7 @@ public class BluffPopUp : MonoBehaviour
     private string originalSubstring;
     private Vector3 originalScale;
     private Vector3 originalPos;
+    private NumberCriteria numberCriteria = null;
     private HashSet<char> restrictedLetters = new HashSet<char>();
 
     private void Awake()
@@ -96,6 +97,10 @@ public class BluffPopUp : MonoBehaviour
         {
             ShowWarning($"Word must be {minLength + 1}+ letters");
         }
+        else if (numberCriteria != null && !numberCriteria.IsAllowed(inputField.text.Length))
+        {
+            ShowWarning($"Word must be {numberCriteria.GetName()} length");
+        }
         else
         {
             char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
@@ -121,6 +126,12 @@ public class BluffPopUp : MonoBehaviour
     {
         restrictedLetters.Clear();
         minLength = 3;
+        numberCriteria = null;
+    }
+
+    public void AddNumberCriteria(NumberCriteria numberCriteria)
+    {
+        this.numberCriteria = numberCriteria;
     }
 
     public void Skip()

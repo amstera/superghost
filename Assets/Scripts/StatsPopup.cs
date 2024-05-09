@@ -11,6 +11,7 @@ public class StatsPopup : MonoBehaviour
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
     public TextMeshProUGUI statsText;
+    public GameManager gameManager;
 
     public RectTransform statsContentRect;
     public ScrollRect statsScrollRect;
@@ -120,6 +121,25 @@ public class StatsPopup : MonoBehaviour
         text += $"<color=green>{saveObject.Statistics.GamesPlayed}</color>";
         text += regularLineBreak;
 
+        text += "Most Points / Round\n";
+        text += $"<color=green>{saveObject.Statistics.MostPointsPerRound}</color>";
+        if (string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord))
+        {
+            text += regularLineBreak;
+        }
+        else
+        {
+            text += "<line-height=-5>\n</line-height>\n";
+            text += $"(<color=green><size=30>{saveObject.Statistics.MostPointsPerRoundWord}</size></color>)";
+            text += regularLineBreak;
+        }
+
+        var mostUsedItem = GetMostUsedItem(saveObject.Statistics.UsedShopItemIds);
+        text += "Most Used Item\n";
+        text += $"<color=green>{mostUsedItem}</color>";
+        text += regularLineBreak;
+
+
         text += "Most Money\n";
         text += $"<color=green>${saveObject.Statistics.MostMoney}</color>";
         text += regularLineBreak;
@@ -134,19 +154,6 @@ public class StatsPopup : MonoBehaviour
         text += $"<color=red>{longestLosingWord}</color>";
         text += regularLineBreak;
 
-        text += "Most Points / Round\n";
-        text += $"<color=green>{saveObject.Statistics.MostPointsPerRound}</color>";
-        if (string.IsNullOrEmpty(saveObject.Statistics.MostPointsPerRoundWord))
-        {
-            text += regularLineBreak;
-        }
-        else
-        {
-            text += "<line-height=-5>\n</line-height>\n";
-            text += $"(<color=green><size=30>{saveObject.Statistics.MostPointsPerRoundWord}</size></color>)";
-            text += regularLineBreak;
-        }
-
         var lengthOfAverageWinningWord = saveObject.Statistics.WinningWords.Count > 0 ? Math.Round(saveObject.Statistics.WinningWords.Average(w => w.Length)) : 0;
         text += "Avg. Winning Word Length\n";
         text += $"<color=green>{lengthOfAverageWinningWord}</color>";
@@ -156,9 +163,6 @@ public class StatsPopup : MonoBehaviour
         text += "Frequent 1st Letter\n";
         text += $"<color=green>{frequentStartingLetter}</color>";
         text += regularLineBreak;
-
-        text += "Skunks\n";
-        text += $"<color=green>{saveObject.Statistics.Skunks}</color>";
 
         statsText.text = text;
 
@@ -194,5 +198,27 @@ public class StatsPopup : MonoBehaviour
         }
 
         return keyOfHighestValue;
+    }
+
+    private string GetMostUsedItem(Dictionary<int, int> dictionary)
+    {
+        if (dictionary == null || dictionary.Count == 0)
+        {
+            return "N/A";
+        }
+
+        int idOfHighestValue = 0;
+        int highestValue = int.MinValue;
+
+        foreach (var pair in dictionary)
+        {
+            if (pair.Value > highestValue)
+            {
+                highestValue = pair.Value;
+                idOfHighestValue = pair.Key;
+            }
+        }
+
+        return gameManager.shopPopUp.shopItems.FirstOrDefault(s => s.id == idOfHighestValue)?.title ?? "N/A";
     }
 }

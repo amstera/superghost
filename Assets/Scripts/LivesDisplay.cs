@@ -51,6 +51,12 @@ public class LivesDisplay : MonoBehaviour
         return GetDisplayText();
     }
 
+    public void LoseAllLives()
+    {
+        currentLifeIndex = livesString.Length;
+        UpdateLivesDisplay();
+    }
+
     IEnumerator LoseLifeAnimation()
     {
         currentLifeIndex++;

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 public class CriteriaText : MonoBehaviour
 {
@@ -16,10 +17,21 @@ public class CriteriaText : MonoBehaviour
 
     public bool SetLevelCriteria(int level)
     {
-        currentCriteria.Clear();
+        var previousCriteria = level > 0 ? GetCurrentCriteria(level - 1, new List<GameCriterion>(), out _) : new List<GameCriterion>();
+        currentCriteria = GetCurrentCriteria(level, previousCriteria, out bool canSkip);
+
+        UpdateText();
+
+        return canSkip;
+    }
+
+    private List<GameCriterion> GetCurrentCriteria(int level, List<GameCriterion> previousCriteria, out bool canSkip)
+    {
+        List<GameCriterion> currentCriteria = new List<GameCriterion>();
+
         var letter = GetLetter(level);
         var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.25f : saveObject.Difficulty == Difficulty.Easy ? 0.75f : 1;
-        bool canSkip = false;
+        canSkip = false;
 
         switch (level)
         {
@@ -27,6 +39,7 @@ public class CriteriaText : MonoBehaviour
                 canSkip = true;
                 break;
             case 1:
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(25, difficultyMultiplier)));
                 currentCriteria.Add(new NoUsingLetter(letter));
                 break;
             case 2:
@@ -35,15 +48,15 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 3:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
-                currentCriteria.Add(new NoUsingLetter(letter));
+                AddCriteria(1, 3, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 4:
                 canSkip = true;
-                currentCriteria.Add(new MinLetters(5));
+                AddCriteria(1, 4, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 5:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
-                currentCriteria.Add(new StartWithHandicap(1));
+                AddCriteria(1, 5, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 6:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
@@ -51,8 +64,7 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 7:
                 canSkip = true;
-                currentCriteria.Add(new NoUsingLetter(letter));
-                currentCriteria.Add(new StartWithHandicap(2));
+                AddCriteria(2, 7, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 8:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
@@ -63,9 +75,44 @@ public class CriteriaText : MonoBehaviour
                 break;
         }
 
-        UpdateText();
+        return currentCriteria;
+    }
 
-        return canSkip;
+    private void AddCriteria(int amount, int level, int startIndex, List<GameCriterion> currentCriteria, List<GameCriterion> previousCriteria, char letter)
+    {
+        List<GameCriterion> possibleCriteria = new List<GameCriterion> {
+            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(1), new MinLetters(5), new NoUsingLetter(letter)
+        };
+        if (saveObject.ChosenCriteria.TryGetValue(level, out List<int> criteria))
+        {
+            foreach (var id in criteria)
+            {
+                currentCriteria.Add(possibleCriteria.Find(pc => pc.Id == id));
+            }
+            return;
+        }
+
+        var availableCriteria = possibleCriteria.FindAll(pc => !saveObject.ChosenCriteria.Any(c => c.Value.Any(v => pc.Id == v)));
+
+        availableCriteria.RemoveAll(a => previousCriteria.Any(p => p.Id == a.Id));
+        if (level == 3)
+        {
+            availableCriteria.RemoveAll(a => a.Id == 1); // No Using Letter
+        }
+        else if (level == 5)
+        {
+            availableCriteria.RemoveAll(a => a.Id == 3); // Min Letters
+        }
+
+        for (int i = 0; i < Mathf.Min(availableCriteria.Count, amount); i++)
+        {
+            var newCriteria = availableCriteria[Random.Range(0, availableCriteria.Count)];
+            availableCriteria.Remove(newCriteria);
+            currentCriteria.Add(newCriteria);
+        }
+
+        saveObject.ChosenCriteria[level] = currentCriteria.Skip(startIndex).Select(c => c.Id).ToList();
+        SaveManager.Save(saveObject);
     }
 
     private void UpdateText()
@@ -125,11 +172,6 @@ public class CriteriaText : MonoBehaviour
 
     private char GetLetter(int level)
     {
-        if (level == 0 && saveObject.RestrictedChars.Count > 0)
-        {
-            saveObject.RestrictedChars.Clear();
-        }
-
         char restrictedChar;
         if (saveObject.RestrictedChars.TryGetValue(level, out restrictedChar) && restrictedChar != '\0')
         {

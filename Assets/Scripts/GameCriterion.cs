@@ -3,6 +3,7 @@ using System;
 [Serializable]
 public abstract class GameCriterion
 {
+    public int Id { get; set; }
     public abstract string GetDescription();
     public abstract bool IsMet(GameState state);
     public bool IsRestrictive;
@@ -15,6 +16,7 @@ public class ScoreAtLeastXPoints : GameCriterion
     public ScoreAtLeastXPoints(int points)
     {
         this.points = points;
+        Id = 0;
     }
 
     public override string GetDescription()
@@ -35,6 +37,7 @@ public class NoUsingLetter : GameCriterion
     public NoUsingLetter(char letter)
     {
         this.letter = letter;
+        Id = 1;
         IsRestrictive = true;
     }
 
@@ -61,6 +64,7 @@ public class StartWithHandicap : GameCriterion
     public StartWithHandicap(int amount)
     {
         this.amount = amount;
+        Id = 2;
         IsRestrictive = true;
     }
 
@@ -88,6 +92,7 @@ public class MinLetters : GameCriterion
     public MinLetters(int amount)
     {
         this.amount = amount;
+        Id = 3;
         IsRestrictive = true;
     }
 
@@ -107,10 +112,78 @@ public class MinLetters : GameCriterion
     }
 }
 
+public class OddLetters : GameCriterion
+{
+    public OddLetters()
+    {
+        Id = 4;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"Odd Words";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+
+    public NumberCriteria GetCriteria()
+    {
+        return new NumberCriteria("odd", x => x % 2 == 1);
+    }
+}
+
+public class EvenLetters : GameCriterion
+{
+    public EvenLetters()
+    {
+        Id = 5;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"Even Words";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+
+    public NumberCriteria GetCriteria()
+    {
+        return new NumberCriteria("even", x => x % 2 == 0);
+    }
+}
+
+public class AIStarts : GameCriterion
+{
+    public AIStarts()
+    {
+        Id = 6;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"<color=yellow>CASP</color> Starts";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+}
+
 public class NoComboLetters : GameCriterion
 {
     public NoComboLetters()
     {
+        Id = 7;
         IsRestrictive = true;
     }
 
@@ -129,4 +202,26 @@ public class GameState
 {
     public int Points;
     public bool EndGame;
+}
+
+public class NumberCriteria
+{
+    public Func<int, bool> Criteria { get; set; }
+    public string Type { get; set; }
+
+    public NumberCriteria(string type, Func<int, bool> criteria)
+    {
+        Type = type;
+        Criteria = criteria;
+    }
+
+    public string GetName()
+    {
+        return Type;
+    }
+
+    public bool IsAllowed(int number)
+    {
+        return Criteria(number);
+    }
 }

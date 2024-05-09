@@ -13,6 +13,7 @@ public class ComboText : MonoBehaviour
     public AudioSource shuffleAudioSource;
 
     private List<ComboChar> comboChars = new List<ComboChar>();
+    private List<char> restrictedLetters = new List<char>();
     private Dictionary<char, int> characterWeights = new Dictionary<char, int>
     {
         {'A', 2}, {'B', 7}, {'C', 5}, {'D', 4}, {'E', 2}, {'F', 10}, {'G', 7},
@@ -65,11 +66,15 @@ public class ComboText : MonoBehaviour
 
     private char WeightedRandomCharacter()
     {
-        int totalWeight = characterWeights.Values.Sum();
+        var filteredCharacterWeights = characterWeights
+            .Where(kvp => !restrictedLetters.Contains(kvp.Key))
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        int totalWeight = filteredCharacterWeights.Values.Sum();
         int randomNumber = Random.Range(1, totalWeight + 1);
         int sum = 0;
 
-        foreach (var kvp in characterWeights)
+        foreach (var kvp in filteredCharacterWeights)
         {
             sum += kvp.Value;
             if (randomNumber <= sum)
@@ -170,6 +175,16 @@ public class ComboText : MonoBehaviour
         return comboChars.All(c => c.State == CharState.EarnedPoints);
     }
 
+    public void AddRestrictedLetter(char c)
+    {
+        restrictedLetters.Add(c);
+    }
+
+    public void ClearRestrictions()
+    {
+        restrictedLetters.Clear();
+    }
+
     private IEnumerator ChooseNewComboAnimation()
     {
         if (!IsInactive)
@@ -183,7 +198,8 @@ public class ComboText : MonoBehaviour
         var totalChars = 4;
 
         // Pre-select the characters to ensure they're unique
-        selectedChars.Add(vowels[Random.Range(0, vowels.Count)]);
+        var restrictedVowels = vowels.FindAll(v => !restrictedLetters.Contains(v));
+        selectedChars.Add(restrictedVowels[Random.Range(0, restrictedVowels.Count)]);
         while (selectedChars.Count < totalChars)
         {
             selectedChars.Add(WeightedRandomCharacter());

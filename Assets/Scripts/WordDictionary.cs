@@ -16,6 +16,7 @@ public class WordDictionary
     private readonly char[] specialConsonants = "bcdgkpstw".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
     private int minLength = 3;
+    private NumberCriteria numberCriteria = null;
     private delegate bool MatchCondition(string w, string extension);
 
     public void LoadWords(string[] lines)
@@ -57,7 +58,12 @@ public class WordDictionary
 
     public void SetFilteredWords(string substring)
     {
-        filteredWords = filteredWords.Where(w => w.Length > minLength && w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        var words = filteredWords.Where(w => w.Length > minLength && w.Contains(substring, StringComparison.InvariantCultureIgnoreCase));
+        if (numberCriteria != null)
+        {
+            words = words.Where(w => numberCriteria.IsAllowed(w.Length));
+        }
+        filteredWords = words.ToList();
     }
 
     public void ClearFilteredWords()
@@ -113,6 +119,12 @@ public class WordDictionary
     {
         restrictedLetters.Clear();
         minLength = 3;
+        numberCriteria = null;
+    }
+
+    public void SetNumberCriteria(NumberCriteria numberCriteria)
+    {
+        this.numberCriteria = numberCriteria;
     }
 
     public void SetMinLength(int minLength)
@@ -182,8 +194,7 @@ public class WordDictionary
 
         if (filteredWords.Count == 0) return true; // No possible words
 
-        int minSubstringLength = minLength;
-        if (substring.Length < minSubstringLength) return false;
+        if (substring.Length < minLength) return false;
 
         if (lostChallengeSubstring.Contains(substring)) return false;
 

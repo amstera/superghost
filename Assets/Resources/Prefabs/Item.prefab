@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 1
+  borderWidth: 2
   falloffDistance: 1
 --- !u!114 &3477993785966033674
 MonoBehaviour:
@@ -641,6 +641,7 @@ GameObject:
   - component: {fileID: 3990712674185840627}
   - component: {fileID: 4944796984049232896}
   - component: {fileID: 3572867988044167647}
+  - component: {fileID: 2182380122144991051}
   m_Layer: 5
   m_Name: Description
   m_TagString: Untagged
@@ -764,6 +765,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2182380122144991051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5954007912920408131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &6691524679511782817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,6 +1412,7 @@ GameObject:
   - component: {fileID: 8887786207181032624}
   - component: {fileID: 4876657748069829519}
   - component: {fileID: 8512413080343071364}
+  - component: {fileID: 8381361808855786776}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -1520,3 +1537,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &8381361808855786776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9162004099354771038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
