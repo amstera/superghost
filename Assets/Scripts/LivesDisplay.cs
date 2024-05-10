@@ -51,6 +51,13 @@ public class LivesDisplay : MonoBehaviour
         return GetDisplayText();
     }
 
+    public void SetLives(int lives)
+    {
+        currentLifeIndex = livesString.Length - lives;
+        UpdateLivesDisplay();
+        StartCoroutine(PopAnimation());
+    }
+
     public void LoseAllLives()
     {
         currentLifeIndex = livesString.Length;

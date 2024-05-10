@@ -47,9 +47,9 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasDoubleEndedMultiplier;
+    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier;
     public float ChanceMultiplier = 1;
-    public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses;
+    public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch;
     public int currency = 5;
 
     private HashSet<string> previousWords = new HashSet<string>();
@@ -464,6 +464,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public void MatchAILives()
+    {
+        playerLivesText.SetLives(aiLivesText.LivesRemaining());
+        AILivesMatch++;
+    }
+
     public void EnableDoubleWealth()
     {
         HasDoubleWealth = true;
@@ -489,6 +496,11 @@ public class GameManager : MonoBehaviour
     public void EnableMoneyLose()
     {
         HasLoseMoney = true;
+    }
+
+    public void EnableBonusMoney()
+    {
+        HasBonusMoney = true;
     }
 
     public void LoseLifeMoney()
@@ -646,7 +658,10 @@ public class GameManager : MonoBehaviour
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
-            previousWords.Add(gameWord);
+            if (gameWord.ToLower() != originalWord.ToLower())
+            {
+                previousWords.Add(gameWord);
+            }
             UpdatePoints(gameWord, -1);
         }
 
@@ -728,6 +743,7 @@ public class GameManager : MonoBehaviour
         {
             HasLoseMoney = false;
             HasDoubleWealth = false;
+            HasBonusMoney = false;
         }
 
         if (!roundEnded)
@@ -845,6 +861,31 @@ public class GameManager : MonoBehaviour
 
             HasLoseMoney = false;
         }
+        if (HasBonusMoney)
+        {
+            if (playerWon || !gameOver)
+            {
+                int bonusMoney = (playerLivesText.GetStartLives() - playerLivesText.LivesRemaining()) * 3;
+
+                if (HasDoubleWealth)
+                {
+                    bonusMoney *= 2;
+                }
+
+                if (playerWon)
+                {
+                    roundCurrency += bonusMoney;
+                }
+                else
+                {
+                    currencyEarnedText.gameObject.SetActive(true);
+                    currencyEarnedText.AddPoints(bonusMoney, true);
+                }
+                currency += bonusMoney;
+            }
+
+            HasBonusMoney = false;
+        }
         HasDoubleWealth = false;
 
         if (playerWon) // won round
@@ -905,6 +946,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.transform.localPosition += Vector3.down * 75;
             PlayerRestoreLivesUses = 0;
             AIRestoreLivesUses = 0;
+            AILivesMatch = 0;
             runInfoPopup.difficulty = saveObject.Difficulty;
             activeEffectsText.gameObject.SetActive(false);
 

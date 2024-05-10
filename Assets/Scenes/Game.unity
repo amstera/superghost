@@ -1370,8 +1370,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.5, y: -95.86401}
-  m_SizeDelta: {x: -15, y: -191.73}
+  m_AnchoredPosition: {x: 2.5, y: -90.112}
+  m_SizeDelta: {x: -15, y: -180.23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &113918394
 MonoBehaviour:
@@ -1992,6 +1992,21 @@ MonoBehaviour:
     warning: Only one use per round
     type: 2
     iconSprite: {fileID: 21300000, guid: c0f26cf569a4240c7abd415f8d15f94e, type: 3}
+    isFavored: 1
+  - id: 18
+    title: Perfect Balance
+    body: Make your <color=red>GHOST</color> letters the same as CASP
+    warning: Must use during your turn
+    type: 1
+    iconSprite: {fileID: 21300000, guid: b719caeae49214d4094956947d0c1bb9, type: 3}
+    isFavored: 0
+  - id: 19
+    title: Loss Leader
+    body: Get a bonus <color=green>$3</color> for each of your <color=red>GHOST</color>
+      letters
+    warning: Only one use per round
+    type: 2
+    iconSprite: {fileID: 21300000, guid: 1aeaa4f66078b42e3b1ba68c22daad82, type: 3}
     isFavored: 1
   shopItemPrefabs:
   - {fileID: 6471958011589242375}
@@ -5465,7 +5480,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999774
+  m_Size: 0.9999218
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8603,8 +8618,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000044
-  m_Size: 0.710195
+  m_Value: 1.0000064
+  m_Size: 0.7252997
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -31395,7 +31410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 229}
+  m_AnchoredPosition: {x: 0, y: 235.7}
   m_SizeDelta: {x: 389.56, y: 64.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1422350923
@@ -31508,7 +31523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.6
+  amplitude: 0.65
 --- !u!114 &1422350926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31763,8 +31778,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0000011745343
-  m_Size: 0.33190867
+  m_Value: -0.0000022956806
+  m_Size: 0.33188868
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -34642,7 +34657,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.0009986016}
+  m_AnchoredPosition: {x: 5, y: 0.0021771993}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -36519,7 +36534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.06666667, g: 0.39215687, b: 0.5882353, a: 1}
+  m_Color: {r: 0.67058825, g: 0.1764706, b: 0.09803922, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -38203,7 +38218,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2404}
+  m_AnchoredPosition: {x: 0, y: 1143.2417}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -39903,11 +39918,13 @@ MonoBehaviour:
   HasLongWordMultiplier: 0
   HasDoubleBluff: 0
   HasLoseMoney: 0
+  HasBonusMoney: 0
   HasDoubleEndedMultiplier: 0
   ChanceMultiplier: 1
   ResetWordUses: 0
   PlayerRestoreLivesUses: 0
   AIRestoreLivesUses: 0
+  AILivesMatch: 0
   currency: 5
 --- !u!4 &1816581305
 Transform:
@@ -41610,7 +41627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 189}
+  m_AnchoredPosition: {x: 0, y: 200.5}
   m_SizeDelta: {x: 335, y: 29.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1885233852
@@ -44160,7 +44177,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 269.87405}
+  m_AnchoredPosition: {x: 0, y: 275.62366}
   m_SizeDelta: {x: 0, y: 760}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745

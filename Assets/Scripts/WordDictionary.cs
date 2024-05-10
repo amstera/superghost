@@ -168,7 +168,13 @@ public class WordDictionary
 
             char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd);
 
-            return addAtEnd ? substring + nextLetter : nextLetter + substring;
+            var bluffedWord = addAtEnd ? substring + nextLetter : nextLetter + substring;
+            if (filteredWords.Contains(bluffedWord.ToLower())) // it is bluffing accidentally with a real word
+            {
+                return BluffWord(substring, difficulty); // redo it and try again
+            }
+
+            return bluffedWord;
         }
 
         // return nothing if choosing not to bluff the word

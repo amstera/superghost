@@ -59,7 +59,7 @@ public class ShopItem : MonoBehaviour
 
         iconImage.sprite = iconSprite;
 
-        if (isActive && !string.IsNullOrEmpty(extraInfoText))
+        if (!string.IsNullOrEmpty(extraInfoText))
         {
             this.extraInfoText.text = extraInfoText;
         }

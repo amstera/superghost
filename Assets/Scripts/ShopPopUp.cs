@@ -110,7 +110,7 @@ public class ShopPopUp : MonoBehaviour
                 var helpers = availableShopItems.Where(item => item.type == ShopItemType.Helper).ToList();
                 var pointsItems = availableShopItems.Where(item => item.type == ShopItemType.Points).ToList();
 
-                ShopItemInfo SelectWeightedRandom(List<ShopItemInfo> items, float favoredWeight = 1.2f)
+                ShopItemInfo SelectWeightedRandom(List<ShopItemInfo> items, float favoredWeight = 1.25f)
                 {
                     ShopItemInfo selected = null;
                     double maxWeight = 0;
@@ -203,7 +203,7 @@ public class ShopPopUp : MonoBehaviour
 
     public void ReShuffle()
     {
-        int restockCost = (int)RoundHalfUp(10 * totalCostPercentage);
+        int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
         if (currency >= restockCost)
         {
             StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(restockCost, null)));
@@ -389,7 +389,7 @@ public class ShopPopUp : MonoBehaviour
             shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, GetInteractable(shopItem.id), GetAdditionalInteractableCriteria(shopItem.id), IsActive(shopItem.id), GetExtraInfoText(shopItem.id), shopItem.iconSprite, (item) => BuyPressed(item), () => GetCoroutine(shopItem.id, cost));
         }
 
-        int restockCost = (int)RoundHalfUp(10 * totalCostPercentage);
+        int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -437,6 +437,10 @@ public class ShopPopUp : MonoBehaviour
                 return DoAction(id, cost, () => gameManager.EnableDoubleEnded(), false, true);
             case 17:
                 return DoAction(id, cost, () => ApplyDiscount(0.5f), false, true);
+            case 18:
+                return DoAction(id, cost, () => gameManager.MatchAILives(), true, false);
+            case 19:
+                return DoAction(id, cost, () => gameManager.EnableBonusMoney(), false, true);
         }
 
         return null;
@@ -492,6 +496,10 @@ public class ShopPopUp : MonoBehaviour
                 return gameEnded ? 2 : (roundsWon + 1) * 2;
             case 17:
                 return 5;
+            case 18:
+                return (int)Math.Pow(2, gameManager.AILivesMatch) * 5;
+            case 19:
+                return 5;
         }
 
         return -1;
@@ -537,6 +545,10 @@ public class ShopPopUp : MonoBehaviour
                 return !gameManager.HasDoubleEndedMultiplier;
             case 17:
                 return totalCostPercentage == 1;
+            case 18:
+                return gameManager.IsPlayerTurn();
+            case 19:
+                return !gameManager.HasBonusMoney;
         }
 
         return false;
@@ -581,6 +593,10 @@ public class ShopPopUp : MonoBehaviour
             case 16:
                 return true;
             case 17:
+                return true;
+            case 18:
+                return gameManager.playerLivesText.LivesRemaining() != gameManager.aiLivesText.LivesRemaining();
+            case 19:
                 return true;
         }
 
@@ -627,6 +643,10 @@ public class ShopPopUp : MonoBehaviour
                 return gameManager.HasDoubleEndedMultiplier;
             case 17:
                 return totalCostPercentage != 1;
+            case 18:
+                return false;
+            case 19:
+                return gameManager.HasBonusMoney;
         }
 
         return false;
@@ -641,7 +661,14 @@ public class ShopPopUp : MonoBehaviour
                 {
                     return $"<color=red>{gameManager.ChanceMultiplier}x</color>";
                 }
-                return $"{gameManager.ChanceMultiplier}x";
+                if (gameManager.ChanceMultiplier > 1)
+                {
+                    return $"{gameManager.ChanceMultiplier}x";
+                }
+                break;
+            case 19:
+                int totalAmount = (gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3;
+                return $"${totalAmount}";
         }
 
         return "";
