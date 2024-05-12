@@ -22452,6 +22452,7 @@ equably
 equal
 equaled
 equaling
+equalities
 equality
 equalization
 equalize

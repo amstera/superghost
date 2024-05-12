@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour
             bonusCurrencyEarnedText.Reset();
             runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 113);
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
+            nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -254);
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
             difficultyText.gameObject.SetActive(false);
@@ -1041,6 +1042,10 @@ public class GameManager : MonoBehaviour
                 playerText.color = Color.red;
                 aiText.color = Color.green;
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
+                if (DeviceTypeChecker.IsiPhoneSE())
+                {
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -215);
+                }
                 shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);

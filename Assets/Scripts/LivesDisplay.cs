@@ -130,6 +130,52 @@ public class LivesDisplay : MonoBehaviour
         var livesRemaining = LivesRemaining();
         flames.SetActive(LivesRemaining() <= 1);
         flames.transform.GetChild(flames.transform.childCount - 1).gameObject.SetActive(livesRemaining == 0);
+
+        if (livesRemaining <= 1)
+        {
+            StartCoroutine(CriticalLivesColorAnimation());
+        }
+        else
+        {
+            livesText.text = GetDisplayText();
+        }
+    }
+
+    IEnumerator CriticalLivesColorAnimation()
+    {
+        while (LivesRemaining() <= 1)
+        {
+            float duration = 3.0f; // Increased duration for a slower transition
+            float timer = 0;
+            while (timer < duration)
+            {
+                Color orange = new Color(1, 165 / 255f, 0, 1); // Orange color
+                Color lerpColor = Color.Lerp(
+                    Color.red,
+                    orange,
+                    Mathf.PingPong(timer / duration * 2, 1)  // Ping pong for smooth transition between orange and red
+                );
+
+                UpdateLivesDisplayWithCriticalColor(lerpColor);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            // Ensure the final color is set to red at the end of each cycle if still critical
+            UpdateLivesDisplayWithCriticalColor(Color.red);
+        }
+        // When condition is no longer met, reset the text color to normal
+        UpdateLivesDisplay();
+    }
+
+    void UpdateLivesDisplayWithCriticalColor(Color criticalColor)
+    {
+        string displayText = "";
+        for (int i = 0; i < livesString.Length; i++)
+        {
+            Color currentColor = i < currentLifeIndex ? criticalColor : defaultColor;
+            displayText += $"<color=#{ColorUtility.ToHtmlStringRGB(currentColor)}>{livesString[i]}</color>";
+        }
+        livesText.text = displayText;
     }
 
     string GetDisplayText()
@@ -137,16 +183,9 @@ public class LivesDisplay : MonoBehaviour
         string displayText = "";
         for (int i = 0; i < livesString.Length; i++)
         {
-            if (i < currentLifeIndex)
-            {
-                displayText += $"<color=#{ColorUtility.ToHtmlStringRGB(lostLifeColor)}>{livesString[i]}</color>";
-            }
-            else
-            {
-                displayText += $"<color=#{ColorUtility.ToHtmlStringRGB(defaultColor)}>{livesString[i]}</color>";
-            }
+            Color currentColor = i < currentLifeIndex ? lostLifeColor : defaultColor;
+            displayText += $"<color=#{ColorUtility.ToHtmlStringRGB(currentColor)}>{livesString[i]}</color>";
         }
-
         return displayText;
     }
 

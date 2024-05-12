@@ -9,7 +9,8 @@ using System;
 public class StatsPopup : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
-    public GameObject popUpGameObject;
+    public GameObject popUpGameObject, statsPage, unlocksPage;
+    public Button statsButton, unlocksButton;
     public TextMeshProUGUI statsText;
     public GameManager gameManager;
 
@@ -76,6 +77,26 @@ public class StatsPopup : MonoBehaviour
 
         StopAllCoroutines();
         ResetPopUp();
+    }
+
+    public void PressStatsTab()
+    {
+        clickAudioSource?.Play();
+
+        statsButton.interactable = false;
+        unlocksButton.interactable = true;
+        statsPage.gameObject.SetActive(true);
+        unlocksPage.gameObject.SetActive(false);
+    }
+
+    public void PressUnlocksTab()
+    {
+        clickAudioSource?.Play();
+
+        statsButton.interactable = true;
+        unlocksButton.interactable = false;
+        statsPage.gameObject.SetActive(false);
+        unlocksPage.gameObject.SetActive(true);
     }
 
     private void ResetPopUp()
