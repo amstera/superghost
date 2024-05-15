@@ -57,7 +57,8 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(textOverlayRect, eventData.position, eventData.pressEventCamera, out localPos);
                 localPos.y -= 65f;
 
-                effectsPopUp.Show(clickedEffect.title, localPos, clickedEffect.color);
+                GetColor(clickedEffect.color, out Color brighterColor);
+                effectsPopUp.Show(clickedEffect.title, localPos, brighterColor);
             }
         }
         else
@@ -74,7 +75,7 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
         foreach (var effect in activeEffects)
         {
             var shortTitle = GetShortTitle(effect.title);
-            var color = GetColor(effect.color);
+            var color = GetColor(effect.color, out _);
 
             text.text += $"<mark=#{color} padding=15,15,15,15>{shortTitle}</mark>  ";
             textOverlay.text += $"<link=\"{effect.id}\">{shortTitle}</link>  ";
@@ -99,11 +100,11 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
         return shortTitle;
     }
 
-    private string GetColor(Color color)
+    private string GetColor(Color color, out Color brighterColor)
     {
         Color.RGBToHSV(color, out float H, out float S, out float V);
         V = Mathf.Clamp(V + 0.25f, 0, 1);
-        Color brighterColor = Color.HSVToRGB(H, S, V);
+        brighterColor = Color.HSVToRGB(H, S, V);
 
         return ColorUtility.ToHtmlStringRGB(brighterColor);
     }

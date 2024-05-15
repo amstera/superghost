@@ -917,8 +917,11 @@ public class GameManager : MonoBehaviour
                 saveObject.Statistics.MostMoney = currency;
             }
 
-            currencyEarnedText.gameObject.SetActive(true);
-            currencyEarnedText.AddPoints(roundCurrency, true);
+            if (roundCurrency != 0)
+            {
+                currencyEarnedText.gameObject.SetActive(true);
+                currencyEarnedText.AddPoints(roundCurrency, true);
+            }
         }
         else // lost round
         {
@@ -993,6 +996,7 @@ public class GameManager : MonoBehaviour
 
                 currentGame++;
                 saveObject.CurrentLevel++;
+                saveObject.Statistics.GameWins++;
 
                 UpdateLevelStats();
 

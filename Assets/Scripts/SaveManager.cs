@@ -68,6 +68,7 @@ public class SaveObject
     public bool HasSeenTutorial;
     public int Currency = 5;
     public int CurrentLevel;
+    public HatType HatType = HatType.None;
     public Dictionary<int, List<int>> ChosenCriteria = new Dictionary<int, List<int>>();
     public List<int> ShopItemIds = new List<int>();
     public Dictionary<int, char> RestrictedChars = new Dictionary<int, char>();
@@ -96,6 +97,7 @@ public class Statistics
     public int HardWins;
     public int NormalWins;
     public int EasyWins;
+    public int GameWins;
     public Dictionary<int, int> UsedShopItemIds = new Dictionary<int, int>();
     public List<string> WinningWords = new List<string>();
 }

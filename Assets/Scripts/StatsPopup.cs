@@ -13,9 +13,11 @@ public class StatsPopup : MonoBehaviour
     public Button statsButton, unlocksButton;
     public TextMeshProUGUI statsText;
     public GameManager gameManager;
+    public UnlockItem unlockPrefab;
+    public Hat hat;
 
-    public RectTransform statsContentRect;
-    public ScrollRect statsScrollRect;
+    public RectTransform statsContentRect, unlocksContentRect;
+    public ScrollRect statsScrollRect, unlocksScrollRect;
 
     public AudioSource clickAudioSource;
 
@@ -35,11 +37,10 @@ public class StatsPopup : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        // Load settings
         saveObject = SaveManager.Load();
 
-        // Set up stats
         ConfigureStats();
+        ConfigureUnlocks();
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -189,14 +190,67 @@ public class StatsPopup : MonoBehaviour
 
         statsContentRect.sizeDelta = new Vector2(statsContentRect.sizeDelta.x, 1375);
 
-        StartCoroutine(ScrollToTop());
+        StartCoroutine(ScrollToTop(statsScrollRect));
     }
 
-    private IEnumerator ScrollToTop()
+    public void ConfigureUnlocks()
+    {
+        // Clear existing unlock items
+        foreach (Transform child in unlocksContentRect)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var layoutGroup = unlocksContentRect.GetComponent<VerticalLayoutGroup>();
+        layoutGroup.padding = new RectOffset(0, 0, 15, 30);
+
+        // Repopulate unlock items
+        foreach (var hatData in hat.hatDataList)
+        {
+            var unlockItem = Instantiate(unlockPrefab, unlocksContentRect);
+            unlockItem.statsPopup = this;
+            unlockItem.Init(hatData.hatType, CheckIfUnlocked(hatData.hatType), saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);;
+        }
+
+        StartCoroutine(ScrollToTop(unlocksScrollRect));
+    }
+
+    public void OnUnlockItemClicked(UnlockItem clickedItem)
+    {
+        clickAudioSource?.Play();
+
+        hat.UpdateHat(clickedItem.hatType);
+        saveObject.HatType = clickedItem.hatType;
+        SaveManager.Save(saveObject);
+
+        foreach (Transform sibling in unlocksContentRect)
+        {
+            var siblingUnlockItem = sibling.GetComponent<UnlockItem>();
+            if (siblingUnlockItem != clickedItem)
+            {
+                siblingUnlockItem.Enabled = false;
+            }
+        }
+    }
+
+    private bool CheckIfUnlocked(HatType type)
+    {
+        switch (type)
+        {
+            case HatType.None:
+                return true;
+            case HatType.Toque:
+                return saveObject.Statistics.GameWins > 0;
+        }
+
+        return false;
+    }
+
+    private IEnumerator ScrollToTop(ScrollRect scrollRect)
     {
         // Wait for end of frame to let the UI update
         yield return new WaitForEndOfFrame();
-        statsScrollRect.verticalNormalizedPosition = 1.0f;
+        scrollRect.verticalNormalizedPosition = 1.0f;
     }
 
     private string GetFrequentStartingLetter(Dictionary<string, int> dictionary)

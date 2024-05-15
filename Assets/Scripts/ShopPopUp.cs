@@ -103,6 +103,7 @@ public class ShopPopUp : MonoBehaviour
 
             if (saveObject.ShopItemIds.Count == 0 || overrideExistingItems)
             {
+                int currentLevel = saveObject.CurrentLevel;
                 var availableShopItems = shopItems.Where(item => !previousShopItemIds.Contains(item.id)).ToList();
                 FilterAvailableShopItems(availableShopItems);
                 Shuffle(availableShopItems);
@@ -112,6 +113,11 @@ public class ShopPopUp : MonoBehaviour
 
                 ShopItemInfo SelectWeightedRandom(List<ShopItemInfo> items, float favoredWeight = 1.25f)
                 {
+                    if (currentLevel == 0)
+                    {
+                        favoredWeight += 0.25f;
+                    }
+
                     ShopItemInfo selected = null;
                     double maxWeight = 0;
                     double weight;
@@ -654,6 +660,7 @@ public class ShopPopUp : MonoBehaviour
 
     private string GetExtraInfoText(int id)
     {
+        bool gameEnded = gameManager.IsGameEnded();
         switch (id)
         {
             case 10:
@@ -668,7 +675,7 @@ public class ShopPopUp : MonoBehaviour
                 break;
             case 19:
                 int totalAmount = (gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3;
-                return $"${totalAmount}";
+                return gameEnded ? "$0" : $"${totalAmount}";
         }
 
         return "";
