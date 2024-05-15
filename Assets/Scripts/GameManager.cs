@@ -996,7 +996,19 @@ public class GameManager : MonoBehaviour
 
                 currentGame++;
                 saveObject.CurrentLevel++;
-                saveObject.Statistics.GameWins++;
+
+                if (saveObject.Difficulty == Difficulty.Easy)
+                {
+                    saveObject.Statistics.EasyGameWins++;
+                }
+                else if (saveObject.Difficulty == Difficulty.Normal)
+                {
+                    saveObject.Statistics.NormalGameWins++;
+                }
+                else if (saveObject.Difficulty == Difficulty.Hard)
+                {
+                    saveObject.Statistics.HardGameWins++;
+                }
 
                 UpdateLevelStats();
 

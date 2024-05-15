@@ -97,7 +97,9 @@ public class Statistics
     public int HardWins;
     public int NormalWins;
     public int EasyWins;
-    public int GameWins;
+    public int EasyGameWins;
+    public int NormalGameWins;
+    public int HardGameWins;
     public Dictionary<int, int> UsedShopItemIds = new Dictionary<int, int>();
     public List<string> WinningWords = new List<string>();
 }

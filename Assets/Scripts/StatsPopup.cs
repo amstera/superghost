@@ -240,7 +240,29 @@ public class StatsPopup : MonoBehaviour
             case HatType.None:
                 return true;
             case HatType.Toque:
-                return saveObject.Statistics.GameWins > 0;
+                return saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+            case HatType.Steampunk:
+                return saveObject.Statistics.EasyHighestLevel >= 4 || saveObject.Statistics.HighestLevel >= 4 || saveObject.Statistics.HardHighestLevel >= 4;
+            case HatType.Wizard:
+                return saveObject.Statistics.HighScore >= 150;
+            case HatType.Fedora:
+                return saveObject.Statistics.HardGameWins > 0;
+            case HatType.Jester:
+                return saveObject.Statistics.EasyHighestLevel >= 9 || saveObject.Statistics.HighestLevel >= 9 || saveObject.Statistics.HardHighestLevel >= 9;
+            case HatType.Party:
+                return saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
+            case HatType.Cap:
+                return saveObject.Statistics.HardHighestLevel >= 4;
+            case HatType.Cowboy:
+                return saveObject.Statistics.HighScore >= 250;
+            case HatType.Devil:
+                return saveObject.Statistics.MostPointsPerRound >= 150;
+            case HatType.Crown:
+                return saveObject.Statistics.HardWins > 0;
+            case HatType.Taco:
+                return saveObject.Statistics.EasyWins >= 5 || saveObject.Statistics.NormalWins >= 5 || saveObject.Statistics.HardWins >= 5;
+            case HatType.Top:
+                return saveObject.Statistics.NormalWins >= 10 || saveObject.Statistics.HardWins >= 10;
         }
 
         return false;

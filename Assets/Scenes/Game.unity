@@ -5678,7 +5678,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99714524
+  m_Size: 0.99999774
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8816,8 +8816,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.7242613
+  m_Value: 1.0000108
+  m_Size: 0.72532564
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9724,7 +9724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minIntensity: 0
-  maxIntensity: 0.2
+  maxIntensity: 0.3
   pulseSpeed: 1
   waveAmplitude: 0.1
   waveFrequency: 3
@@ -10942,10 +10942,10 @@ MonoBehaviour:
   screenJumpLength: 0.2
   screenJumpMinLevel: 0.1
   screenJumpMaxLevel: 0.9
-  flickeringStrength: 0.001
+  flickeringStrength: 0.0015
   flickeringCycle: 111
   isSlippage: 0
-  isSlippageNoise: 0
+  isSlippageNoise: 1
   slippageStrength: 0.005
   slippageInterval: 1
   slippageScrollSpeed: 2
@@ -10953,7 +10953,7 @@ MonoBehaviour:
   chromaticAberrationStrength: 0.0025
   isChromaticAberration: 1
   isMultipleGhost: 0
-  multipleGhostStrength: 0.01
+  multipleGhostStrength: 1
   isScanline: 0
   isMonochrome: 0
   isLetterBox: 0
@@ -30043,7 +30043,7 @@ MonoBehaviour:
   - hatType: 12
     sprite: {fileID: 21300000, guid: 15b5a43350ede44e8afeabce56b3b84a, type: 3}
     name: Sorcerer
-    description: Get 200+ points in a game
+    description: Get 150+ points in a game
     width: 45
     height: 35
     xPos: 0
@@ -30080,6 +30080,22 @@ MonoBehaviour:
     height: 30
     xPos: 0
     yPos: 40
+  - hatType: 3
+    sprite: {fileID: 21300000, guid: 5f5727ffbc33f4478a5d6693d750f423, type: 3}
+    name: Cowboy
+    description: Get 250+ points in a game
+    width: 45
+    height: 35
+    xPos: 0
+    yPos: 40
+  - hatType: 6
+    sprite: {fileID: 21300000, guid: 7a5f30b430eac4f76bc4fe1e259f7820, type: 3}
+    name: Devil Horns
+    description: Get 150+ points in a round
+    width: 50
+    height: 40
+    xPos: 0
+    yPos: 45
   - hatType: 5
     sprite: {fileID: 21300000, guid: e3fa3830fcbf3464eb4177c48a6d4651, type: 3}
     name: Crown
@@ -30088,22 +30104,6 @@ MonoBehaviour:
     height: 40
     xPos: 0
     yPos: 45
-  - hatType: 6
-    sprite: {fileID: 21300000, guid: 7a5f30b430eac4f76bc4fe1e259f7820, type: 3}
-    name: Devil Horns
-    description: Get 200+ points in a round
-    width: 50
-    height: 40
-    xPos: 0
-    yPos: 45
-  - hatType: 3
-    sprite: {fileID: 21300000, guid: 5f5727ffbc33f4478a5d6693d750f423, type: 3}
-    name: Cowboy
-    description: Get 350+ points in a game
-    width: 45
-    height: 35
-    xPos: 0
-    yPos: 40
   - hatType: 10
     sprite: {fileID: 21300000, guid: 44e5f7eb8bee3464282e4e8cfe3ea86d, type: 3}
     name: Fiesta
@@ -33289,8 +33289,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.33093834
+  m_Value: -0.000007901413
+  m_Size: 0.33190936
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -36318,7 +36318,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.000009588848}
+  m_AnchoredPosition: {x: 5, y: 0.0009631071}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -40043,7 +40043,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.239}
+  m_AnchoredPosition: {x: 0, y: 1143.248}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -41692,7 +41692,9 @@ MonoBehaviour:
       HardWins: 0
       NormalWins: 0
       EasyWins: 0
-      GameWins: 0
+      EasyGameWins: 0
+      NormalGameWins: 0
+      HardGameWins: 0
       WinningWords: []
     RunStatistics:
       HighScore: 0
@@ -41709,7 +41711,9 @@ MonoBehaviour:
       HardWins: 0
       NormalWins: 0
       EasyWins: 0
-      GameWins: 0
+      EasyGameWins: 0
+      NormalGameWins: 0
+      HardGameWins: 0
       WinningWords: []
   shopButton: {fileID: 1222778901}
   challengeButton: {fileID: 1389336110}
@@ -45080,7 +45084,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 113}
-  m_SizeDelta: {x: 225, y: 55}
+  m_SizeDelta: {x: 250, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1993080054
 MonoBehaviour:
@@ -46044,7 +46048,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 275.625}
+  m_AnchoredPosition: {x: 0, y: 275.62277}
   m_SizeDelta: {x: 0, y: 760}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2025111745
