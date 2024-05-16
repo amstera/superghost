@@ -174,6 +174,7 @@ public class VirtualKeyboard : MonoBehaviour
         {
             var btn = buttonLetterMap[c];
             restrictedLetters.Add(c);
+            btn.GetComponent<Image>().color = new Color32(255, 150, 150, 255);
             DisableButton(btn);
             btn.interactable = false;
         }
@@ -186,6 +187,7 @@ public class VirtualKeyboard : MonoBehaviour
             if (buttonLetterMap.ContainsKey(letter))
             {
                 var btn = buttonLetterMap[letter];
+                btn.GetComponent<Image>().color = buttonPrefab.GetComponent<Image>().color;
                 if (!buttonsDisabled)
                 {
                     EnableButton(btn);

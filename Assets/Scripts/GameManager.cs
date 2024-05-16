@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton, runInfoButton;
+    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton, runInfoButton, statsButton;
     public SkipButton skipButton;
     public Stars stars;
     public RecapPopup recapPopup;
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public BluffPopUp bluffPopup;
     public RunInfoPopUp runInfoPopup;
     public SettingsPopUp settingsPopup;
+    public StatsPopup statsPopup;
     public CriteriaText criteriaText;
     public Vignette vignette;
     public ActiveEffectsText activeEffectsText;
@@ -167,7 +168,7 @@ public class GameManager : MonoBehaviour
         restartButton.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
 
-        if (gameOver)
+        if (gameOver) // only at the beginning of a new game and not any new round
         {
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
@@ -218,6 +219,9 @@ public class GameManager : MonoBehaviour
             settingsPopup.difficultyDropdown.interactable = IsRunEnded();
             shopPopUp.RefreshView();
             ghostAvatar.SetFlag(GetGameState());
+
+            var unlockedHats = statsPopup.GetUnlockedHats();
+            statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
         }
         else
         {
@@ -1097,6 +1101,9 @@ public class GameManager : MonoBehaviour
 
         shopPopUp.RefreshView();
         ghostAvatar.SetFlag(gameState);
+
+        var unlockedHats = statsPopup.GetUnlockedHats();
+        statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
 
         if (playSound)
         {

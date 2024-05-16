@@ -9,8 +9,8 @@ using System;
 public class StatsPopup : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
-    public GameObject popUpGameObject, statsPage, unlocksPage;
-    public Button statsButton, unlocksButton;
+    public GameObject popUpGameObject, statsPage, unlocksPage, newUnlocksIndicator;
+    public Button statsIconButton, statsButton, unlocksButton;
     public TextMeshProUGUI statsText;
     public GameManager gameManager;
     public UnlockItem unlockPrefab;
@@ -29,6 +29,7 @@ public class StatsPopup : MonoBehaviour
 
     private void Start()
     {
+        saveObject = SaveManager.Load();
         originalScale = popUpGameObject.transform.localScale;
         ResetPopUp();
     }
@@ -37,10 +38,23 @@ public class StatsPopup : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        saveObject = SaveManager.Load();
-
         ConfigureStats();
-        ConfigureUnlocks();
+
+        var unlockedHats = GetUnlockedHats();
+        ConfigureUnlocks(unlockedHats);
+        if (saveObject.UnlockedHats.Count != unlockedHats.Count)
+        {
+            if (unlocksPage.activeSelf)
+            {
+                statsIconButton.GetComponent<Image>().color = Color.white;
+                saveObject.UnlockedHats = unlockedHats;
+                SaveManager.Save(saveObject);
+            }
+            else
+            {
+                newUnlocksIndicator.SetActive(true);
+            }
+        }
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -98,6 +112,15 @@ public class StatsPopup : MonoBehaviour
         unlocksButton.interactable = false;
         statsPage.gameObject.SetActive(false);
         unlocksPage.gameObject.SetActive(true);
+        newUnlocksIndicator.SetActive(false);
+
+        var unlockedHats = GetUnlockedHats();
+        if (unlockedHats.Count != saveObject.UnlockedHats.Count)
+        {
+            statsIconButton.GetComponent<Image>().color = Color.white;
+            saveObject.UnlockedHats = unlockedHats;
+            SaveManager.Save(saveObject);
+        }
     }
 
     private void ResetPopUp()
@@ -193,7 +216,7 @@ public class StatsPopup : MonoBehaviour
         StartCoroutine(ScrollToTop(statsScrollRect));
     }
 
-    public void ConfigureUnlocks()
+    public void ConfigureUnlocks(List<HatType> unlockedHats)
     {
         // Clear existing unlock items
         foreach (Transform child in unlocksContentRect)
@@ -209,7 +232,9 @@ public class StatsPopup : MonoBehaviour
         {
             var unlockItem = Instantiate(unlockPrefab, unlocksContentRect);
             unlockItem.statsPopup = this;
-            unlockItem.Init(hatData.hatType, CheckIfUnlocked(hatData.hatType), saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);;
+            bool isUnlocked = unlockedHats.Contains(hatData.hatType);
+            bool isNewlyUnlocked = isUnlocked && !saveObject.UnlockedHats.Contains(hatData.hatType);
+            unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);;
         }
 
         StartCoroutine(ScrollToTop(unlocksScrollRect));
@@ -233,39 +258,60 @@ public class StatsPopup : MonoBehaviour
         }
     }
 
-    private bool CheckIfUnlocked(HatType type)
+    public List<HatType> GetUnlockedHats()
     {
-        switch (type)
+        var unlockedHats = new List<HatType> { HatType.None };
+
+        if (saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0)
         {
-            case HatType.None:
-                return true;
-            case HatType.Toque:
-                return saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
-            case HatType.Steampunk:
-                return saveObject.Statistics.EasyHighestLevel >= 4 || saveObject.Statistics.HighestLevel >= 4 || saveObject.Statistics.HardHighestLevel >= 4;
-            case HatType.Wizard:
-                return saveObject.Statistics.HighScore >= 150;
-            case HatType.Fedora:
-                return saveObject.Statistics.HardGameWins > 0;
-            case HatType.Jester:
-                return saveObject.Statistics.EasyHighestLevel >= 9 || saveObject.Statistics.HighestLevel >= 9 || saveObject.Statistics.HardHighestLevel >= 9;
-            case HatType.Party:
-                return saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
-            case HatType.Cap:
-                return saveObject.Statistics.HardHighestLevel >= 4;
-            case HatType.Cowboy:
-                return saveObject.Statistics.HighScore >= 250;
-            case HatType.Devil:
-                return saveObject.Statistics.MostPointsPerRound >= 150;
-            case HatType.Crown:
-                return saveObject.Statistics.HardWins > 0;
-            case HatType.Taco:
-                return saveObject.Statistics.EasyWins >= 5 || saveObject.Statistics.NormalWins >= 5 || saveObject.Statistics.HardWins >= 5;
-            case HatType.Top:
-                return saveObject.Statistics.NormalWins >= 10 || saveObject.Statistics.HardWins >= 10;
+            unlockedHats.Add(HatType.Toque);
+        }
+        if (saveObject.Statistics.EasyHighestLevel >= 4 || saveObject.Statistics.HighestLevel >= 4 || saveObject.Statistics.HardHighestLevel >= 4)
+        {
+            unlockedHats.Add(HatType.Steampunk);
+        }
+        if (saveObject.Statistics.HighScore >= 150)
+        {
+            unlockedHats.Add(HatType.Wizard);
+        }
+        if (saveObject.Statistics.HardGameWins > 0)
+        {
+            unlockedHats.Add(HatType.Fedora);
+        }
+        if (saveObject.Statistics.EasyHighestLevel >= 9 || saveObject.Statistics.HighestLevel >= 9 || saveObject.Statistics.HardHighestLevel >= 9)
+        {
+            unlockedHats.Add(HatType.Jester);
+        }
+        if (saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0)
+        {
+            unlockedHats.Add(HatType.Party);
+        }
+        if (saveObject.Statistics.HardHighestLevel >= 4)
+        {
+            unlockedHats.Add(HatType.Cap);
+        }
+        if (saveObject.Statistics.HighScore >= 250)
+        {
+            unlockedHats.Add(HatType.Cowboy);
+        }
+        if (saveObject.Statistics.MostPointsPerRound >= 150)
+        {
+            unlockedHats.Add(HatType.Devil);
+        }
+        if (saveObject.Statistics.HardWins > 0)
+        {
+            unlockedHats.Add(HatType.Crown);
+        }
+        if (saveObject.Statistics.EasyWins >= 5 || saveObject.Statistics.NormalWins >= 5 || saveObject.Statistics.HardWins >= 5)
+        {
+            unlockedHats.Add(HatType.Taco);
+        }
+        if (saveObject.Statistics.NormalWins >= 10 || saveObject.Statistics.HardWins >= 10)
+        {
+            unlockedHats.Add(HatType.Top);
         }
 
-        return false;
+        return unlockedHats;
     }
 
     private IEnumerator ScrollToTop(ScrollRect scrollRect)

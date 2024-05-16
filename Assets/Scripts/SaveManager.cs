@@ -69,6 +69,7 @@ public class SaveObject
     public int Currency = 5;
     public int CurrentLevel;
     public HatType HatType = HatType.None;
+    public List<HatType> UnlockedHats = new List<HatType>();
     public Dictionary<int, List<int>> ChosenCriteria = new Dictionary<int, List<int>>();
     public List<int> ShopItemIds = new List<int>();
     public Dictionary<int, char> RestrictedChars = new Dictionary<int, char>();

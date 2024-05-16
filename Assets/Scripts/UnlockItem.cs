@@ -13,6 +13,7 @@ public class UnlockItem : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI description;
     public Image lockImage;
     public Image checkmarkImage;
+    public GameObject newIndicator;
     public StatsPopup statsPopup;
 
     private bool _unlocked;
@@ -37,12 +38,14 @@ public class UnlockItem : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    private bool newlyUnlocked;
     private string originalTitleText;
 
-    public void Init(HatType type, bool unlocked, bool enabled, Sprite displaySprite, string titleText, string descriptionText)
+    public void Init(HatType type, bool unlocked, bool newlyUnlocked, bool enabled, Sprite displaySprite, string titleText, string descriptionText)
     {
         _unlocked = unlocked;
         _enabled = enabled;
+        this.newlyUnlocked = newlyUnlocked;
         hatType = type;
         if (type != HatType.None)
         {
@@ -71,6 +74,7 @@ public class UnlockItem : MonoBehaviour, IPointerClickHandler
             lockImage.gameObject.SetActive(false);
             displayImage.color = Color.white;
             title.text = originalTitleText;
+            newIndicator.SetActive(newlyUnlocked && !Enabled);
 
             if (Enabled)
             {

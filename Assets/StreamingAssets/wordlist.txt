@@ -49763,6 +49763,7 @@ pout
 pouted
 pouter
 pouters
+poutine
 pouting
 pouts
 poverty
