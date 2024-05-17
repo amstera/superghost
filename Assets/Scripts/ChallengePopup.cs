@@ -13,6 +13,7 @@ public class ChallengePopUp : MonoBehaviour
     public TextMeshProUGUI challengeText;
     public TMP_InputField inputField;
     public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText;
+    public ActiveEffectsText activeEffectsText;
 
     public AudioSource alertAudioSource;
 
@@ -54,6 +55,7 @@ public class ChallengePopUp : MonoBehaviour
         inputField.text = substring;
 
         comboText.text = gameManager.comboText.GetString();
+        activeEffectsText.MatchEffects(gameManager.activeEffectsText);
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());

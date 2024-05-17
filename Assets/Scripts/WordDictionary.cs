@@ -373,7 +373,7 @@ public class WordDictionary
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
-            float ratio = 0.15f - playerAIWinDifference * 0.0125f;
+            float ratio = 0.15f - playerAIWinDifference * 0.025f;
             if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))

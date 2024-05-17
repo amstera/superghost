@@ -39,6 +39,17 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
         UpdateDisplay();
     }
 
+    public void MatchEffects(ActiveEffectsText aet)
+    {
+        activeEffects.Clear();
+        foreach (var effect in aet.GetEffects())
+        {
+            activeEffects.Add(effect);
+        }
+
+        UpdateDisplay();
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         int linkIndex = TMP_TextUtilities.FindIntersectingLink(textOverlay, eventData.position, Camera.main);

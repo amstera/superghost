@@ -1442,6 +1442,7 @@ public class GameManager : MonoBehaviour
         if (challengePopup.canvasGroup.alpha > 0)
         {
             challengePopup.pointsCalculateText.text = calculationText;
+            challengePopup.activeEffectsText.MatchEffects(activeEffectsText);
         }
         if (bluffPopup.canvasGroup.alpha > 0)
         {
