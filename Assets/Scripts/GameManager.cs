@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
             shopPopUp.RefreshView();
             ghostAvatar.SetFlag(GetGameState());
 
-            var unlockedHats = statsPopup.GetUnlockedHats();
+            var unlockedHats = statsPopup.GetUnlockedHats(true);
             statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
         }
         else
@@ -1102,7 +1102,7 @@ public class GameManager : MonoBehaviour
         shopPopUp.RefreshView();
         ghostAvatar.SetFlag(gameState);
 
-        var unlockedHats = statsPopup.GetUnlockedHats();
+        var unlockedHats = statsPopup.GetUnlockedHats(true);
         statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
 
         if (playSound)

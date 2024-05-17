@@ -74,7 +74,7 @@ public class UnlockItem : MonoBehaviour, IPointerClickHandler
             lockImage.gameObject.SetActive(false);
             displayImage.color = Color.white;
             title.text = originalTitleText;
-            newIndicator.SetActive(newlyUnlocked && !Enabled);
+            newIndicator.SetActive(newlyUnlocked && !Enabled && hatType != HatType.None);
 
             if (Enabled)
             {

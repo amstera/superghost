@@ -57,7 +57,9 @@ public class ShopItem : MonoBehaviour
         var buyButtonText = buyButton.GetComponentInChildren<TextMeshProUGUI>();
         buyButtonText.color = new Color(buyButtonText.color.r, buyButtonText.color.g, buyButtonText.color.b, buyButton.interactable ? 1 : 0.5f);
 
+        Color complementaryColor = new Color(1 - brighterColor.r, 1 - brighterColor.g, 1 - brighterColor.b);
         iconImage.sprite = iconSprite;
+        iconImage.color = complementaryColor;
 
         if (!string.IsNullOrEmpty(extraInfoText))
         {

@@ -40,8 +40,9 @@ public class StatsPopup : MonoBehaviour
 
         ConfigureStats();
 
-        var unlockedHats = GetUnlockedHats();
-        ConfigureUnlocks(unlockedHats);
+        ConfigureUnlocks();
+
+        var unlockedHats = GetUnlockedHats(true);
         if (saveObject.UnlockedHats.Count != unlockedHats.Count)
         {
             if (unlocksPage.activeSelf)
@@ -114,7 +115,7 @@ public class StatsPopup : MonoBehaviour
         unlocksPage.gameObject.SetActive(true);
         newUnlocksIndicator.SetActive(false);
 
-        var unlockedHats = GetUnlockedHats();
+        var unlockedHats = GetUnlockedHats(true);
         if (unlockedHats.Count != saveObject.UnlockedHats.Count)
         {
             statsIconButton.GetComponent<Image>().color = Color.white;
@@ -216,7 +217,7 @@ public class StatsPopup : MonoBehaviour
         StartCoroutine(ScrollToTop(statsScrollRect));
     }
 
-    public void ConfigureUnlocks(List<HatType> unlockedHats)
+    public void ConfigureUnlocks()
     {
         // Clear existing unlock items
         foreach (Transform child in unlocksContentRect)
@@ -226,6 +227,8 @@ public class StatsPopup : MonoBehaviour
 
         var layoutGroup = unlocksContentRect.GetComponent<VerticalLayoutGroup>();
         layoutGroup.padding = new RectOffset(0, 0, 15, 30);
+
+        var unlockedHats = GetUnlockedHats(false);
 
         // Repopulate unlock items
         foreach (var hatData in hat.hatDataList)
@@ -258,9 +261,14 @@ public class StatsPopup : MonoBehaviour
         }
     }
 
-    public List<HatType> GetUnlockedHats()
+    public List<HatType> GetUnlockedHats(bool forCount)
     {
-        var unlockedHats = new List<HatType> { HatType.None };
+        var unlockedHats = new List<HatType>();
+
+        if (!forCount)
+        {
+            unlockedHats.Add(HatType.None);
+        }
 
         if (saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0)
         {
