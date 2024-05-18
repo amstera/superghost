@@ -245,7 +245,7 @@ public class ShopPopUp : MonoBehaviour
         {
             var shopItem = shopItemPrefabs.Find(s => s.id == id);
             var shopItemInfo = shopItems.Find(s => s.id == id);
-            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItem.backgroundImage.color, cost);
+            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItemInfo.body, shopItem.backgroundImage.color, cost);
             activeEffectsText.AddEffect(details);
         }
 

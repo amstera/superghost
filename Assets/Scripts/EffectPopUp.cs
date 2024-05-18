@@ -5,7 +5,7 @@ using System.Collections;
 
 public class EffectsPopUp : MonoBehaviour
 {
-    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI titleText, descriptionText;
     public CanvasGroup canvasGroup;
     public Image backgroundImage;
     public float fadeInDuration = 0.25f;
@@ -25,11 +25,12 @@ public class EffectsPopUp : MonoBehaviour
         }
     }
 
-    public void Show(string title, Vector3 position, Color color)
+    public void Show(string title, string description, Vector3 position, Color color)
     {
         clickAudioSource?.Play();
 
         titleText.text = title;
+        descriptionText.text = description;
         transform.localPosition = position;
         backgroundImage.color = color;
 

@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            tutorialPopup.Show(false);
+            tutorialPopup.Show(0, false);
             saveObject.HasSeenTutorial = true;
 
             SaveManager.Save(saveObject);
@@ -170,6 +170,16 @@ public class GameManager : MonoBehaviour
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
+            bool hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+            if (saveObject.HasSeenTutorial && hasWonGame && !saveObject.HasSeenRunTutorial)
+            {
+                tutorialPopup.Show(10, false);
+                saveObject.HasSeenRunTutorial = true;
+
+                SaveManager.Save(saveObject);
+                return;
+            }
+
             playerLivesText.ResetLives();
             aiLivesText.ResetLives();
             totalPointsText.Reset();

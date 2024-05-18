@@ -66,6 +66,7 @@ public class SaveObject
 {
     public bool EnableSound = true;
     public bool HasSeenTutorial;
+    public bool HasSeenRunTutorial;
     public int Currency = 5;
     public int CurrentLevel;
     public HatType HatType = HatType.None;

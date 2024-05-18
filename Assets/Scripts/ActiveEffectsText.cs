@@ -66,10 +66,10 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
                 Vector2 localPos;
                 RectTransform textOverlayRect = textOverlay.GetComponent<RectTransform>();
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(textOverlayRect, eventData.position, eventData.pressEventCamera, out localPos);
-                localPos.y -= 65f;
+                localPos.y -= 105;
 
                 GetColor(clickedEffect.color, out Color brighterColor);
-                effectsPopUp.Show(clickedEffect.title, localPos, brighterColor);
+                effectsPopUp.Show(clickedEffect.title, clickedEffect.description, localPos, brighterColor);
             }
         }
         else
@@ -123,16 +123,18 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
 
 public class ShopItemEffectDetails
 {
-    public ShopItemEffectDetails(int id, string title, Color color, int cost)
+    public ShopItemEffectDetails(int id, string title, string description, Color color, int cost)
     {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.color = color;
         this.cost = cost;
     }
 
     public int id;
     public string title;
+    public string description;
     public int cost;
     public Color color;
 }

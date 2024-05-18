@@ -12,38 +12,51 @@ public class TutorialPopUp : MonoBehaviour
     public float fadeDuration = 0.5f;
 
     public GameManager gameManager;
+    public SaveObject saveObject;
 
     public AudioSource clickAudioSource;
 
     private int currentPageIndex = 0;
     private bool showCloseButton = false;
+    private bool hasWonGame = false;
+    private int visiblePagesCount;
 
     private void Start()
     {
-        ResetPopUp();
+        saveObject = SaveManager.Load();
     }
 
-    public void Show(bool showCloseButton = true)
+    private void SetVisiblePagesCount()
+    {
+        hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+        visiblePagesCount = hasWonGame ? pages.Length : pages.Length - 4;
+    }
+
+    public void ShowButton()
+    {
+        Show(0, true);
+    }
+
+    public void Show(int startingPageIndex = 0, bool showCloseButton = true)
     {
         clickAudioSource?.Play();
 
         this.showCloseButton = showCloseButton;
+        currentPageIndex = startingPageIndex;
+        SetVisiblePagesCount();
 
-        currentPageIndex = 0; // Reset to the first page
-        UpdatePageVisibility();
-        UpdateButtonVisibility();
-        StartCoroutine(AnimateProgressBar());
+        UpdateUI();
+        StartCoroutine(FadeIn());
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-
-        StartCoroutine(FadeIn());
     }
 
     private IEnumerator FadeIn()
     {
         float currentTime = 0;
         popUpGameObject.SetActive(true);
+
         while (currentTime < fadeDuration)
         {
             currentTime += Time.deltaTime;
@@ -54,24 +67,21 @@ public class TutorialPopUp : MonoBehaviour
 
     public void Hide()
     {
-        if (showCloseButton)
-        {
-            clickAudioSource?.Play();
-        }
-        else
+        clickAudioSource?.Play();
+
+        if (!showCloseButton)
         {
             gameManager.NewGamePressed();
         }
 
-        StopAllCoroutines(); // Stop any animations
+        StopAllCoroutines();
         ResetPopUp();
     }
 
     private void ResetPopUp()
     {
         currentPageIndex = 0;
-        UpdatePageVisibility();
-        UpdateButtonVisibility();
+        UpdateUI();
         StartCoroutine(AnimateProgressBar());
 
         canvasGroup.alpha = 0;
@@ -82,14 +92,12 @@ public class TutorialPopUp : MonoBehaviour
 
     public void NextPage()
     {
-        if (currentPageIndex < pages.Length - 1)
+        if (currentPageIndex < visiblePagesCount - 1)
         {
             clickAudioSource?.Play();
 
             currentPageIndex++;
-            UpdatePageVisibility();
-            UpdateButtonVisibility();
-            StartCoroutine(AnimateProgressBar());
+            UpdateUI();
         }
     }
 
@@ -100,32 +108,37 @@ public class TutorialPopUp : MonoBehaviour
             clickAudioSource?.Play();
 
             currentPageIndex--;
-            UpdatePageVisibility();
-            UpdateButtonVisibility();
-            StartCoroutine(AnimateProgressBar());
+            UpdateUI();
         }
+    }
+
+    private void UpdateUI()
+    {
+        UpdatePageVisibility();
+        UpdateButtonVisibility();
+        StartCoroutine(AnimateProgressBar());
     }
 
     private void UpdatePageVisibility()
     {
         for (int i = 0; i < pages.Length; i++)
         {
-            pages[i].SetActive(i == currentPageIndex);
+            pages[i].SetActive(i == currentPageIndex && (hasWonGame || i < pages.Length - 4));
         }
     }
 
     private void UpdateButtonVisibility()
     {
         previousButton.gameObject.SetActive(currentPageIndex > 0);
-        nextButton.gameObject.SetActive(currentPageIndex < pages.Length - 1);
-        closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == pages.Length - 1);
+        nextButton.gameObject.SetActive(currentPageIndex < visiblePagesCount - 1);
+        closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePagesCount - 1);
     }
 
     private IEnumerator AnimateProgressBar()
     {
         if (progressBar != null && pages.Length > 0)
         {
-            float targetValue = (float)currentPageIndex / (pages.Length - 1);
+            float targetValue = (float)currentPageIndex / (visiblePagesCount - 1);
             float currentValue = progressBar.value;
             float elapsedTime = 0;
 
@@ -136,7 +149,7 @@ public class TutorialPopUp : MonoBehaviour
                 yield return null;
             }
 
-            progressBar.value = targetValue; // Ensure it ends exactly at the target value
+            progressBar.value = targetValue;
         }
     }
 }

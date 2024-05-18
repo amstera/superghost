@@ -39,9 +39,12 @@ public class TextWiggleEffect : MonoBehaviour
 
             for (int j = 0; j < 4; ++j)
             {
-                Vector3 temp = vertices[vertexIndex + j];
-                temp.y += offset;
-                vertices[vertexIndex + j] = temp;
+                if (vertexIndex + j < vertices.Length)
+                {
+                    Vector3 temp = vertices[vertexIndex + j];
+                    temp.y += offset;
+                    vertices[vertexIndex + j] = temp;
+                }
             }
         }
 
