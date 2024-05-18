@@ -66,9 +66,18 @@ public class WordDictionary
         filteredWords = words.ToList();
     }
 
-    public void ClearFilteredWords()
+    public void ClearFilteredWords(List<string> blockedWords)
     {
-        filteredWords = words.Where(w => !restrictedLetters.Any(l => w.Contains(l, StringComparison.InvariantCultureIgnoreCase))).ToList();
+        // Convert blocked words list to a HashSet for faster lookup
+        var blockedWordsSet = new HashSet<string>(blockedWords, StringComparer.InvariantCultureIgnoreCase);
+
+        // Remove blocked words first with case insensitivity
+        var unblockedWords = words.Where(w => !blockedWordsSet.Contains(w, StringComparer.InvariantCultureIgnoreCase)).ToList();
+
+        // Then filter by restricted letters
+        filteredWords = unblockedWords.Where(w =>
+            !restrictedLetters.Any(l => w.Contains(l, StringComparison.InvariantCultureIgnoreCase))
+        ).ToList();
     }
 
     public bool IsWordReal(string word, bool useEntireDictionary = false)
@@ -287,7 +296,7 @@ public class WordDictionary
         char[] lettersForStartWith = endsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
-        ratio = 0.3f + playerAIWinDifference * 0.025f;
+        ratio = 0.3f + playerAIWinDifference * 0.05f;
         if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= ratio))
         {
             ShuffleArray(lettersForStartWith);

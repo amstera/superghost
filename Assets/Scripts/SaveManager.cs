@@ -74,6 +74,7 @@ public class SaveObject
     public Dictionary<int, List<int>> ChosenCriteria = new Dictionary<int, List<int>>();
     public List<int> ShopItemIds = new List<int>();
     public Dictionary<int, char> RestrictedChars = new Dictionary<int, char>();
+    public List<string> BlockedWords = new List<string>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
     public Statistics RunStatistics = new Statistics();

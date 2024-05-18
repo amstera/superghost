@@ -201,7 +201,8 @@ public class SettingsPopUp : MonoBehaviour
             return;
         }
 
-        if (gameManager.wordDictionary.IsWordReal(inputField.text, true))
+        bool isBlockedWord = saveObject.BlockedWords.Contains(inputField.text.ToLower());
+        if (!isBlockedWord && gameManager.wordDictionary.IsWordReal(inputField.text, true))
         {
             dictionaryValidateText.color = Color.green;
             dictionaryValidateText.text = $"{inputField.text.ToUpper()} is a valid word";
@@ -209,7 +210,7 @@ public class SettingsPopUp : MonoBehaviour
         else
         {
             dictionaryValidateText.color = Color.red;
-            dictionaryValidateText.text = $"{inputField.text.ToUpper()} is not a valid word";
+            dictionaryValidateText.text = isBlockedWord ? $"{inputField.text.ToUpper()} is blocked" : $"{inputField.text.ToUpper()} is not a valid word";
         }
 
         inputField.text = "";

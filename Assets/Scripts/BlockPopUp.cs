@@ -1,13 +1,14 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
-public class RestartPopUp : MonoBehaviour
+public class BlockPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public Button restartButton;
+    public TextMeshProUGUI bodyText;
+    public Button blockButton;
 
     public AudioSource clickAudioSource;
 
@@ -15,18 +16,25 @@ public class RestartPopUp : MonoBehaviour
     public float scaleDuration = 0.5f;
 
     private Vector3 originalScale;
+    private SaveObject saveObject;
+    private string word;
 
     private void Awake()
     {
         originalScale = popUpGameObject.transform.localScale;
+        saveObject = SaveManager.Load();
         ResetPopUp();
     }
 
-    public void Show()
+    public void Show(string word)
     {
         clickAudioSource?.Play();
 
-        StopAllCoroutines(); // Ensure no other animations are running
+        this.word = word;
+        bool isBlocked = saveObject.BlockedWords.Contains(word.ToLower());
+        bodyText.text = isBlocked ? $"<color=yellow>{word.ToUpper()}</color> is already blocked" : $"Block <color=yellow>{word.ToUpper()}</color> from being used?";
+        blockButton.interactable = !isBlocked;
+
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         StartCoroutine(FadeIn());
@@ -64,30 +72,17 @@ public class RestartPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Restart()
+    public void Block()
     {
         clickAudioSource?.Play();
-        restartButton.interactable = false;
 
-        StartCoroutine(RestartAfterDelay());
-    }
+        if (!saveObject.BlockedWords.Contains(word.ToLower()))
+        {
+            saveObject.BlockedWords.Add(word.ToLower());
+            SaveManager.Save(saveObject);
+        }
 
-    private IEnumerator RestartAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f);
-
-        SaveObject saveObject = SaveManager.Load();
-
-        saveObject.Currency = 5;
-        saveObject.CurrentLevel = 0;
-        saveObject.RunStatistics = new Statistics();
-        saveObject.ShopItemIds.Clear();
-        saveObject.RestrictedChars.Clear();
-        saveObject.ChosenCriteria.Clear();
-
-        SaveManager.Save(saveObject);
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Hide();
     }
 
     private void ResetPopUp()

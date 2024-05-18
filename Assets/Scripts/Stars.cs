@@ -6,7 +6,7 @@ public class Stars : MonoBehaviour
 {
     public Image[] stars;
     public Color yellowColor = Color.yellow;
-    public Color diamondColor = new Color(185f / 255f, 242f / 255f, 255f / 255f, 1f);
+    private Color diamondColor = new Color(130f / 255f, 190f / 255f, 255f / 255f, 1f);
 
     public AudioClip starAudioClip;
 

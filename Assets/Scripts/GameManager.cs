@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
             keyboard.EnableAllButtons();
         }
 
-        wordDictionary.ClearFilteredWords();
+        wordDictionary.ClearFilteredWords(saveObject.BlockedWords);
         wordDisplay.characterSpacing = 0f;
         wordDisplay.text = isPlayerTurn ? $"<color=yellow>{separator}</color>" : separator;
         historyText.UpdateText("");
@@ -534,7 +534,7 @@ public class GameManager : MonoBehaviour
         {
             gameWord = "";
         }
-        wordDictionary.ClearFilteredWords();
+        wordDictionary.ClearFilteredWords(saveObject.BlockedWords);
         if (string.IsNullOrEmpty(gameWord))
         {
             wordDisplay.text = $"<color=yellow>{separator}</color>";
@@ -580,6 +580,7 @@ public class GameManager : MonoBehaviour
             var thoughtWord = wordDictionary.FindWordContains(gameWord, true).ToUpper();
             string wordLink = GenerateWordLink(thoughtWord, false);
             wordDisplay.text = $"{caspString} countered with\n{wordLink}";
+            wordDisplay.word = thoughtWord;
             wordDictionary.AddLostChallengeWord(gameWord);
             playerLivesText.LoseLife();
             UpdatePoints(thoughtWord, -1);
@@ -622,6 +623,7 @@ public class GameManager : MonoBehaviour
         {
             string wordLink = GenerateWordLink(word, true);
             wordDisplay.text = $"You win with\n{wordLink}\n{caspString} was <color=green>bluffing</color>";
+            wordDisplay.word = word;
 
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             var addedChars = word.Replace(previousWord, "").ToCharArray();
@@ -651,6 +653,7 @@ public class GameManager : MonoBehaviour
         {
             string wordLink = GenerateWordLink(word, true);
             wordDisplay.text = $"You win!\n{wordLink}\nis a word";
+            wordDisplay.word = word;
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
@@ -790,6 +793,7 @@ public class GameManager : MonoBehaviour
             string wordLink = GenerateWordLink(gameWord, false);
             var caspString = GetCaspText();
             wordDisplay.text = $"{caspString} wins with\n{wordLink}";
+            wordDisplay.word = gameWord;
             playerLivesText.LoseLife();
             isPlayerTurn = true;
             previousWords.Add(gameWord);
@@ -1216,6 +1220,7 @@ public class GameManager : MonoBehaviour
                 {
                     var wordLink = GenerateWordLink(foundWord, true);
                     wordDisplay.text = $"You win with\n{wordLink}";
+                    wordDisplay.word = foundWord;
                     wordDisplay.Pop();
                     aiLivesText.LoseLife();
                     confettiPS.Play();

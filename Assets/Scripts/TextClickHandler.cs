@@ -6,7 +6,9 @@ using UnityEngine.EventSystems;
 public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 {
     public GameManager gameManager;
+    public string word;
 
+    private WordPopUp wordPopup;
     private Coroutine colorLerpCoroutine;
     private Coroutine popCoroutine;
 
@@ -43,7 +45,16 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
             // Open the URL if it's not empty
             if (!string.IsNullOrEmpty(url))
             {
-                Application.OpenURL(url);
+                if (wordPopup == null)
+                {
+                    wordPopup = GetComponentInChildren<WordPopUp>();
+                }
+
+                RectTransform rectTrans = GetComponent<RectTransform>();
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTrans, eventData.position, eventData.pressEventCamera, out Vector2 localPos);
+                localPos = new Vector2(0, localPos.y - 80);
+
+                wordPopup.Show(localPos, word, url);
                 return;
             }
         }
