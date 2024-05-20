@@ -193,7 +193,7 @@ public class GameManager : MonoBehaviour
             difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
             shopNewIndicator.SetActive(false);
-            comboText.gameObject.SetActive(true);
+            comboText.transform.parent.gameObject.SetActive(true);
             activeEffectsText.gameObject.SetActive(true);
             pointsText.gameObject.SetActive(true);
             recapButton.gameObject.SetActive(false);
@@ -266,6 +266,7 @@ public class GameManager : MonoBehaviour
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
         levelText.text = $"Level {currentGame + 1}/10";
+        levelText.fontSize = currentGame + 1 == 10 ? 26 : 28;
         levelText.color = Color.green;
         skipButton.gameObject.SetActive(true);
         pointsEarnedText.gameObject.SetActive(false);
@@ -567,7 +568,7 @@ public class GameManager : MonoBehaviour
         challengeButton.interactable = true;
         challengeButtonText.color = new Color(challengeButtonText.color.r, challengeButtonText.color.g, challengeButtonText.color.b, 1f);
 
-        if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
+        if (wordDictionary.ShouldChallenge(gameWord, GetPlayerAIWinDifference(), saveObject.Difficulty, false))
         {
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             gameWord = previousWord;
@@ -959,7 +960,7 @@ public class GameManager : MonoBehaviour
         if (gameOver)
         {
             UpdateDailyGameStreak(true);
-            comboText.gameObject.SetActive(false);
+            comboText.transform.parent.gameObject.SetActive(false);
             pointsText.gameObject.SetActive(false);
             recapButton.gameObject.SetActive(true);
             playerIndicator.gameObject.SetActive(false);
@@ -1186,7 +1187,8 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(0.4f, 1f));
 
-        if (wordDictionary.ShouldChallenge(gameWord, saveObject.Difficulty))
+        int winDiff = GetPlayerAIWinDifference();
+        if (wordDictionary.ShouldChallenge(gameWord, winDiff, saveObject.Difficulty, true))
         {
             var word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
             if (string.IsNullOrEmpty(word))

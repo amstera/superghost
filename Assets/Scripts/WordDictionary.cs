@@ -147,7 +147,8 @@ public class WordDictionary
 
         var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
 
-        if (rng.NextDouble() < difficultySettings.ProbabilityOffset / 5f)
+        float oddsToBluff = difficultySettings.ProbabilityOffset / 4.5f;
+        if (rng.NextDouble() < oddsToBluff)
         {
             char firstChar = substring[0];
             char lastChar = substring[^1];
@@ -201,7 +202,7 @@ public class WordDictionary
         return possibleLetters[rng.Next(possibleLetters.Length)];
     }
 
-    public bool ShouldChallenge(string substring, Difficulty difficulty)
+    public bool ShouldChallenge(string substring, int playerAIWinDifference, Difficulty difficulty, bool aiCallsChallenge)
     {
         if (string.IsNullOrEmpty(substring)) return false;
 
@@ -217,8 +218,8 @@ public class WordDictionary
         foreach (var word in filteredWords)
         {
             double completionPercentage = (double)substring.Length / word.Length;
-            var maxThresholdPercentage = word.StartsWith(substring) ? 0.6f : 0.8f;
-            if (completionPercentage > maxThresholdPercentage) return false; // Too close to completion
+            var maxThresholdPercentage = word.StartsWith(substring) ? 0.75f : 0.85f;
+            if (completionPercentage >= maxThresholdPercentage) return false; // Too close to completion
         }
 
         //Commoness
@@ -247,6 +248,10 @@ public class WordDictionary
         var difficultySettings = DifficultySettings.GetSettingsForDifficulty(difficulty);
 
         double challengeProbability = Math.Max(0, difficultySettings.ProbabilityOffset - avgScore / maxCommonessThreshold);
+        if (playerAIWinDifference < 0 && !aiCallsChallenge) // AI is winning and deciding to accept bluff
+        {
+            challengeProbability *= 1.25f;
+        }
 
         return rng.NextDouble() < challengeProbability;
     }
@@ -344,7 +349,7 @@ public class WordDictionary
             }
         }
 
-        // Determine the priority order based on isLosing flag
+        // Determine the priority order based on isAILosing flag
         ratio = 0.5f + playerAIWinDifference * 0.1f;
         bool primaryIsEven = isAILosing || (difficulty == Difficulty.Hard && rng.NextDouble() <= ratio);
         var primaryList = primaryIsEven ? evenLengthWords : oddLengthWords;

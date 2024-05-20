@@ -11,7 +11,7 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI text;
     public TextMeshProUGUI textOverlay;
     public ProceduralImage background;
-    public GameObject deleteButton;
+    public GameObject deleteButton, outline;
     public EffectsPopUp effectsPopUp;
 
     private List<ShopItemEffectDetails> activeEffects = new List<ShopItemEffectDetails>();
@@ -96,6 +96,7 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
         textOverlay.text.Trim();
 
         deleteButton.SetActive(activeEffects.Count > 0);
+        outline.SetActive(activeEffects.Count > 0);
         background.color = new Color(background.color.r, background.color.g, background.color.b, activeEffects.Count > 0 ? 1 : 0);
     }
 

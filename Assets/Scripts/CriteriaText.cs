@@ -44,7 +44,8 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 2:
                 canSkip = true;
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                //currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                AddCriteria(1, 2, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 3:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));

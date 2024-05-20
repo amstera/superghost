@@ -237,7 +237,7 @@ public class StatsPopup : MonoBehaviour
             unlockItem.statsPopup = this;
             bool isUnlocked = unlockedHats.Contains(hatData.hatType);
             bool isNewlyUnlocked = isUnlocked && !saveObject.UnlockedHats.Contains(hatData.hatType);
-            unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);;
+            unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);
         }
 
         StartCoroutine(ScrollToTop(unlocksScrollRect));
