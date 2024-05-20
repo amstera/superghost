@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Linq;
 
 public class BlockedWordsPopUp : MonoBehaviour
 {
@@ -94,7 +95,7 @@ public class BlockedWordsPopUp : MonoBehaviour
         noBlockedWordsText.SetActive(saveObject.BlockedWords.Count == 0);
 
         // Repopulate unlock items
-        foreach (var blockedWord in saveObject.BlockedWords)
+        foreach (var blockedWord in saveObject.BlockedWords.OrderBy(b => b))
         {
             var blockedWordObj = Instantiate(blockedWordPrefab, contentRect);
             blockedWordObj.GetComponentInChildren<TextMeshProUGUI>().text = blockedWord.ToUpper();

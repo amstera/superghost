@@ -250,7 +250,8 @@ public class WordDictionary
         double challengeProbability = Math.Max(0, difficultySettings.ProbabilityOffset - avgScore / maxCommonessThreshold);
         if (playerAIWinDifference < 0 && !aiCallsChallenge) // AI is winning and deciding to accept bluff
         {
-            challengeProbability *= 1.25f;
+            challengeProbability *= 1f + (0.25f * Math.Abs(playerAIWinDifference));
+            challengeProbability = Math.Min(0.9f, challengeProbability);
         }
 
         return rng.NextDouble() < challengeProbability;
