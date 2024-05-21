@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier;
+    public bool HasBonusMultiplier, HasLastResortMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier;
     public float ChanceMultiplier = 1;
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch;
     public int currency = 5;
@@ -419,6 +419,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnableLastResortMultiplier()
+    {
+        HasLastResortMultiplier = true;
+        if (!roundEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
     public void EnableEvenMultiplier()
     {
         HasEvenWordMultiplier = true;
@@ -549,6 +558,20 @@ public class GameManager : MonoBehaviour
 
         SetPointsCalculatedText();
         wordDisplay.Pop();
+    }
+
+    public void SkipTurn()
+    {
+        isPlayerTurn = false;
+        ghostAvatar.Think();
+        SetIndicators(isPlayerTurn);
+
+        if (startText.activeSelf)
+        {
+            startText.SetActive(false);
+        }
+
+        CheckGameStatus();
     }
 
     private IEnumerator ProcessChallengeWord()
@@ -749,6 +772,7 @@ public class GameManager : MonoBehaviour
     public void ClearActiveEffects(bool includeSpecial = false)
     {
         HasBonusMultiplier = false;
+        HasLastResortMultiplier = false;
         HasEvenWordMultiplier = false;
         HasLongWordMultiplier = false;
         HasOddWordMultiplier = false;
@@ -1290,6 +1314,11 @@ public class GameManager : MonoBehaviour
                 pointsChange *= 2;
                 pointsBreakdown.Add(2);
             }
+            if (HasLastResortMultiplier)
+            {
+                pointsChange *= 2.5f;
+                pointsBreakdown.Add(2.5f);
+            }
             if (HasEvenWordMultiplier && word.Length % 2 == 0)
             {
                 pointsChange *= 2.5f;
@@ -1408,6 +1437,12 @@ public class GameManager : MonoBehaviour
             {
                 calculationText += $" x 2";
                 totalPoints *= 2;
+                showTotal = true;
+            }
+            if (HasLastResortMultiplier)
+            {
+                calculationText += $" x 2.5";
+                totalPoints *= 2.5f;
                 showTotal = true;
             }
             if (HasEvenWordMultiplier && gameWord.Length % 2 == 0)
