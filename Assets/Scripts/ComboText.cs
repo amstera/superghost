@@ -107,7 +107,7 @@ public class ComboText : MonoBehaviour
             comboTextBuilder.Append($"<color={colorCode}>{comboChar.Character}</color> ");
         }
 
-        comboText.text = IsInactive ? "" : comboTextBuilder.ToString().TrimEnd();
+        comboText.text = IsInactive ? "<color=white>? ? ?</color>" : comboTextBuilder.ToString().TrimEnd();
         if (multiplier > 1)
         {
             string multiplierColor = isWin ? earnedColor : pendingColor;

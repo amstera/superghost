@@ -458,7 +458,7 @@ public class ShopPopUp : MonoBehaviour
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableChanceMultiplier(), false, true),
                     gameManager.ChanceMultiplier == 1, true, gameManager.ChanceMultiplier != 1,
-                    gameManager.ChanceMultiplier != 1 ? $"{gameManager.ChanceMultiplier}x" : "");
+                    gameManager.ChanceMultiplier != 1 ? (gameManager.ChanceMultiplier < 1 ? $"<color=red>{gameManager.ChanceMultiplier}x</color>" : $"{gameManager.ChanceMultiplier}x") : "");
             case 11:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.RestoreLife(true), true, false),
