@@ -363,7 +363,7 @@ public class ShopPopUp : MonoBehaviour
             availableShopItems.RemoveAll(s => s.id == 17); // remove Price Cut if you don't have enough currency
         }
 
-        if (gameManager.playerLivesText.LivesRemaining() > 1)
+        if (gameManager.playerLivesText.LivesRemaining() > 1 || gameManager.IsGameEnded())
         {
             availableShopItems.RemoveAll(s => s.id == 21); // Last Resort only can show up if you have 1 life remaining
         }

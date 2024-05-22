@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, newIndicator, startText, shopNewIndicator, difficultyText, fireBallCalculate;
+    public GameObject playerIndicator, aiIndicator, newIndicator, startText, shopNewIndicator, highestLevelNewIndicator, difficultyText, fireBallCalculate;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour
             difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
             shopNewIndicator.SetActive(false);
+            highestLevelNewIndicator.SetActive(false);
             comboText.transform.parent.gameObject.SetActive(true);
             activeEffectsText.gameObject.SetActive(true);
             pointsText.gameObject.SetActive(true);
@@ -1022,7 +1023,28 @@ public class GameManager : MonoBehaviour
                     saveObject.Statistics.MostMoney = currency;
                 }
 
-                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue Run >";
+                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
+                var nextRoundButtonText = "Continue Run >";
+                if (DeviceTypeChecker.IsiPhoneSE())
+                {
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -230);
+                }
+                else
+                {
+                    nextRoundButtonText += $"\n<size=25>Level {currentGame + 2}/10</size>";
+
+                    Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
+                    {
+                        { Difficulty.Normal, saveObject.Statistics.HighestLevel },
+                        { Difficulty.Easy, saveObject.Statistics.EasyHighestLevel },
+                        { Difficulty.Hard, saveObject.Statistics.HardHighestLevel }
+                    };
+                    if (currentGame + 1 > highestLevelMap[saveObject.Difficulty])
+                    {
+                        highestLevelNewIndicator.SetActive(true);
+                    }
+                }
+                nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = nextRoundButtonText;
 
                 if (points > saveObject.Statistics.HighScore)
                 {
@@ -1101,6 +1123,7 @@ public class GameManager : MonoBehaviour
                 playerText.color = Color.red;
                 aiText.color = Color.green;
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
+                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -245);
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
                     nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -215);
