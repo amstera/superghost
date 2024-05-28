@@ -233,6 +233,8 @@ public class GameManager : MonoBehaviour
 
             var unlockedHats = statsPopup.GetUnlockedHats(true);
             statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
+
+            AudioManager.instance.GameStarted();
         }
         else
         {
@@ -1159,6 +1161,8 @@ public class GameManager : MonoBehaviour
             endGameText.gameObject.SetActive(true);
             saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
+
+            AudioManager.instance.GameEnded();
         }
 
         shopPopUp.RefreshView();

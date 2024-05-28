@@ -5,6 +5,7 @@ public class SkipButton : MonoBehaviour
 {
     public Button parentTextButton, button;
     public Sprite skipIcon, lockIcon;
+    public ScaleInOut scaleInOut;
 
     public void Set(bool canSkip)
     {
@@ -12,6 +13,7 @@ public class SkipButton : MonoBehaviour
         button.interactable = canSkip;
         button.GetComponent<Image>().sprite = canSkip ? skipIcon : lockIcon;
         button.transform.localPosition = new Vector2(button.transform.localPosition.x, canSkip ? 2.1f : 2.5f);
+        scaleInOut.enabled = canSkip;
 
         RectTransform rect = button.GetComponent<RectTransform>();
 

@@ -60,16 +60,34 @@ public class CriteriaText : MonoBehaviour
                 AddCriteria(1, 5, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 6:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
-                currentCriteria.Add(new MinLetters(6));
+                int chosenValue = GetOrGenerateRandomValue(6, 0, 2);
+                if (chosenValue == 0)
+                {
+                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                    currentCriteria.Add(new MinLetters(6));
+                }
+                else
+                {
+                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                    currentCriteria.Add(new NoComboLetters());
+                }
                 break;
             case 7:
                 canSkip = true;
                 AddCriteria(2, 7, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 8:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
-                currentCriteria.Add(new NoComboLetters());
+                int chosenValue6 = saveObject.ChosenCriteria[6].First();
+                if (chosenValue6 == 0)
+                {
+                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
+                    currentCriteria.Add(new NoComboLetters());
+                }
+                else
+                {
+                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                    currentCriteria.Add(new MinLetters(6));
+                }
                 break;
             case 9:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
@@ -203,5 +221,19 @@ public class CriteriaText : MonoBehaviour
     {
         float scaledScore = baseScore * multiplier;
         return (int)(Mathf.Round(scaledScore / 5) * 5);
+    }
+
+    private int GetOrGenerateRandomValue(int key, int minValue, int maxValue)
+    {
+        if (saveObject.ChosenCriteria.ContainsKey(key))
+        {
+            return saveObject.ChosenCriteria[key].First();
+        }
+
+        int randomValue = Random.Range(minValue, maxValue);
+        saveObject.ChosenCriteria[key] = new List<int> { randomValue };
+        SaveManager.Save(saveObject);
+
+        return randomValue;
     }
 }

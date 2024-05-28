@@ -65,6 +65,7 @@ public class SaveManager : MonoBehaviour
 public class SaveObject
 {
     public bool EnableSound = true;
+    public bool EnableMusic = true;
     public bool HasSeenTutorial;
     public bool HasSeenRunTutorial;
     public int Currency = 5;
