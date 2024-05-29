@@ -11,7 +11,6 @@ public class SettingsPopUp : MonoBehaviour
     public GameObject popUpGameObject, settingsPage, dictionaryPage;
     public Button settingsButton, dictionaryButton;
     public GameManager gameManager;
-    public AudioManager audioManager;
 
     public TextMeshProUGUI footerText, dictionaryValidateText;
     public Toggle sfxToggle, musicToggle;
@@ -139,11 +138,11 @@ public class SettingsPopUp : MonoBehaviour
 
         if (saveObject.EnableSound)
         {
-            audioManager.UnmuteMaster();
+            AudioManager.instance.UnmuteMaster();
         }
         else
         {
-            audioManager.MuteMaster();
+            AudioManager.instance.MuteMaster();
         }
     }
 
@@ -157,11 +156,11 @@ public class SettingsPopUp : MonoBehaviour
 
         if (saveObject.EnableMusic)
         {
-            audioManager.StartMusic();
+            AudioManager.instance.StartMusic();
         }
         else
         {
-            audioManager.StopMusic();
+            AudioManager.instance.StopMusic();
         }
     }
 

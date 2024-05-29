@@ -78,7 +78,7 @@ public class SaveObject
     public List<string> BlockedWords = new List<string>();
     public Difficulty Difficulty = Difficulty.Normal;
     public Statistics Statistics = new Statistics();
-    public Statistics RunStatistics = new Statistics();
+    public RunStatistics RunStatistics = new RunStatistics();
 }
 
 [Preserve]
@@ -108,6 +108,14 @@ public class Statistics
     public List<string> WinningWords = new List<string>();
 }
 
+[Preserve]
+[Serializable]
+public class RunStatistics : Statistics
+{
+    public bool SetNewHighScore;
+    public bool SetNewHighLevel;
+    public bool SetNewRoundHighScore;
+}
 
 [Preserve]
 [Serializable]

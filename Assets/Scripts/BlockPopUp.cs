@@ -10,7 +10,7 @@ public class BlockPopUp : MonoBehaviour
     public TextMeshProUGUI bodyText;
     public Button blockButton;
 
-    public AudioSource clickAudioSource;
+    public AudioSource clickAudioSource, blockAudioSource;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
@@ -74,7 +74,7 @@ public class BlockPopUp : MonoBehaviour
 
     public void Block()
     {
-        clickAudioSource?.Play();
+        blockAudioSource?.Play();
 
         if (!saveObject.BlockedWords.Contains(word.ToLower()))
         {

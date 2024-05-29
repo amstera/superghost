@@ -80,7 +80,7 @@ public class RestartPopUp : MonoBehaviour
 
         saveObject.Currency = 5;
         saveObject.CurrentLevel = 0;
-        saveObject.RunStatistics = new Statistics();
+        saveObject.RunStatistics = new RunStatistics();
         saveObject.ShopItemIds.Clear();
         saveObject.RestrictedChars.Clear();
         saveObject.ChosenCriteria.Clear();

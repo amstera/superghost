@@ -219,10 +219,7 @@ public class GameManager : MonoBehaviour
 
             if (currentGame == 0)
             {
-                runInfoPopup.newHighLevel = false;
-                runInfoPopup.newHighScore = false;
-                runInfoPopup.newHighRoundScore = false;
-                saveObject.RunStatistics = new Statistics();
+                saveObject.RunStatistics = new RunStatistics();
             }
 
             gameOver = false;
@@ -754,7 +751,7 @@ public class GameManager : MonoBehaviour
 
         if (saveObject.CurrentLevel > highestLevelMap[saveObject.Difficulty])
         {
-            runInfoPopup.newHighLevel = true;
+            saveObject.RunStatistics.SetNewHighLevel = true;
             switch (saveObject.Difficulty)
             {
                 case Difficulty.Normal:
@@ -947,7 +944,7 @@ public class GameManager : MonoBehaviour
             {
                 saveObject.Statistics.MostPointsPerRound = roundPoints;
                 saveObject.Statistics.MostPointsPerRoundWord = isLastWordValid ? gameWord.ToLower() : "";
-                runInfoPopup.newHighRoundScore = true;
+                saveObject.RunStatistics.SetNewRoundHighScore = true;
             }
             if (roundPoints > saveObject.RunStatistics.MostPointsPerRound)
             {
@@ -1052,7 +1049,7 @@ public class GameManager : MonoBehaviour
                 {
                     saveObject.Statistics.HighScore = points;
                     newIndicator.SetActive(true);
-                    runInfoPopup.newHighScore = true;
+                    saveObject.RunStatistics.SetNewHighScore = true;
 
                     Device.RequestStoreReview();
                 }
@@ -1091,6 +1088,7 @@ public class GameManager : MonoBehaviour
                     shopNewIndicator.SetActive(false);
                     shopButton.gameObject.SetActive(false);
                     nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
+                    highestLevelNewIndicator.SetActive(false);
                     bonusCurrencyEarnedText.gameObject.SetActive(false);
                     currencyEarnedText.gameObject.SetActive(false);
                     runInfoButton.gameObject.SetActive(true);
@@ -1134,7 +1132,7 @@ public class GameManager : MonoBehaviour
                 runInfoButton.gameObject.SetActive(true);
                 endingPointsText.gameObject.SetActive(true);
                 endingPointsText.normalColor = Color.red;
-                endingPointsText.AddPoints(points, endingText: " PTS", overrideColor: Color.red);
+                endingPointsText.AddPoints(points, endingText: points == 1 ? " PT" : " PTS", overrideColor: Color.red);
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.15f);
@@ -1162,7 +1160,7 @@ public class GameManager : MonoBehaviour
             saveObject.Currency = currency;
             saveObject.Statistics.GamesPlayed++;
 
-            AudioManager.instance.GameEnded();
+            AudioManager.instance.GameEnded(playerWon);
         }
 
         shopPopUp.RefreshView();

@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
 
     private SaveObject saveObject;
     private bool isGameStarted = true;
+    private bool didWin = false;
 
     void Awake()
     {
@@ -33,6 +34,11 @@ public class AudioManager : MonoBehaviour
         {
             MuteMaster();
         }
+
+        if (!saveObject.EnableMusic)
+        {
+            bgMusicAudioSource.Stop();
+        }
     }
 
     public void MuteMaster()
@@ -54,12 +60,13 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void GameEnded()
+    public void GameEnded(bool didWin)
     {
         isGameStarted = false;
+        this.didWin = didWin;
         if (bgMusicAudioSource.clip != gameEndMusic && saveObject.EnableMusic)
         {
-            StartCoroutine(FadeOutAndIn(gameEndMusic));
+            StartCoroutine(FadeOutAndIn(gameEndMusic, targetPitch: didWin ? 1 : 0.8f));
         }
     }
 
@@ -76,7 +83,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(FadeOutAndIn(gameEndMusic));
+            StartCoroutine(FadeOutAndIn(gameEndMusic, targetPitch: didWin ? 1 : 0.8f));
         }
     }
 
@@ -85,7 +92,7 @@ public class AudioManager : MonoBehaviour
         bgMusicAudioSource.Stop();
     }
 
-    private IEnumerator FadeOutAndIn(AudioClip newClip, float fadeDuration = 0.5f)
+    private IEnumerator FadeOutAndIn(AudioClip newClip, float fadeDuration = 0.5f, float targetPitch = 1)
     {
         // Check if a clip is currently playing
         if (bgMusicAudioSource.isPlaying)
@@ -112,6 +119,6 @@ public class AudioManager : MonoBehaviour
             bgMusicAudioSource.pitch = progress * progress; // Quadratic easing in
             yield return null;
         }
-        bgMusicAudioSource.pitch = 1;
+        bgMusicAudioSource.pitch = targetPitch;
     }
 }
