@@ -170,6 +170,7 @@ public class VirtualKeyboard : MonoBehaviour
 
     public void AddRestrictedLetter(char c)
     {
+        c = char.ToUpper(c);
         if (buttonLetterMap.ContainsKey(c))
         {
             var btn = buttonLetterMap[c];
@@ -177,6 +178,19 @@ public class VirtualKeyboard : MonoBehaviour
             btn.GetComponent<Image>().color = new Color32(255, 150, 150, 255);
             DisableButton(btn);
             btn.interactable = false;
+        }
+    }
+
+    public void RemoveRestrictedLetter(char c)
+    {
+        c = char.ToUpper(c);
+        if (buttonLetterMap.ContainsKey(c))
+        {
+            restrictedLetters.Remove(c);
+            var btn = buttonLetterMap[c];
+            btn.GetComponent<Image>().color = buttonPrefab.GetComponent<Image>().color;
+            EnableButton(btn);
+            btn.interactable = true;
         }
     }
 

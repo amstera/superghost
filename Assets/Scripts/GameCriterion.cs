@@ -219,6 +219,25 @@ public class UseAtLeastXItems : GameCriterion
     }
 }
 
+public class NoRepeatLetters : GameCriterion
+{
+    public NoRepeatLetters()
+    {
+        Id = 9;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"No Repeats";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+}
+
 public class GameState
 {
     public int ItemsUsed;

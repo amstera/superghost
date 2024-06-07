@@ -101,7 +101,7 @@ public class CriteriaText : MonoBehaviour
     private void AddCriteria(int amount, int level, int startIndex, List<GameCriterion> currentCriteria, List<GameCriterion> previousCriteria, char letter)
     {
         List<GameCriterion> possibleCriteria = new List<GameCriterion> {
-            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(1), new MinLetters(5), new NoUsingLetter(letter)
+            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(1), new MinLetters(5), new NoUsingLetter(letter), new NoRepeatLetters()
         };
         if (saveObject.ChosenCriteria.TryGetValue(level, out List<int> criteria))
         {

@@ -28,6 +28,7 @@ public class BluffPopUp : MonoBehaviour
     private Vector3 originalPos;
     private NumberCriteria numberCriteria = null;
     private HashSet<char> restrictedLetters = new HashSet<char>();
+    private bool noRepeatingLetters;
 
     private void Awake()
     {
@@ -101,13 +102,17 @@ public class BluffPopUp : MonoBehaviour
         {
             ShowWarning($"Word must be {numberCriteria.GetName()} length");
         }
+        else if (noRepeatingLetters && ContainsRepeatingLetters(inputField.text, out char repeatingLetter))
+        {
+            ShowWarning($"Word cannot contain <color=white>{repeatingLetter.ToString().ToUpper()}</color>");
+        }
         else
         {
             char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
 
             if (invalidChar != '\0')
             {
-                ShowWarning($"Word cannot contain {invalidChar.ToString().ToUpper()}");
+                ShowWarning($"Word cannot contain <color=white>{invalidChar.ToString().ToUpper()}</color>");
             }
             else
             {
@@ -129,6 +134,11 @@ public class BluffPopUp : MonoBehaviour
         numberCriteria = null;
     }
 
+    public void SetNoRepeatingLetters(bool value)
+    {
+        noRepeatingLetters = value;
+    }
+
     public void AddNumberCriteria(NumberCriteria numberCriteria)
     {
         this.numberCriteria = numberCriteria;
@@ -146,6 +156,22 @@ public class BluffPopUp : MonoBehaviour
 
         gameManager.BluffWin(inputField.text);
         Hide();
+    }
+
+    private bool ContainsRepeatingLetters(string word, out char repeatingLetter)
+    {
+        var letters = new HashSet<char>();
+        foreach (var letter in word)
+        {
+            char lowerLetter = char.ToLower(letter);
+            if (!letters.Add(lowerLetter))
+            {
+                repeatingLetter = lowerLetter;
+                return true;
+            }
+        }
+        repeatingLetter = '\0';
+        return false;
     }
 
     private IEnumerator ShakePopup()

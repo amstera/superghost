@@ -17,6 +17,7 @@ public class WordDictionary
     private readonly char[] weightedLetters = GenerateWeightedLetters();
     private int minLength = 3;
     private NumberCriteria numberCriteria = null;
+    private bool noRepeatingLetters;
     private delegate bool MatchCondition(string w, string extension);
 
     public void LoadWords(string[] lines)
@@ -58,12 +59,32 @@ public class WordDictionary
 
     public void SetFilteredWords(string substring)
     {
-        var words = filteredWords.Where(w => w.Length > minLength && w.Contains(substring, StringComparison.InvariantCultureIgnoreCase));
-        if (numberCriteria != null)
-        {
-            words = words.Where(w => numberCriteria.IsAllowed(w.Length));
-        }
+        substring = substring.ToLower();
+        var existingLetters = noRepeatingLetters ? substring.ToHashSet() : null;
+
+        var words = filteredWords.Where(w =>
+            w.Length > minLength &&
+            w.Contains(substring, StringComparison.InvariantCultureIgnoreCase) &&
+            (numberCriteria == null || numberCriteria.IsAllowed(w.Length)) &&
+            (!noRepeatingLetters || HasNoRepeatingLetters(w, existingLetters))
+        );
+
         filteredWords = words.ToList();
+    }
+
+    private bool HasNoRepeatingLetters(string word, HashSet<char> existingLetters)
+    {
+        var letters = new HashSet<char>();
+
+        foreach (var letter in word)
+        {
+            char lowerLetter = char.ToLower(letter);
+            if (!letters.Add(lowerLetter) && existingLetters.Contains(lowerLetter))
+            {
+                return false; // duplicate found
+            }
+        }
+        return true;
     }
 
     public void ClearFilteredWords(List<string> blockedWords)
@@ -134,6 +155,11 @@ public class WordDictionary
     public void SetNumberCriteria(NumberCriteria numberCriteria)
     {
         this.numberCriteria = numberCriteria;
+    }
+
+    public void SetNoRepeatingLetters(bool value)
+    {
+        noRepeatingLetters = value;
     }
 
     public void SetMinLength(int minLength)

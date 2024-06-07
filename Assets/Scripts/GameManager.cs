@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     private bool isLastWordValid = true;
     private bool playerWon;
     private bool isChallenging;
-    private bool aiAlwaysStarts;
+    private bool aiAlwaysStarts, noRepeatLetters;
     private int points, roundPoints, currentGame;
     private int roundCurrency;
     private int minLength = 3;
@@ -280,6 +280,11 @@ public class GameManager : MonoBehaviour
         currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
 
+        if (noRepeatLetters)
+        {
+            keyboard.RemoveAllRestrictions();
+        }
+
         keyboard.Show();
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
@@ -340,6 +345,11 @@ public class GameManager : MonoBehaviour
         wordDictionary.SetFilteredWords(gameWord);
         UpdateWordDisplay(HasDoubleTurn, newIndex);
         comboText.UseCharacter(character);
+
+        if (noRepeatLetters)
+        {
+            keyboard.AddRestrictedLetter(character);
+        }
 
         if (HasDoubleTurn)
         {
@@ -541,6 +551,12 @@ public class GameManager : MonoBehaviour
 
     public void UndoTurn()
     {
+        if (noRepeatLetters)
+        {
+            var addedChar = previousWords.Count > 0 ? ReplaceIgnoreCase(gameWord, previousWords.Last(), "").ToCharArray()[0] : gameWord[0];
+            keyboard.RemoveRestrictedLetter(addedChar);
+        }
+
         if (previousWords.Count > 0)
         {
             gameWord = previousWords.Last();
@@ -551,6 +567,7 @@ public class GameManager : MonoBehaviour
             gameWord = "";
         }
         wordDictionary.ClearFilteredWords(saveObject.BlockedWords);
+
         if (string.IsNullOrEmpty(gameWord))
         {
             wordDisplay.text = $"<color=yellow>{separator}</color>";
@@ -656,7 +673,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.word = word;
 
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
-            var addedChars = word.Replace(previousWord, "").ToCharArray();
+            var addedChars = ReplaceIgnoreCase(word, previousWord, "").ToCharArray();
             foreach (var c in addedChars)
             {
                 comboText.UseCharacter(c);
@@ -690,7 +707,7 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = false;
             wordDictionary.AddLostChallengeWord(originalWord);
 
-            var addedChars = word.Replace(originalWord, "").ToCharArray();
+            var addedChars = ReplaceIgnoreCase(word, originalWord, "").ToCharArray();
             foreach (var c in addedChars)
             {
                 comboText.UseCharacter(c);
@@ -1111,7 +1128,13 @@ public class GameManager : MonoBehaviour
                             break;
                     }
 
+                    currencyText.SetPoints(saveObject.RunStatistics.MostMoney);
+
                     ResetRun();
+                }
+                else
+                {
+                    currencyText.AddPoints(currency - currencyText.points);
                 }
             }
             else // lose game
@@ -1167,8 +1190,6 @@ public class GameManager : MonoBehaviour
 
         var unlockedHats = statsPopup.GetUnlockedHats(true);
         statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
-
-        currencyText.AddPoints(currency - currencyText.points);
 
         if (playSound)
         {
@@ -1587,6 +1608,11 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = true;
         SetIndicators(isPlayerTurn);
         shopPopUp.RefreshView();
+
+        if (noRepeatLetters)
+        {
+            keyboard.AddRestrictedLetter(addedLetter.addedLetter[0]);
+        }
     }
 
     private void ResetRun()
@@ -1613,16 +1639,31 @@ public class GameManager : MonoBehaviour
         };
     }
 
+    public static string ReplaceIgnoreCase(string source, string oldValue, string newValue)
+    {
+        if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(oldValue))
+            return source;
+
+        string result = source;
+        int index = result.IndexOf(oldValue, StringComparison.InvariantCultureIgnoreCase);
+
+        while (index != -1)
+        {
+            result = result.Remove(index, oldValue.Length).Insert(index, newValue);
+            index = result.IndexOf(oldValue, index + newValue.Length, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        return result;
+    }
+
     private void AddRestrictions(List<GameCriterion> criteria)
     {
-        keyboard.RemoveAllRestrictions();
-        challengePopup.ClearRestrictions();
-        bluffPopup.ClearRestrictions();
-        wordDictionary.ClearRestrictions();
+        ClearLetterRestrictions();
         comboText.ClearRestrictions();
         minLength = 3;
         comboText.IsInactive = false;
         aiAlwaysStarts = false;
+        SetRepeatingLetters(false);
 
         foreach (var criterion in criteria)
         {
@@ -1665,6 +1706,10 @@ public class GameManager : MonoBehaviour
                 {
                     aiAlwaysStarts = true;
                 }
+                else if (criterion is NoRepeatLetters)
+                {
+                    SetRepeatingLetters(true);
+                }
             }
         }
 
@@ -1677,5 +1722,21 @@ public class GameManager : MonoBehaviour
         challengePopup.AddRestrictedLetter(restrictedLetter);
         bluffPopup.AddRestrictedLetter(restrictedLetter);
         comboText.AddRestrictedLetter(restrictedLetter);
+    }
+
+    private void ClearLetterRestrictions()
+    {
+        keyboard.RemoveAllRestrictions();
+        challengePopup.ClearRestrictions();
+        bluffPopup.ClearRestrictions();
+        wordDictionary.ClearRestrictions();
+    }
+
+    private void SetRepeatingLetters(bool value)
+    {
+        noRepeatLetters = value;
+        wordDictionary.SetNoRepeatingLetters(value);
+        challengePopup.SetNoRepeatingLetters(value);
+        bluffPopup.SetNoRepeatingLetters(value);
     }
 }
