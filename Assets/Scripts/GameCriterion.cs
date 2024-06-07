@@ -198,8 +198,30 @@ public class NoComboLetters : GameCriterion
     }
 }
 
+public class UseAtLeastXItems : GameCriterion
+{
+    private int items;
+
+    public UseAtLeastXItems(int items)
+    {
+        this.items = items;
+        Id = 8;
+    }
+
+    public override string GetDescription()
+    {
+        return $"Buy {items}+ Item" + (items > 1 ? "s" : "");
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return state.ItemsUsed >= items;
+    }
+}
+
 public class GameState
 {
+    public int ItemsUsed;
     public int Points;
     public bool EndGame;
 }

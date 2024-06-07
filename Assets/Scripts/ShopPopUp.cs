@@ -142,8 +142,10 @@ public class ShopPopUp : MonoBehaviour
                 availableShopItems.Remove(chosenPointsItem);
 
                 var chosenThirdItem = SelectWeightedRandom(availableShopItems);
+                availableShopItems.Remove(chosenThirdItem);
+                var chosenFourthItem = SelectWeightedRandom(availableShopItems);
 
-                var chosenItems = new List<ShopItemInfo> {chosenHelper, chosenPointsItem, chosenThirdItem};
+                var chosenItems = new List<ShopItemInfo> {chosenHelper, chosenPointsItem, chosenThirdItem, chosenFourthItem };
                 Shuffle(chosenItems);
 
                 foreach (var item in chosenItems)
@@ -226,6 +228,9 @@ public class ShopPopUp : MonoBehaviour
             var coroutine = item.GetCoroutine();
             StartCoroutine(coroutine());
 
+            gameManager.ItemsUsed++;
+            gameManager.UpdateGameState();
+
             saveObject.Statistics.UsedShopItemIds[item.id] = saveObject.Statistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
             saveObject.RunStatistics.UsedShopItemIds[item.id] = saveObject.RunStatistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
             SaveManager.Save(saveObject);
@@ -286,6 +291,7 @@ public class ShopPopUp : MonoBehaviour
     {
         currency -= cost;
         gameManager.currency -= cost;
+        gameManager.currencyText.AddPoints(-cost);
         currencyText.AddPoints(-cost);
 
         InitializeShopItems();
@@ -405,7 +411,7 @@ public class ShopPopUp : MonoBehaviour
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
-        reshuffleText.text = $"Restock (<color={(canAffordReshuffle ? "green" : "red")}>${restockCost}</color>)";
+        reshuffleText.text = $"Shuffle Items (<color={(canAffordReshuffle ? "green" : "red")}>${restockCost}</color>)";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
     }
 

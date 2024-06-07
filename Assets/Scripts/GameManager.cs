@@ -14,7 +14,7 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public TextClickHandler wordDisplay;
-    public PointsText pointsText, totalPointsText,currencyEarnedText, bonusCurrencyEarnedText, endingPointsText;
+    public PointsText pointsText, totalPointsText, currencyEarnedText, bonusCurrencyEarnedText, endingPointsText, currencyText;
     public PointsExtendedText pointsEarnedText;
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
@@ -23,13 +23,13 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, newIndicator, startText, shopNewIndicator, highestLevelNewIndicator, difficultyText, fireBallCalculate;
+    public GameObject playerIndicator, aiIndicator, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, levelLine;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
     public SaveObject saveObject;
-    public Button shopButton, challengeButton, recapButton, nextRoundButton, tutorialButton, restartButton, runInfoButton, statsButton;
+    public Button challengeButton, recapButton, nextRoundButton, runInfoButton, statsButton;
     public SkipButton skipButton;
     public Stars stars;
     public RecapPopup recapPopup;
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     public string gameWord = "";
     public bool HasBonusMultiplier, HasLastResortMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier;
     public float ChanceMultiplier = 1;
-    public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch;
+    public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch, ItemsUsed;
     public int currency = 5;
 
     private HashSet<string> previousWords = new HashSet<string>();
@@ -151,6 +151,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(NewGame());
     }
 
+    public void UpdateGameState()
+    {
+        var gameState = GetGameState();
+        criteriaText.UpdateState(gameState);
+    }
+
     private IEnumerator NewGame()
     {
         clickAudioSource?.Play();
@@ -164,8 +170,7 @@ public class GameManager : MonoBehaviour
     {
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
-        tutorialButton.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(true);
+        commandCenter.SetActive(true);
         pointsCalculateText.text = string.Empty;
 
         if (gameOver) // only at the beginning of a new game and not any new round
@@ -192,7 +197,6 @@ public class GameManager : MonoBehaviour
             totalPointsText.gameObject.SetActive(false);
             difficultyText.gameObject.SetActive(false);
             newIndicator.SetActive(false);
-            shopNewIndicator.SetActive(false);
             highestLevelNewIndicator.SetActive(false);
             comboText.transform.parent.gameObject.SetActive(true);
             activeEffectsText.gameObject.SetActive(true);
@@ -200,19 +204,21 @@ public class GameManager : MonoBehaviour
             recapButton.gameObject.SetActive(false);
             runInfoButton.gameObject.SetActive(false);
             endingPointsText.Reset();
+            currencyText.gameObject.SetActive(true);
             endingPointsText.gameObject.SetActive(false);
-            shopButton.gameObject.SetActive(true);
             recap.Clear();
             wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
             points = 0;
             bool canSkip = criteriaText.SetLevelCriteria(currentGame);
             skipButton.Set(canSkip);
+            levelLine.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
             AddRestrictions(criteriaText.GetCurrentCriteria());
             comboText.ChooseNewCombo();
             vignette.Hide();
             endGameText.GetComponent<ColorCycleEffect>().enabled = false;
             isPlayerTurn = true;
+            currencyText.SetPoints(saveObject.Currency);
 
             var main = confettiPS.main;
             main.loop = false;
@@ -368,7 +374,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, shopNewIndicator.activeSelf);
+        shopPopUp.Show(currency, gameWord, false);//shopNewIndicator.activeSelf);
     }
 
     public void ShowHint()
@@ -873,10 +879,8 @@ public class GameManager : MonoBehaviour
 
         ShowHistory();
         ghostAvatar.Hide();     
-        challengeButton.gameObject.SetActive(false);
         nextRoundButton.gameObject.SetActive(true);
-        tutorialButton.gameObject.SetActive(false);
-        restartButton.gameObject.SetActive(false);
+        commandCenter.SetActive(false);
         levelText.gameObject.SetActive(false);
         activeEffectsText.ClearAll();
 
@@ -993,6 +997,7 @@ public class GameManager : MonoBehaviour
             wordDisplay.transform.localPosition += Vector3.down * 75;
             PlayerRestoreLivesUses = 0;
             AIRestoreLivesUses = 0;
+            ItemsUsed = 0;
             AILivesMatch = 0;
             runInfoPopup.difficulty = saveObject.Difficulty;
             activeEffectsText.gameObject.SetActive(false);
@@ -1003,7 +1008,6 @@ public class GameManager : MonoBehaviour
                 endGameText.color = Color.green;
                 totalPointsText.gameObject.SetActive(true);
                 totalPointsText.AddPoints(points);
-                shopNewIndicator.SetActive(true);
 
                 if (historyText.textComponent.alignment == TextAlignmentOptions.Center)
                 {
@@ -1085,8 +1089,6 @@ public class GameManager : MonoBehaviour
                     main.loop = true;
                     confettiPS.Play();
 
-                    shopNewIndicator.SetActive(false);
-                    shopButton.gameObject.SetActive(false);
                     nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
                     highestLevelNewIndicator.SetActive(false);
                     bonusCurrencyEarnedText.gameObject.SetActive(false);
@@ -1095,9 +1097,6 @@ public class GameManager : MonoBehaviour
                     stars.Hide();
                     gameStatusAudioSource.clip = winRunSound;
                     runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 56);
-                    endingPointsText.gameObject.SetActive(true);
-                    endingPointsText.normalColor = Color.green;
-                    endingPointsText.AddPoints(currency, prefixText: "$", overrideColor: Color.green);
 
                     switch (saveObject.Difficulty)
                     {
@@ -1128,8 +1127,8 @@ public class GameManager : MonoBehaviour
                 {
                     nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -215);
                 }
-                shopButton.gameObject.SetActive(false);
                 runInfoButton.gameObject.SetActive(true);
+                currencyText.gameObject.SetActive(false);
                 endingPointsText.gameObject.SetActive(true);
                 endingPointsText.normalColor = Color.red;
                 endingPointsText.AddPoints(points, endingText: points == 1 ? " PT" : " PTS", overrideColor: Color.red);
@@ -1168,6 +1167,8 @@ public class GameManager : MonoBehaviour
 
         var unlockedHats = statsPopup.GetUnlockedHats(true);
         statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
+
+        currencyText.AddPoints(currency - currencyText.points);
 
         if (playSound)
         {
@@ -1299,7 +1300,10 @@ public class GameManager : MonoBehaviour
         playerText.color = isPlayer ? Color.green : Color.white;
         aiText.color = isPlayer ? Color.white : Color.green;
 
-        challengeButton.gameObject.SetActive(isPlayer && !string.IsNullOrEmpty(gameWord) && !roundEnded);
+        bool isChallengeButtonEnabled = isPlayer && !string.IsNullOrEmpty(gameWord) && !roundEnded;
+        challengeButton.interactable = isChallengeButtonEnabled;
+        var challengeButtonText = challengeButton.GetComponentInChildren<TextMeshProUGUI>();
+        challengeButtonText.color = new Color(challengeButtonText.color.r, challengeButtonText.color.g, challengeButtonText.color.b, isChallengeButtonEnabled ? 1 : 0.5f);
 
         SetPointsCalculatedText();
 
@@ -1603,6 +1607,7 @@ public class GameManager : MonoBehaviour
     {
         return new GameState
         {
+            ItemsUsed = ItemsUsed,
             Points = points,
             EndGame = gameOver
         };

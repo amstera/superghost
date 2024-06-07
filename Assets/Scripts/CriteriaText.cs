@@ -40,11 +40,11 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 1:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(25, difficultyMultiplier)));
-                currentCriteria.Add(new NoUsingLetter(letter));
+                currentCriteria.Add(new UseAtLeastXItems(1));
                 break;
             case 2:
                 canSkip = true;
-                //currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
                 AddCriteria(1, 2, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 3:
@@ -53,6 +53,7 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 4:
                 canSkip = true;
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100, difficultyMultiplier)));
                 AddCriteria(1, 4, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 5:
@@ -106,19 +107,19 @@ public class CriteriaText : MonoBehaviour
         {
             foreach (var id in criteria)
             {
-                currentCriteria.Add(possibleCriteria.Find(pc => pc.Id == id));
+                var criterion = possibleCriteria.Find(pc => pc.Id == id);
+                if (criterion != null)
+                {
+                    currentCriteria.Add(criterion);
+                }
             }
             return;
         }
 
         var availableCriteria = possibleCriteria.FindAll(pc => !saveObject.ChosenCriteria.Any(c => c.Value.Any(v => pc.Id == v)));
 
-        availableCriteria.RemoveAll(a => previousCriteria.Any(p => p.Id == a.Id));
-        if (level == 3)
-        {
-            availableCriteria.RemoveAll(a => a.Id == 1); // No Using Letter
-        }
-        else if (level == 5)
+        availableCriteria.RemoveAll(a => previousCriteria.Any(p => p != null && p.Id == a.Id));
+        if (level == 5)
         {
             availableCriteria.RemoveAll(a => a.Id == 3); // Min Letters
         }
@@ -144,7 +145,7 @@ public class CriteriaText : MonoBehaviour
         }
 
         criteriaText.text = sb.ToString();
-        criteriaText.fontSize = currentCriteria.Count < 2 ? 24 : 22;
+        criteriaText.fontSize = currentCriteria.Count < 2 ? 24 : 23.5f;
     }
 
     public void UpdateState(GameState state)

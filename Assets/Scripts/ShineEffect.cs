@@ -7,6 +7,7 @@ public class ShineEffect : MonoBehaviour
     public float endX = 55f;
     public float moveDuration = 3f;
     public float waitTime = 0f;
+    public float initialDelay = 0f;
 
     private Coroutine moveShineCoroutine;
 
@@ -27,6 +28,8 @@ public class ShineEffect : MonoBehaviour
 
     IEnumerator MoveShine()
     {
+        yield return new WaitForSeconds(initialDelay);
+
         while (true)
         {
             float elapsedTime = 0f;

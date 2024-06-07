@@ -2718,6 +2718,8 @@ apologized
 apologizes
 apologizing
 apology
+apophyge
+apophyges
 apoplectic
 apoplexies
 apoplexy
@@ -11997,6 +11999,8 @@ coffin
 coffined
 coffining
 coffins
+cofounder
+cofounders
 cogency
 cogent
 cogently
@@ -43582,6 +43586,7 @@ nonstick
 nonstop
 nonstrategic
 nonstructural
+nonsubjective
 nonsupport
 nonsurgical
 nontaxable

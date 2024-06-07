@@ -86,6 +86,7 @@ public class RemoveEffectsPopUp : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         gameManager.currency += sellMoney;
+        gameManager.currencyText.AddPoints(sellMoney);
         activeEffectsText.ClearAll();
         gameManager.ClearActiveEffects(true);
 
