@@ -221,7 +221,10 @@ public class ShopPopUp : MonoBehaviour
 
     private void BuyItem(int cost, ShopItem item)
     {
-        moneyAudioSource?.Play();
+        if (cost != 0)
+        {
+            moneyAudioSource?.Play();
+        }
 
         if (item != null)
         {
@@ -515,6 +518,10 @@ public class ShopPopUp : MonoBehaviour
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableNoDuplicateLetterMultiplier(), false, true),
                     !gameManager.HasNoDuplicateLetterMultiplier, true, gameManager.HasNoDuplicateLetterMultiplier, "");
+            case 23:
+                return new ShopItemAdjustableDetails(
+                    DoMoneyRoulette(),
+                    gameManager.IsPlayerTurn(), true, false, "");
         }
 
         return null;
@@ -580,6 +587,8 @@ public class ShopPopUp : MonoBehaviour
                 return 5;
             case 22:
                 return gameEnded ? 3 : (roundsWon + 1) * 3;
+            case 23:
+                return 0;
         }
 
         return -1;
@@ -601,6 +610,22 @@ public class ShopPopUp : MonoBehaviour
     float RoundHalfUp(float number)
     {
         return Mathf.Floor(number + 0.5f);
+    }
+
+    private IEnumerator DoMoneyRoulette()
+    {
+        yield return null;
+
+        if (Random.Range(0, 2) == 1) // lose life
+        {
+            gameManager.LoseLife();
+            Hide(false);
+        }
+        else // get money
+        {
+            moneyAudioSource?.Play();
+            RefreshPopUp(-10);
+        }
     }
 }
 

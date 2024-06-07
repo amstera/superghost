@@ -2667,6 +2667,14 @@ MonoBehaviour:
     type: 0
     iconSprite: {fileID: 21300000, guid: c6f83b898e625472899b44924e093cac, type: 3}
     isFavored: 1
+  - id: 23
+    title: Money Roulette
+    body: Either get <color=green>$10</color> or get a <color=red>GHOST</color> letter...
+      it's random!
+    warning: Must use during your turn
+    type: 2
+    iconSprite: {fileID: 21300000, guid: 02d69f1f90a6447c6979d133211f1fae, type: 3}
+    isFavored: 1
   shopItemPrefabs:
   - {fileID: 6471958011589242375}
   - {fileID: 2111350996}
@@ -7200,7 +7208,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999356
+  m_Size: 0.9999475
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11075,8 +11083,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000019
-  m_Size: 0.5658229
+  m_Value: 1.0000067
+  m_Size: 0.56581026
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -39634,8 +39642,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0000010143706
-  m_Size: 0.331913
+  m_Value: -0.0000050718527
+  m_Size: 0.33189738
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -47485,7 +47493,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.00083356485}
+  m_AnchoredPosition: {x: 5, y: 0.0046726814}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -51374,7 +51382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2402}
+  m_AnchoredPosition: {x: 0, y: 1143.2449}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -55105,9 +55113,9 @@ RectTransform:
   - {fileID: 1993080052}
   - {fileID: 1069617368}
   - {fileID: 27335230}
+  - {fileID: 1039797307}
   - {fileID: 863971980}
   - {fileID: 977524200}
-  - {fileID: 1039797307}
   - {fileID: 634552301}
   - {fileID: 457834030}
   - {fileID: 455116504}
@@ -58955,7 +58963,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 275.62424}
+  m_AnchoredPosition: {x: 0, y: 275.62216}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706

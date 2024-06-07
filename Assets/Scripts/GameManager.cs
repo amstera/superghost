@@ -844,6 +844,25 @@ public class GameManager : MonoBehaviour
         EndGame();
     }
 
+    public void LoseLife()
+    {
+        playerLivesText.LoseLife();
+        if (playerLivesText.LivesRemaining() == 0)
+        {
+            if (startText.activeSelf)
+            {
+                startText.SetActive(false);
+            }
+
+            var caspString = GetCaspText();
+            wordDisplay.text = $"{caspString} wins!\nYou ran out of lives!";
+
+            isLastWordValid = false;
+            previousWords.Add(gameWord);
+            EndGame();
+        }
+    }
+
     void CheckGameStatus()
     {
         if (gameWord.Length > minLength && wordDictionary.IsWordReal(gameWord))
