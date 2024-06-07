@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
-    public bool HasBonusMultiplier, HasLastResortMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier;
+    public bool HasBonusMultiplier, HasLastResortMultiplier, HasEvenWordMultiplier, HasOddWordMultiplier, HasDoubleWealth, HasDoubleTurn, HasLongWordMultiplier, HasDoubleBluff, HasLoseMoney, HasBonusMoney, HasDoubleEndedMultiplier, HasNoDuplicateLetterMultiplier;
     public float ChanceMultiplier = 1;
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch, ItemsUsed;
     public int currency = 5;
@@ -444,6 +444,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnableNoDuplicateLetterMultiplier()
+    {
+        HasNoDuplicateLetterMultiplier = true;
+        if (!roundEnded)
+        {
+            SetPointsCalculatedText();
+        }
+    }
+
     public void EnableEvenMultiplier()
     {
         HasEvenWordMultiplier = true;
@@ -800,6 +809,7 @@ public class GameManager : MonoBehaviour
         HasLongWordMultiplier = false;
         HasOddWordMultiplier = false;
         HasDoubleEndedMultiplier = false;
+        HasNoDuplicateLetterMultiplier = false;
         HasDoubleBluff = false;
         HasDoubleTurn = false;
         shopPopUp.ApplyDiscount(1);
@@ -916,7 +926,7 @@ public class GameManager : MonoBehaviour
                 int loseMoney = 10;
                 if (HasDoubleWealth)
                 {
-                    loseMoney *= 2;
+                    loseMoney *= 3;
                 }
 
                 currencyEarnedText.gameObject.SetActive(true);
@@ -934,7 +944,7 @@ public class GameManager : MonoBehaviour
 
                 if (HasDoubleWealth)
                 {
-                    bonusMoney *= 2;
+                    bonusMoney *= 3;
                 }
 
                 if (playerWon)
@@ -1002,6 +1012,7 @@ public class GameManager : MonoBehaviour
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.UpdateState(gameState);
 
+        bool wonRun = false;
         if (gameOver)
         {
             UpdateDailyGameStreak(true);
@@ -1099,6 +1110,7 @@ public class GameManager : MonoBehaviour
 
                 if (currentGame == 10) // win run
                 {
+                    wonRun = true;
                     endGameText.text = "You Win!";
                     endGameText.GetComponent<ColorCycleEffect>().enabled = true;
 
@@ -1131,10 +1143,6 @@ public class GameManager : MonoBehaviour
                     currencyText.SetPoints(saveObject.RunStatistics.MostMoney);
 
                     ResetRun();
-                }
-                else
-                {
-                    currencyText.AddPoints(currency - currencyText.points);
                 }
             }
             else // lose game
@@ -1204,6 +1212,11 @@ public class GameManager : MonoBehaviour
             skipButton.gameObject.SetActive(false);
         }
         criteriaText.gameObject.SetActive(lostRun);
+
+        if (!lostRun && !wonRun)
+        {
+            currencyText.AddPoints(currency - currencyText.points);
+        }
 
         SaveManager.Save(saveObject);
     }
@@ -1369,6 +1382,11 @@ public class GameManager : MonoBehaviour
                 pointsChange *= 2.5f;
                 pointsBreakdown.Add(2.5f);
             }
+            if (HasNoDuplicateLetterMultiplier && HasNoDuplicateLetters(word))
+            {
+                pointsChange *= 4f;
+                pointsBreakdown.Add(4f);
+            }
             if (HasEvenWordMultiplier && word.Length % 2 == 0)
             {
                 pointsChange *= 2.5f;
@@ -1410,7 +1428,7 @@ public class GameManager : MonoBehaviour
             roundCurrency = roundPoints / 5 + 1;
             if (HasDoubleWealth)
             {
-                roundCurrency *= 2;
+                roundCurrency *= 3;
             }
             currency += roundCurrency;
         }
@@ -1493,6 +1511,12 @@ public class GameManager : MonoBehaviour
             {
                 calculationText += $" x 2.5";
                 totalPoints *= 2.5f;
+                showTotal = true;
+            }
+            if (HasNoDuplicateLetterMultiplier && HasNoDuplicateLetters(gameWord))
+            {
+                calculationText += $" x 4";
+                totalPoints *= 4;
                 showTotal = true;
             }
             if (HasEvenWordMultiplier && gameWord.Length % 2 == 0)
@@ -1637,6 +1661,19 @@ public class GameManager : MonoBehaviour
             Points = points,
             EndGame = gameOver
         };
+    }
+
+    private bool HasNoDuplicateLetters(string word)
+    {
+        var seenLetters = new HashSet<char>();
+        foreach (var letter in word)
+        {
+            if (!seenLetters.Add(char.ToLower(letter)))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static string ReplaceIgnoreCase(string source, string oldValue, string newValue)

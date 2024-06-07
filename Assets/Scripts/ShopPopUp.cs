@@ -511,6 +511,10 @@ public class ShopPopUp : MonoBehaviour
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableLastResortMultiplier(), false, true),
                     !gameManager.HasLastResortMultiplier, gameManager.playerLivesText.LivesRemaining() == 1, gameManager.HasLastResortMultiplier, "");
+            case 22:
+                return new ShopItemAdjustableDetails(
+                    DoAction(id, cost, () => gameManager.EnableNoDuplicateLetterMultiplier(), false, true),
+                    !gameManager.HasNoDuplicateLetterMultiplier, true, gameManager.HasNoDuplicateLetterMultiplier, "");
         }
 
         return null;
@@ -574,6 +578,8 @@ public class ShopPopUp : MonoBehaviour
                 return (int)RoundHalfUp((substringLength + 1) * 1.25f);
             case 21:
                 return 5;
+            case 22:
+                return gameEnded ? 3 : (roundsWon + 1) * 3;
         }
 
         return -1;
