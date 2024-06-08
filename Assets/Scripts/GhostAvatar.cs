@@ -9,9 +9,10 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public GameManager gameManager;
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
-    public Image ghostImage;
+    public Image ghostImage, glowGhostImage;
     public GameObject flag, mercyButton;
     public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost;
+    public Material glowMaterial;
     public int currentLevel;
 
     private float startYPosition;
@@ -23,6 +24,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     private bool isThinking = false;
     private bool isLosing;
     private bool shouldShowFlag;
+    private Color currentGlowColor = Color.white;
     private Coroutine shakingTouchedCoroutine;
 
     void Start()
@@ -35,11 +37,12 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     {
         if (isShowing)
         {
-            float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2.5f;
+            float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2f;
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
 
             float rotationY = Mathf.Sin(Time.time * 0.5f) * 25;
             ghostImage.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
+            glowGhostImage.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
 
             UpdateGhostColor();
         }
@@ -188,7 +191,11 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
 
         // Apply level-based blending with white
         float levelIntensity = currentLevel / 9f; // Scale factor based on current level
-        ghostImage.color = Color.Lerp(Color.white, transitionColor, levelIntensity);
+        currentGlowColor = Color.Lerp(Color.white, transitionColor, 1f); // Intense glow
+
+        // Set the material properties
+        glowMaterial.SetColor("_GlowColor", currentGlowColor);
+        glowMaterial.SetFloat("_Opacity", levelIntensity); // Adjust opacity based on level
     }
 
     IEnumerator FadeCanvasGroup(float targetAlpha, float duration = 0.5f)

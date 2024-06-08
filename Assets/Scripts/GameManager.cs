@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, levelLine;
+    public GameObject playerIndicator, aiIndicator, historyBackground, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, levelLine;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
             bonusCurrencyEarnedText.Reset();
             runInfoButton.transform.localPosition = new Vector3(runInfoButton.transform.position.x, 113);
             nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next Round >";
-            nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -254);
+            nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
             difficultyText.gameObject.SetActive(false);
@@ -262,6 +262,7 @@ public class GameManager : MonoBehaviour
         wordDisplay.characterSpacing = 0f;
         wordDisplay.text = isPlayerTurn ? $"<color=yellow>{separator}</color>" : separator;
         historyText.UpdateText("");
+        historyBackground.SetActive(false);
         gameWord = "";
         selectedPosition = TextPosition.None;
         roundEnded = false;
@@ -945,7 +946,7 @@ public class GameManager : MonoBehaviour
                 int loseMoney = 10;
                 if (HasDoubleWealth)
                 {
-                    loseMoney *= 3;
+                    loseMoney = Mathf.RoundToInt(loseMoney * 2.5f);
                 }
 
                 currencyEarnedText.gameObject.SetActive(true);
@@ -963,7 +964,7 @@ public class GameManager : MonoBehaviour
 
                 if (HasDoubleWealth)
                 {
-                    bonusMoney *= 3;
+                    bonusMoney = Mathf.RoundToInt(bonusMoney * 2.5f);
                 }
 
                 if (playerWon)
@@ -1073,11 +1074,11 @@ public class GameManager : MonoBehaviour
                     saveObject.Statistics.MostMoney = currency;
                 }
 
-                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
+                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250);
                 var nextRoundButtonText = "Continue Run >";
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
-                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -230);
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
                 }
                 else
                 {
@@ -1184,7 +1185,7 @@ public class GameManager : MonoBehaviour
                 endingPointsText.AddPoints(points, endingText: points == 1 ? " PT" : " PTS", overrideColor: Color.red);
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
-                vignette.Show(0.15f);
+                vignette.Show(0.125f);
 
                 if (playerWon)
                 {
@@ -1230,7 +1231,6 @@ public class GameManager : MonoBehaviour
             levelText.color = Color.yellow;
             skipButton.gameObject.SetActive(false);
         }
-        criteriaText.gameObject.SetActive(lostRun);
 
         if (!lostRun && !wonRun)
         {
@@ -1270,6 +1270,7 @@ public class GameManager : MonoBehaviour
             index++;
         }
 
+        historyBackground.SetActive(true);
         historyText.UpdateText(previousWordsText);
 
         recap.Add(new RecapObject
@@ -1447,7 +1448,7 @@ public class GameManager : MonoBehaviour
             roundCurrency = roundPoints / 5 + 1;
             if (HasDoubleWealth)
             {
-                roundCurrency *= 3;
+                roundCurrency = Mathf.RoundToInt(roundCurrency * 2.5f);
             }
             currency += roundCurrency;
         }

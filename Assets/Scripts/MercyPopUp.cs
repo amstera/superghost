@@ -7,7 +7,7 @@ public class MercyPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public GameManager gameManager;
 
-    public AudioSource clickAudioSource;
+    public AudioSource clickAudioSource, alertAudioSource;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
@@ -23,6 +23,7 @@ public class MercyPopUp : MonoBehaviour
     public void Show()
     {
         clickAudioSource?.Play();
+        alertAudioSource?.Play();
 
         StopAllCoroutines(); // Ensure no other animations are running
         canvasGroup.interactable = true;

@@ -9,6 +9,7 @@ public class PointsExtendedText : MonoBehaviour
     public TextMeshProUGUI pointsText;
     public GameObject fireball;
     public AudioSource incrementAudioSource;
+    public GameManager gameManager;
 
     public float displaySpeed = 0.3f; // Time between number updates
 
@@ -44,7 +45,7 @@ public class PointsExtendedText : MonoBehaviour
             for (int i = 1; i < numbers.Count; i++)
             {
                 pointsText.text = total.ToString("F0") + " x " + numbers[i].ToString();
-                fireball.SetActive(total >= pointsForFire);
+                ShowFireball(total, pointsForFire);
                 total *= numbers[i];
                 UpdateTextColor(total);
                 incrementAudioSource?.Play();
@@ -55,7 +56,7 @@ public class PointsExtendedText : MonoBehaviour
             }
         }
 
-        fireball.SetActive(total >= pointsForFire);
+        ShowFireball(total, pointsForFire);
 
         int finalPoints = (int)Math.Round(total, MidpointRounding.AwayFromZero);
         string symbol = finalPoints < 0 ? "" : "+";
@@ -66,6 +67,15 @@ public class PointsExtendedText : MonoBehaviour
             incrementAudioSource?.Play();
         }
         yield return StartCoroutine(PopTextEffect());
+    }
+
+    private void ShowFireball(float total, int pointsForFire)
+    {
+        if (total >= pointsForFire)
+        {
+            fireball.SetActive(true);
+            gameManager.criteriaText.gameObject.SetActive(false);
+        }
     }
 
     private void UpdateTextColor(float score)
