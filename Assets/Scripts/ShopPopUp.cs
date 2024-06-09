@@ -96,7 +96,7 @@ public class ShopPopUp : MonoBehaviour
         if (visibleShopItems.Count == 0)
         {
             var saveObject = SaveManager.Load();
-            if (overrideExistingItems && saveChanges)
+            if ((overrideExistingItems && saveChanges) || saveObject.ShopItemIds.Count < 4)
             {
                 saveObject.ShopItemIds.Clear();
             }

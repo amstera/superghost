@@ -27,7 +27,9 @@ public class PointsExtendedText : MonoBehaviour
     public void AddPoints(List<float> numbers)
     {
         if (numbers == null || numbers.Count == 0)
+        {
             return;
+        }
 
         fireball.SetActive(false);
         incrementAudioSource.pitch = 1;

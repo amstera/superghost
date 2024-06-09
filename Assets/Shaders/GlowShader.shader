@@ -6,6 +6,8 @@ Shader "Custom/IntenseGlowShader"
         _GlowColor ("Glow Color", Color) = (1,1,1,1)
         _GlowIntensity ("Glow Intensity", Range(0, 10)) = 5
         _Opacity ("Opacity", Range(0, 1)) = 1.0
+        _WaveFrequency ("Wave Frequency", Range(0, 10)) = 1.0
+        _WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.1
     }
     SubShader
     {
@@ -41,6 +43,8 @@ Shader "Custom/IntenseGlowShader"
             float4 _GlowColor;
             float _GlowIntensity;
             float _Opacity;
+            float _WaveFrequency;
+            float _WaveAmplitude;
 
             v2f vert (appdata_t v)
             {
@@ -53,7 +57,8 @@ Shader "Custom/IntenseGlowShader"
             half4 frag (v2f i) : SV_Target
             {
                 half4 texColor = tex2D(_MainTex, i.uv);
-                half4 glowColor = _GlowColor * _GlowIntensity;
+                float wave = sin(i.uv.x * _WaveFrequency + _Time.y * _WaveFrequency) * _WaveAmplitude;
+                half4 glowColor = _GlowColor * (_GlowIntensity + wave);
 
                 // Apply opacity to both the texture and the glow
                 texColor.a *= _Opacity;

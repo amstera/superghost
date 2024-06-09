@@ -219,6 +219,7 @@ public class GameManager : MonoBehaviour
             endGameText.GetComponent<ColorCycleEffect>().enabled = false;
             isPlayerTurn = true;
             currencyText.SetPoints(saveObject.Currency);
+            criteriaText.criteriaText.color = Color.yellow;
 
             var main = confettiPS.main;
             main.loop = false;
@@ -1074,7 +1075,7 @@ public class GameManager : MonoBehaviour
                     saveObject.Statistics.MostMoney = currency;
                 }
 
-                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250);
+                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
                 var nextRoundButtonText = "Continue Run >";
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
@@ -1128,6 +1129,8 @@ public class GameManager : MonoBehaviour
 
                 UpdateLevelStats();
 
+                criteriaText.criteriaText.color = Color.green;
+
                 if (currentGame == 10) // win run
                 {
                     wonRun = true;
@@ -1173,10 +1176,10 @@ public class GameManager : MonoBehaviour
                 playerText.color = Color.red;
                 aiText.color = Color.green;
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
-                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -245);
+                nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250);
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
-                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -215);
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
                 }
                 runInfoButton.gameObject.SetActive(true);
                 currencyText.gameObject.SetActive(false);
@@ -1226,6 +1229,10 @@ public class GameManager : MonoBehaviour
 
         bool lostRun = gameOver && (!playerWon || !metCriteria);
         levelText.gameObject.SetActive(lostRun);
+        if (playerWon && gameOver && !pointsEarnedText.gameObject.activeSelf)
+        {
+            levelText.gameObject.SetActive(true);
+        }
         if (lostRun)
         {
             levelText.color = Color.yellow;
