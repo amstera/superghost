@@ -28,7 +28,6 @@ public class CriteriaText : MonoBehaviour
     private List<GameCriterion> GetCurrentCriteria(int level, List<GameCriterion> previousCriteria, out bool canSkip)
     {
         List<GameCriterion> currentCriteria = new List<GameCriterion>();
-
         var letter = GetLetter(level);
         var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.25f : saveObject.Difficulty == Difficulty.Easy ? 0.75f : 1;
         canSkip = false;
@@ -61,37 +60,20 @@ public class CriteriaText : MonoBehaviour
                 AddCriteria(1, 5, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 6:
-                int chosenValue = GetOrGenerateRandomValue(6, 0, 2);
-                if (chosenValue == 0)
-                {
-                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
-                    AddCriteria(1, 6, 1, currentCriteria, previousCriteria, letter);
-                }
-                else
-                {
-                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
-                    currentCriteria.Add(new NoComboLetters());
-                }
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                AddCriteria(1, 6, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 7:
                 canSkip = true;
-                AddCriteria(2, 7, 0, currentCriteria, previousCriteria, letter);
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(175, difficultyMultiplier)));
+                AddCriteria(1, 7, 0, currentCriteria, previousCriteria, letter);
                 break;
             case 8:
-                int chosenValue6 = saveObject.ChosenCriteria[6].First();
-                if (chosenValue6 == 0)
-                {
-                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
-                    currentCriteria.Add(new NoComboLetters());
-                }
-                else
-                {
-                    currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
-                    AddCriteria(1, 8, 1, currentCriteria, previousCriteria, letter);
-                }
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
+                AddCriteria(1, 8, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 9:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(250, difficultyMultiplier)));
                 break;
         }
 
@@ -101,8 +83,18 @@ public class CriteriaText : MonoBehaviour
     private void AddCriteria(int amount, int level, int startIndex, List<GameCriterion> currentCriteria, List<GameCriterion> previousCriteria, char letter)
     {
         List<GameCriterion> possibleCriteria = new List<GameCriterion> {
-            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter), new NoRepeatLetters()
+            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 7 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter), new NoRepeatLetters()
         };
+
+        if (level < 6)
+        {
+            possibleCriteria.Add(new OnlyMoveBackward());
+        }
+        else
+        {
+            possibleCriteria.Add(new NoComboLetters());
+        }
+
         if (saveObject.ChosenCriteria.TryGetValue(level, out List<int> criteria))
         {
             foreach (var id in criteria)
@@ -113,31 +105,51 @@ public class CriteriaText : MonoBehaviour
                     currentCriteria.Add(criterion);
                 }
             }
+            AdjustForNoComboLetters(currentCriteria);
             return;
         }
 
-        var availableCriteria = possibleCriteria.FindAll(pc => !saveObject.ChosenCriteria.Any(c => c.Value.Any(v => pc.Id == v)));
-
+        var availableCriteria = possibleCriteria.Where(pc => !saveObject.ChosenCriteria.Any(c => c.Value.Contains(pc.Id))).ToList();
         availableCriteria.RemoveAll(a => previousCriteria.Any(p => p != null && p.Id == a.Id));
 
         for (int i = 0; i < Mathf.Min(availableCriteria.Count, amount); i++)
         {
             var newCriteria = availableCriteria[Random.Range(0, availableCriteria.Count)];
             availableCriteria.Remove(newCriteria);
+
             currentCriteria.Add(newCriteria);
         }
 
+        AdjustForNoComboLetters(currentCriteria);
         saveObject.ChosenCriteria[level] = currentCriteria.Skip(startIndex).Select(c => c.Id).ToList();
         SaveManager.Save(saveObject);
     }
 
+    private void AdjustForNoComboLetters(List<GameCriterion> currentCriteria)
+    {
+        if (currentCriteria.Any(c => c is NoComboLetters))
+        {
+            foreach (var criterion in currentCriteria.OfType<ScoreAtLeastXPoints>())
+            {
+                criterion.SetPoints(AdjustScore(criterion.GetPoints() / 3, 1));
+            }
+        }
+    }
+
     private void UpdateText()
     {
+        criteriaText.lineSpacing = -5;
         StringBuilder sb = new StringBuilder();
         foreach (var criterion in currentCriteria)
         {
             if (sb.Length > 0) sb.AppendLine();
-            sb.Append("-").Append(criterion.GetDescription());
+            var description = criterion.GetDescription();
+            sb.Append("-").Append(description);
+
+            if (description.Contains("\n"))
+            {
+                criteriaText.lineSpacing = -20;
+            }
         }
 
         criteriaText.text = sb.ToString();
@@ -175,33 +187,20 @@ public class CriteriaText : MonoBehaviour
 
     public bool AllMet(GameState state)
     {
-        foreach (var criterion in currentCriteria)
-        {
-            if (!criterion.IsMet(state))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return currentCriteria.All(criterion => criterion.IsMet(state));
     }
 
     private char GetLetter(int level)
     {
-        char restrictedChar;
-        if (saveObject.RestrictedChars.TryGetValue(level, out restrictedChar) && restrictedChar != '\0')
+        if (saveObject.RestrictedChars.TryGetValue(level, out char restrictedChar) && restrictedChar != '\0')
         {
             return restrictedChar;
         }
 
         var possibleLetters = new List<char> { 'A', 'E', 'O', 'I', 'R', 'T', 'S', 'N', 'L', 'H' };
-        List<char> unusedLetters = new List<char>(possibleLetters);
-        foreach (var pair in saveObject.RestrictedChars)
-        {
-            unusedLetters.Remove(pair.Value);
-        }
+        var unusedLetters = possibleLetters.Except(saveObject.RestrictedChars.Values).ToList();
 
-        if (unusedLetters.Count == 0)
+        if (!unusedLetters.Any())
         {
             unusedLetters = possibleLetters;
         }
@@ -218,19 +217,5 @@ public class CriteriaText : MonoBehaviour
     {
         float scaledScore = baseScore * multiplier;
         return (int)(Mathf.Round(scaledScore / 5) * 5);
-    }
-
-    private int GetOrGenerateRandomValue(int key, int minValue, int maxValue)
-    {
-        if (saveObject.ChosenCriteria.ContainsKey(key))
-        {
-            return saveObject.ChosenCriteria[key].First();
-        }
-
-        int randomValue = Random.Range(minValue, maxValue);
-        saveObject.ChosenCriteria[key] = new List<int> { randomValue };
-        SaveManager.Save(saveObject);
-
-        return randomValue;
     }
 }

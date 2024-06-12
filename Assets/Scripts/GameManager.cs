@@ -1179,7 +1179,7 @@ public class GameManager : MonoBehaviour
                 nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250);
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
-                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -230);
                 }
                 runInfoButton.gameObject.SetActive(true);
                 currencyText.gameObject.SetActive(false);
@@ -1235,7 +1235,7 @@ public class GameManager : MonoBehaviour
         }
         if (lostRun)
         {
-            levelText.color = Color.yellow;
+            levelText.color = Color.red;
             skipButton.gameObject.SetActive(false);
         }
 

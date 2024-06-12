@@ -28,6 +28,16 @@ public class ScoreAtLeastXPoints : GameCriterion
     {
         return state.Points >= points;
     }
+
+    public int GetPoints()
+    {
+        return points;
+    }
+
+    public void SetPoints(int points)
+    {
+        this.points = points;
+    }
 }
 
 public class NoUsingLetter : GameCriterion
@@ -238,8 +248,28 @@ public class NoRepeatLetters : GameCriterion
     }
 }
 
+public class OnlyMoveBackward : GameCriterion
+{
+    public OnlyMoveBackward()
+    {
+        Id = 10;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"No Letters\nAdded At End";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+}
+
 public class GameState
 {
+    public string CurrentWord;
     public int ItemsUsed;
     public int Points;
     public bool EndGame;

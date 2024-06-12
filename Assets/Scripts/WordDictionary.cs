@@ -549,7 +549,7 @@ public class DifficultySettings
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250 } },
             Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.92f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
-            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 400, 250, 100 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
     }
