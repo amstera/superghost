@@ -7,6 +7,8 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 {
     public GameManager gameManager;
     public string word;
+    public bool canMoveLeft = true;
+    public bool canMoveRight = true;
 
     private WordPopUp wordPopup;
     private Coroutine colorLerpCoroutine;
@@ -74,11 +76,11 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
             // Determine if the click is on the left or right half of the TextMeshProUGUI component
             bool isLeftSide = localCursor.x < 0; // Assuming pivot is at the center (0.5, 0.5)
 
-            if (isLeftSide)
+            if (isLeftSide && canMoveLeft)
             {
                 gameManager.SelectPosition(GameManager.TextPosition.Left);
             }
-            else if (!isLeftSide)
+            else if (!isLeftSide && canMoveRight)
             {
                 gameManager.SelectPosition(GameManager.TextPosition.Right);
             }

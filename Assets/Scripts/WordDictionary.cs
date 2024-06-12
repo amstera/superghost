@@ -16,6 +16,7 @@ public class WordDictionary
     private readonly char[] specialConsonants = "bcdgkpstw".ToCharArray();
     private readonly char[] weightedLetters = GenerateWeightedLetters();
     private int minLength = 3;
+    private int wordDirection;
     private NumberCriteria numberCriteria = null;
     private bool noRepeatingLetters;
     private delegate bool MatchCondition(string w, string extension);
@@ -66,11 +67,13 @@ public class WordDictionary
             w.Length > minLength &&
             w.Contains(substring, StringComparison.InvariantCultureIgnoreCase) &&
             (numberCriteria == null || numberCriteria.IsAllowed(w.Length)) &&
-            (!noRepeatingLetters || HasNoRepeatingLetters(w, existingLetters))
+            (!noRepeatingLetters || HasNoRepeatingLetters(w, existingLetters)) &&
+            IsValidExtension(w, substring)
         );
 
         filteredWords = words.ToList();
     }
+
 
     private bool HasNoRepeatingLetters(string word, HashSet<char> existingLetters)
     {
@@ -124,16 +127,6 @@ public class WordDictionary
         return filteredWords.Where(w => w.Contains(substring, StringComparison.InvariantCultureIgnoreCase)).OrderBy(w => w.Length).FirstOrDefault();
     }
 
-    public bool CanExtendWordToLeft(string word)
-    {
-        return filteredWords.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) > 0);
-    }
-
-    public bool CanExtendWordToRight(string word)
-    {
-        return filteredWords.Any(w => w.Contains(word, StringComparison.InvariantCultureIgnoreCase) && w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) < w.Length - word.Length);
-    }
-
     public void AddLostChallengeWord(string substring)
     {
         substring = substring.ToLower();
@@ -165,6 +158,11 @@ public class WordDictionary
     public void SetMinLength(int minLength)
     {
         this.minLength = minLength;
+    }
+
+    public void SetWordDirection(int direction)
+    {
+        wordDirection = direction;
     }
 
     public string BluffWord(string substring, Difficulty difficulty)
@@ -202,9 +200,9 @@ public class WordDictionary
                 }
             }
 
-            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd);
+            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd && wordDirection != -1);
 
-            var bluffedWord = addAtEnd ? substring + nextLetter : nextLetter + substring;
+            var bluffedWord = addAtEnd && wordDirection != -1 ? substring + nextLetter : nextLetter + substring;
             if (filteredWords.Contains(bluffedWord.ToLower())) // it is bluffing accidentally with a real word
             {
                 return BluffWord(substring, difficulty); // redo it and try again
@@ -434,7 +432,12 @@ public class WordDictionary
 
     private bool ShouldPrioritizeStart(int substringLength, int playerAIWinDifference, Difficulty difficulty)
     {
-        if (difficulty == Difficulty.Easy)
+        if (wordDirection == -1)
+        {
+            return false;
+        }
+
+        if (difficulty == Difficulty.Easy || wordDirection == 1)
         {
             return true;
         }
@@ -488,6 +491,22 @@ public class WordDictionary
         return null; // No valid extension found
     }
 
+    private bool IsValidExtension(string word, string substring)
+    {
+        if (wordDirection == 0)
+        {
+            return true;
+        }
+        else if (wordDirection == -1)
+        {
+            return word.EndsWith(substring, StringComparison.InvariantCultureIgnoreCase);
+        }
+        else if (wordDirection == 1)
+        {
+            return word.StartsWith(substring, StringComparison.InvariantCultureIgnoreCase);
+        }
+        return false;
+    }
 
     private void ShuffleArray<T>(T[] array)
     {

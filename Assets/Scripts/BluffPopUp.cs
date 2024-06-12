@@ -29,6 +29,7 @@ public class BluffPopUp : MonoBehaviour
     private NumberCriteria numberCriteria = null;
     private HashSet<char> restrictedLetters = new HashSet<char>();
     private bool noRepeatingLetters;
+    private int wordDirection;
 
     private void Awake()
     {
@@ -106,6 +107,14 @@ public class BluffPopUp : MonoBehaviour
         {
             ShowWarning($"Word cannot contain <color=white>{repeatingLetter.ToString().ToUpper()}</color>");
         }
+        else if (wordDirection == -1 && !inputField.text.EndsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must end with {originalSubstring.ToUpper()}");
+        }
+        else if (wordDirection == 1 && !inputField.text.StartsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
+        }
         else
         {
             char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
@@ -137,6 +146,11 @@ public class BluffPopUp : MonoBehaviour
     public void SetNoRepeatingLetters(bool value)
     {
         noRepeatingLetters = value;
+    }
+
+    public void SetWordDirection(int value)
+    {
+        wordDirection = value;
     }
 
     public void AddNumberCriteria(NumberCriteria numberCriteria)

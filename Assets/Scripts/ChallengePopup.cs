@@ -30,6 +30,7 @@ public class ChallengePopUp : MonoBehaviour
     private HashSet<char> restrictedLetters = new HashSet<char>();
     private NumberCriteria numberCriteria = null;
     private bool noRepeatingLetters;
+    private int wordDirection;
 
     private void Awake()
     {
@@ -103,6 +104,14 @@ public class ChallengePopUp : MonoBehaviour
         {
             ShowWarning($"Word cannot contain <color=white>{repeatingLetter.ToString().ToUpper()}</color>");
         }
+        else if (wordDirection == -1 && !inputField.text.EndsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must end with {originalSubstring.ToUpper()}");
+        }
+        else if (wordDirection == 1 && !inputField.text.StartsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
+        }
         else
         {
             char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
@@ -139,6 +148,11 @@ public class ChallengePopUp : MonoBehaviour
     public void SetNoRepeatingLetters(bool value)
     {
         noRepeatingLetters = value;
+    }
+
+    public void SetWordDirection(int value)
+    {
+        wordDirection = value;
     }
 
     private IEnumerator HandleChallenge()

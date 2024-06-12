@@ -248,22 +248,30 @@ public class NoRepeatLetters : GameCriterion
     }
 }
 
-public class OnlyMoveBackward : GameCriterion
+public class OnlyMove : GameCriterion
 {
-    public OnlyMoveBackward()
+    bool isForward;
+
+    public OnlyMove(bool isForward)
     {
         Id = 10;
+        this.isForward = isForward;
         IsRestrictive = true;
     }
 
     public override string GetDescription()
     {
-        return $"No Letters\nAdded At End";
+        return $"No Letters\nAdded to " + (isForward ? "Front" : "End");
     }
 
     public override bool IsMet(GameState state)
     {
         return true;
+    }
+
+    public bool CanMoveForward()
+    {
+        return isForward;
     }
 }
 

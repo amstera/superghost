@@ -897,8 +897,11 @@ public class GameManager : MonoBehaviour
         string displayText = gameWord.ToUpper();
         string underscore = updateColor ? $"<color=yellow>{separator}</color>" : separator;
 
-        displayText = (selectedPosition == TextPosition.Left ? underscore : separator) + displayText;
-        displayText += selectedPosition == TextPosition.Right ? underscore : separator;
+        displayText = wordDisplay.canMoveLeft ? (selectedPosition == TextPosition.Left ? underscore : separator) + displayText : displayText;
+        if (wordDisplay.canMoveRight)
+        {
+            displayText += selectedPosition == TextPosition.Right ? underscore : separator;
+        }
 
         newWordIndex++;
         wordDisplay.text = displayText;
@@ -1728,6 +1731,7 @@ public class GameManager : MonoBehaviour
         comboText.IsInactive = false;
         aiAlwaysStarts = false;
         SetRepeatingLetters(false);
+        SetWordDirection(0);
 
         foreach (var criterion in criteria)
         {
@@ -1774,6 +1778,17 @@ public class GameManager : MonoBehaviour
                 {
                     SetRepeatingLetters(true);
                 }
+                else if (criterion is OnlyMove onlyMove)
+                {
+                    if (onlyMove.CanMoveForward())
+                    {
+                        SetWordDirection(1);
+                    }
+                    else
+                    {
+                        SetWordDirection(-1);
+                    }
+                }
             }
         }
 
@@ -1802,5 +1817,14 @@ public class GameManager : MonoBehaviour
         wordDictionary.SetNoRepeatingLetters(value);
         challengePopup.SetNoRepeatingLetters(value);
         bluffPopup.SetNoRepeatingLetters(value);
+    }
+
+    private void SetWordDirection(int value)
+    {
+        wordDisplay.canMoveLeft = value != 1;
+        wordDisplay.canMoveRight = value != -1;
+        wordDictionary.SetWordDirection(value);
+        challengePopup.SetWordDirection(value);
+        bluffPopup.SetWordDirection(value);
     }
 }
