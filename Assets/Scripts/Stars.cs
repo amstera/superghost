@@ -72,23 +72,25 @@ public class Stars : MonoBehaviour
 
     private IEnumerator AnimateStar(Image star, Color targetColor)
     {
-        yield return StartCoroutine(PopAndChangeColor(star, targetColor));
+        yield return StartCoroutine(PopAndChangeColor(star, targetColor, true));
     }
 
     private IEnumerator AnimateAllStarsDiamond()
     {
         foreach (var star in stars)
         {
-            StartCoroutine(PopAndChangeColor(star, diamondColor)); // Start all animations
+            StartCoroutine(PopAndChangeColor(star, diamondColor, false)); // Start all animations
         }
+
+        AudioSource.PlayClipAtPoint(starAudioClip, Vector3.zero, 0.25f);
 
         // Wait for the last pop animation to finish before ending
         yield return new WaitForSeconds(0.5f); // Adjust based on pop animation duration
     }
 
-    private IEnumerator PopAndChangeColor(Image star, Color targetColor)
+    private IEnumerator PopAndChangeColor(Image star, Color targetColor, bool playSound)
     {
-        if (saveObject.EnableSound)
+        if (saveObject.EnableSound && playSound)
         {
             AudioSource.PlayClipAtPoint(starAudioClip, Vector3.zero, 0.25f);
         }
