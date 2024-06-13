@@ -200,6 +200,11 @@ public class WordDictionary
                 }
             }
 
+            if (wordDirection == 1)
+            {
+                addAtEnd = true;
+            }
+
             char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd && wordDirection != -1);
 
             var bluffedWord = addAtEnd && wordDirection != -1 ? substring + nextLetter : nextLetter + substring;

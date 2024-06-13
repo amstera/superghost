@@ -9,9 +9,10 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public GameManager gameManager;
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
-    public Image ghostImage, glowGhostImage;
+    public Image ghostImage, glowGhostImage, speechBubble;
     public GameObject flag, mercyButton;
     public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost;
+    public Sprite normalBlinkGhost, angryBlinkGhost, thinkingBlinkGhost, sadBlinkGhost;
     public Material glowMaterial;
     public int currentLevel;
 
@@ -26,11 +27,13 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     private bool shouldShowFlag;
     private Color currentGlowColor = Color.white;
     private Coroutine shakingTouchedCoroutine;
+    private Coroutine blinkingCoroutine;
 
     void Start()
     {
         startYPosition = transform.localPosition.y;
         originalTextScale = textMeshProUGUI.transform.localScale;
+        blinkingCoroutine = StartCoroutine(Blink());
     }
 
     void Update()
@@ -40,7 +43,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             float newY = startYPosition + Mathf.Sin(Time.time * moveSpeed) * 2f;
             transform.localPosition = new Vector3(transform.localPosition.x, newY, transform.localPosition.z);
 
-            float rotationY = Mathf.Sin(Time.time * 0.5f) * 25;
+            float rotationY = Mathf.Sin(Time.time * 0.5f) * 20;
             ghostImage.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
             glowGhostImage.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
 
@@ -67,7 +70,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
 
     public void Hide()
     {
-        StartCoroutine(FadeCanvasGroup(0, 0.1f)); // Fade out
+        StartCoroutine(FadeCanvasGroup(0, 0f)); // Fade out
         isShowing = false;
         mercyButton.SetActive(false);
         flag.SetActive(false);
@@ -170,7 +173,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         {
             ghostImage.sprite = angryGhost;
         }
-        else 
+        else
         {
             ghostImage.sprite = normalGhost;
         }
@@ -261,7 +264,33 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         {
             textMeshProUGUI.text = thinkingStates[index % thinkingStates.Length];
             index++;
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
+    private IEnumerator Blink()
+    {
+        while (true)
+        {
+            float blinkInterval = Random.Range(3f, 5f); // Time between blinks
+            yield return new WaitForSeconds(blinkInterval);
+
+            float blinkDuration = 0.1f; // Duration of blink
+            Sprite currentBlinkSprite = null;
+
+            // Determine the appropriate blink sprite based on the current sprite
+            if (ghostImage.sprite == normalGhost) currentBlinkSprite = normalBlinkGhost;
+            else if (ghostImage.sprite == angryGhost) currentBlinkSprite = angryBlinkGhost;
+            else if (ghostImage.sprite == thinkingGhost) currentBlinkSprite = thinkingBlinkGhost;
+            else if (ghostImage.sprite == sadGhost) currentBlinkSprite = sadBlinkGhost;
+
+            ghostImage.sprite = currentBlinkSprite;
+            yield return new WaitForSeconds(blinkDuration);
+            // Restore to the original sprite after blinking
+            if (ghostImage.sprite == normalBlinkGhost) ghostImage.sprite = normalGhost;
+            else if (ghostImage.sprite == angryBlinkGhost) ghostImage.sprite = angryGhost;
+            else if (ghostImage.sprite == thinkingBlinkGhost) ghostImage.sprite = thinkingGhost;
+            else if (ghostImage.sprite == sadBlinkGhost) ghostImage.sprite = sadGhost;
         }
     }
 

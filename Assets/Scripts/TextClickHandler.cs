@@ -14,8 +14,6 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
     private Coroutine colorLerpCoroutine;
     private Coroutine popCoroutine;
 
-    private float popDuration;
-
     public override string text
     {
         get { return base.text; }
@@ -99,14 +97,12 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 
     public void Pop(float duration = 0.2f)
     {
-        popDuration = duration;
-
         if (popCoroutine != null)
         {
             StopCoroutine(popCoroutine);
         }
 
-        popCoroutine = StartCoroutine(PopEffect());
+        popCoroutine = StartCoroutine(PopEffect(duration));
     }
 
     // Coroutine to lerp the color of the letter at a specific index
@@ -156,7 +152,7 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         this.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
     }
 
-    IEnumerator PopEffect()
+    IEnumerator PopEffect(float duration)
     {
         Vector3 zeroScale = Vector3.zero;  // Start from absolute zero
         var originalScale = transform.localScale; // Store the original scale
@@ -164,9 +160,9 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         float elapsedTime = 0f;
 
         // Scale up from zero to overshoot scale
-        while (elapsedTime < popDuration * 0.6f) // Faster to overshoot
+        while (elapsedTime < duration * 0.6f) // Faster to overshoot
         {
-            float proportionCompleted = elapsedTime / (popDuration * 0.6f);
+            float proportionCompleted = elapsedTime / (duration * 0.6f);
             float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2); // Applying ease-out quadratic effect
 
             transform.localScale = Vector3.Lerp(zeroScale, overshootScale, easeOutProgress);
@@ -177,9 +173,9 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 
         // Settle back to the original scale
         elapsedTime = 0f;
-        while (elapsedTime < popDuration * 0.4f) // Slower to settle
+        while (elapsedTime < duration * 0.4f) // Slower to settle
         {
-            transform.localScale = Vector3.Lerp(overshootScale, originalScale, elapsedTime / (popDuration * 0.4f));
+            transform.localScale = Vector3.Lerp(overshootScale, originalScale, elapsedTime / (duration * 0.4f));
             elapsedTime += Time.deltaTime;
 
             yield return null;
@@ -188,4 +184,5 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         // Ensure it sets back to original scale
         transform.localScale = originalScale;
     }
+
 }

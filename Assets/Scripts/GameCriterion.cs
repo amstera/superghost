@@ -261,7 +261,7 @@ public class OnlyMove : GameCriterion
 
     public override string GetDescription()
     {
-        return $"Letters Only\nAdded to " + (isForward ? "End" : "Front");
+        return $"Letters Only\nAdd to " + (isForward ? "End" : "Front");
     }
 
     public override bool IsMet(GameState state)
