@@ -12,6 +12,7 @@ public abstract class GameCriterion
 public class ScoreAtLeastXPoints : GameCriterion
 {
     private int points;
+    private bool isMet;
 
     public ScoreAtLeastXPoints(int points)
     {
@@ -21,12 +22,14 @@ public class ScoreAtLeastXPoints : GameCriterion
 
     public override string GetDescription()
     {
-        return $"Get {points}+ PTS";
+        var highlightPointsColor = isMet ? "green" : "#FF5733";
+        return $"Score <color={highlightPointsColor}>{points}+</color> PTS";
     }
 
     public override bool IsMet(GameState state)
     {
-        return state.Points >= points;
+        isMet = state.Points >= points;
+        return isMet;
     }
 
     public int GetPoints()

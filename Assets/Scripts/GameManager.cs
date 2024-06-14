@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winRunSound;
-    public AudioSource clickAudioSource, gameStatusAudioSource, keyAudioSource, challengeAudioSource;
+    public AudioSource clickAudioSource, gameStatusAudioSource, keyAudioSource, challengeAudioSource, moneyAudioSource;
 
     public bool isPlayerTurn = true;
     public string gameWord = "";
@@ -863,6 +863,11 @@ public class GameManager : MonoBehaviour
             previousWords.Add(gameWord);
             EndGame();
         }
+        else
+        {
+            gameStatusAudioSource.clip = loseSound;
+            gameStatusAudioSource.Play();
+        }
     }
 
     void CheckGameStatus()
@@ -1228,6 +1233,19 @@ public class GameManager : MonoBehaviour
         if (playSound)
         {
             gameStatusAudioSource.Play();
+        }
+        if ((totalPointsText.gameObject.activeSelf && bonusCurrencyEarnedText.gameObject.activeSelf) || currencyEarnedText.gameObject.activeSelf)
+        {
+            float delayTime = 0.5f;
+            if (totalPointsText.gameObject.activeSelf)
+            {
+                delayTime = 0.75f;
+            }
+            else if (roundCurrency < 5)
+            {
+                delayTime = 0.25f;
+            }
+            moneyAudioSource.PlayDelayed(delayTime);
         }
 
         bool lostRun = gameOver && (!playerWon || !metCriteria);

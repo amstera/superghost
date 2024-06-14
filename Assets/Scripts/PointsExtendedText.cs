@@ -33,6 +33,7 @@ public class PointsExtendedText : MonoBehaviour
 
         fireball.SetActive(false);
         incrementAudioSource.pitch = 1;
+        incrementAudioSource.volume = 0.4f;
         int pointsForFire = 40;
         StartCoroutine(DisplayPointsRoutine(numbers, pointsForFire));
     }
@@ -52,6 +53,7 @@ public class PointsExtendedText : MonoBehaviour
                 UpdateTextColor(total);
                 incrementAudioSource?.Play();
                 incrementAudioSource.pitch *= 1.5f;
+                incrementAudioSource.volume *= 1.15f;
 
                 yield return StartCoroutine(PopTextEffect());
                 yield return new WaitForSeconds(displaySpeed);

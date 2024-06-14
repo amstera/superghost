@@ -11,10 +11,12 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public CanvasGroup canvasGroup;
     public Image ghostImage, glowGhostImage, speechBubble;
     public GameObject flag, mercyButton;
-    public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost;
-    public Sprite normalBlinkGhost, angryBlinkGhost, thinkingBlinkGhost, sadBlinkGhost;
+    public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost, surprisedGhost;
+    public Sprite normalBlinkGhost, angryBlinkGhost, thinkingBlinkGhost, sadBlinkGhost, surprisedBlinkGhost;
     public Material glowMaterial;
     public int currentLevel;
+
+    public AudioSource ghostAudioSource;
 
     private float startYPosition;
     private bool isShowing = false;
@@ -60,10 +62,6 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         }
 
         UpdateState(isLosing, currentLevel);
-        if (flag.activeSelf)
-        {
-            ghostImage.sprite = sadGhost;
-        }
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
     }
@@ -145,6 +143,14 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
 
     private IEnumerator Shake()
     {
+        if (!ghostAudioSource.isPlaying)
+        {
+            ghostAudioSource.Play();
+        }
+
+        // Change to surprised sprite
+        ghostImage.sprite = surprisedGhost;
+
         float elapsed = 0.0f;
         var originalPos = transform.localPosition;
         var shakeDuration = 0.25f;
@@ -162,6 +168,11 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         }
 
         transform.localPosition = originalPos;
+
+        // Wait while showing the surprised image
+        yield return new WaitForSeconds(0.1f);
+
+        UpdateState(isLosing, currentLevel);
     }
 
     public void UpdateState(bool isLosing, int currentLevel)
@@ -169,7 +180,11 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         this.isLosing = isLosing;
         this.currentLevel = currentLevel;
 
-        if (isLosing)
+        if (flag.activeSelf)
+        {
+            ghostImage.sprite = sadGhost;
+        }
+        else if (isLosing)
         {
             ghostImage.sprite = angryGhost;
         }
@@ -283,14 +298,19 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             else if (ghostImage.sprite == angryGhost) currentBlinkSprite = angryBlinkGhost;
             else if (ghostImage.sprite == thinkingGhost) currentBlinkSprite = thinkingBlinkGhost;
             else if (ghostImage.sprite == sadGhost) currentBlinkSprite = sadBlinkGhost;
+            else if (ghostImage.sprite == surprisedGhost) currentBlinkSprite = surprisedBlinkGhost;
 
-            ghostImage.sprite = currentBlinkSprite;
+            if (currentBlinkSprite != null)
+            {
+                ghostImage.sprite = currentBlinkSprite;
+            }
             yield return new WaitForSeconds(blinkDuration);
             // Restore to the original sprite after blinking
             if (ghostImage.sprite == normalBlinkGhost) ghostImage.sprite = normalGhost;
             else if (ghostImage.sprite == angryBlinkGhost) ghostImage.sprite = angryGhost;
             else if (ghostImage.sprite == thinkingBlinkGhost) ghostImage.sprite = thinkingGhost;
             else if (ghostImage.sprite == sadBlinkGhost) ghostImage.sprite = sadGhost;
+            else if (ghostImage.sprite == surprisedBlinkGhost) ghostImage.sprite = surprisedGhost;
         }
     }
 
