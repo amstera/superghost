@@ -15,7 +15,7 @@ public class ChallengePopUp : MonoBehaviour
     public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText;
     public ActiveEffectsText activeEffectsText;
 
-    public AudioSource alertAudioSource;
+    public AudioSource alertAudioSource, noticeAudioSource;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
@@ -214,6 +214,8 @@ public class ChallengePopUp : MonoBehaviour
 
     private void ShowWarning(string text)
     {
+        noticeAudioSource?.Play();
+
         StartCoroutine(ShakePopup());
         warningText.text = text;
         warningText.gameObject.SetActive(true);

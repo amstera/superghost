@@ -13,7 +13,7 @@ public class BluffPopUp : MonoBehaviour
     public TextMeshProUGUI warningText, pointsText, bluffText, comboText, pointsCalculateText;
     public TMP_InputField inputField;
 
-    public AudioSource winAudioSource;
+    public AudioSource winAudioSource, noticeAudioSource;
     public ParticleSystem confetti;
 
     public float fadeDuration = 0.5f;
@@ -223,6 +223,8 @@ public class BluffPopUp : MonoBehaviour
 
     private void ShowWarning(string text)
     {
+        noticeAudioSource?.Play();
+
         StartCoroutine(ShakePopup());
         warningText.text = text;
         warningText.gameObject.SetActive(true);

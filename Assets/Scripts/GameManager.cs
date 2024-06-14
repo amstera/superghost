@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     public ActiveEffectsText activeEffectsText;
     public WordDictionary wordDictionary = new WordDictionary();
 
-    public AudioClip winSound, loseSound, loseGameSound, winRunSound;
+    public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
     public AudioSource clickAudioSource, gameStatusAudioSource, keyAudioSource, challengeAudioSource, moneyAudioSource;
 
     public bool isPlayerTurn = true;
@@ -994,7 +994,7 @@ public class GameManager : MonoBehaviour
 
         if (playerWon) // won round
         {
-            gameStatusAudioSource.clip = winSound;
+            gameStatusAudioSource.clip = gameOver ? winGameSound : winSound;
 
             if (isLastWordValid && gameWord.Length > saveObject.Statistics.LongestWinningWord.Length)
             {
