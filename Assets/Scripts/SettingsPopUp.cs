@@ -11,8 +11,9 @@ public class SettingsPopUp : MonoBehaviour
     public GameObject popUpGameObject, settingsPage, dictionaryPage;
     public Button settingsButton, dictionaryButton;
     public GameManager gameManager;
+    public Sprite lockImage;
 
-    public TextMeshProUGUI footerText, dictionaryValidateText;
+    public TextMeshProUGUI dropdownText, footerText, dictionaryValidateText;
     public Toggle sfxToggle, musicToggle;
     public TMP_Dropdown difficultyDropdown;
     public TMP_InputField inputField;
@@ -25,6 +26,7 @@ public class SettingsPopUp : MonoBehaviour
     private SaveObject saveObject;
     private Vector3 originalScale;
     private Vector3 originalPos;
+    private bool isHardOptionDisabled;
 
     private void Start()
     {
@@ -54,6 +56,10 @@ public class SettingsPopUp : MonoBehaviour
         // Set up Difficulty dropdown
         difficultyDropdown.value = (int)saveObject.Difficulty;
         difficultyDropdown.interactable = gameManager.IsRunEnded();
+
+        dropdownText.text = "Can't be changed mid-run";
+
+        UpdateDifficultyDropdownOptions();
 
         // Set up dictionary
         inputField.text = "";
@@ -164,11 +170,20 @@ public class SettingsPopUp : MonoBehaviour
         }
     }
 
-    private void OnDifficultyChanged(int difficultyIndex)
+    private void OnDifficultyChanged(int index)
     {
         clickAudioSource?.Play();
 
-        saveObject.Difficulty = (Difficulty)difficultyIndex;
+        // Prevent selecting "HARD" difficulty if it is disabled
+        if (isHardOptionDisabled && index == 2)
+        {
+            difficultyDropdown.value = (int)saveObject.Difficulty;
+            dropdownText.text = "Win a run to unlock <color=red>HARD</color>\nCan't be changed mid-run";
+            difficultyDropdown.Hide();
+            return;
+        }
+
+        saveObject.Difficulty = (Difficulty)index;
         gameManager.saveObject = saveObject;
         SaveManager.Save(saveObject);
     }
@@ -235,6 +250,27 @@ public class SettingsPopUp : MonoBehaviour
         }
 
         inputField.text = "";
+    }
+
+    private void UpdateDifficultyDropdownOptions()
+    {
+        isHardOptionDisabled = saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0;
+        var options = difficultyDropdown.options;
+
+        if (isHardOptionDisabled)
+        {
+            // Update the "HARD" option to be strikethrough
+            options[2].text = "<color=red><s>HARD</s></color>";
+            options[2].image = lockImage;
+        }
+        else
+        {
+            // Ensure the "HARD" option is normal if previously strikethrough
+            options[2].text = "<color=red>HARD</color>";
+            options[2].image = null;
+        }
+
+        difficultyDropdown.options = options;
     }
 
     private IEnumerator ShakePopup()

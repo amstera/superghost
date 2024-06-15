@@ -117,6 +117,12 @@ public class GameManager : MonoBehaviour
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
+
+        if (saveObject.Difficulty == Difficulty.Hard && saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0)
+        {
+            saveObject.Difficulty = Difficulty.Normal;
+            SaveManager.Save(saveObject);
+        }
     }
 
     IEnumerator Start()

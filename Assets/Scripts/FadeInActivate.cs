@@ -5,6 +5,7 @@ public class FadeInActivate : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public float fadeInDuration = 0.25f;
+    public float delay;
 
     private void OnEnable()
     {
@@ -14,6 +15,8 @@ public class FadeInActivate : MonoBehaviour
     private IEnumerator FadeIn()
     {
         canvasGroup.alpha = 0;
+
+        yield return new WaitForSeconds(delay);
 
         float elapsedTime = 0f;
         while (elapsedTime < fadeInDuration)

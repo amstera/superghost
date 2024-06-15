@@ -86,7 +86,7 @@ public class CriteriaText : MonoBehaviour
             new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 7 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter), new NoRepeatLetters()
         };
 
-        if (level > 3 && level < 7)
+        if (level > 2 && level < 7)
         {
             possibleCriteria.Add(new OnlyMove(true));
         }

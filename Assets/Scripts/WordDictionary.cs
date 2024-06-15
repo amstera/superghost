@@ -332,7 +332,7 @@ public class WordDictionary
         char[] lettersForEndWith = startsWithVowel ? consonants.Concat(vowels).ToArray() : vowels.Concat(consonants).ToArray();
 
         ratio = 0.3f + playerAIWinDifference * 0.075f;
-        if (difficulty > Difficulty.Easy && (difficulty == Difficulty.Hard || rng.NextDouble() <= ratio))
+        if (difficulty == Difficulty.Hard || rng.NextDouble() <= ratio)
         {
             ShuffleArray(lettersForStartWith);
             ShuffleArray(lettersForEndWith);
@@ -442,7 +442,7 @@ public class WordDictionary
             return false;
         }
 
-        if (difficulty == Difficulty.Easy || wordDirection == 1)
+        if (wordDirection == 1)
         {
             return true;
         }

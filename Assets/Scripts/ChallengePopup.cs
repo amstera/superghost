@@ -102,7 +102,7 @@ public class ChallengePopUp : MonoBehaviour
         }
         else if (noRepeatingLetters && ContainsRepeatingLetters(inputField.text, out char repeatingLetter))
         {
-            ShowWarning($"Word cannot contain <color=white>{repeatingLetter.ToString().ToUpper()}</color>");
+            ShowWarning($"Word cannot repeat <color=white>{repeatingLetter.ToString().ToUpper()}</color>");
         }
         else if (wordDirection == -1 && !inputField.text.EndsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
         {
