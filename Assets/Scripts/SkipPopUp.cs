@@ -35,8 +35,8 @@ public class SkipPopUp : MonoBehaviour
         clickAudioSource?.Play();
 
         amountToEarn = 5 * saveObject.CurrentLevel + 5;
-        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>${amountToEarn}</color>";
-        skipButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Skip (<color=green>+${amountToEarn}</color>)";
+        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>{amountToEarn}¤</color>";
+        skipButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Skip (<color=green>+{amountToEarn}¤</color>)";
         currencyText.SetPoints(gameManager.currency);
 
         StopAllCoroutines(); // Ensure no other animations are running

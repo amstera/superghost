@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
 {
     public AudioMixer audioMixer;
     public AudioSource bgMusicAudioSource;
-    public AudioClip bgMusic, gameEndMusic;
+    public AudioClip bgMusic, bossMusic, gameEndMusic;
     public static AudioManager instance;
 
     private SaveObject saveObject;
@@ -54,9 +54,10 @@ public class AudioManager : MonoBehaviour
     public void GameStarted()
     {
         isGameStarted = true;
-        if (bgMusicAudioSource.clip != bgMusic && saveObject.EnableMusic)
+        var newClip = saveObject.CurrentLevel >= 5 ? bossMusic : bgMusic;
+        if (bgMusicAudioSource.clip != newClip && saveObject.EnableMusic)
         {
-            StartCoroutine(FadeOutAndIn(bgMusic));
+            StartCoroutine(FadeOutAndIn(newClip));
         }
     }
 
@@ -79,7 +80,8 @@ public class AudioManager : MonoBehaviour
 
         if (isGameStarted)
         {
-            StartCoroutine(FadeOutAndIn(bgMusic));
+            var newClip = saveObject.CurrentLevel >= 5 ? bossMusic : bgMusic;
+            StartCoroutine(FadeOutAndIn(newClip));
         }
         else
         {
@@ -94,6 +96,8 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeOutAndIn(AudioClip newClip, float fadeDuration = 0.5f, float targetPitch = 1)
     {
+        bgMusicAudioSource.volume = newClip == bossMusic ? 0.25f : 0.15f;
+
         // Check if a clip is currently playing
         if (bgMusicAudioSource.isPlaying)
         {

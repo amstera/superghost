@@ -30,7 +30,7 @@ public class ShopItem : MonoBehaviour
 
         bool canAfford = currency >= cost;
         cost = Math.Max(cost, 0);
-        var costText = isActive ? "<sprite=0>" : $"${cost}";
+        var costText = isActive ? "<sprite=0>" : $"{cost}¤";
 
         Color.RGBToHSV(backgroundImage.color, out float H, out float S, out float V);
         V = Mathf.Clamp(V + 0.25f, 0, 1);

@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, historyBackground, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, levelLine;
+    public GameObject playerIndicator, aiIndicator, historyBackground, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, criteria;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -178,6 +178,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.gameObject.SetActive(false);
         commandCenter.SetActive(true);
         pointsCalculateText.text = string.Empty;
+        criteria.gameObject.SetActive(true);
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -218,7 +219,7 @@ public class GameManager : MonoBehaviour
             points = 0;
             bool canSkip = criteriaText.SetLevelCriteria(currentGame);
             skipButton.Set(canSkip);
-            levelLine.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
+            criteria.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
             AddRestrictions(criteriaText.GetCurrentCriteria());
             comboText.ChooseNewCombo();
             vignette.Hide();
@@ -226,6 +227,7 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = true;
             currencyText.SetPoints(saveObject.Currency);
             criteriaText.criteriaText.color = Color.yellow;
+            criteriaText.outline.color = new Color32(109, 109, 109, 255);
 
             var main = confettiPS.main;
             main.loop = false;
@@ -392,7 +394,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, false);//shopNewIndicator.activeSelf);
+        shopPopUp.Show(currency, gameWord, false);
     }
 
     public void ShowHint()
@@ -958,7 +960,7 @@ public class GameManager : MonoBehaviour
         {
             if (!playerWon && !gameOver)
             {
-                int loseMoney = 10;
+                int loseMoney = 15;
                 if (HasDoubleWealth)
                 {
                     loseMoney = Mathf.RoundToInt(loseMoney * 2.5f);
@@ -1144,6 +1146,7 @@ public class GameManager : MonoBehaviour
                 UpdateLevelStats();
 
                 criteriaText.criteriaText.color = Color.green;
+                criteriaText.outline.color = Color.green;
 
                 if (currentGame == 10) // win run
                 {
@@ -1203,6 +1206,7 @@ public class GameManager : MonoBehaviour
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.125f);
+                criteriaText.outline.color = Color.red;
 
                 if (playerWon)
                 {

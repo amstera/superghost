@@ -414,7 +414,7 @@ public class ShopPopUp : MonoBehaviour
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
-        reshuffleText.text = $"Shuffle Items (<color={(canAffordReshuffle ? "green" : "red")}>${restockCost}</color>)";
+        reshuffleText.text = $"Shuffle Powers (<color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>)";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
     }
 
@@ -505,7 +505,7 @@ public class ShopPopUp : MonoBehaviour
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableBonusMoney(), false, true),
                     !gameManager.HasBonusMoney, true, gameManager.HasBonusMoney,
-                    gameManager.IsGameEnded() ? "$0" : $"${(gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3}");
+                    gameManager.IsGameEnded() ? "$0" : $"{(gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3}¤");
             case 20:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.SkipTurn(), true, false),

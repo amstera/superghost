@@ -12,6 +12,7 @@ public class VirtualKeyboard : MonoBehaviour
     public TextMeshProUGUI warningText;
 
     public AudioSource keyAudioSource;
+    public AudioSource warningAudioSource;
 
     private string[] rows = new string[]
     {
@@ -91,6 +92,7 @@ public class VirtualKeyboard : MonoBehaviour
             StartCoroutine(ShakeAnimation(btn));
             if (gameManager.selectedPosition == GameManager.TextPosition.None)
             {
+                warningAudioSource?.Play();
                 warningText.gameObject.SetActive(true);
             }
             return;

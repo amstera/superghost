@@ -124,7 +124,7 @@ public class PointsText : MonoBehaviour
         }
         else if (IsCurrency)
         {
-            pointsDisplay = $"{symbol}${currentPoints}";
+            pointsDisplay = $"{symbol}{currentPoints}¤";
         }
         else
         {

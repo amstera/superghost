@@ -33,7 +33,8 @@ public class RemoveEffectsPopUp : MonoBehaviour
         sellButton.interactable = true;
         currencyText.SetPoints(gameManager.currency);
         int sellMoney = GetValueOfItems();
-        bodyText.text = $"Remove all active items and get\n<color=green>${sellMoney}</color>";
+        bodyText.text = $"Remove all active Powers and get\n<color=green>{sellMoney}¤</color>";
+        sellButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Sell (<color=green>+{sellMoney}¤</color>)";
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;

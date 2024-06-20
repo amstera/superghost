@@ -78,7 +78,7 @@ public class PointsExtendedText : MonoBehaviour
         if (total >= pointsForFire)
         {
             fireball.SetActive(true);
-            gameManager.criteriaText.gameObject.SetActive(false);
+            gameManager.criteria.gameObject.SetActive(false);
         }
     }
 

@@ -3,10 +3,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using UnityEngine.UI;
 
 public class CriteriaText : MonoBehaviour
 {
     public TextMeshProUGUI criteriaText;
+    public Image outline;
     private List<GameCriterion> currentCriteria = new List<GameCriterion>();
     private SaveObject saveObject;
 
@@ -29,7 +31,7 @@ public class CriteriaText : MonoBehaviour
     {
         List<GameCriterion> currentCriteria = new List<GameCriterion>();
         var letter = GetLetter(level);
-        var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.25f : saveObject.Difficulty == Difficulty.Easy ? 0.75f : 1;
+        var difficultyMultiplier = saveObject.Difficulty == Difficulty.Hard ? 1.2f : saveObject.Difficulty == Difficulty.Easy ? 0.8f : 1;
         canSkip = false;
 
         switch (level)
@@ -86,7 +88,7 @@ public class CriteriaText : MonoBehaviour
             new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 7 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter), new NoRepeatLetters()
         };
 
-        if (level > 2 && level < 7)
+        if (level > 3 && level <= 7)
         {
             possibleCriteria.Add(new OnlyMove(true));
         }

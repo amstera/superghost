@@ -385,12 +385,17 @@ public class WordDictionary
         var primaryList = primaryIsEven ? evenLengthWords : oddLengthWords;
         var secondaryList = primaryIsEven ? oddLengthWords : evenLengthWords;
 
+        if (!primaryIsEven && substring.Length >= 2)
+        {
+            primaryList = primaryList.Where(p => !evenLengthWords.Any(e => p.Contains(e))).ToList();
+        }
+
         // Attempt to find a word in the primary list, then in the secondary if necessary
         string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, playerAIWinDifference, difficulty);
         if (foundWord == null)
         {
             Random random = new Random();
-            ratio = 0.35f - playerAIWinDifference * 0.025f;
+            ratio = 0.4f - playerAIWinDifference * 0.025f;
             if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
@@ -417,7 +422,7 @@ public class WordDictionary
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
-            float ratio = 0.15f - playerAIWinDifference * 0.025f;
+            float ratio = 0.25f - playerAIWinDifference * 0.025f;
             if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
