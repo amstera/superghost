@@ -186,8 +186,8 @@ public class StatsPopup : MonoBehaviour
         text += regularLineBreak;
 
 
-        text += "Most Money\n";
-        text += $"<color=green>${saveObject.Statistics.MostMoney}</color>";
+        text += "Most Mana\n";
+        text += $"<color=green>{saveObject.Statistics.MostMoney}¤</color>";
         text += regularLineBreak;
 
         var longestWinningWord = string.IsNullOrEmpty(saveObject.Statistics.LongestWinningWord) ? "N/A" : saveObject.Statistics.LongestWinningWord;

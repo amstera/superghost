@@ -15,6 +15,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public Sprite normalBlinkGhost, angryBlinkGhost, thinkingBlinkGhost, sadBlinkGhost, surprisedBlinkGhost;
     public Material glowMaterial;
     public int currentLevel;
+    public bool CanMercy = true;
 
     public AudioSource ghostAudioSource;
 
@@ -29,13 +30,12 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     private bool shouldShowFlag;
     private Color currentGlowColor = Color.white;
     private Coroutine shakingTouchedCoroutine;
-    private Coroutine blinkingCoroutine;
 
     void Start()
     {
         startYPosition = transform.localPosition.y;
         originalTextScale = textMeshProUGUI.transform.localScale;
-        blinkingCoroutine = StartCoroutine(Blink());
+        StartCoroutine(Blink());
     }
 
     void Update()
@@ -82,7 +82,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             isShowing = true;
         }
 
-        if (shouldShowFlag && !flag.activeSelf)
+        if (shouldShowFlag && !flag.activeSelf && CanMercy)
         {
             flag.SetActive(true);
             mercyButton.SetActive(true);
@@ -99,7 +99,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public void SetFlag(GameState gameState)
     {
         int livesDiff = gameManager.playerLivesText.LivesRemaining() - gameManager.aiLivesText.LivesRemaining();
-        shouldShowFlag = livesDiff >= 3 && gameManager.criteriaText.GetCurrentCriteria().TrueForAll(c => c.IsMet(gameState));
+        shouldShowFlag = livesDiff >= 3 && CanMercy && gameManager.criteriaText.GetCurrentCriteria().TrueForAll(c => c.IsMet(gameState));
     }
 
     public void Pop()

@@ -76,6 +76,7 @@ public class CriteriaText : MonoBehaviour
                 break;
             case 9:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(250, difficultyMultiplier)));
+                currentCriteria.Add(new NoMercy());
                 break;
         }
 

@@ -278,6 +278,25 @@ public class OnlyMove : GameCriterion
     }
 }
 
+public class NoMercy : GameCriterion
+{
+    public NoMercy()
+    {
+        Id = 11;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"No Mercy";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+}
+
 public class GameState
 {
     public string CurrentWord;

@@ -7,9 +7,12 @@ public class SkipButton : MonoBehaviour
     public Sprite skipIcon, lockIcon;
     public ScaleInOut scaleInOut;
     public GameObject skipText;
+    public bool canSkip;
 
     public void Set(bool canSkip)
     {
+        this.canSkip = canSkip;
+
         parentTextButton.interactable = canSkip;
         button.interactable = canSkip;
         button.GetComponent<Image>().sprite = canSkip ? skipIcon : lockIcon;

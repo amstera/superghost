@@ -162,7 +162,7 @@ public class SettingsPopUp : MonoBehaviour
 
         if (saveObject.EnableMusic)
         {
-            AudioManager.instance.StartMusic();
+            AudioManager.instance.StartMusic(gameManager.skipButton.canSkip);
         }
         else
         {

@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, historyBackground, commandCenter, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, criteria;
+    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, criteria;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public CriteriaText criteriaText;
     public Vignette vignette;
     public ActiveEffectsText activeEffectsText;
+    public CommandCenter commandCenter;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
@@ -161,6 +162,7 @@ public class GameManager : MonoBehaviour
     {
         var gameState = GetGameState();
         criteriaText.UpdateState(gameState);
+        commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), gameState);
     }
 
     private IEnumerator NewGame()
@@ -176,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
-        commandCenter.SetActive(true);
+        commandCenter.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
         criteria.gameObject.SetActive(true);
 
@@ -246,7 +248,7 @@ public class GameManager : MonoBehaviour
             var unlockedHats = statsPopup.GetUnlockedHats(true);
             statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
 
-            AudioManager.instance.GameStarted();
+            AudioManager.instance.GameStarted(skipButton.canSkip);
         }
         else
         {
@@ -298,6 +300,7 @@ public class GameManager : MonoBehaviour
         keyboard.Show();
         previousWords.Clear();
         SetIndicators(isPlayerTurn);
+        commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), GetGameState());
 
         bool isAILosing = GetPlayerAIWinDifference() > 0;
         ghostAvatar.UpdateState(isAILosing, currentGame);
@@ -944,7 +947,7 @@ public class GameManager : MonoBehaviour
         ShowHistory();
         ghostAvatar.Hide();     
         nextRoundButton.gameObject.SetActive(true);
-        commandCenter.SetActive(false);
+        commandCenter.gameObject.SetActive(false);
         levelText.gameObject.SetActive(false);
         activeEffectsText.ClearAll();
 
@@ -1758,6 +1761,7 @@ public class GameManager : MonoBehaviour
         minLength = 3;
         comboText.IsInactive = false;
         aiAlwaysStarts = false;
+        ghostAvatar.CanMercy = true;
         SetRepeatingLetters(false);
         SetWordDirection(0);
 
@@ -1816,6 +1820,10 @@ public class GameManager : MonoBehaviour
                     {
                         SetWordDirection(-1);
                     }
+                }
+                else if (criterion is NoMercy)
+                {
+                    ghostAvatar.CanMercy = false;
                 }
             }
         }

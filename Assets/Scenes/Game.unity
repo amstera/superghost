@@ -6975,6 +6975,7 @@ MonoBehaviour:
   lockIcon: {fileID: 21300000, guid: f8a4f508f211c4a648a31ede6ef0cef6, type: 3}
   scaleInOut: {fileID: 227443375}
   skipText: {fileID: 271738040}
+  canSkip: 0
 --- !u!114 &227443375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8082,7 +8083,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956862462}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999977
+  m_Size: 0.98974097
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12435,8 +12436,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000215
-  m_Size: 0.565816
+  m_Value: 1.0013113
+  m_Size: 0.5628325
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13908,6 +13909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af171ac35028443ebe58d8a9aaea972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 1816581304}
+  shopText: {fileID: 1527441087}
   shopGlowOutline: {fileID: 433873146}
 --- !u!1 &460503156
 GameObject:
@@ -43438,8 +43441,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.000023277134
-  m_Size: 0.33189896
+  m_Value: -0.0009997956
+  m_Size: 0.32840377
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -44081,6 +44084,7 @@ MonoBehaviour:
   surprisedBlinkGhost: {fileID: 21300000, guid: d8ca0f3dd246c4477a64eb89e78c3631, type: 3}
   glowMaterial: {fileID: 2100000, guid: d1f04a96c366b4ed3ae49c4b1f407006, type: 2}
   currentLevel: 0
+  CanMercy: 1
   ghostAudioSource: {fileID: 1444670332}
 --- !u!114 &1444670331
 MonoBehaviour:
@@ -45944,7 +45948,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1527441083
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47125,7 +47129,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 0.0010480693}
+  m_AnchoredPosition: {x: 5, y: 0.9035004}
   m_SizeDelta: {x: -10, y: 448.95}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1572167015
@@ -51150,7 +51154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2656}
+  m_AnchoredPosition: {x: 0, y: 1144.3821}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1741486811
@@ -53161,7 +53165,6 @@ MonoBehaviour:
   playerIndicator: {fileID: 2045813791}
   aiIndicator: {fileID: 1336521940}
   historyBackground: {fileID: 510063153}
-  commandCenter: {fileID: 457834029}
   newIndicator: {fileID: 1916854526}
   startText: {fileID: 1717378855}
   highestLevelNewIndicator: {fileID: 1040625726}
@@ -53241,6 +53244,7 @@ MonoBehaviour:
   criteriaText: {fileID: 726771569}
   vignette: {fileID: 892349764}
   activeEffectsText: {fileID: 977524204}
+  commandCenter: {fileID: 457834034}
   winSound: {fileID: 8300000, guid: 3ece9ada6261241b89f4b864c62ea9bf, type: 3}
   loseSound: {fileID: 8300000, guid: ee235064e6428461ab57d9f47891eba7, type: 3}
   loseGameSound: {fileID: 8300000, guid: f65bb70422c67482d83bc0f5aff962d4, type: 3}
@@ -59931,7 +59935,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 275.6159}
+  m_AnchoredPosition: {x: 0, y: 275.07034}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706
@@ -63373,7 +63377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.2830189, b: 0.06981308, a: 0.972549}
+  m_Color: {r: 0.105882354, g: 0.63529414, b: 0.08235294, a: 0.972549}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -63390,7 +63394,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 1
+  borderWidth: 2
   falloffDistance: 1
 --- !u!222 &2130344982
 CanvasRenderer:

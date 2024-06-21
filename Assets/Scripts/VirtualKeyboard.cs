@@ -38,7 +38,7 @@ public class VirtualKeyboard : MonoBehaviour
     {
         float padding = 4f; 
         float parentWidth = keyboardParent.GetComponent<RectTransform>().rect.width - (padding * 2);
-        float spacing = 5f;
+        float spacing = 5.5f;
 
         // Find the longest row to base centering calculations on
         int maxRowLength = 0;

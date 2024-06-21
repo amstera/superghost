@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI.ProceduralImage;
 
 public class CommandCenter : MonoBehaviour
 {
+    public GameManager gameManager;
+    public TextMeshProUGUI shopText;
     public ProceduralImage shopGlowOutline;
     private SaveObject saveObject;
 
@@ -18,10 +22,16 @@ public class CommandCenter : MonoBehaviour
 
     public void AdjustAlphaBasedOnLevel()
     {
-        float alpha = Mathf.Lerp(0, 130, saveObject.CurrentLevel / 9f) / 255f;
+        float alpha = Mathf.Lerp(0, 100, Mathf.Min(1, (saveObject.CurrentLevel + 0.5f) / 9f) / 255f);
 
         Color currentColor = shopGlowOutline.color;
         currentColor.a = alpha;
         shopGlowOutline.color = currentColor;
+    }
+
+    public void UpdateState(List<GameCriterion> criteria, GameState gameState)
+    {
+        var criterion = criteria.Find(c => c is UseAtLeastXItems);
+        shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency > 0) || (criterion != null && !criterion.IsMet(gameState)));
     }
 }

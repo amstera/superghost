@@ -116,8 +116,8 @@ public class RunInfoPopUp : MonoBehaviour
 
         newGameScore.SetActive(saveObject.RunStatistics.SetNewHighScore);
 
-        text += "Final Money\n";
-        text += $"<color=green>${saveObject.RunStatistics.MostMoney}</color>";
+        text += "Final Mana\n";
+        text += $"<color=green>{saveObject.RunStatistics.MostMoney}¤</color>";
         text += regularLineBreak;
 
         var mostUsedItem = GetMostUsedItem(saveObject.RunStatistics.UsedShopItemIds);
