@@ -181,6 +181,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.gameObject.SetActive(false);
         commandCenter.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
+        backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -308,7 +309,10 @@ public class GameManager : MonoBehaviour
         ghostAvatar.UpdateState(isAILosing, currentGame);
 
         criteria.gameObject.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
-        backgroundSwirl.UpdateLerp(playerAiWinDifference, false, false);
+        if (backgroundSwirl.gameObject.activeSelf)
+        {
+            backgroundSwirl.UpdateLerp(playerAiWinDifference, false, false);
+        }
 
         if (!isPlayerTurn)
         {
@@ -402,7 +406,7 @@ public class GameManager : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        shopPopUp.Show(currency, gameWord, false);
+        shopPopUp.Show(currency, gameWord);
     }
 
     public void ShowHint()
@@ -605,6 +609,8 @@ public class GameManager : MonoBehaviour
             wordDictionary.SetFilteredWords(gameWord);
             UpdateWordDisplay(true, 0);
         }
+
+        clickAudioSource?.Play();
 
         SetPointsCalculatedText();
         wordDisplay.Pop();
@@ -1285,7 +1291,10 @@ public class GameManager : MonoBehaviour
             currencyText.AddPoints(currency - currencyText.points);
         }
 
-        backgroundSwirl.UpdateLerp(GetPlayerAIWinDifference(), gameOver && playerWon && metCriteria, lostRun);
+        if (backgroundSwirl.gameObject.activeSelf)
+        {
+            backgroundSwirl.UpdateLerp(GetPlayerAIWinDifference(), gameOver && playerWon && metCriteria, lostRun);
+        }
 
         SaveManager.Save(saveObject);
     }

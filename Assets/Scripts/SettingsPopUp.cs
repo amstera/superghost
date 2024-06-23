@@ -14,7 +14,7 @@ public class SettingsPopUp : MonoBehaviour
     public Sprite lockImage;
 
     public TextMeshProUGUI dropdownText, footerText, dictionaryValidateText;
-    public Toggle sfxToggle, musicToggle;
+    public Toggle sfxToggle, musicToggle, motionToggle;
     public TMP_Dropdown difficultyDropdown;
     public TMP_InputField inputField;
 
@@ -35,6 +35,7 @@ public class SettingsPopUp : MonoBehaviour
 
         sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
         musicToggle.onValueChanged.AddListener(OnMusicToggleChanged);
+        motionToggle.onValueChanged.AddListener(OnMotionToggleChanged);
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
 
         ResetPopUp();
@@ -52,6 +53,9 @@ public class SettingsPopUp : MonoBehaviour
 
         // Set up Music toggle
         musicToggle.isOn = saveObject.EnableMusic;
+
+        // Set up Motion toggle
+        motionToggle.isOn = saveObject.EnableMotion;
 
         // Set up Difficulty dropdown
         difficultyDropdown.value = (int)saveObject.Difficulty;
@@ -168,6 +172,17 @@ public class SettingsPopUp : MonoBehaviour
         {
             AudioManager.instance.StopMusic();
         }
+    }
+
+    private void OnMotionToggleChanged(bool isEnabled)
+    {
+        clickAudioSource?.Play();
+
+        saveObject.EnableMotion = isEnabled;
+        gameManager.saveObject = saveObject;
+        SaveManager.Save(saveObject);
+
+        gameManager.backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
     }
 
     private void OnDifficultyChanged(int index)

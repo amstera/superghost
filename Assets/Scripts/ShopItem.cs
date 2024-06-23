@@ -42,6 +42,7 @@ public class ShopItem : MonoBehaviour
         titleTextOverlay.text = $"{title} - {coloredCostText}";
 
         bodyText.text = body;
+        bodyText.lineSpacing = bodyText.text.Contains("¤") ? -30f : -3f;
 
         if (interactable)
         {
