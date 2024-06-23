@@ -40,11 +40,6 @@ public class ShopItem : MonoBehaviour
         string coloredCostText = $"<color={(canAfford ? "green" : "red")}>{costText}</color>";
         titleText.text = $"<mark color=#{color} padding=\"20, 20, 12, 12\">{title}</mark> - {coloredCostText}";
         titleTextOverlay.text = $"{title} - {coloredCostText}";
-        if (isActive)
-        {
-            titleText.text = "<voffset=-6><space=-20>" + titleText.text + "</voffset>";
-            titleTextOverlay.text = "<voffset=-6><space=-20>" + titleTextOverlay.text + "</voffset>";
-        }
 
         bodyText.text = body;
 
@@ -84,6 +79,8 @@ public class ShopItem : MonoBehaviour
                 onBuyPressed(this);
             });
         }
+
+        AdjustTextPositions(isActive);
     }
 
     public int GetCost()
@@ -95,6 +92,31 @@ public class ShopItem : MonoBehaviour
     {
         return coroutine;
     }
+
+    private void AdjustTextPositions(bool isActive)
+    {
+        if (isActive)
+        {
+            titleText.rectTransform.offsetMin = new Vector2(0, titleText.rectTransform.offsetMin.y);
+            titleText.rectTransform.offsetMax = new Vector2(-13.5f, titleText.rectTransform.offsetMax.y);
+            titleText.rectTransform.anchoredPosition = new Vector2(titleText.rectTransform.anchoredPosition.x, 80);
+
+            titleTextOverlay.rectTransform.offsetMin = new Vector2(0, titleTextOverlay.rectTransform.offsetMin.y);
+            titleTextOverlay.rectTransform.offsetMax = new Vector2(-13.5f, titleTextOverlay.rectTransform.offsetMax.y);
+            titleTextOverlay.rectTransform.anchoredPosition = new Vector2(titleTextOverlay.rectTransform.anchoredPosition.x, 80);
+        }
+        else
+        {
+            titleText.rectTransform.offsetMin = new Vector2(21, titleText.rectTransform.offsetMin.y);
+            titleText.rectTransform.offsetMax = new Vector2(-19, titleText.rectTransform.offsetMax.y);
+            titleText.rectTransform.anchoredPosition = new Vector2(titleText.rectTransform.anchoredPosition.x, 84);
+
+            titleTextOverlay.rectTransform.offsetMin = new Vector2(21, titleTextOverlay.rectTransform.offsetMin.y);
+            titleTextOverlay.rectTransform.offsetMax = new Vector2(-19, titleTextOverlay.rectTransform.offsetMax.y);
+            titleTextOverlay.rectTransform.anchoredPosition = new Vector2(titleTextOverlay.rectTransform.anchoredPosition.x, 84);
+        }
+    }
+
 }
 
 [Serializable]

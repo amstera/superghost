@@ -223,7 +223,7 @@ public class UseAtLeastXItems : GameCriterion
 
     public override string GetDescription()
     {
-        return $"Use {items}+ Special";
+        return $"Use {items}+ Power" + (items == 1 ? "" : "s");
     }
 
     public override bool IsMet(GameState state)
