@@ -31,7 +31,10 @@ public class CommandCenter : MonoBehaviour
 
     public void UpdateState(List<GameCriterion> criteria, GameState gameState)
     {
-        var criterion = criteria.Find(c => c is UseAtLeastXItems);
-        shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency > 0) || (criterion != null && !criterion.IsMet(gameState)));
+        var useItemCriterion = criteria.Find(c => c is UseAtLeastXItems);
+        var minPointsCriterion = criteria.Find(c => c is ScoreAtLeastXPoints);
+        shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency > 0)
+            || (useItemCriterion != null && !useItemCriterion.IsMet(gameState))
+            || (minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && gameManager.aiLivesText.LivesRemaining() == 1));
     }
 }

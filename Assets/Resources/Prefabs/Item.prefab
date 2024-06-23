@@ -233,7 +233,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 82}
+  m_AnchoredPosition: {x: 1, y: 84}
   m_SizeDelta: {x: -40, y: 50.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5968010452361542717
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hint - <color=green>$5</color>
+  m_text: "Hint  <color=green>5\xA4</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -948,7 +948,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: -5
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -5
   m_lineSpacingMax: 0
   m_paragraphSpacing: 5
   m_charWidthMaxAdj: 0
@@ -1033,7 +1033,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -74}
-  m_SizeDelta: {x: 140.44, y: 30.9}
+  m_SizeDelta: {x: 157.4866, y: 30.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5011085314072601766
 CanvasRenderer:
@@ -1182,7 +1182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 82}
+  m_AnchoredPosition: {x: 1, y: 84}
   m_SizeDelta: {x: -40, y: 50.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3151420290721474840
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hint - <color=green>$5</color>
+  m_text: "Hint  <color=green>5\xA4</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}

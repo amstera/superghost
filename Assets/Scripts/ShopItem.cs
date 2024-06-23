@@ -30,16 +30,21 @@ public class ShopItem : MonoBehaviour
 
         bool canAfford = currency >= cost;
         cost = Math.Max(cost, 0);
-        var costText = isActive ? "<sprite=0>" : $"{cost}¤";
 
         Color.RGBToHSV(backgroundImage.color, out float H, out float S, out float V);
         V = Mathf.Clamp(V + 0.25f, 0, 1);
         Color brighterColor = Color.HSVToRGB(H, S, V);
         var color = ColorUtility.ToHtmlStringRGB(brighterColor);
 
+        var costText = isActive ? $"<sprite=0>" : $"{cost}¤";
         string coloredCostText = $"<color={(canAfford ? "green" : "red")}>{costText}</color>";
         titleText.text = $"<mark color=#{color} padding=\"20, 20, 12, 12\">{title}</mark> - {coloredCostText}";
         titleTextOverlay.text = $"{title} - {coloredCostText}";
+        if (isActive)
+        {
+            titleText.text = "<voffset=-6><space=-20>" + titleText.text + "</voffset>";
+            titleTextOverlay.text = "<voffset=-6><space=-20>" + titleTextOverlay.text + "</voffset>";
+        }
 
         bodyText.text = body;
 

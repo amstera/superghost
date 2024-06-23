@@ -35954,6 +35954,8 @@ karmic
 kart
 karts
 katakana
+katana
+katanas
 katydid
 katydids
 kayak

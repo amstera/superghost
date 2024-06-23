@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public Vignette vignette;
     public ActiveEffectsText activeEffectsText;
     public CommandCenter commandCenter;
+    public BackgroundSwirl backgroundSwirl;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
@@ -180,7 +181,6 @@ public class GameManager : MonoBehaviour
         nextRoundButton.gameObject.SetActive(false);
         commandCenter.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
-        criteria.gameObject.SetActive(true);
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -229,7 +229,8 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = true;
             currencyText.SetPoints(saveObject.Currency);
             criteriaText.criteriaText.color = Color.yellow;
-            criteriaText.outline.color = new Color32(109, 109, 109, 255);
+            criteriaText.outline.color = new Color32(108, 108, 108, 255);
+            criteriaText.backgroundHUDOutline.color = new Color32(108, 108, 108, 255);
 
             var main = confettiPS.main;
             main.loop = false;
@@ -302,8 +303,12 @@ public class GameManager : MonoBehaviour
         SetIndicators(isPlayerTurn);
         commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), GetGameState());
 
-        bool isAILosing = GetPlayerAIWinDifference() > 0;
+        int playerAiWinDifference = GetPlayerAIWinDifference();
+        bool isAILosing = playerAiWinDifference > 0;
         ghostAvatar.UpdateState(isAILosing, currentGame);
+
+        criteria.gameObject.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
+        backgroundSwirl.UpdateLerp(playerAiWinDifference, false, false);
 
         if (!isPlayerTurn)
         {
@@ -1150,6 +1155,7 @@ public class GameManager : MonoBehaviour
 
                 criteriaText.criteriaText.color = Color.green;
                 criteriaText.outline.color = Color.green;
+                criteriaText.backgroundHUDOutline.color = Color.green;
 
                 if (currentGame == 10) // win run
                 {
@@ -1210,6 +1216,7 @@ public class GameManager : MonoBehaviour
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.125f);
                 criteriaText.outline.color = Color.red;
+                criteriaText.backgroundHUDOutline.color = Color.red;
 
                 if (playerWon)
                 {
@@ -1277,6 +1284,8 @@ public class GameManager : MonoBehaviour
         {
             currencyText.AddPoints(currency - currencyText.points);
         }
+
+        backgroundSwirl.UpdateLerp(GetPlayerAIWinDifference(), gameOver && playerWon && metCriteria, lostRun);
 
         SaveManager.Save(saveObject);
     }

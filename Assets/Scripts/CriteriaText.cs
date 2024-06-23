@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CriteriaText : MonoBehaviour
 {
     public TextMeshProUGUI criteriaText;
-    public Image outline;
+    public Image outline, backgroundHUDOutline;
     private List<GameCriterion> currentCriteria = new List<GameCriterion>();
     private SaveObject saveObject;
 
