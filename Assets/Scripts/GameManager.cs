@@ -513,7 +513,7 @@ public class GameManager : MonoBehaviour
 
     public void EnableChanceMultiplier()
     {
-        var values = playerLivesText.LivesRemaining() == 1 && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 2.5f };
+        var values = playerLivesText.LivesRemaining() == 1 && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 1.5f, 2.5f };
         var index = Random.Range(0, values.Length);
         ChanceMultiplier = values[index];
         if (!roundEnded)
@@ -1195,7 +1195,7 @@ public class GameManager : MonoBehaviour
                             break;
                     }
 
-                    currencyText.SetPoints(saveObject.RunStatistics.MostMoney);
+                    currencyText.SetPoints(currency);
 
                     ResetRun();
                 }

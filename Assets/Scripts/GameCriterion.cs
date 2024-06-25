@@ -135,7 +135,7 @@ public class OddLetters : GameCriterion
 
     public override string GetDescription()
     {
-        return $"Odd Words";
+        return $"Odd Len. Words";
     }
 
     public override bool IsMet(GameState state)
@@ -159,7 +159,7 @@ public class EvenLetters : GameCriterion
 
     public override string GetDescription()
     {
-        return $"Even Words";
+        return $"Even Len. Words";
     }
 
     public override bool IsMet(GameState state)
