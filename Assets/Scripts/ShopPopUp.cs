@@ -615,15 +615,17 @@ public class ShopPopUp : MonoBehaviour
     {
         yield return null;
 
-        if (Random.Range(0, 2) == 1) // lose life
-        {
-            gameManager.LoseLife();
-            Hide(false);
-        }
-        else // get money
+        int range = gameManager.currency <= 10 ? 2 : gameManager.currency <= 50 ? 3 : 4;
+
+        if (Random.Range(0, range) == 1) // get money
         {
             moneyAudioSource?.Play();
             RefreshPopUp(-10);
+        }
+        else // lose life
+        {
+            gameManager.LoseLife();
+            Hide(false);
         }
     }
 }

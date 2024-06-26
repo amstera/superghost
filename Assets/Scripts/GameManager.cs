@@ -1700,6 +1700,7 @@ public class GameManager : MonoBehaviour
 
     private void PlayComputerWord(string word)
     {
+        keyAudioSource.pitch = Random.Range(0.8f, 1.2f);
         keyAudioSource?.Play();
 
         previousWords.Add(gameWord);

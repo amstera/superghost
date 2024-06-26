@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.ProceduralImage;
 
 public class CommandCenter : MonoBehaviour
 {
     public GameManager gameManager;
     public TextMeshProUGUI shopText;
+    public Button shopButton;
     public ProceduralImage shopGlowOutline;
     private SaveObject saveObject;
 
@@ -33,8 +35,9 @@ public class CommandCenter : MonoBehaviour
     {
         var useItemCriterion = criteria.Find(c => c is UseAtLeastXItems);
         var minPointsCriterion = criteria.Find(c => c is ScoreAtLeastXPoints);
-        shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency > 0)
+        shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency >= 5)
             || (useItemCriterion != null && !useItemCriterion.IsMet(gameState))
-            || (minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && gameManager.aiLivesText.LivesRemaining() == 1));
+            || (minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && gameManager.aiLivesText.LivesRemaining() <= 2 && gameManager.currency > 0));
+        shopButton.GetComponentInChildren<TextMeshProUGUI>().enableVertexGradient = shopText.gameObject.activeSelf;
     }
 }
