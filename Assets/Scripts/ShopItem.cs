@@ -77,6 +77,7 @@ public class ShopItem : MonoBehaviour
             buyButton.onClick.AddListener(() =>
             {
                 buyButton.interactable = false;
+                StartCoroutine(ButtonPopAnimation());
                 onBuyPressed(this);
             });
         }
@@ -116,6 +117,33 @@ public class ShopItem : MonoBehaviour
             titleTextOverlay.rectTransform.offsetMax = new Vector2(-19, titleTextOverlay.rectTransform.offsetMax.y);
             titleTextOverlay.rectTransform.anchoredPosition = new Vector2(titleTextOverlay.rectTransform.anchoredPosition.x, 84);
         }
+    }
+
+    private IEnumerator ButtonPopAnimation()
+    {
+        Vector3 originalScale = buyButton.transform.localScale;
+        Vector3 targetScale = originalScale * 1.2f;
+        float duration = 0.1f;
+
+        // Scale up
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            buyButton.transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Scale back down
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            buyButton.transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        buyButton.transform.localScale = originalScale;
     }
 
 }

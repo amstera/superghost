@@ -531,38 +531,20 @@ public class WordDictionary
 
     private static char[] GenerateWeightedLetters()
     {
-        // Initialize a list to hold the weighted letters
-        List<char> weightedList = new List<char>();
+        var weightedList = new List<char>();
+        var letterFrequencies = new Dictionary<char, int>
+        {
+            {'e', 12}, {'t', 9}, {'a', 8}, {'o', 7}, {'i', 7}, {'n', 6}, {'s', 6}, {'h', 6},
+            {'r', 5}, {'d', 4}, {'l', 4}, {'c', 3}, {'u', 3}, {'m', 2}, {'w', 2}, {'f', 2},
+            {'g', 2}, {'y', 2}, {'p', 1}, {'b', 1}, {'v', 1}, {'k', 1}, {'j', 1}, {'x', 1},
+            {'q', 1}, {'z', 1}
+        };
 
-        // Add letters based on their frequency
-        weightedList.AddRange(Enumerable.Repeat('e', 12));
-        weightedList.AddRange(Enumerable.Repeat('t', 9));
-        weightedList.AddRange(Enumerable.Repeat('a', 8));
-        weightedList.AddRange(Enumerable.Repeat('o', 7));
-        weightedList.AddRange(Enumerable.Repeat('i', 7));
-        weightedList.AddRange(Enumerable.Repeat('n', 6));
-        weightedList.AddRange(Enumerable.Repeat('s', 6));
-        weightedList.AddRange(Enumerable.Repeat('h', 6));
-        weightedList.AddRange(Enumerable.Repeat('r', 5));
-        weightedList.AddRange(Enumerable.Repeat('d', 4));
-        weightedList.AddRange(Enumerable.Repeat('l', 4));
-        weightedList.AddRange(Enumerable.Repeat('c', 3));
-        weightedList.AddRange(Enumerable.Repeat('u', 3));
-        weightedList.AddRange(Enumerable.Repeat('m', 2));
-        weightedList.AddRange(Enumerable.Repeat('w', 2));
-        weightedList.AddRange(Enumerable.Repeat('f', 2));
-        weightedList.AddRange(Enumerable.Repeat('g', 2));
-        weightedList.AddRange(Enumerable.Repeat('y', 2));
-        weightedList.AddRange(Enumerable.Repeat('p', 1));
-        weightedList.AddRange(Enumerable.Repeat('b', 1));
-        weightedList.AddRange(Enumerable.Repeat('v', 1));
-        weightedList.AddRange(Enumerable.Repeat('k', 1));
-        weightedList.AddRange(Enumerable.Repeat('j', 1));
-        weightedList.AddRange(Enumerable.Repeat('x', 1));
-        weightedList.AddRange(Enumerable.Repeat('q', 1));
-        weightedList.AddRange(Enumerable.Repeat('z', 1));
+        foreach (var kvp in letterFrequencies)
+        {
+            weightedList.AddRange(Enumerable.Repeat(kvp.Key, kvp.Value));
+        }
 
-        // Convert the list to an array and return it
         return weightedList.ToArray();
     }
 }
