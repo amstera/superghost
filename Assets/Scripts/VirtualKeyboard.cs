@@ -34,13 +34,17 @@ public class VirtualKeyboard : MonoBehaviour
         originalScale = allButtons[0].transform.localScale;
     }
 
+    void Update()
+    {
+        DetectKeyPress();
+    }
+
     void GenerateKeyboard()
     {
-        float padding = 4f; 
+        float padding = 4f;
         float parentWidth = keyboardParent.GetComponent<RectTransform>().rect.width - (padding * 2);
         float spacing = 5.5f;
 
-        // Find the longest row to base centering calculations on
         int maxRowLength = 0;
         foreach (string row in rows)
         {
@@ -50,30 +54,24 @@ public class VirtualKeyboard : MonoBehaviour
             }
         }
 
-        // Calculate the button width based on the longest row and the available parent width
         float buttonWidth = (parentWidth - (maxRowLength - 1) * spacing) / maxRowLength;
-        float buttonHeight = 65f; // Adjust the button height as needed
+        float buttonHeight = 65f;
 
         for (int i = 0; i < rows.Length; i++)
         {
-            // Calculate the starting X position for the current row to center it
             float rowLength = rows[i].Length;
             float rowWidth = rowLength * buttonWidth + (rowLength - 1) * spacing;
-            float startPositionX = (parentWidth - rowWidth) / 2f + padding / 2f; // Add half of the padding to the start position
+            float startPositionX = (parentWidth - rowWidth) / 2f + padding / 2f;
 
             for (int j = 0; j < rowLength; j++)
             {
                 GameObject buttonObj = Instantiate(buttonPrefab, keyboardParent);
                 RectTransform btnRect = buttonObj.GetComponent<RectTransform>();
 
-                // Set the button's size
                 btnRect.sizeDelta = new Vector2(buttonWidth, buttonHeight);
-
-                // Set the button's position
                 float xPos = startPositionX + j * (buttonWidth + spacing);
                 btnRect.anchoredPosition = new Vector2(xPos, -i * (buttonHeight + spacing));
 
-                // Set the letter on the button and add it to the button list
                 char letter = rows[i][j];
                 buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = letter.ToString();
                 Button btn = buttonObj.GetComponent<Button>();
@@ -100,7 +98,7 @@ public class VirtualKeyboard : MonoBehaviour
 
         buttonsDisabled = true;
 
-        keyAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        keyAudioSource.pitch = Random.Range(0.8f, 1.5f);
         keyAudioSource?.Play();
         StartCoroutine(PopAnimation(btn.gameObject));
         StartCoroutine(WaitAndProcessTurn(letter));
@@ -110,6 +108,26 @@ public class VirtualKeyboard : MonoBehaviour
     {
         yield return new WaitForSeconds(0.15f);
         gameManager.ProcessTurn(letter);
+    }
+
+    void DetectKeyPress()
+    {
+        if (!gameObject.activeSelf || gameManager.challengePopup.canvasGroup.alpha > 0 || gameManager.bluffPopup.canvasGroup.alpha > 0 || gameManager.settingsPopup.canvasGroup.alpha > 0)
+        {
+            return;
+        }
+
+        foreach (char letter in buttonLetterMap.Keys)
+        {
+            KeyCode keyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), letter.ToString());
+            if (Input.GetKeyDown(keyCode))
+            {
+                if (buttonLetterMap[letter].interactable)
+                {
+                    buttonLetterMap[letter].onClick.Invoke();
+                }
+            }
+        }
     }
 
     public void DisableAllButtons()
@@ -212,14 +230,13 @@ public class VirtualKeyboard : MonoBehaviour
                 btn.interactable = true;
             }
         }
-        restrictedLetters.Clear();  // Clear the restricted set
+        restrictedLetters.Clear();
     }
 
     IEnumerator PopAnimation(GameObject btnGameObject)
     {
         Vector3 targetScale = originalScale * 1.5f;
 
-        // Scale up
         float currentTime = 0f;
         float duration = 0.15f;
         while (currentTime < duration)
@@ -229,7 +246,6 @@ public class VirtualKeyboard : MonoBehaviour
             yield return null;
         }
 
-        // Scale down
         currentTime = 0f;
         while (currentTime < duration)
         {
@@ -251,10 +267,10 @@ public class VirtualKeyboard : MonoBehaviour
             float y = originalPosition.y + Random.Range(-1f, 1f) * magnitude;
 
             btn.transform.localPosition = new Vector3(x, y, originalPosition.z);
-            yield return null; // Wait for the next frame before continuing the loop
+            yield return null;
         }
 
-        btn.transform.localPosition = originalPosition; // Reset to original position
+        btn.transform.localPosition = originalPosition;
     }
 
     private void EnableButton(Button btn)

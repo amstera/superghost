@@ -187,6 +187,7 @@ public class StatsPopup : MonoBehaviour
 
 
         text += "Most Mana\n";
+        text += "<line-height=0>\n";
         text += $"<color=green>{saveObject.Statistics.MostMoney}¤</color>";
         text += regularLineBreak;
 

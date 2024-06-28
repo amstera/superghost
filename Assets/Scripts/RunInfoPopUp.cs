@@ -117,6 +117,7 @@ public class RunInfoPopUp : MonoBehaviour
         newGameScore.SetActive(saveObject.RunStatistics.SetNewHighScore);
 
         text += "Final Mana\n";
+        text += "<line-height=0>\n";
         text += $"<color=green>{saveObject.RunStatistics.MostMoney}¤</color>";
         text += regularLineBreak;
 

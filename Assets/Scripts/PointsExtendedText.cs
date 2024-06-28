@@ -32,8 +32,8 @@ public class PointsExtendedText : MonoBehaviour
         }
 
         fireball.SetActive(false);
-        incrementAudioSource.pitch = 1;
-        incrementAudioSource.volume = 0.4f;
+        incrementAudioSource.pitch = 1.5f;
+        incrementAudioSource.volume = 0.05f;
         int pointsForFire = 40;
         StartCoroutine(DisplayPointsRoutine(numbers, pointsForFire));
     }
@@ -52,7 +52,8 @@ public class PointsExtendedText : MonoBehaviour
                 total *= numbers[i];
                 UpdateTextColor(total);
                 incrementAudioSource?.Play();
-                incrementAudioSource.pitch *= 1.5f;
+                float semitoneRatio = Mathf.Pow(2f, 1f / 12f);
+                incrementAudioSource.pitch *= semitoneRatio;
                 incrementAudioSource.volume *= 1.15f;
 
                 yield return StartCoroutine(PopTextEffect());

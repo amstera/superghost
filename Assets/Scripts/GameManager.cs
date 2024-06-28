@@ -610,7 +610,8 @@ public class GameManager : MonoBehaviour
             UpdateWordDisplay(true, 0);
         }
 
-        clickAudioSource?.Play();
+        keyAudioSource.pitch = Random.Range(0.8f, 1.5f);
+        keyAudioSource?.Play();
 
         SetPointsCalculatedText();
         wordDisplay.Pop();
@@ -651,6 +652,7 @@ public class GameManager : MonoBehaviour
         {
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             gameWord = previousWord;
+            keyboard.Hide();
             bluffPopup.Show(previousWord);
             SetPointsCalculatedText();
         }
@@ -1356,6 +1358,7 @@ public class GameManager : MonoBehaviour
             var word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
             if (string.IsNullOrEmpty(word))
             {
+                keyboard.Hide();
                 challengePopup.Show(gameWord);
             }
             else
@@ -1374,6 +1377,7 @@ public class GameManager : MonoBehaviour
                     word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
                     if (string.IsNullOrEmpty(word))
                     {
+                        keyboard.Hide();
                         challengePopup.Show(gameWord);
                     }
                     else
@@ -1700,7 +1704,7 @@ public class GameManager : MonoBehaviour
 
     private void PlayComputerWord(string word)
     {
-        keyAudioSource.pitch = Random.Range(0.8f, 1.2f);
+        keyAudioSource.pitch = Random.Range(0.8f, 1.5f);
         keyAudioSource?.Play();
 
         previousWords.Add(gameWord);
