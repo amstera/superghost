@@ -36,10 +36,7 @@ public class ShopItem : MonoBehaviour
         Color brighterColor = Color.HSVToRGB(H, S, V);
         var color = ColorUtility.ToHtmlStringRGB(brighterColor);
 
-        var costText = isActive ? $"<sprite=0>" : $"{cost}¤";
-        string coloredCostText = $"<color={(canAfford ? "green" : "red")}>{costText}</color>";
-        titleText.text = $"<mark color=#{color} padding=\"20, 20, 12, 12\">{title}</mark> - {coloredCostText}";
-        titleTextOverlay.text = $"{title} - {coloredCostText}";
+        StartCoroutine(UpdateTitle(title, cost, isActive, canAfford, color));
 
         bodyText.text = body;
         bodyText.lineSpacing = bodyText.text.Contains("¤") ? -30f : -3f;
@@ -93,6 +90,24 @@ public class ShopItem : MonoBehaviour
     public Func<IEnumerator> GetCoroutine()
     {
         return coroutine;
+    }
+
+    private IEnumerator UpdateTitle(string title, int cost, bool isActive, bool canAfford, string color)
+    {
+        titleText.text = "";
+        titleTextOverlay.text = "";
+
+        var costTextActive = "<sprite=0>";
+        var costTextNonActive = $"{cost}¤";
+        var costText = isActive ? costTextActive : costTextNonActive;
+        var padding = "20, 20, 12, 12";
+
+        // Set the final text with chosen font size
+        string coloredCostText = $"<color={(canAfford ? "green" : "red")}>{costText}</color>";
+        titleText.text = $"<mark color=#{color} padding=\"{padding}\">{title}</mark> - {coloredCostText}";
+        titleTextOverlay.text = $"{title} - {coloredCostText}";
+
+        yield return null;
     }
 
     private void AdjustTextPositions(bool isActive)

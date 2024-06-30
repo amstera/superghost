@@ -11,6 +11,7 @@ public class CommandCenter : MonoBehaviour
     public Button shopButton;
     public ProceduralImage shopGlowOutline;
     private SaveObject saveObject;
+    public GameObject spiralBackground;
 
     void Awake()
     {

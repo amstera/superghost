@@ -5,9 +5,11 @@ using System.Collections;
 
 public class EffectsPopUp : MonoBehaviour
 {
+    public ActiveEffectsText activeEffectsText;
     public TextMeshProUGUI titleText, descriptionText;
     public CanvasGroup canvasGroup;
     public Image backgroundImage;
+    public Button sellButton;
     public float fadeInDuration = 0.25f;
     public float fadeOutDuration = 0.25f;
     public AudioSource clickAudioSource;
@@ -28,6 +30,7 @@ public class EffectsPopUp : MonoBehaviour
     public void Show(string title, string description, Vector3 position, Color color)
     {
         clickAudioSource?.Play();
+        canvasGroup.interactable = true;
 
         titleText.text = title;
         descriptionText.text = description;
@@ -40,6 +43,7 @@ public class EffectsPopUp : MonoBehaviour
 
     public void Hide()
     {
+        canvasGroup.interactable = false;
         canvasGroup.alpha = 0;
     }
 

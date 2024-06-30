@@ -10,8 +10,8 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI textOverlay;
-    public ProceduralImage background;
-    public GameObject deleteButton, outline;
+    public ProceduralImage background, outline;
+    public GameObject deleteButton;
     public EffectsPopUp effectsPopUp;
 
     private List<ShopItemEffectDetails> activeEffects = new List<ShopItemEffectDetails>();
@@ -66,6 +66,7 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
                 Vector2 localPos;
                 RectTransform textOverlayRect = textOverlay.GetComponent<RectTransform>();
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(textOverlayRect, eventData.position, eventData.pressEventCamera, out localPos);
+                localPos.x -= 20f;
                 localPos.y -= 105;
 
                 GetColor(clickedEffect.color, out Color brighterColor);
@@ -96,7 +97,8 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
         textOverlay.text.Trim();
 
         deleteButton.SetActive(activeEffects.Count > 0);
-        outline.SetActive(activeEffects.Count > 0);
+        outline.gameObject.SetActive(activeEffects.Count > 0);
+        outline.color = activeEffects.Count >= 5 ? new Color32(80, 0, 0, 255) : new Color32(54, 54, 54, 255);
         background.color = new Color(background.color.r, background.color.g, background.color.b, activeEffects.Count > 0 ? 1 : 0);
     }
 

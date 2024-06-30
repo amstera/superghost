@@ -29,7 +29,7 @@ public class TutorialPopUp : MonoBehaviour
     private void SetVisiblePagesCount()
     {
         hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
-        visiblePagesCount = hasWonGame ? pages.Length : pages.Length - 4;
+        visiblePagesCount = hasWonGame ? pages.Length : pages.Length - 5;
     }
 
     public void ShowButton()
@@ -123,7 +123,7 @@ public class TutorialPopUp : MonoBehaviour
     {
         for (int i = 0; i < pages.Length; i++)
         {
-            pages[i].SetActive(i == currentPageIndex && (hasWonGame || i < pages.Length - 4));
+            pages[i].SetActive(i == currentPageIndex && (hasWonGame || i < pages.Length - 5));
         }
     }
 

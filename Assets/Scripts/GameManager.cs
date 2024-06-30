@@ -182,6 +182,7 @@ public class GameManager : MonoBehaviour
         commandCenter.gameObject.SetActive(true);
         pointsCalculateText.text = string.Empty;
         backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
+        commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -558,6 +559,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Hide();
         StartNewGame();
         ResetWordUses++;
+        SetPointsCalculatedText();
     }
 
     public void EnableDoubleBluff()

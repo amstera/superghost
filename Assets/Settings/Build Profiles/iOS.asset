@@ -17,9 +17,7 @@ MonoBehaviour:
   m_PlatformId: ad48d16a66894befa4d8181998c3cb09
   m_PlatformBuildProfile:
     rid: 7106587320802344962
-  m_Scenes:
-  - m_enabled: 1
-    m_path: Assets/Scenes/Game.unity
+  m_Scenes: []
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:
@@ -183,7 +181,7 @@ MonoBehaviour:
     - line: '|   hdrBitDepth: 0'
     - line: '|   m_ColorGamuts: 00000000'
     - line: '|   targetPixelDensity: 30'
-    - line: '|   resolutionScalingMode: 1'
+    - line: '|   resolutionScalingMode: 0'
     - line: '|   resetResolutionOnWindowResize: 0'
     - line: '|   androidSupportedAspectRatio: 1'
     - line: '|   androidMaxAspectRatio: 2.1'
@@ -197,7 +195,7 @@ MonoBehaviour:
     - line: '|   buildNumber:'
     - line: '|     Standalone: 0'
     - line: '|     VisionOS: 0'
-    - line: '|     iPhone: 34'
+    - line: '|     iPhone: 35'
     - line: '|     tvOS: 0'
     - line: '|   overrideDefaultApplicationIdentifier: 1'
     - line: '|   AndroidBundleVersionCode: 1'
@@ -228,9 +226,9 @@ MonoBehaviour:
     - line: '|   uIPrerenderedIcon: 0'
     - line: '|   uIRequiresPersistentWiFi: 0'
     - line: '|   uIRequiresFullScreen: 1'
-    - line: '|   uIStatusBarHidden: 0'
+    - line: '|   uIStatusBarHidden: 1'
     - line: '|   uIExitOnSuspend: 0'
-    - line: '|   uIStatusBarStyle: 1'
+    - line: '|   uIStatusBarStyle: 0'
     - line: '|   appleTVSplashScreen: {instanceID: 0}'
     - line: '|   appleTVSplashScreen2x: {instanceID: 0}'
     - line: '|   tvOSSmallIconLayers: []'

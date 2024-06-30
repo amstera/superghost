@@ -183,6 +183,7 @@ public class SettingsPopUp : MonoBehaviour
         SaveManager.Save(saveObject);
 
         gameManager.backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
+        gameManager.commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
     }
 
     private void OnDifficultyChanged(int index)

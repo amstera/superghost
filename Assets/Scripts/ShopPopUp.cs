@@ -20,6 +20,7 @@ public class ShopPopUp : MonoBehaviour
     public List<Color> colors = new List<Color>();
     public TextMeshProUGUI discountText;
     public ActiveEffectsText activeEffectsText;
+    public ActiveEffectsText shopActiveEffectsText;
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -53,7 +54,7 @@ public class ShopPopUp : MonoBehaviour
 
         currencyText.SetPoints(currency);
 
-        InitializeShopItems();
+        InitializeShopItems(false);
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
@@ -81,7 +82,7 @@ public class ShopPopUp : MonoBehaviour
         {
             currency = gameManager.currency;
             currencyText.SetPoints(currency);
-            InitializeShopItems();
+            InitializeShopItems(false);
         }
     }
 
@@ -238,7 +239,7 @@ public class ShopPopUp : MonoBehaviour
             SaveManager.Save(saveObject);
         }
 
-        RefreshPopUp(cost);
+        RefreshPopUp(cost, item != null);
     }
 
     private IEnumerator DoAction(int id, int cost, Action action, bool shouldHide, bool shouldAddEffect)
@@ -289,14 +290,14 @@ public class ShopPopUp : MonoBehaviour
         return cost == 0 ? 0 : cost == 1 ? 0.2f : cost < 5 ? 0.25f : 0.6f;
     }
 
-    private void RefreshPopUp(int cost)
+    private void RefreshPopUp(int cost, bool isItem)
     {
         currency -= cost;
         gameManager.currency -= cost;
         gameManager.currencyText.AddPoints(-cost);
         currencyText.AddPoints(-cost);
 
-        InitializeShopItems();
+        InitializeShopItems(isItem);
     }
 
     public IEnumerator RefreshShopWithAnimation(bool saveChanges, Action action)
@@ -393,7 +394,7 @@ public class ShopPopUp : MonoBehaviour
         }
     }
 
-    private void InitializeShopItems()
+    private void InitializeShopItems(bool initializeFromBuy)
     {
         if (visibleShopItems.Count != shopItemPrefabs.Count)
         {
@@ -406,7 +407,17 @@ public class ShopPopUp : MonoBehaviour
             var shopItem = visibleShopItems[i];
             int cost = (int)RoundHalfUp(GetCost(shopItem.id) * totalCostPercentage);
             var shopItemAdjustableDetails = GetShopItemAdjustableDetails(shopItem.id, cost);
-            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, shopItem.warning, cost, currency, shopItemAdjustableDetails.IsInteractable, shopItemAdjustableDetails.IsAdditionalInteractable, shopItemAdjustableDetails.IsActive, shopItemAdjustableDetails.ExtraInfoText, shopItem.iconSprite, (item) => BuyPressed(item), () => shopItemAdjustableDetails.Coroutine);
+            bool isAdditionalInteractable = shopItemAdjustableDetails.IsAdditionalInteractable && (!initializeFromBuy || shopItemPrefabs[i].buyButton.interactable);
+
+            string warningText = shopItem.warning;
+            bool isInteractable = shopItemAdjustableDetails.IsInteractable;
+            if (!shopItemAdjustableDetails.IsActive && shopItemAdjustableDetails.CanBeActive && activeEffectsText.GetEffects().Count >= 5)
+            {
+                warningText = "Too many active powers";
+                isInteractable = false;
+            }
+
+            shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, warningText, cost, currency, isInteractable, isAdditionalInteractable, shopItemAdjustableDetails.IsActive, shopItemAdjustableDetails.ExtraInfoText, shopItem.iconSprite, (item) => BuyPressed(item), () => shopItemAdjustableDetails.Coroutine);
         }
 
         int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
@@ -415,6 +426,7 @@ public class ShopPopUp : MonoBehaviour
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
         reshuffleText.text = $"Shuffle Powers (<color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>)";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
+        shopActiveEffectsText.MatchEffects(activeEffectsText);
     }
 
     private ShopItemAdjustableDetails GetShopItemAdjustableDetails(int id, int cost)
@@ -424,103 +436,105 @@ public class ShopPopUp : MonoBehaviour
             case 0:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.ShowHint(), true, false),
-                    gameManager.IsPlayerTurn(), true, false, "");
+                    gameManager.IsPlayerTurn(), true, false, "", false);
             case 1:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.ShuffleComboLetters(), true, false),
                     gameManager.IsDoneRound(),
-                    gameManager.comboText.gameObject.activeSelf, false, "");
+                    gameManager.comboText.gameObject.activeSelf, false, "", false);
             case 2:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableMultiplier(), false, true),
-                    !gameManager.HasBonusMultiplier, true, gameManager.HasBonusMultiplier, "");
+                    !gameManager.HasBonusMultiplier, true, gameManager.HasBonusMultiplier, "", true);
             case 3:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableEvenMultiplier(), false, true),
-                    !gameManager.HasEvenWordMultiplier, true, gameManager.HasEvenWordMultiplier, "");
+                    !gameManager.HasEvenWordMultiplier, true, gameManager.HasEvenWordMultiplier, "", true);
             case 4:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableDoubleWealth(), false, true),
-                    !gameManager.HasDoubleWealth, true, gameManager.HasDoubleWealth, "");
+                    !gameManager.HasDoubleWealth, true, gameManager.HasDoubleWealth, "", true);
             case 5:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.DoDoubleTurn(), false, true),
-                    gameManager.IsPlayerTurn(), !gameManager.HasDoubleTurn, gameManager.HasDoubleTurn, "");
+                    gameManager.IsPlayerTurn(), !gameManager.HasDoubleTurn, gameManager.HasDoubleTurn, "", true);
             case 6:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.ResetWord(), true, false),
-                    gameManager.IsPlayerTurn(), gameManager.gameWord.Length > 0, false, "");
+                    gameManager.IsPlayerTurn(), gameManager.gameWord.Length > 0, false, "", false);
             case 7:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableLongWordMultiplier(), false, true),
-                    !gameManager.HasLongWordMultiplier, true, gameManager.HasLongWordMultiplier, "");
+                    !gameManager.HasLongWordMultiplier, true, gameManager.HasLongWordMultiplier, "", true);
             case 8:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.UndoTurn(), true, false),
-                    gameManager.IsPlayerTurn(), gameManager.gameWord.Length > 0, false, "");
+                    gameManager.IsPlayerTurn(), gameManager.gameWord.Length > 0, false, "", false);
             case 9:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableDoubleBluff(), false, true),
-                    !gameManager.HasDoubleBluff, true, gameManager.HasDoubleBluff, "");
+                    !gameManager.HasDoubleBluff, true, gameManager.HasDoubleBluff, "", true);
             case 10:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableChanceMultiplier(), false, true),
                     gameManager.ChanceMultiplier == 1, true, gameManager.ChanceMultiplier != 1,
-                    gameManager.ChanceMultiplier != 1 ? (gameManager.ChanceMultiplier < 1 ? $"<color=red>{gameManager.ChanceMultiplier}x</color>" : $"{gameManager.ChanceMultiplier}x") : "");
+                    gameManager.ChanceMultiplier != 1 ? (gameManager.ChanceMultiplier < 1 ? $"<color=red>{gameManager.ChanceMultiplier}x</color>" : $"{gameManager.ChanceMultiplier}x") : "",
+                    true);
             case 11:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.RestoreLife(true), true, false),
-                    gameManager.IsPlayerTurn(), !gameManager.playerLivesText.HasFullLives(), false, "");
+                    gameManager.IsPlayerTurn(), !gameManager.playerLivesText.HasFullLives(), false, "", false);
             case 12:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.RestoreLife(false), true, false),
-                    gameManager.IsPlayerTurn(), !gameManager.aiLivesText.HasFullLives(), false, "");
+                    gameManager.IsPlayerTurn(), !gameManager.aiLivesText.HasFullLives(), false, "", false);
             case 13:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableMoneyLose(), false, true),
-                    !gameManager.HasLoseMoney, true, gameManager.HasLoseMoney, "");
+                    !gameManager.HasLoseMoney, true, gameManager.HasLoseMoney, "", true);
             case 14:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.LoseLifeMoney(), true, false),
-                    gameManager.IsPlayerTurn(), gameManager.playerLivesText.LivesRemaining() > 1, false, "");
+                    gameManager.IsPlayerTurn(), gameManager.playerLivesText.LivesRemaining() > 1, false, "", false);
             case 15:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableOddMultiplier(), false, true),
-                    !gameManager.HasOddWordMultiplier, true, gameManager.HasOddWordMultiplier, "");
+                    !gameManager.HasOddWordMultiplier, true, gameManager.HasOddWordMultiplier, "", true);
             case 16:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableDoubleEnded(), false, true),
-                    !gameManager.HasDoubleEndedMultiplier, true, gameManager.HasDoubleEndedMultiplier, "");
+                    !gameManager.HasDoubleEndedMultiplier, true, gameManager.HasDoubleEndedMultiplier, "", true);
             case 17:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => ApplyDiscount(0.5f), false, true),
-                    totalCostPercentage == 1, true, totalCostPercentage != 1, "");
+                    totalCostPercentage == 1, true, totalCostPercentage != 1, "", true);
             case 18:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.MatchAILives(), true, false),
                     gameManager.IsPlayerTurn(),
-                    gameManager.playerLivesText.LivesRemaining() != gameManager.aiLivesText.LivesRemaining(), false, "");
+                    gameManager.playerLivesText.LivesRemaining() != gameManager.aiLivesText.LivesRemaining(), false, "", false);
             case 19:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableBonusMoney(), false, true),
                     !gameManager.HasBonusMoney, true, gameManager.HasBonusMoney,
-                    gameManager.IsGameEnded() ? "$0" : $"{(gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3}¤");
+                    gameManager.IsGameEnded() ? "$0" : $"{(gameManager.playerLivesText.GetStartLives() - gameManager.playerLivesText.LivesRemaining()) * 3}¤",
+                    true);
             case 20:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.SkipTurn(), true, false),
-                    gameManager.IsPlayerTurn(), true, false, "");
+                    gameManager.IsPlayerTurn(), true, false, "", false);
             case 21:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableLastResortMultiplier(), false, true),
-                    !gameManager.HasLastResortMultiplier, gameManager.playerLivesText.LivesRemaining() == 1, gameManager.HasLastResortMultiplier, "");
+                    !gameManager.HasLastResortMultiplier, gameManager.playerLivesText.LivesRemaining() == 1, gameManager.HasLastResortMultiplier, "", true);
             case 22:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableNoDuplicateLetterMultiplier(), false, true),
-                    !gameManager.HasNoDuplicateLetterMultiplier, true, gameManager.HasNoDuplicateLetterMultiplier, "");
+                    !gameManager.HasNoDuplicateLetterMultiplier, true, gameManager.HasNoDuplicateLetterMultiplier, "", true);
             case 23:
                 return new ShopItemAdjustableDetails(
                     DoMoneyRoulette(),
-                    gameManager.IsPlayerTurn(), true, false, "");
+                    gameManager.IsPlayerTurn(), true, false, "", false);
         }
 
         return null;
@@ -615,12 +629,12 @@ public class ShopPopUp : MonoBehaviour
     {
         yield return null;
 
-        int range = gameManager.currency <= 10 ? 2 : gameManager.currency <= 50 ? 3 : 4;
+        int range = gameManager.currency <= 10 ? 2 : gameManager.currency <= 50 || gameManager.playerLivesText.LivesRemaining() == 1 ? 3 : 4;
 
         if (Random.Range(0, range) == 1) // get money
         {
             moneyAudioSource?.Play();
-            RefreshPopUp(-10);
+            RefreshPopUp(-10, false);
         }
         else // lose life
         {
@@ -637,13 +651,15 @@ public class ShopItemAdjustableDetails
     public bool IsAdditionalInteractable;
     public bool IsActive;
     public string ExtraInfoText;
+    public bool CanBeActive;
 
-    public ShopItemAdjustableDetails(IEnumerator coroutine, bool isInteractable, bool isAdditionalInteractable, bool isActive, string extraInfoText)
+    public ShopItemAdjustableDetails(IEnumerator coroutine, bool isInteractable, bool isAdditionalInteractable, bool isActive, string extraInfoText, bool canBeActive)
     {
         Coroutine = coroutine;
         IsInteractable = isInteractable;
         IsAdditionalInteractable = isAdditionalInteractable;
         IsActive = isActive;
         ExtraInfoText = extraInfoText;
+        CanBeActive = canBeActive;
     }
 }
