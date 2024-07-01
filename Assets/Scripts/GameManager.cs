@@ -1117,7 +1117,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    nextRoundButtonText += $"\n<size=25>Level {currentGame + 2}/10</size>";
+                    nextRoundButtonText += $"\n<size=30><color=green>Level {currentGame + 2}/10</color></size>";
 
                     Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
                     {

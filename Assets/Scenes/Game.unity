@@ -2521,7 +2521,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -64}
+  m_AnchoredPosition: {x: 0, y: -210.00003}
   m_SizeDelta: {x: 210.01, y: 39.24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &117726929
@@ -12513,7 +12513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -1.866, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -310}
+  m_AnchoredPosition: {x: 0, y: -314}
   m_SizeDelta: {x: 88.19, y: 36.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395927527
@@ -12529,7 +12529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frequency: 5
-  amplitude: 0.4
+  amplitude: 0.5
 --- !u!114 &395927528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12577,8 +12577,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12716,8 +12716,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.000001
-  m_Size: 0.56582403
+  m_Value: 1.0000023
+  m_Size: 0.5658257
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16706,7 +16706,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.00049877, y: 75}
+  m_AnchoredPosition: {x: -0.00049877, y: 173}
   m_SizeDelta: {x: 400, y: 31.2528}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529991560
@@ -27105,7 +27105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -66}
+  m_AnchoredPosition: {x: 0, y: -205}
   m_SizeDelta: {x: 210.01, y: 39.24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &867801733
@@ -35256,7 +35256,6 @@ GameObject:
   - component: {fileID: 1111215339}
   - component: {fileID: 1111215342}
   - component: {fileID: 1111215341}
-  - component: {fileID: 1111215340}
   m_Layer: 5
   m_Name: Glow Ghost
   m_TagString: Untagged
@@ -35283,21 +35282,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 3.9999998, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1111215340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1111215338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
-  m_UseGraphicAlpha: 1
 --- !u!114 &1111215341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40988,7 +40972,7 @@ MonoBehaviour:
     yPos: 0
   - hatType: 2
     sprite: {fileID: 21300000, guid: 556d30a2cc98047afa805ad49818228b, type: 3}
-    name: Toque
+    name: Beanie
     description: Win one game on any difficulty
     width: 50
     height: 40
@@ -42477,8 +42461,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 130, y: 118}
+  m_AnchoredPosition: {x: 0, y: 5}
+  m_SizeDelta: {x: 200, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1339300335
 MonoBehaviour:
@@ -45014,7 +44998,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
   m_Value: -0.0000004804913
-  m_Size: 0.33191407
+  m_Size: 0.33191544
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -49253,7 +49237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2546544751669845674, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -63.099976
+      value: -209.1
       objectReference: {fileID: 0}
     - target: {fileID: 2546544751669845674, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -55018,9 +55002,9 @@ RectTransform:
   - {fileID: 2074568005}
   - {fileID: 1279506568}
   - {fileID: 278489077}
-  - {fileID: 1835410651}
   - {fileID: 2034685573}
   - {fileID: 395927526}
+  - {fileID: 1835410651}
   m_Father: {fileID: 797799548}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -57293,7 +57277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -457}
+  m_AnchoredPosition: {x: 0, y: -459}
   m_SizeDelta: {x: 350, y: 176.86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1835410652
@@ -57316,8 +57300,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=yellow>Note:</color> \nPowers use <color=green>mana (\xA4)</color>
-    (it carries between levels)\n\n"
+  m_text: "<color=yellow>Note:</color>\nGet <color=green>mana (\xA4)</color> when
+    you win a round to use on powers!\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -60952,7 +60936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6907801826067722454, guid: 3c02332a6761045e38731cb238686605, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -145
+      value: -291
       objectReference: {fileID: 0}
     - target: {fileID: 6907801826067722454, guid: 3c02332a6761045e38731cb238686605, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -61634,7 +61618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -1.866, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -108.380005}
+  m_AnchoredPosition: {x: 0, y: -254.38004}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &1993707886
@@ -62764,7 +62748,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 275.62457}
+  m_AnchoredPosition: {x: 0, y: 275.624}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706
@@ -63838,7 +63822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2035106208
 RectTransform:
   m_ObjectHideFlags: 0
@@ -67330,15 +67314,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7647678434395184252, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_Color.b
-      value: 0.011764706
+      value: 0.009567461
       objectReference: {fileID: 0}
     - target: {fileID: 7647678434395184252, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_Color.g
-      value: 0.43529412
+      value: 0.4056604
       objectReference: {fileID: 0}
     - target: {fileID: 7647678434395184252, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_Color.r
-      value: 0.039215688
+      value: 0.034849938
       objectReference: {fileID: 0}
     - target: {fileID: 7647678434395184252, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_Enabled

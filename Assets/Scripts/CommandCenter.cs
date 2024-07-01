@@ -25,7 +25,7 @@ public class CommandCenter : MonoBehaviour
 
     public void AdjustAlphaBasedOnLevel()
     {
-        float alpha = Mathf.Lerp(0, 90, Mathf.Min(1, (saveObject.CurrentLevel * 1.5f) / 9f) / 255f);
+        float alpha = Mathf.Lerp(0, 60, Mathf.Min(1, (saveObject.CurrentLevel * 1.5f) / 9f) / 255f);
 
         Color currentColor = shopGlowOutline.color;
         currentColor.a = alpha;
