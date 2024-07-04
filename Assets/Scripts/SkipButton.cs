@@ -16,6 +16,7 @@ public class SkipButton : MonoBehaviour
         parentTextButton.interactable = canSkip;
         button.interactable = canSkip;
         button.GetComponent<Image>().sprite = canSkip ? skipIcon : lockIcon;
+        button.GetComponent<Image>().enabled = canSkip;
         button.transform.localPosition = new Vector2(button.transform.localPosition.x, canSkip ? 6.2f : 3f);
         scaleInOut.enabled = canSkip;
         skipText.SetActive(canSkip);

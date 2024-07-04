@@ -34,6 +34,7 @@ public class ShopPopUp : MonoBehaviour
     private List<ShopItemInfo> visibleShopItems = new List<ShopItemInfo>();
     private HashSet<int> previousShopItemIds = new HashSet<int>();
     private SaveObject saveObject;
+    private bool isShuffling = false;
 
     private void Awake()
     {
@@ -212,10 +213,11 @@ public class ShopPopUp : MonoBehaviour
     public void ReShuffle()
     {
         int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
-        if (currency >= restockCost)
+        if (currency >= restockCost && !isShuffling) // Check if already shuffling
         {
             StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(restockCost, null)));
             StartCoroutine(ScrollToTop());
+            StartCoroutine(PopButton(shuffleButton));
         }
     }
 
@@ -424,7 +426,7 @@ public class ShopPopUp : MonoBehaviour
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
-        reshuffleText.text = $"Shuffle Powers (<color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>)";
+        reshuffleText.text = $"Shuffle Powers - <color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
         shopActiveEffectsText.MatchEffects(activeEffectsText);
     }
@@ -642,6 +644,39 @@ public class ShopPopUp : MonoBehaviour
             Hide(false);
         }
     }
+
+    private IEnumerator PopButton(Button button)
+    {
+        if (isShuffling) yield break;
+
+        isShuffling = true;
+
+        Vector3 originalScale = button.transform.localScale;
+        Vector3 targetScale = originalScale * 1.15f;
+        float duration = 0.1f;
+        float time = 0;
+
+        // Scale up
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            button.transform.localScale = Vector3.Lerp(originalScale, targetScale, time / duration);
+            yield return null;
+        }
+
+        time = 0;
+        // Scale down
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            button.transform.localScale = Vector3.Lerp(targetScale, originalScale, time / duration);
+            yield return null;
+        }
+
+        button.transform.localScale = originalScale;
+        isShuffling = false;
+    }
+
 }
 
 public class ShopItemAdjustableDetails

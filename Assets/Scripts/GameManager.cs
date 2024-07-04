@@ -981,7 +981,7 @@ public class GameManager : MonoBehaviour
                 int loseMoney = 15;
                 if (HasDoubleWealth)
                 {
-                    loseMoney = Mathf.RoundToInt(loseMoney * 2.5f);
+                    loseMoney = Mathf.RoundToInt(loseMoney * 2f);
                 }
 
                 currencyEarnedText.gameObject.SetActive(true);
@@ -999,7 +999,7 @@ public class GameManager : MonoBehaviour
 
                 if (HasDoubleWealth)
                 {
-                    bonusMoney = Mathf.RoundToInt(bonusMoney * 2.5f);
+                    bonusMoney = Mathf.RoundToInt(bonusMoney * 2f);
                 }
 
                 if (playerWon)
@@ -1513,7 +1513,7 @@ public class GameManager : MonoBehaviour
             roundCurrency = roundPoints / 5 + 1;
             if (HasDoubleWealth)
             {
-                roundCurrency = Mathf.RoundToInt(roundCurrency * 2.5f);
+                roundCurrency = Mathf.RoundToInt(roundCurrency * 2f);
             }
             currency += roundCurrency;
         }

@@ -160,7 +160,6 @@ public class ShopItem : MonoBehaviour
 
         buyButton.transform.localScale = originalScale;
     }
-
 }
 
 [Serializable]

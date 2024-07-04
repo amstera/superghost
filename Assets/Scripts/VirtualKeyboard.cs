@@ -112,7 +112,11 @@ public class VirtualKeyboard : MonoBehaviour
 
     void DetectKeyPress()
     {
-        if (!gameObject.activeSelf || gameManager.challengePopup.canvasGroup.alpha > 0 || gameManager.bluffPopup.canvasGroup.alpha > 0 || gameManager.settingsPopup.canvasGroup.alpha > 0)
+        if (!gameObject.activeSelf
+            || gameManager.challengePopup.canvasGroup.alpha > 0
+            || gameManager.bluffPopup.canvasGroup.alpha > 0
+            || gameManager.shopPopUp.canvasGroup.alpha > 0
+            || gameManager.settingsPopup.canvasGroup.alpha > 0)
         {
             return;
         }
