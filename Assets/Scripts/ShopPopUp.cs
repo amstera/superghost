@@ -41,6 +41,11 @@ public class ShopPopUp : MonoBehaviour
         originalScale = popUpGameObject.transform.localScale;
         saveObject = SaveManager.Load();
         ResetPopUp();
+
+        if (!DeviceTypeChecker.IsiPhoneSE())
+        {
+            popUpGameObject.transform.localPosition += Vector3.up * 13;
+        }
     }
 
     public void Show(int currency, string substring)

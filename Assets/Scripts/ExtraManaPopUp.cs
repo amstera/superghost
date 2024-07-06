@@ -16,11 +16,21 @@ public class ExtraManaPopUp : MonoBehaviour
     public float scaleDuration = 0.5f;
 
     private Vector3 originalScale;
+    private bool initializeAds;
 
     private void Awake()
     {
         originalScale = popUpGameObject.transform.localScale;
         ResetPopUp();
+    }
+
+    void OnDestroy()
+    {
+        if (initializeAds)
+        {
+            AdsManager.Instance.rewardedAd.OnAdCompleted -= HandleAdCompleted;
+            AdsManager.Instance.rewardedAd.OnAdSkipped -= HandleAdSkipped;
+        }
     }
 
     public void Show()
@@ -34,6 +44,14 @@ public class ExtraManaPopUp : MonoBehaviour
         canvasGroup.blocksRaycasts = true;
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
+
+        // Subscribe to ad events
+        if (!initializeAds)
+        {
+            AdsManager.Instance.rewardedAd.OnAdCompleted += HandleAdCompleted;
+            AdsManager.Instance.rewardedAd.OnAdSkipped += HandleAdSkipped;
+            initializeAds = true;
+        }
     }
 
     private IEnumerator FadeIn()
@@ -59,6 +77,13 @@ public class ExtraManaPopUp : MonoBehaviour
         }
     }
 
+    public void GetMana()
+    {
+        clickAudioSource?.Play();
+
+        AdsManager.Instance.rewardedAd.ShowAd();
+    }
+
     public void Hide()
     {
         clickAudioSource?.Play();
@@ -72,5 +97,37 @@ public class ExtraManaPopUp : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    private void HandleAdCompleted()
+    {
+        Debug.Log("Ad Completed - Reward the player with mana.");
+        AddMana();
+    }
+
+    public void AddMana()
+    {
+        moneyAudioSource?.Play();
+        currencyText.AddPoints(10);
+        watchButton.interactable = false;
+
+        StartCoroutine(AddAfterDelay(10));
+    }
+
+    private IEnumerator AddAfterDelay(int amount)
+    {
+        yield return new WaitForSeconds(0.75f);
+
+        gameManager.currency += amount;
+        gameManager.currencyText.AddPoints(amount);
+        gameManager.shopPopUp.RefreshView();
+
+        ResetPopUp();
+    }
+
+
+    private void HandleAdSkipped()
+    {
+        Debug.Log("Ad Skipped - No reward given.");
     }
 }
