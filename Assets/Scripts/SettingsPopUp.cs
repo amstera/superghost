@@ -18,7 +18,7 @@ public class SettingsPopUp : MonoBehaviour
     public TMP_Dropdown difficultyDropdown;
     public TMP_InputField inputField;
 
-    public AudioSource clickAudioSource;
+    public AudioSource clickAudioSource, warningAudioSource;
 
     public float fadeDuration = 0.5f;
     public float scaleDuration = 0.5f;
@@ -291,6 +291,8 @@ public class SettingsPopUp : MonoBehaviour
 
     private IEnumerator ShakePopup()
     {
+        warningAudioSource?.Play();
+
         float elapsed = 0.0f;
 
         while (elapsed < 0.25f)

@@ -15,7 +15,7 @@ public class ShopItem : MonoBehaviour
     public Color normalWarningColor;
     public Color blockedWarningColor;
     public Button buyButton;
-    public ProceduralImage backgroundImage;
+    public ProceduralImage backgroundImage, outlineImage;
     public Image iconImage;
     public TextMeshProUGUI extraInfoText;
 
@@ -37,6 +37,8 @@ public class ShopItem : MonoBehaviour
         var color = ColorUtility.ToHtmlStringRGB(brighterColor);
 
         StartCoroutine(UpdateTitle(title, cost, isActive, canAfford, color));
+
+        outlineImage.color = brighterColor;
 
         bodyText.text = body;
         bodyText.lineSpacing = bodyText.text.Contains("¤") ? -30f : -3f;
