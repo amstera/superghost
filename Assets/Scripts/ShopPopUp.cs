@@ -14,7 +14,7 @@ public class ShopPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public ScrollRect scrollRect;
     public PointsText currencyText;
-    public Button shuffleButton;
+    public Button shuffleButton, getMoreButton;
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
@@ -433,6 +433,7 @@ public class ShopPopUp : MonoBehaviour
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
         reshuffleText.text = $"Shuffle Powers - <color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
+        getMoreButton.GetComponentInChildren<TextMeshProUGUI>().enableVertexGradient = gameManager.currency < 5;
         shopActiveEffectsText.MatchEffects(activeEffectsText);
     }
 

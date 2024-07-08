@@ -286,7 +286,7 @@ public class GameManager : MonoBehaviour
         roundCurrency = 0;
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
-        levelText.text = $"Level {currentGame + 1}/10";
+        levelText.text = $"Level {currentGame + 1}/" + (currentGame >= 10 ? "∞" : "10");
         levelText.fontSize = currentGame + 1 == 10 ? 26 : 28;
         levelText.color = Color.green;
         skipButton.gameObject.SetActive(true);
@@ -579,7 +579,7 @@ public class GameManager : MonoBehaviour
 
     public void LoseLifeMoney()
     {
-        playerLivesText.LoseLife();
+        LoseLife();
     }
 
     public void UndoTurn()
@@ -1117,7 +1117,8 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    nextRoundButtonText += $"\n<size=30><color=green>Level {currentGame + 2}/10</color></size>";
+                    string totalLevels = currentGame + 2 > 10 ? "" : "/10";
+                    nextRoundButtonText += $"\n<size=30><color=green>Level {currentGame + 2}{totalLevels}</color></size>";
 
                     Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
                     {
@@ -1177,7 +1178,7 @@ public class GameManager : MonoBehaviour
                     main.loop = true;
                     confettiPS.Play();
 
-                    nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
+                    nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Endless Mode >";
                     highestLevelNewIndicator.SetActive(false);
                     bonusCurrencyEarnedText.gameObject.SetActive(false);
                     currencyEarnedText.gameObject.SetActive(false);
@@ -1200,8 +1201,8 @@ public class GameManager : MonoBehaviour
                     }
 
                     currencyText.SetPoints(currency);
-
-                    ResetRun();
+                    saveObject.RunStatistics.MostMoney = currency;
+                    // ResetRun();
                 }
             }
             else // lose game
@@ -1244,6 +1245,7 @@ public class GameManager : MonoBehaviour
                     wordDisplay.transform.localPosition += Vector3.up * 25;
                 }
 
+                saveObject.RunStatistics.MostMoney = currency;
                 ResetRun();
             }
 
@@ -1729,7 +1731,6 @@ public class GameManager : MonoBehaviour
     {
         isPlayerTurn = true;
         ResetWordUses = 0;
-        saveObject.RunStatistics.MostMoney = currency;
 
         currentGame = 0;
         saveObject.CurrentLevel = 0;

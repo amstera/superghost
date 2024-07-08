@@ -239,24 +239,22 @@ public class VirtualKeyboard : MonoBehaviour
 
     IEnumerator PopAnimation(GameObject btnGameObject)
     {
-        Vector3 targetScale = originalScale * 1.5f;
-
+        float duration = 0.2f;
+        float peakScaleMultiplier = 1.5f;
         float currentTime = 0f;
-        float duration = 0.15f;
+
         while (currentTime < duration)
         {
-            btnGameObject.transform.localScale = Vector3.Lerp(originalScale, targetScale, currentTime / duration);
-            currentTime += Time.deltaTime;
+            float t = currentTime / duration;
+            float scaleFactor = Mathf.Sin(t * Mathf.PI) * (peakScaleMultiplier - 1f) + 1f;
+
+            btnGameObject.transform.localScale = originalScale * scaleFactor;
+
+            currentTime += Time.unscaledDeltaTime;
             yield return null;
         }
 
-        currentTime = 0f;
-        while (currentTime < duration)
-        {
-            btnGameObject.transform.localScale = Vector3.Lerp(targetScale, originalScale, currentTime / duration);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
+        btnGameObject.transform.localScale = originalScale;
     }
 
     IEnumerator ShakeAnimation(Button btn)

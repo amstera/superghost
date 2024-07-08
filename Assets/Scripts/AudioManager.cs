@@ -57,7 +57,8 @@ public class AudioManager : MonoBehaviour
         var newClip = saveObject.CurrentLevel < 5 ? bgMusic : bossMusic;
         if (bgMusicAudioSource.clip != newClip && saveObject.EnableMusic)
         {
-            StartCoroutine(FadeOutAndIn(newClip));
+            float pitch = saveObject.CurrentLevel >= 10 ? 1.1f : saveObject.CurrentLevel == 9 ? 1.05f : 1f;
+            StartCoroutine(FadeOutAndIn(newClip, targetPitch: pitch));
         }
     }
 
@@ -81,7 +82,8 @@ public class AudioManager : MonoBehaviour
         if (isGameStarted)
         {
             var newClip = saveObject.CurrentLevel < 5 ? bgMusic : bossMusic;
-            StartCoroutine(FadeOutAndIn(newClip));
+            float pitch = saveObject.CurrentLevel >= 10 ? 1.1f : saveObject.CurrentLevel == 9 ? 1.05f : 1f;
+            StartCoroutine(FadeOutAndIn(newClip, targetPitch: pitch));
         }
         else
         {

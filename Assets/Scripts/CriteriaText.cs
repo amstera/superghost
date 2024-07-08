@@ -68,7 +68,7 @@ public class CriteriaText : MonoBehaviour
             case 7:
                 canSkip = true;
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(175, difficultyMultiplier)));
-                AddCriteria(1, 7, 0, currentCriteria, previousCriteria, letter);
+                AddCriteria(1, 7, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 8:
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(200, difficultyMultiplier)));
@@ -78,6 +78,10 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(250, difficultyMultiplier)));
                 currentCriteria.Add(new NoMercy());
                 break;
+            default: // for endless mode
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100 * level - 600, difficultyMultiplier)));
+                AddCriteria(1, level, 1, currentCriteria, previousCriteria, letter);
+                break;
         }
 
         return currentCriteria;
@@ -86,14 +90,14 @@ public class CriteriaText : MonoBehaviour
     private void AddCriteria(int amount, int level, int startIndex, List<GameCriterion> currentCriteria, List<GameCriterion> previousCriteria, char letter)
     {
         List<GameCriterion> possibleCriteria = new List<GameCriterion> {
-            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 6 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter)
+            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 10 ? 3 : level >= 6 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter)
         };
 
         if (level > 3)
         {
             possibleCriteria.Add(new NoRepeatLetters());
         }
-        if (level >= 3 && level <= 7)
+        if ((level >= 3 && level <= 7) || level >= 10)
         {
             possibleCriteria.Add(new OnlyMove(true));
         }
@@ -118,6 +122,11 @@ public class CriteriaText : MonoBehaviour
 
         var availableCriteria = possibleCriteria.Where(pc => !saveObject.ChosenCriteria.Any(c => c.Value.Contains(pc.Id))).ToList();
         availableCriteria.RemoveAll(a => previousCriteria.Any(p => p != null && p.Id == a.Id));
+        if (availableCriteria.Count == 0)
+        {
+            saveObject.ChosenCriteria.Clear();
+            availableCriteria = possibleCriteria;
+        }
 
         for (int i = 0; i < Mathf.Min(availableCriteria.Count, amount); i++)
         {
