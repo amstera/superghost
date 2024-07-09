@@ -11,7 +11,7 @@ public class SkipPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI bodyText;
     public PointsText currencyText;
-    public Button skipButton;
+    public Button levelSkipButton, skipButton;
     public GameManager gameManager;
 
     public AudioSource clickAudioSource, moneyAudioSource;
@@ -32,6 +32,7 @@ public class SkipPopUp : MonoBehaviour
 
     public void Show()
     {
+        StartCoroutine(ButtonPopAnimation());
         clickAudioSource?.Play();
 
         amountToEarn = Mathf.Min(30, 5 * saveObject.CurrentLevel + 5);
@@ -116,5 +117,32 @@ public class SkipPopUp : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    private IEnumerator ButtonPopAnimation()
+    {
+        Vector3 originalScale = levelSkipButton.transform.localScale;
+        Vector3 targetScale = originalScale * 1.2f;
+        float duration = 0.1f;
+
+        // Scale up
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            levelSkipButton.transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Scale back down
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            levelSkipButton.transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        levelSkipButton.transform.localScale = originalScale;
     }
 }

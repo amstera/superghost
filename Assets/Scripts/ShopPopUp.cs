@@ -530,7 +530,7 @@ public class ShopPopUp : MonoBehaviour
             case 20:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.SkipTurn(), true, false),
-                    gameManager.IsPlayerTurn(), true, false, "", false);
+                    gameManager.IsPlayerTurn(), !gameManager.HasDoubleTurn, false, "", false);
             case 21:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.EnableLastResortMultiplier(), false, true),

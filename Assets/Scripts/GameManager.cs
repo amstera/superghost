@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     public ChallengePopUp challengePopup;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
-    public TextMeshProUGUI playerText, aiText, endGameText, pointsCalculateText, levelText;
+    public TextMeshProUGUI endGameText, pointsCalculateText, levelText;
+    public TextLerpColor playerText, aiText;
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
@@ -624,6 +625,7 @@ public class GameManager : MonoBehaviour
         isPlayerTurn = false;
         ghostAvatar.Think();
         SetIndicators(isPlayerTurn);
+        wordDisplay.text = wordDisplay.text.Replace($"<color=yellow>{separator}</color>", separator);
 
         if (startText.activeSelf)
         {
@@ -1098,8 +1100,8 @@ public class GameManager : MonoBehaviour
                 }
 
                 stars.Show(points);
-                playerText.color = Color.green;
-                aiText.color = Color.red;
+                playerText.SetColor(Color.green);
+                aiText.SetColor(Color.red);
 
                 int gameWonCurrency = stars.GetStars() * 5 + (currentGame + 1) * 3;
                 bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", delay: 0.5f);
@@ -1210,8 +1212,8 @@ public class GameManager : MonoBehaviour
                 endGameText.text = "Defeat!";
                 endGameText.color = Color.red;
                 pointsEarnedText.gameObject.SetActive(false);
-                playerText.color = Color.red;
-                aiText.color = Color.green;
+                playerText.SetColor(Color.red);
+                aiText.SetColor(Color.green);
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start New Run >";
                 nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250);
                 if (DeviceTypeChecker.IsiPhoneSE())
@@ -1354,7 +1356,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ProcessComputerTurn()
     {
-        yield return new WaitForSeconds(Random.Range(0.4f, 1f));
+        yield return new WaitForSeconds(Random.Range(0.6f, 1f));
 
         int winDiff = GetPlayerAIWinDifference();
         if (wordDictionary.ShouldChallenge(gameWord, winDiff, saveObject.Difficulty, true))
@@ -1418,8 +1420,8 @@ public class GameManager : MonoBehaviour
     {
         playerIndicator.SetActive(isPlayer);
         aiIndicator.SetActive(!isPlayer);
-        playerText.color = isPlayer ? Color.green : Color.white;
-        aiText.color = isPlayer ? Color.white : Color.green;
+        playerText.SetColor(isPlayer ? Color.green : Color.white);
+        aiText.SetColor(isPlayer ? Color.white : Color.green);
 
         bool isChallengeButtonEnabled = isPlayer && !string.IsNullOrEmpty(gameWord) && !roundEnded;
         challengeButton.interactable = isChallengeButtonEnabled;

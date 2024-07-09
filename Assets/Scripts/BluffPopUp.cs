@@ -52,7 +52,7 @@ public class BluffPopUp : MonoBehaviour
         substring = substring.ToLower().Trim();
 
         originalSubstring = substring;
-        bluffText.text = $"Finish the word for extra points:\n<color=#03FF00>{substring.ToUpper()}</color>";
+        bluffText.text = $"Finish the word for bonus points:\n<color=#03FF00>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = substring;
 

@@ -208,7 +208,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         Color transitionColor = phase < 0.5 ? Color.Lerp(yellow, orange, phase * 2) : Color.Lerp(orange, red, (phase - 0.5f) * 2);
 
         // Apply level-based blending with white
-        float levelIntensity = currentLevel / 9f; // Scale factor based on current level
+        float levelIntensity = Mathf.Min(1f, currentLevel / 9f); // Scale factor based on current level
         currentGlowColor = Color.Lerp(Color.white, transitionColor, 1f); // Intense glow
 
         // Set the material properties
