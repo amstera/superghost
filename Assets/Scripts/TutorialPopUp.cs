@@ -82,6 +82,7 @@ public class TutorialPopUp : MonoBehaviour
 
     public void Hide()
     {
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
         if (!showCloseButton)

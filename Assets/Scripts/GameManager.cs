@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     private int points, roundPoints, currentGame;
     private int roundCurrency;
     private int minLength = 3;
+    private int minPointsNeeded;
     public enum TextPosition { None, Left, Right }
 
     private const string separator = "_";
@@ -270,6 +271,8 @@ public class GameManager : MonoBehaviour
             recap.Clear();
             wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
+            pointsText.normalColor = Color.white;
+            pointsText.pointsText.color = Color.white;
             points = 0;
             bool canSkip = criteriaText.SetLevelCriteria(currentGame);
             skipButton.Set(canSkip);
@@ -1565,6 +1568,7 @@ public class GameManager : MonoBehaviour
         roundPoints = (int)Math.Round(pointsChange, MidpointRounding.AwayFromZero);
         pointsText.AddPoints(roundPoints);
         points = Mathf.Max(0, points + roundPoints);
+        pointsText.normalColor = Color.Lerp(Color.white, Color.green, minPointsNeeded == 0 ? 0 : Math.Min(1, points/(float)minPointsNeeded));
 
         if (pointsChange > 0)
         {
@@ -1906,6 +1910,13 @@ public class GameManager : MonoBehaviour
                 else if (criterion is NoMercy)
                 {
                     ghostAvatar.CanMercy = false;
+                }
+            }
+            else
+            {
+                if (criterion is ScoreAtLeastXPoints minPoints)
+                {
+                    minPointsNeeded = minPoints.GetPoints();
                 }
             }
         }
