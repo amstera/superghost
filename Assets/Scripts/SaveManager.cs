@@ -69,6 +69,7 @@ public class SaveObject
     public bool EnableMotion = true;
     public bool HasSeenTutorial;
     public bool HasSeenRunTutorial;
+    public bool HasSeenEndlessModeTutorial;
     public int Currency = 5;
     public int CurrentLevel;
     public HatType HatType = HatType.None;

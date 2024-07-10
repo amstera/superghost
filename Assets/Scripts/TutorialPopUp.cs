@@ -17,19 +17,34 @@ public class TutorialPopUp : MonoBehaviour
     public AudioSource clickAudioSource;
 
     private int currentPageIndex = 0;
-    private bool showCloseButton = false;
-    private bool hasWonGame = false;
+    private bool showCloseButton;
+    private bool hasWonGame;
+    private bool hasWonRun;
     private int visiblePagesCount;
 
     private void Start()
     {
         saveObject = SaveManager.Load();
+        SetVisiblePagesCount();
     }
 
     private void SetVisiblePagesCount()
     {
         hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
-        visiblePagesCount = hasWonGame ? pages.Length : pages.Length - 5;
+        hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
+
+        if (hasWonRun)
+        {
+            visiblePagesCount = 15; // Show all pages (0-14)
+        }
+        else if (hasWonGame)
+        {
+            visiblePagesCount = 14; // Show pages (0-13)
+        }
+        else
+        {
+            visiblePagesCount = 10; // Show pages (0-9)
+        }
     }
 
     public void ShowButton()
@@ -98,6 +113,7 @@ public class TutorialPopUp : MonoBehaviour
 
             currentPageIndex++;
             UpdateUI();
+            StartCoroutine(PopButton(nextButton));
         }
     }
 
@@ -109,6 +125,7 @@ public class TutorialPopUp : MonoBehaviour
 
             currentPageIndex--;
             UpdateUI();
+            StartCoroutine(PopButton(previousButton));
         }
     }
 
@@ -123,7 +140,7 @@ public class TutorialPopUp : MonoBehaviour
     {
         for (int i = 0; i < pages.Length; i++)
         {
-            pages[i].SetActive(i == currentPageIndex && (hasWonGame || i < pages.Length - 5));
+            pages[i].SetActive(i == currentPageIndex && i < visiblePagesCount);
         }
     }
 
@@ -151,5 +168,31 @@ public class TutorialPopUp : MonoBehaviour
 
             progressBar.value = targetValue;
         }
+    }
+
+    private IEnumerator PopButton(Button button)
+    {
+        Vector3 originalScale = Vector3.one;
+        Vector3 targetScale = originalScale * 1.2f;
+        float popDuration = 0.1f;
+        float elapsedTime = 0;
+
+        while (elapsedTime < popDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            button.transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / popDuration);
+            yield return null;
+        }
+
+        elapsedTime = 0;
+
+        while (elapsedTime < popDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            button.transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / popDuration);
+            yield return null;
+        }
+
+        button.transform.localScale = originalScale;
     }
 }

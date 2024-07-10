@@ -169,10 +169,50 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator NewGame()
     {
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
         nextRoundButton.interactable = false;
+        var originalColor = nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().color;
+        nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.75f);
 
-        yield return new WaitForSeconds(0.15f);
+        var originalScale = Vector3.one;
+        var duration = 0.15f;
+        var popEffectScale = 1.35f;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            // Apply ease-out effect (quadratic)
+            float proportionCompleted = elapsedTime / duration;
+            float easeOutProgress = 1 - Mathf.Pow(1 - proportionCompleted, 2);
+
+            nextRoundButton.transform.localScale = Vector3.Lerp(originalScale, originalScale * popEffectScale, easeOutProgress);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        StartCoroutine(StartNewGameSep());
+
+        // Smooth interpolation back to the original scale
+        elapsedTime = 0f;
+        var poppedScale = nextRoundButton.transform.localScale;
+        while (elapsedTime < duration)
+        {
+            // Smoothly lerp back using linear interpolation (could use easing here as well)
+            nextRoundButton.transform.localScale = Vector3.Lerp(poppedScale, originalScale, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure it sets back to original exactly
+        nextRoundButton.transform.localScale = originalScale;
+        nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().color = originalColor;
+    }
+
+    private IEnumerator StartNewGameSep()
+    {
+        yield return null;
+
         StartNewGame();
     }
 
@@ -188,10 +228,19 @@ public class GameManager : MonoBehaviour
         if (gameOver) // only at the beginning of a new game and not any new round
         {
             bool hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+            bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
             if (saveObject.HasSeenTutorial && hasWonGame && !saveObject.HasSeenRunTutorial)
             {
                 tutorialPopup.Show(10, false);
                 saveObject.HasSeenRunTutorial = true;
+
+                SaveManager.Save(saveObject);
+                return;
+            }
+            else if (saveObject.HasSeenTutorial && saveObject.HasSeenRunTutorial && hasWonRun && !saveObject.HasSeenEndlessModeTutorial)
+            {
+                tutorialPopup.Show(14, false);
+                saveObject.HasSeenEndlessModeTutorial = true;
 
                 SaveManager.Save(saveObject);
                 return;
@@ -330,6 +379,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
         selectedPosition = position;
@@ -398,6 +448,7 @@ public class GameManager : MonoBehaviour
     {
         if (!isChallenging)
         {
+            clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
             clickAudioSource?.Play();
 
             StartCoroutine(ProcessChallengeWord());
@@ -406,6 +457,7 @@ public class GameManager : MonoBehaviour
 
     public void ShopButtonPressed()
     {
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
         shopPopUp.Show(currency, gameWord);
@@ -680,6 +732,7 @@ public class GameManager : MonoBehaviour
 
     public void BluffWin(string word)
     {
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
         aiLivesText.LoseLife();
@@ -729,6 +782,7 @@ public class GameManager : MonoBehaviour
 
     public void HandleChallenge(string word)
     {
+        clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
         previousWords.Add(gameWord);
