@@ -640,9 +640,10 @@ public class GameManager : MonoBehaviour
 
     public void UndoTurn()
     {
+        var addedChar = previousWords.Count > 0 ? ReplaceIgnoreCase(gameWord, previousWords.Last(), "").ToCharArray()[0] : gameWord[0];
+
         if (noRepeatLetters)
         {
-            var addedChar = previousWords.Count > 0 ? ReplaceIgnoreCase(gameWord, previousWords.Last(), "").ToCharArray()[0] : gameWord[0];
             keyboard.RemoveRestrictedLetter(addedChar);
         }
 
@@ -667,6 +668,8 @@ public class GameManager : MonoBehaviour
             wordDictionary.SetFilteredWords(gameWord);
             UpdateWordDisplay(true, 0);
         }
+
+        comboText.RemoveCharacter(addedChar);
 
         keyAudioSource.pitch = Random.Range(0.8f, 1.5f);
         keyAudioSource?.Play();

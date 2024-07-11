@@ -217,7 +217,9 @@ public class ShopPopUp : MonoBehaviour
 
     public void ReShuffle()
     {
-        int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
+        int baseRestockAmount = saveObject.CurrentLevel < 10 ? 6 : 10;
+        int levelMultiplier = saveObject.CurrentLevel < 10 ? 1 : (int)Math.Pow(2, saveObject.CurrentLevel - 10);
+        int restockCost = Math.Min(80, (int)RoundHalfUp(baseRestockAmount * levelMultiplier * totalCostPercentage));
         if (currency >= restockCost && !isShuffling) // Check if already shuffling
         {
             StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(restockCost, null)));
@@ -427,7 +429,9 @@ public class ShopPopUp : MonoBehaviour
             shopItemPrefabs[i].Initialize(shopItem.id, shopItem.title, shopItem.body, warningText, cost, currency, isInteractable, isAdditionalInteractable, shopItemAdjustableDetails.IsActive, shopItemAdjustableDetails.ExtraInfoText, shopItem.iconSprite, (item) => BuyPressed(item), () => shopItemAdjustableDetails.Coroutine);
         }
 
-        int restockCost = (int)RoundHalfUp(6 * totalCostPercentage);
+        int baseRestockAmount = saveObject.CurrentLevel < 10 ? 6 : 10;
+        int levelMultiplier = saveObject.CurrentLevel < 10 ? 1 : (int)Math.Pow(2, saveObject.CurrentLevel - 10);
+        int restockCost = Math.Min(80, (int)RoundHalfUp(baseRestockAmount * levelMultiplier * totalCostPercentage));
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();

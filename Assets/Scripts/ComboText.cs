@@ -14,6 +14,7 @@ public class ComboText : MonoBehaviour
 
     private List<ComboChar> comboChars = new List<ComboChar>();
     private List<char> restrictedLetters = new List<char>();
+    private List<char> addedLetters = new List<char>();
     private Dictionary<char, int> characterWeights = new Dictionary<char, int>
     {
         {'A', 2}, {'B', 7}, {'C', 5}, {'D', 4}, {'E', 2}, {'F', 10}, {'G', 7},
@@ -121,6 +122,7 @@ public class ComboText : MonoBehaviour
     public void UseCharacter(char character)
     {
         character = char.ToUpper(character);
+        addedLetters.Add(character);
         var comboChar = comboChars.FirstOrDefault(c => c.Character == character);
         if (comboChar != null && comboChar.State == CharState.NotUsed)
         {
@@ -131,9 +133,25 @@ public class ComboText : MonoBehaviour
         UpdateComboText();
     }
 
+    public void RemoveCharacter(char character)
+    {
+        character = char.ToUpper(character);
+        var comboChar = comboChars.FirstOrDefault(c => c.Character == character);
+        if (comboChar != null && comboChar.State == CharState.Pending && addedLetters.Count(c => c == character) == 1)
+        {
+            comboChar.State = CharState.NotUsed;
+            multiplier /= 2;
+        }
+
+        addedLetters.Remove(character);
+
+        UpdateComboText();
+    }
+
     public void ResetPending()
     {
         multiplier = 1;
+        addedLetters.Clear();
 
         foreach (var comboChar in comboChars)
         {
@@ -192,6 +210,7 @@ public class ComboText : MonoBehaviour
             shuffleAudioSource?.Play();
         }
 
+        addedLetters.Clear();
         comboChars.Clear();
         multiplier = 1;
         var selectedChars = new HashSet<char>();

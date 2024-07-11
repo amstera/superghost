@@ -79,7 +79,8 @@ public class CriteriaText : MonoBehaviour
                 currentCriteria.Add(new NoMercy());
                 break;
             default: // for endless mode
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100 * level - 600, difficultyMultiplier)));
+                int requiredScore = GetEndlessModeScore(level);
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(requiredScore, difficultyMultiplier)));
                 AddCriteria(1, level, 1, currentCriteria, previousCriteria, letter);
                 break;
         }
@@ -233,5 +234,22 @@ public class CriteriaText : MonoBehaviour
     {
         float scaledScore = baseScore * multiplier;
         return (int)(Mathf.Round(scaledScore / 5) * 5);
+    }
+
+    private int GetEndlessModeScore(int level)
+    {
+        if (level < 10) return 400; // Fallback for levels below 10, though this shouldn't occur in endless mode
+
+        switch (level)
+        {
+            case 10: return 400;
+            case 11: return 600;
+            case 12: return 1000;
+            case 13: return 1500;
+            case 14: return 2000;
+            case 15: return 3000;
+            case 16: return 5000;
+            default: return 5000 + (level - 16) * 2500;
+        }
     }
 }
