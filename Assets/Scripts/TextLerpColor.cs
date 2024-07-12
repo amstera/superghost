@@ -28,7 +28,7 @@ public class TextLerpColor : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.IsGameEnded() || isPlayer ? gameManager.playerLivesText.LivesRemaining() != 1 : gameManager.aiLivesText.LivesRemaining() != 1)
+        if (gameManager.IsGameEnded() || (isPlayer ? gameManager.playerLivesText.LivesRemaining() != 1 : gameManager.aiLivesText.LivesRemaining() != 1))
         {
             textMeshPro.color = originalColor;
             return;

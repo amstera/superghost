@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 public class ExtraManaPopUp : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class ExtraManaPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public GameManager gameManager;
     public PointsText currencyText;
+    public TextMeshProUGUI bodyText;
     public Button watchButton;
 
     public AudioSource clickAudioSource, moneyAudioSource;
@@ -17,10 +19,13 @@ public class ExtraManaPopUp : MonoBehaviour
 
     private Vector3 originalScale;
     private bool initializeAds;
+    private int amount;
+    private SaveObject saveObject;
 
     private void Awake()
     {
         originalScale = popUpGameObject.transform.localScale;
+        saveObject = SaveManager.Load();
         ResetPopUp();
     }
 
@@ -39,11 +44,15 @@ public class ExtraManaPopUp : MonoBehaviour
 
         watchButton.interactable = true;
         currencyText.SetPoints(gameManager.currency);
+        amount = saveObject.CurrentLevel < 10 ? 10 : 40;
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
+
+        bodyText.text = $"Get <color=green>mana (¤)</color> each time you win a round!\n\nNeed more? Watch an ad to get\n<color=green>{amount}¤</color>";
+        watchButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Watch (<color=green>+{amount}¤</color>)";
 
         // Subscribe to ad events
         if (!initializeAds)
@@ -108,13 +117,13 @@ public class ExtraManaPopUp : MonoBehaviour
     public void AddMana()
     {
         moneyAudioSource?.Play();
-        currencyText.AddPoints(10);
+        currencyText.AddPoints(amount);
         watchButton.interactable = false;
 
-        StartCoroutine(AddAfterDelay(10));
+        StartCoroutine(AddAfterDelay());
     }
 
-    private IEnumerator AddAfterDelay(int amount)
+    private IEnumerator AddAfterDelay()
     {
         yield return new WaitForSeconds(0.75f);
 

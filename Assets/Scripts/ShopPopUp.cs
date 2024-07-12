@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEngine.UI.ProceduralImage;
 
 public class ShopPopUp : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class ShopPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public ScrollRect scrollRect;
     public PointsText currencyText;
-    public Button shuffleButton, getMoreButton;
+    public Button shuffleButton;
+    public ButtonProperties getMoreButton;
     public List<ShopItemInfo> shopItems = new List<ShopItemInfo>();
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
@@ -437,7 +439,8 @@ public class ShopPopUp : MonoBehaviour
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
         reshuffleText.text = $"Shuffle Powers - <color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
-        getMoreButton.GetComponentInChildren<TextMeshProUGUI>().enableVertexGradient = gameManager.currency < 5;
+        getMoreButton.outline.color = canAffordReshuffle ? new Color32(100, 230, 70, 255) : new Color32(240, 235, 50, 255);
+        getMoreButton.text.enableVertexGradient = !canAffordReshuffle;
         shopActiveEffectsText.MatchEffects(activeEffectsText);
     }
 

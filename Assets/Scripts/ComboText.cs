@@ -27,10 +27,15 @@ public class ComboText : MonoBehaviour
     private Coroutine newCombo;
     private int multiplier;
 
+    private const float bumpDuration = 0.1f;
+    private const float bumpHeight = 0.075f;
+
     private class ComboChar
     {
         public char Character { get; set; }
         public CharState State { get; set; }
+        public Coroutine AnimationCoroutine { get; set; }
+        public Vector3 OriginalPosition { get; set; }
 
         public ComboChar(char character, CharState state)
         {
@@ -128,9 +133,41 @@ public class ComboText : MonoBehaviour
         {
             comboChar.State = CharState.Pending;
             multiplier *= 2;
+
+            // Start the bump animation for the used character
+            if (comboChar.AnimationCoroutine != null)
+            {
+                StopCoroutine(comboChar.AnimationCoroutine);
+            }
+            comboChar.AnimationCoroutine = StartCoroutine(BumpCharacterAnimation(comboChar));
         }
 
         UpdateComboText();
+    }
+
+    private IEnumerator BumpCharacterAnimation(ComboChar comboChar)
+    {
+        float elapsedTime = 0f;
+        Vector3 startPosition = comboText.transform.position;
+        Vector3 bumpedPosition = startPosition + Vector3.up * bumpHeight;
+
+        while (elapsedTime < bumpDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / bumpDuration;
+
+            // Use a sine wave to create a smooth up-and-down motion
+            float sineWave = Mathf.Sin(t * Mathf.PI);
+
+            comboText.transform.position = Vector3.Lerp(startPosition, bumpedPosition, sineWave);
+
+            UpdateComboText();
+            yield return null;
+        }
+
+        comboText.transform.position = startPosition;
+        UpdateComboText();
+        comboChar.AnimationCoroutine = null;
     }
 
     public void RemoveCharacter(char character)

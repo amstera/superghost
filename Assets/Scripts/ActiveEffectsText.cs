@@ -98,8 +98,8 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
 
         deleteButton.SetActive(activeEffects.Count > 0);
         outline.gameObject.SetActive(activeEffects.Count > 0);
-        outline.color = activeEffects.Count >= 5 ? new Color32(80, 0, 0, 255) : new Color32(54, 54, 54, 255);
-        background.color = new Color(background.color.r, background.color.g, background.color.b, activeEffects.Count > 0 ? 1 : 0);
+        outline.color = activeEffects.Count >= 5 ? new Color32(80, 0, 0, 240) : new Color32(54, 54, 54, 240);
+        background.color = new Color(background.color.r, background.color.g, background.color.b, activeEffects.Count > 0 ? 135f/255 : 0);
     }
 
     private string GetShortTitle(string title)
