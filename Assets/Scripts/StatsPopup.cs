@@ -181,7 +181,7 @@ public class StatsPopup : MonoBehaviour
         }
 
         var mostUsedItem = GetMostUsedItem(saveObject.Statistics.UsedShopItemIds);
-        text += "Most Used Item\n";
+        text += "Most Used Power\n";
         text += $"<color=green>{mostUsedItem}</color>";
         text += regularLineBreak;
 

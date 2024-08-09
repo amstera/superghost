@@ -35,15 +35,15 @@ public class TutorialPopUp : MonoBehaviour
 
         if (hasWonRun)
         {
-            visiblePagesCount = 15; // Show all pages (0-14)
+            visiblePagesCount = 15; // Show all pages (1-16)
         }
         else if (hasWonGame)
         {
-            visiblePagesCount = 14; // Show pages (0-13)
+            visiblePagesCount = 14; // Show pages (1-14)
         }
         else
         {
-            visiblePagesCount = 10; // Show pages (0-9)
+            visiblePagesCount = 9; // Show pages (1-10)
         }
     }
 

@@ -166,6 +166,9 @@ public class GameManager : MonoBehaviour
         var gameState = GetGameState();
         criteriaText.UpdateState(gameState);
         commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), gameState);
+        bool metCriteria = criteriaText.AllMet(gameState);
+        criteriaText.outline.color = metCriteria ? Color.green : Color.red;
+        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
     }
 
     private IEnumerator NewGame()
@@ -284,7 +287,8 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = true;
             currencyText.SetPoints(saveObject.Currency);
             criteriaText.criteriaText.color = Color.yellow;
-            criteriaText.outline.color = new Color32(108, 108, 108, 255);
+            criteriaText.outline.color = Color.red;
+            criteriaText.background.color = new Color32(150, 50, 50, 35);
             criteriaText.backgroundHUDOutline.color = new Color32(108, 108, 108, 255);
 
             var main = confettiPS.main;
@@ -1128,6 +1132,8 @@ public class GameManager : MonoBehaviour
         var gameState = GetGameState();
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.UpdateState(gameState);
+        criteriaText.outline.color = metCriteria ? Color.green : Color.red;
+        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
 
         bool wonRun = false;
         if (gameOver)

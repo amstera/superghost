@@ -122,7 +122,7 @@ public class RunInfoPopUp : MonoBehaviour
         text += regularLineBreak;
 
         var mostUsedItem = GetMostUsedItem(saveObject.RunStatistics.UsedShopItemIds);
-        text += "Most Used Item\n";
+        text += "Most Used Power\n";
         text += $"<color=green>{mostUsedItem}</color>";
         text += regularLineBreak;
 

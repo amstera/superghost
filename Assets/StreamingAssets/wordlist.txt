@@ -4223,8 +4223,12 @@ baby
 babyhood
 babying
 babyish
+babysit
+babysits
+babysitted
 babysitter
 babysitters
+babysitting
 baccalaureate
 baccalaureates
 baccarat
@@ -71245,6 +71249,10 @@ unstructured
 unstrung
 unstuck
 unstudied
+unsubscribe
+unsubscribed
+unsubscribes
+unsubscribing
 unsubstantial
 unsubstantiated
 unsubtle
