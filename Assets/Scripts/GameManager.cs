@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.outline.color = metCriteria ? Color.green : Color.red;
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
+        criteriaText.GetComponent<ScaleInOut>().enabled = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
     }
 
     private IEnumerator NewGame()
@@ -1134,6 +1135,7 @@ public class GameManager : MonoBehaviour
         criteriaText.UpdateState(gameState);
         criteriaText.outline.color = metCriteria ? Color.green : Color.red;
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
+        criteriaText.GetComponent<ScaleInOut>().enabled = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
 
         bool wonRun = false;
         if (gameOver)

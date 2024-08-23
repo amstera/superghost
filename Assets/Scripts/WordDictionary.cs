@@ -61,32 +61,30 @@ public class WordDictionary
     public void SetFilteredWords(string substring)
     {
         substring = substring.ToLower();
-        var existingLetters = noRepeatingLetters ? substring.ToHashSet() : null;
 
         var words = filteredWords.Where(w =>
             w.Length > minLength &&
             w.Contains(substring, StringComparison.InvariantCultureIgnoreCase) &&
             (numberCriteria == null || numberCriteria.IsAllowed(w.Length)) &&
-            (!noRepeatingLetters || HasNoRepeatingLetters(w, existingLetters)) &&
+            (!noRepeatingLetters || HasNoRepeatingLetters(w)) &&
             IsValidExtension(w, substring)
         );
 
         filteredWords = words.ToList();
     }
 
-
-    private bool HasNoRepeatingLetters(string word, HashSet<char> existingLetters)
+    private bool HasNoRepeatingLetters(string word)
     {
-        var letters = new HashSet<char>();
+        var seenLetters = new HashSet<char>();
 
         foreach (var letter in word)
         {
-            char lowerLetter = char.ToLower(letter);
-            if (!letters.Add(lowerLetter) && existingLetters.Contains(lowerLetter))
+            if (!seenLetters.Add(letter))
             {
-                return false; // duplicate found
+                return false; // Found a repeating letter
             }
         }
+
         return true;
     }
 
@@ -205,7 +203,7 @@ public class WordDictionary
                 addAtEnd = true;
             }
 
-            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd && wordDirection != -1);
+            char nextLetter = ChooseNextLetter(firstCharIsVowel, lastCharIsVowel, addAtEnd && wordDirection != -1, substring);
 
             var bluffedWord = addAtEnd && wordDirection != -1 ? substring + nextLetter : nextLetter + substring;
             if (filteredWords.Contains(bluffedWord.ToLower())) // it is bluffing accidentally with a real word
@@ -220,13 +218,17 @@ public class WordDictionary
         return null;
     }
 
-    private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, bool addAtEnd)
+    private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, bool addAtEnd, string substring)
     {
         // Determine the type of letter to add based on the position and whether the adjoining character is a vowel
         bool shouldAddVowel = (firstCharIsVowel && !addAtEnd) || (lastCharIsVowel && addAtEnd) ? false : true;
 
         // Filter the weightedLetters based on whether we should add a vowel or consonant
         var possibleLetters = weightedLetters.Where(letter => !restrictedLetters.Contains(char.ToUpper(letter)) && ((shouldAddVowel && vowels.Contains(letter)) || (!shouldAddVowel && consonants.Contains(letter)))).ToArray();
+        if (noRepeatingLetters)
+        {
+            possibleLetters = possibleLetters.Where(l => !substring.ToLower().Contains(l)).ToArray();
+        }
 
         return possibleLetters[rng.Next(possibleLetters.Length)];
     }
@@ -303,7 +305,7 @@ public class WordDictionary
 
         bool isAILosing = playerAIWinDifference > 0;
 
-        float ratio = 0.5f - playerAIWinDifference * 0.1f;
+        float ratio = 0.65f - playerAIWinDifference * 0.1f;
         if (!isAILosing && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
@@ -456,13 +458,13 @@ public class WordDictionary
 
         if (difficulty == Difficulty.Hard)
         {
-            return random.NextDouble() <= 0.45f;
+            return random.NextDouble() <= 0.5f;
         }
 
         if (substringLength <= 2) return true;
 
         // Otherwise chance it will
-        float odds = 0.85f - playerAIWinDifference * 0.1f;
+        float odds = 0.9f - playerAIWinDifference * 0.1f;
         return random.NextDouble() <= odds;
     }
 
@@ -558,9 +560,9 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
-            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 750, 500, 400, 250, 100 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };
     }
