@@ -5,6 +5,7 @@ using System.Linq;
 public class WordDictionary
 {
     private List<string> words = new List<string>();
+    private List<string> originalWords = new List<string>();
     private List<string> filteredWords = new List<string>();
     private HashSet<string> lostChallengeSubstring = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private HashSet<char> restrictedLetters = new HashSet<char>();
@@ -34,6 +35,19 @@ public class WordDictionary
         }
     }
 
+    public void LoadOriginalWords(string[] lines)
+    {
+        foreach (var line in lines)
+        {
+            var word = line.Trim().ToLower();
+            if (!string.IsNullOrEmpty(word) && word.Length > 3)
+            {
+                originalWords.Add(word);
+                filteredWords.Add(word);
+            }
+        }
+    }
+
     public void LoadCommonWords(string[] lines)
     {
         foreach (var line in lines)
@@ -48,14 +62,32 @@ public class WordDictionary
 
     public void SortWordsByCommonality()
     {
-        // Sort the list by commonality, highest frequency first
-        words.Sort((w1, w2) =>
-        {
-            int freq1 = commonWords.TryGetValue(w1, out var frequency1) ? frequency1 : 0; // Use 0 for not found to put these at the end after sorting
-            int freq2 = commonWords.TryGetValue(w2, out var frequency2) ? frequency2 : 0;
+        // Convert to HashSets for faster membership checking
+        var originalWordsSet = new HashSet<string>(originalWords);
+        var wordsSet = new HashSet<string>(words);
 
-            return freq2.CompareTo(freq1);
+        // Create a list of tuples with precomputed values for sorting
+        var wordWithKeys = wordsSet.Select(w =>
+        {
+            int commonality = commonWords.TryGetValue(w, out var frequency) ? frequency : 0;
+            bool isInOriginal = originalWordsSet.Contains(w);
+            return (Word: w, IsInOriginal: isInOriginal, Commonality: commonality);
+        }).ToList();
+
+        // Sort by commonality first, then by whether it is in originalWords
+        wordWithKeys.Sort((wk1, wk2) =>
+        {
+            // First, sort by commonality (higher frequency comes first)
+            int commonalityComparison = wk2.Commonality.CompareTo(wk1.Commonality);
+            if (commonalityComparison != 0)
+                return commonalityComparison;
+
+            // If commonality is the same, prioritize originalWords
+            return wk2.IsInOriginal.CompareTo(wk1.IsInOriginal);
         });
+
+        // Convert back to list after sorting
+        words = wordWithKeys.Select(wk => wk.Word).ToList();
     }
 
     public void SetFilteredWords(string substring)
@@ -470,6 +502,7 @@ public class WordDictionary
 
     private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> wordList, Difficulty difficulty)
     {
+        string bestExtension = null;
         foreach (var letter in letters)
         {
             string[] extensions = prioritizeStart ? new[] { substring + letter } : new[] { letter + substring };
@@ -482,25 +515,40 @@ public class WordDictionary
                         w.StartsWith(extension, StringComparison.InvariantCultureIgnoreCase)
                         : w.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))))
                 {
-                    return extension;
+                    bool isInOriginalWords = originalWords.Any(word => word.Contains(extension, StringComparison.InvariantCultureIgnoreCase));
+                    if (isInOriginalWords)
+                    {
+                        return extension; // Immediately return if the extension is in originalWords
+                    }
+                    else if (bestExtension == null)
+                    {
+                        bestExtension = extension; // Store as a fallback if no better option is found
+                    }
                 }
             }
 
             if (!prioritizeStart || difficulty == Difficulty.Hard)
             {
-                // loop through it again but try with contains
                 foreach (var extension in extensions)
                 {
                     if (wordList.Any(w => initialCondition(w, extension)
                         && w.Contains(extension, StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        return extension;
+                        bool isInOriginalWords = originalWords.Any(word => word.Contains(extension, StringComparison.InvariantCultureIgnoreCase));
+                        if (isInOriginalWords)
+                        {
+                            return extension; // Immediately return if the extension is in originalWords
+                        }
+                        else if (bestExtension == null)
+                        {
+                            bestExtension = extension; // Store as a fallback if no better option is found
+                        }
                     }
                 }
             }
         }
 
-        return null; // No valid extension found
+        return bestExtension; // Return the best option found, or null if none found
     }
 
     private bool IsValidExtension(string word, string substring)
@@ -561,7 +609,7 @@ public class DifficultySettings
         return difficulty switch
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };

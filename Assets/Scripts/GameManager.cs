@@ -82,6 +82,15 @@ public class GameManager : MonoBehaviour
         wordDictionary.LoadWords(dictionaryLines);
     }
 
+    IEnumerator LoadOriginalWordDictionary()
+    {
+        var filePath = Path.Combine(Application.streamingAssetsPath, "wordlist_original.txt");
+        string[] dictionaryLines = null;
+
+        yield return StartCoroutine(LoadFileLines(filePath, result => dictionaryLines = result));
+        wordDictionary.LoadOriginalWords(dictionaryLines);
+    }
+
     IEnumerator LoadCommonWords()
     {
         var commonFilePath = Path.Combine(Application.streamingAssetsPath, "words_common.txt");
@@ -138,6 +147,7 @@ public class GameManager : MonoBehaviour
         }
 
         yield return StartCoroutine(LoadWordDictionary());
+        yield return StartCoroutine(LoadOriginalWordDictionary());
         yield return StartCoroutine(LoadCommonWords());
 
         wordDictionary.SortWordsByCommonality();
@@ -578,6 +588,10 @@ public class GameManager : MonoBehaviour
         var values = playerLivesText.LivesRemaining() == 1 && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 1.5f, 2.5f };
         var index = Random.Range(0, values.Length);
         ChanceMultiplier = values[index];
+        if (ChanceMultiplier == 0.5f)
+        {
+            challengePopup.noticeAudioSource?.Play();
+        }
         if (!roundEnded)
         {
             SetPointsCalculatedText();
