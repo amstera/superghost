@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         AnalyticsService.Instance.StartDataCollection();
 
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = 45;
 
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;

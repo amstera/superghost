@@ -477,7 +477,6 @@ abwatts
 abye
 abyes
 abying
-abys
 abysm
 abysmal
 abysmally
@@ -55077,18 +55076,10 @@ kabukis
 kachina
 kachinas
 kaddish
-kadi
-kadis
-kaes
 kaffeeklatsch
 kaffeeklatsches
-kaffir
-kaffirs
 kaffiyah
 kaffiyeh
-kafir
-kafirs
-kafs
 kaftan
 kaftans
 kagu
@@ -55296,8 +55287,6 @@ kazatski
 kazatsky
 kazoo
 kazoos
-kbar
-kbars
 keas
 kebab
 kebabs
@@ -61143,6 +61132,9 @@ mannose
 mannoses
 mano
 manoeuvre
+manoeuvred
+manoeuvres
+manoeuvring
 manometer
 manometers
 manor
@@ -81271,7 +81263,6 @@ puslike
 puss
 pusses
 pussier
-pussies
 pussiest
 pussley
 pussleys
@@ -81477,11 +81468,6 @@ qadis
 qanat
 qanats
 qats
-qindar
-qindarka
-qindars
-qintar
-qintars
 qiviut
 qiviuts
 quaalude
@@ -117927,8 +117913,6 @@ zithers
 ziti
 zitis
 zits
-zizit
-zizith
 zizzle
 zizzled
 zizzles

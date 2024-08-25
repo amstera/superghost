@@ -27,6 +27,7 @@ public class ComboText : MonoBehaviour
     private Coroutine newCombo;
     private int multiplier;
 
+    private Vector3 initialPosition;
     private const float bumpDuration = 0.1f;
     private const float bumpHeight = 0.075f;
 
@@ -35,7 +36,6 @@ public class ComboText : MonoBehaviour
         public char Character { get; set; }
         public CharState State { get; set; }
         public Coroutine AnimationCoroutine { get; set; }
-        public Vector3 OriginalPosition { get; set; }
 
         public ComboChar(char character, CharState state)
         {
@@ -49,6 +49,16 @@ public class ComboText : MonoBehaviour
         NotUsed,
         Pending, // Yellow
         EarnedPoints // Green
+    }
+
+    void Awake()
+    {
+        initialPosition = comboText.transform.position;
+    }
+
+    void OnEnable()
+    {
+        comboText.transform.position = initialPosition;
     }
 
     public void ChooseNewCombo()

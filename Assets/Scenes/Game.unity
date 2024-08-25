@@ -11228,7 +11228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2546544751669845674, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -460
+      value: -431
       objectReference: {fileID: 0}
     - target: {fileID: 2546544751669845674, guid: e0196bb3e1961454c8c165a6f0c6d3fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -13597,8 +13597,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.000073
-  m_Size: 0.57923585
+  m_Value: 1.0000006
+  m_Size: 0.5792668
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -26194,8 +26194,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -342.69}
-  m_SizeDelta: {x: 320, y: 369.08}
+  m_AnchoredPosition: {x: 0, y: -349}
+  m_SizeDelta: {x: 355.32, y: 369.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &797887308
 MonoBehaviour:
@@ -26217,12 +26217,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- You need to make <color=yellow>CASP</color> spell a <color=green>four
-    or more</color> letter word
+  m_text: '- You need to make <color=yellow>CASP</color> spell a <color=green>4+</color>
+    letter word
 
 
-    - Proper nouns <color=red>don''t count</color>
-    as words
+    - Proper nouns <color=red>don''t count</color> as words (ex:
+    <color=yellow>countries</color>)
 
 
     - Use          to help your run
@@ -48049,8 +48049,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.00003833253
-  m_Size: 0.33188888
+  m_Value: -0.0000004804913
+  m_Size: 0.33191425
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -56615,7 +56615,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2828}
+  m_AnchoredPosition: {x: 0, y: 1143.2396}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -66641,7 +66641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.45984}
+  m_AnchoredPosition: {x: 0, y: 284.48975}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706
