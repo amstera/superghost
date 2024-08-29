@@ -158,7 +158,7 @@ public class ComboText : MonoBehaviour
     private IEnumerator BumpCharacterAnimation(ComboChar comboChar)
     {
         float elapsedTime = 0f;
-        Vector3 startPosition = comboText.transform.position;
+        Vector3 startPosition = initialPosition;
         Vector3 bumpedPosition = startPosition + Vector3.up * bumpHeight;
 
         while (elapsedTime < bumpDuration)

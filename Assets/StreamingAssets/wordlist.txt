@@ -40381,12 +40381,10 @@ fractions
 fractious
 fractiously
 fractiousness
-fractur
 fracture
 fractured
 fractures
 fracturing
-fracturs
 fractus
 frae
 fraena
@@ -40418,8 +40416,6 @@ frailties
 frailty
 fraise
 fraises
-fraktur
-frakturs
 framable
 frame
 framed
@@ -66327,7 +66323,6 @@ mycology
 mycoses
 mycosis
 mycotic
-mycs
 myelin
 myelination
 myeline
@@ -100588,6 +100583,8 @@ submitting
 subnasal
 subnet
 subnets
+subnetwork
+subnetworks
 subniche
 subnodal
 subnormal
@@ -117601,6 +117598,8 @@ yowlers
 yowling
 yowls
 yows
+yoyo
+yoyos
 yperite
 yperites
 ytterbia

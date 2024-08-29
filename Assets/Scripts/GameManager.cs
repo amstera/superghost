@@ -124,8 +124,7 @@ public class GameManager : MonoBehaviour
         await UnityServices.InitializeAsync();
         AnalyticsService.Instance.StartDataCollection();
 
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 45;
+        QualitySettings.vSyncCount = 1;
 
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;
