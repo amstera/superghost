@@ -559,7 +559,7 @@ public class ShopPopUp : MonoBehaviour
     {
         bool roundEnded = gameManager.IsRoundEnded();
         bool gameEnded = gameManager.IsGameEnded();
-        int roundsWon = gameManager.aiLivesText.GetStartLives() - gameManager.aiLivesText.LivesRemaining();
+        int roundsAhead = Math.Max(0, gameManager.playerLivesText.LivesRemaining() - gameManager.aiLivesText.LivesRemaining());
 
         int substringLength = substring.Length;
         if (roundEnded)
@@ -574,9 +574,9 @@ public class ShopPopUp : MonoBehaviour
             case 1:
                 return 5;
             case 2:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 3 : (roundsAhead + 1) * 3;
             case 3:
-                return gameEnded ? 2 : (roundsWon + 1) * 2;
+                return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 4:
                 return 5;
             case 5:
@@ -584,13 +584,13 @@ public class ShopPopUp : MonoBehaviour
             case 6:
                 return (gameManager.ResetWordUses + 1) * 4;
             case 7:
-                return gameEnded ? 2 : (roundsWon + 1) * 2;
+                return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 8:
                 return (int)RoundHalfUp((substringLength + 1) * 1.25f);
             case 9:
-                return gameEnded ? 2 : (roundsWon + 1) * 2;
+                return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 10:
-                return gameEnded ? 5 : 5 + (int)RoundHalfUp(roundsWon * 1.5f);
+                return gameEnded ? 5 : 5 + (int)RoundHalfUp(roundsAhead * 1.5f);
             case 11:
                 return (int)Math.Pow(2, gameManager.PlayerRestoreLivesUses) * 5;
             case 12:
@@ -600,9 +600,9 @@ public class ShopPopUp : MonoBehaviour
             case 14:
                 return -10;
             case 15:
-                return gameEnded ? 2 : (roundsWon + 1) * 2;
+                return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 16:
-                return gameEnded ? 2 : (roundsWon + 1) * 2;
+                return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 17:
                 return 5;
             case 18:
@@ -614,7 +614,7 @@ public class ShopPopUp : MonoBehaviour
             case 21:
                 return 5;
             case 22:
-                return gameEnded ? 3 : (roundsWon + 1) * 3;
+                return gameEnded ? 3 : (roundsAhead + 1) * 3;
             case 23:
                 return 0;
         }

@@ -11,6 +11,7 @@ public class CriteriaText : MonoBehaviour
     public Image outline, background, backgroundHUDOutline;
     private List<GameCriterion> currentCriteria = new List<GameCriterion>();
     private SaveObject saveObject;
+    private string incompleteSymbol = "<size=10> </size><sprite=0>";
 
     public void Awake()
     {
@@ -162,6 +163,10 @@ public class CriteriaText : MonoBehaviour
             if (sb.Length > 0) sb.AppendLine();
             var description = criterion.GetDescription();
             sb.Append("-").Append(description);
+            if (!criterion.IsRestrictive)
+            {
+                sb.Append(incompleteSymbol);
+            }
 
             if (description.Contains("\n"))
             {
@@ -186,9 +191,9 @@ public class CriteriaText : MonoBehaviour
                 {
                     appendText = $"<color=green>-{criterion.GetDescription()}</color>";
                 }
-                else if (state.EndGame)
+                else
                 {
-                    appendText = $"<color=red>-{criterion.GetDescription()}</color>";
+                    appendText = $"-{criterion.GetDescription()}{incompleteSymbol}";
                 }
             }
             sb.Append(appendText);
@@ -205,6 +210,17 @@ public class CriteriaText : MonoBehaviour
     public bool AllMet(GameState state)
     {
         return currentCriteria.All(criterion => criterion.IsMet(state));
+    }
+
+    public string GetFailedCriteria(GameState state)
+    {
+        var failedState = currentCriteria.Find(c => !c.IsMet(state));
+        if (failedState == null)
+        {
+            return string.Empty;
+        }
+
+        return failedState.GetDescription();
     }
 
     private char GetLetter(int level)

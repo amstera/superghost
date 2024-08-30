@@ -26312,7 +26312,6 @@ deferring
 defers
 deffer
 deffest
-defi
 defiance
 defiant
 defiantly
@@ -56965,7 +56964,6 @@ lanely
 lanes
 laneway
 laneways
-lang
 langlauf
 langley
 langleys
@@ -72957,7 +72955,6 @@ papyri
 papyrian
 papyrine
 papyrus
-para
 parable
 parables
 parabola
@@ -73077,7 +73074,6 @@ parapsychologists
 parapsychology
 paraquat
 paraquet
-paras
 parasail
 parasailing
 parasang
@@ -82056,12 +82052,6 @@ quotidian
 quotient
 quotients
 quoting
-qursh
-qurshes
-qurush
-qurushes
-qwerty
-qwertys
 rabat
 rabato
 rabatos

@@ -195,7 +195,7 @@ public class WordDictionary
         wordDirection = direction;
     }
 
-    public string BluffWord(string substring, Difficulty difficulty)
+    public string BluffWord(string substring, Difficulty difficulty, int currentLevel)
     {
         substring = substring.ToLower();
 
@@ -208,6 +208,11 @@ public class WordDictionary
             char lastChar = substring[^1];
             bool firstCharIsVowel = vowels.Contains(firstChar);
             bool lastCharIsVowel = vowels.Contains(lastChar);
+
+            if (currentLevel <= 1 && difficulty == Difficulty.Normal)
+            {
+                difficulty = Difficulty.Easy;
+            }
 
             bool addAtEnd = true;
             if (difficulty != Difficulty.Easy)
@@ -240,7 +245,7 @@ public class WordDictionary
             var bluffedWord = addAtEnd && wordDirection != -1 ? substring + nextLetter : nextLetter + substring;
             if (filteredWords.Contains(bluffedWord.ToLower())) // it is bluffing accidentally with a real word
             {
-                return BluffWord(substring, difficulty); // redo it and try again
+                return BluffWord(substring, difficulty, currentLevel); // redo it and try again
             }
 
             return bluffedWord;
@@ -320,7 +325,7 @@ public class WordDictionary
         return rng.NextDouble() < challengeProbability;
     }
 
-    public string FindNextWord(string substring, int playerAIWinDifference, Difficulty difficulty)
+    public string FindNextWord(string substring, int playerAIWinDifference, Difficulty difficulty, int currentLevel)
     {
         substring = substring.ToLower();
         if (substring.Length == 0)
@@ -335,9 +340,14 @@ public class WordDictionary
             return null;
         }
 
+        if (currentLevel <= 1 && difficulty == Difficulty.Normal)
+        {
+            difficulty = Difficulty.Easy;
+        }
+
         bool isAILosing = playerAIWinDifference > 0;
 
-        float ratio = 0.65f - playerAIWinDifference * 0.1f;
+        float ratio = 0.75f - playerAIWinDifference * 0.1f;
         if (!isAILosing && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
@@ -457,7 +467,7 @@ public class WordDictionary
         {
             Random random = new Random();
             float ratio = 0.25f - playerAIWinDifference * 0.025f;
-            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
+            if (!isAILosing && difficulty <= Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
@@ -608,7 +618,7 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")

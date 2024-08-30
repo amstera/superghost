@@ -124,8 +124,6 @@ public class GameManager : MonoBehaviour
         await UnityServices.InitializeAsync();
         AnalyticsService.Instance.StartDataCollection();
 
-        QualitySettings.vSyncCount = 1;
-
         saveObject = SaveManager.Load();
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
@@ -483,10 +481,10 @@ public class GameManager : MonoBehaviour
     public void ShowHint()
     {
         bool canPushWord = true;
-        var nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Normal);
+        var nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Normal, 10);
         if (string.IsNullOrEmpty(nextWord) || (nextWord.Length - gameWord.Length) % 2 != 0)
         {
-            nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Hard);
+            nextWord = wordDictionary.FindNextWord(gameWord, 4, Difficulty.Hard, 10);
         }
 
         if (string.IsNullOrEmpty(nextWord))
@@ -1247,6 +1245,18 @@ public class GameManager : MonoBehaviour
 
                 UpdateLevelStats();
 
+                var gamesPlayedEvent = new CustomEvent("gamesPlayed")
+                {
+                    { "games_played", saveObject.Statistics.GamesPlayed },
+                    { "current_level", saveObject.CurrentLevel + 1 },
+                    { "current_score", points },
+                    { "version", Application.version },
+                    { "difficulty", saveObject.Difficulty.ToString() },
+                    { "high_score", saveObject.Statistics.HighScore },
+                    { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins }
+                };
+                AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
+
                 criteriaText.criteriaText.color = Color.green;
                 criteriaText.outline.color = Color.green;
                 criteriaText.backgroundHUDOutline.color = Color.green;
@@ -1442,7 +1452,7 @@ public class GameManager : MonoBehaviour
         int winDiff = GetPlayerAIWinDifference();
         if (wordDictionary.ShouldChallenge(gameWord, winDiff, saveObject.Difficulty, true))
         {
-            var word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
+            var word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty, saveObject.CurrentLevel);
             if (string.IsNullOrEmpty(word))
             {
                 keyboard.Hide();
@@ -1455,13 +1465,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            var word = wordDictionary.FindNextWord(gameWord, GetPlayerAIWinDifference(), saveObject.Difficulty);
+            var word = wordDictionary.FindNextWord(gameWord, GetPlayerAIWinDifference(), saveObject.Difficulty, saveObject.CurrentLevel);
             if (word == null)
             {
                 var foundWord = wordDictionary.FindWordContains(gameWord, false);
                 if (string.IsNullOrEmpty(foundWord))
                 {
-                    word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty);
+                    word = wordDictionary.BluffWord(gameWord, saveObject.Difficulty, saveObject.CurrentLevel);
                     if (string.IsNullOrEmpty(word))
                     {
                         keyboard.Hide();
