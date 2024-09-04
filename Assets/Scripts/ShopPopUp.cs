@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using Random = UnityEngine.Random;
 using TMPro;
-using UnityEngine.UI.ProceduralImage;
 
 public class ShopPopUp : MonoBehaviour
 {

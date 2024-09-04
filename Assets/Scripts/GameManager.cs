@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, difficultyText, fireBallCalculate, criteria;
+    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, redoLevel, fireBallCalculate, criteria;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
     public TextPosition selectedPosition = TextPosition.None;
-    public SaveObject saveObject;
+    public SaveObject saveObject, copySaveObject;
     public Button challengeButton, recapButton, nextRoundButton, runInfoButton, statsButton;
     public SkipButton skipButton;
     public Stars stars;
@@ -156,7 +156,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            tutorialPopup.Show(0, false);
+            AudioManager.instance.GameStarted(skipButton.canSkip);
+
+            tutorialPopup.Show(0, false, true);
             saveObject.HasSeenTutorial = true;
 
             SaveManager.Save(saveObject);
@@ -243,7 +245,7 @@ public class GameManager : MonoBehaviour
             bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
             if (saveObject.HasSeenTutorial && hasWonGame && !saveObject.HasSeenRunTutorial)
             {
-                tutorialPopup.Show(10, false);
+                tutorialPopup.Show(9, false, true);
                 saveObject.HasSeenRunTutorial = true;
 
                 SaveManager.Save(saveObject);
@@ -251,7 +253,7 @@ public class GameManager : MonoBehaviour
             }
             else if (saveObject.HasSeenTutorial && saveObject.HasSeenRunTutorial && hasWonRun && !saveObject.HasSeenEndlessModeTutorial)
             {
-                tutorialPopup.Show(14, false);
+                tutorialPopup.Show(14, false, true);
                 saveObject.HasSeenEndlessModeTutorial = true;
 
                 SaveManager.Save(saveObject);
@@ -268,7 +270,10 @@ public class GameManager : MonoBehaviour
             nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
             endGameText.gameObject.SetActive(false);
             totalPointsText.gameObject.SetActive(false);
-            difficultyText.gameObject.SetActive(false);
+            redoLevel.gameObject.SetActive(false);
+            RectTransform wordDisplayRect = wordDisplay.GetComponent<RectTransform>();
+            wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, 135);
+            wordDisplay.fontSizeMax = 45;
             newIndicator.SetActive(false);
             highestLevelNewIndicator.SetActive(false);
             comboText.transform.parent.gameObject.SetActive(true);
@@ -285,7 +290,7 @@ public class GameManager : MonoBehaviour
             pointsText.normalColor = Color.white;
             pointsText.pointsText.color = Color.white;
             points = 0;
-            bool canSkip = criteriaText.SetLevelCriteria(currentGame);
+            bool canSkip = criteriaText.SetLevelCriteria(currentGame) && (saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0);
             skipButton.Set(canSkip);
             criteria.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
             AddRestrictions(criteriaText.GetCurrentCriteria());
@@ -463,10 +468,20 @@ public class GameManager : MonoBehaviour
     {
         if (!isChallenging)
         {
-            clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
-            clickAudioSource?.Play();
+            if (!saveObject.HasPressedChallengeButton)
+            {
+                saveObject.HasPressedChallengeButton = true;
+                SaveManager.Save(saveObject);
 
-            StartCoroutine(ProcessChallengeWord());
+                tutorialPopup.Show(5, false);
+            }
+            else
+            {
+                clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
+                clickAudioSource?.Play();
+
+                StartCoroutine(ProcessChallengeWord());
+            }
         }
     }
 
@@ -1166,6 +1181,8 @@ public class GameManager : MonoBehaviour
             runInfoPopup.difficulty = saveObject.Difficulty;
             activeEffectsText.gameObject.SetActive(false);
 
+            CopySaveObject();
+
             if (playerWon && metCriteria) // win game
             {
                 endGameText.text = "Victory!";
@@ -1245,18 +1262,6 @@ public class GameManager : MonoBehaviour
 
                 UpdateLevelStats();
 
-                var gamesPlayedEvent = new CustomEvent("gamesPlayed")
-                {
-                    { "games_played", saveObject.Statistics.GamesPlayed },
-                    { "current_level", saveObject.CurrentLevel + 1 },
-                    { "current_score", points },
-                    { "version", Application.version },
-                    { "difficulty", saveObject.Difficulty.ToString() },
-                    { "high_score", saveObject.Statistics.HighScore },
-                    { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins }
-                };
-                AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
-
                 criteriaText.criteriaText.color = Color.green;
                 criteriaText.outline.color = Color.green;
                 criteriaText.backgroundHUDOutline.color = Color.green;
@@ -1295,7 +1300,6 @@ public class GameManager : MonoBehaviour
 
                     currencyText.SetPoints(currency);
                     saveObject.RunStatistics.MostMoney = currency;
-                    // ResetRun();
                 }
             }
             else // lose game
@@ -1324,19 +1328,27 @@ public class GameManager : MonoBehaviour
 
                 if (playerWon)
                 {
-                    wordDisplay.text = wordDisplay.text.Replace("<color=green>", "<color=#8C8C8C>");
+                    wordDisplay.text = $"You <color=red>lost</color> the run!\nYou didn't <color=yellow>{criteriaText.GetFailedCriteria(gameState)}</color>";
                     historyText.textComponent.text = historyText.textComponent.text.Replace("<color=green>", "<color=#8C8C8C>");
                 }
 
-                if (saveObject.Difficulty > Difficulty.Easy && currentGame == 0)
+                if (currentGame > 0)
                 {
-                    difficultyText.gameObject.SetActive(true);
-                    wordDisplay.transform.localPosition += Vector3.down * 15;
+                    redoLevel.gameObject.SetActive(true);
+                    runInfoButton.transform.localPosition = new Vector2(runInfoButton.transform.localPosition.x, 40);
+                    wordDisplay.transform.localPosition += Vector3.down * 45;
+
+                    RectTransform wordDisplayRect = wordDisplay.GetComponent<RectTransform>();
+                    wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, 195);
+                    wordDisplay.fontSizeMax = 40;
                 }
                 else
                 {
+                    runInfoButton.transform.localPosition = new Vector2(runInfoButton.transform.localPosition.x, 113);
                     wordDisplay.transform.localPosition += Vector3.up * 25;
                 }
+
+                wordDisplay.transform.localPosition += Vector3.up * 25;
 
                 saveObject.RunStatistics.MostMoney = currency;
                 ResetRun();
@@ -1347,6 +1359,20 @@ public class GameManager : MonoBehaviour
             saveObject.Statistics.GamesPlayed++;
 
             AudioManager.instance.GameEnded(playerWon);
+
+            var gamesPlayedEvent = new CustomEvent("gamesPlayed")
+                {
+                    { "games_played", saveObject.Statistics.GamesPlayed },
+                    { "current_level", copySaveObject.CurrentLevel + 1 },
+                    { "current_score", points },
+                    { "version", Application.version },
+                    { "difficulty", saveObject.Difficulty.ToString() },
+                    { "high_score", saveObject.Statistics.HighScore },
+                    { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                    { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) },
+                    { "won_game", playerWon & metCriteria }
+                };
+            AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
 
         shopPopUp.RefreshView();
@@ -1832,6 +1858,15 @@ public class GameManager : MonoBehaviour
         saveObject.ShopItemIds.Clear();
         saveObject.RestrictedChars.Clear();
         saveObject.ChosenCriteria.Clear();
+    }
+
+    private void CopySaveObject()
+    {
+        copySaveObject.CurrentLevel = saveObject.CurrentLevel;
+        copySaveObject.Currency = saveObject.Currency;
+        copySaveObject.ShopItemIds = saveObject.ShopItemIds.ToList();
+        copySaveObject.RestrictedChars = saveObject.RestrictedChars.ToDictionary(entry => entry.Key, entry => entry.Value);
+        copySaveObject.ChosenCriteria = saveObject.ChosenCriteria.ToDictionary(entry => entry.Key, entry => entry.Value);
     }
 
     private GameState GetGameState()

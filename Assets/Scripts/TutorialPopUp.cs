@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TutorialPopUp : MonoBehaviour
 {
@@ -18,53 +19,79 @@ public class TutorialPopUp : MonoBehaviour
 
     private int currentPageIndex = 0;
     private bool showCloseButton;
-    private bool hasWonGame;
-    private bool hasWonRun;
-    private int visiblePagesCount;
+    private bool startNewGame;
+    private List<int> visiblePageIndices = new List<int>();
 
     private void Start()
     {
         saveObject = SaveManager.Load();
-        SetVisiblePagesCount();
+        SetVisiblePages();
     }
 
-    private void SetVisiblePagesCount()
+    // Determines which pages are visible based on the player's progress
+    private void SetVisiblePages()
     {
-        hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
-        hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
+        visiblePageIndices.Clear();
 
-        if (hasWonRun)
+        bool hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+        bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
+        bool hasPressedChallengeButton = saveObject.HasPressedChallengeButton;
+
+        // Pages 1-5 are always available
+        for (int i = 0; i < 5; i++) visiblePageIndices.Add(i);
+
+        // Unlock Pages 6-9 if the challenge button has been pressed
+        if (hasPressedChallengeButton)
         {
-            visiblePagesCount = 15; // Show all pages (1-16)
+            for (int i = 5; i <= 8; i++) visiblePageIndices.Add(i);
         }
-        else if (hasWonGame)
+
+        // Unlock Pages 10-14 if the player has won a game
+        if (hasWonGame)
         {
-            visiblePagesCount = 14; // Show pages (1-14)
+            for (int i = 9; i <= 13; i++) visiblePageIndices.Add(i);
         }
-        else
-        {
-            visiblePagesCount = 9; // Show pages (1-10)
-        }
+
+        // Unlock Page 15 if the player has won a run
+        if (hasWonRun) visiblePageIndices.Add(14);
     }
 
-    public void ShowButton()
-    {
-        Show(0, true);
-    }
-
-    public void Show(int startingPageIndex = 0, bool showCloseButton = true)
+    // Display the tutorial, starting at a specific page
+    public void Show(int startingPageIndex = 0, bool showCloseButton = true, bool startNewGame = false)
     {
         clickAudioSource?.Play();
 
         this.showCloseButton = showCloseButton;
-        currentPageIndex = startingPageIndex;
-        SetVisiblePagesCount();
+        this.startNewGame = startNewGame;
+        SetVisiblePages();
+
+        // Map the original page index to the correct visible index
+        currentPageIndex = MapOriginalToVisibleIndex(startingPageIndex);
 
         UpdateUI();
         StartCoroutine(FadeIn());
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+    }
+
+    // Maps the original page index to the closest visible page index
+    private int MapOriginalToVisibleIndex(int originalPageIndex)
+    {
+        // Ensure the original page index maps to the correct visible page
+        for (int i = 0; i < visiblePageIndices.Count; i++)
+        {
+            if (visiblePageIndices[i] >= originalPageIndex) return i;
+        }
+
+        // If the requested page is out of bounds, default to the last visible page
+        return visiblePageIndices.Count - 1;
+    }
+
+    public void ShowButton()
+    {
+        // Call Show() with the first visible page instead of defaulting to page 1 (index 0).
+        Show(visiblePageIndices[0], true);
     }
 
     private IEnumerator FadeIn()
@@ -80,12 +107,13 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
+    // Hide the popup and reset its state
     public void Hide()
     {
         clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
-        if (!showCloseButton)
+        if (!showCloseButton && startNewGame)
         {
             gameManager.NewGamePressed();
         }
@@ -108,10 +136,9 @@ public class TutorialPopUp : MonoBehaviour
 
     public void NextPage()
     {
-        if (currentPageIndex < visiblePagesCount - 1)
+        if (currentPageIndex < visiblePageIndices.Count - 1)
         {
             clickAudioSource?.Play();
-
             currentPageIndex++;
             UpdateUI();
             StartCoroutine(PopButton(nextButton));
@@ -123,13 +150,13 @@ public class TutorialPopUp : MonoBehaviour
         if (currentPageIndex > 0)
         {
             clickAudioSource?.Play();
-
             currentPageIndex--;
             UpdateUI();
             StartCoroutine(PopButton(previousButton));
         }
     }
 
+    // Update UI elements based on the current page
     private void UpdateUI()
     {
         UpdatePageVisibility();
@@ -137,26 +164,33 @@ public class TutorialPopUp : MonoBehaviour
         StartCoroutine(AnimateProgressBar());
     }
 
+    // Show only the current page and hide others
     private void UpdatePageVisibility()
     {
         for (int i = 0; i < pages.Length; i++)
         {
-            pages[i].SetActive(i == currentPageIndex && i < visiblePagesCount);
+            pages[i].SetActive(false);
+        }
+
+        if (currentPageIndex >= 0 && currentPageIndex < visiblePageIndices.Count)
+        {
+            pages[visiblePageIndices[currentPageIndex]].SetActive(true);
         }
     }
 
+    // Adjust button visibility based on the current page index
     private void UpdateButtonVisibility()
     {
         previousButton.gameObject.SetActive(currentPageIndex > 0);
-        nextButton.gameObject.SetActive(currentPageIndex < visiblePagesCount - 1);
-        closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePagesCount - 1);
+        nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+        closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePageIndices.Count - 1);
     }
 
     private IEnumerator AnimateProgressBar()
     {
-        if (progressBar != null && pages.Length > 0)
+        if (progressBar != null && visiblePageIndices.Count > 0)
         {
-            float targetValue = (float)currentPageIndex / (visiblePagesCount - 1);
+            float targetValue = (float)currentPageIndex / (visiblePageIndices.Count - 1);
             float currentValue = progressBar.value;
             float elapsedTime = 0;
 
@@ -171,6 +205,7 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
+    // Adds a pop effect to buttons when pressed
     private IEnumerator PopButton(Button button)
     {
         Vector3 originalScale = Vector3.one;

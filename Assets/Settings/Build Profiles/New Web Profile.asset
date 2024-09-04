@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 15003, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: iOS
+  m_Name: New Web Profile
   m_EditorClassIdentifier: 
-  m_BuildTarget: 9
+  m_BuildTarget: 20
   m_Subtarget: 0
-  m_PlatformId: ad48d16a66894befa4d8181998c3cb09
+  m_PlatformId: 84a3bb9e7420477f885e98145999eb20
   m_PlatformBuildProfile:
-    rid: 7106587320802344962
+    rid: 4067069659850211331
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/Scenes/Game.unity
@@ -166,7 +166,7 @@ MonoBehaviour:
     - line: '|   loadStoreDebugModeEnabled: 0'
     - line: '|   visionOSBundleVersion: 1.0'
     - line: '|   tvOSBundleVersion: 1.0'
-    - line: '|   bundleVersion: 1.0.7'
+    - line: '|   bundleVersion: 1.0.0'
     - line: '|   preloadedAssets: []'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
@@ -197,7 +197,7 @@ MonoBehaviour:
     - line: '|   buildNumber:'
     - line: '|     Standalone: 0'
     - line: '|     VisionOS: 0'
-    - line: '|     iPhone: 0'
+    - line: '|     iPhone: 33'
     - line: '|     tvOS: 0'
     - line: '|   overrideDefaultApplicationIdentifier: 1'
     - line: '|   AndroidBundleVersionCode: 1'
@@ -242,9 +242,9 @@ MonoBehaviour:
     - line: '|   tvOSTopShelfImageWideLayers: []'
     - line: '|   tvOSTopShelfImageWideLayers2x: []'
     - line: '|   iOSLaunchScreenType: 1'
-    - line: '|   iOSLaunchScreenPortrait: {fileID: 2800000, guid: f70e06e740b6c4a9b985b5c4d088fd7f,
+    - line: '|   iOSLaunchScreenPortrait: {fileID: 2800000, guid: a467554c328c44162b284f6e00ae01ca,
         type: 3}'
-    - line: '|   iOSLaunchScreenLandscape: {fileID: 2800000, guid: f70e06e740b6c4a9b985b5c4d088fd7f,
+    - line: '|   iOSLaunchScreenLandscape: {fileID: 2800000, guid: a467554c328c44162b284f6e00ae01ca,
         type: 3}'
     - line: '|   iOSLaunchScreenBackgroundColor:'
     - line: '|     serializedVersion: 2'
@@ -252,7 +252,7 @@ MonoBehaviour:
     - line: '|   iOSLaunchScreenFillPct: 100'
     - line: '|   iOSLaunchScreenSize: 100'
     - line: '|   iOSLaunchScreeniPadType: 1'
-    - line: '|   iOSLaunchScreeniPadImage: {fileID: 2800000, guid: f70e06e740b6c4a9b985b5c4d088fd7f,
+    - line: '|   iOSLaunchScreeniPadImage: {fileID: 2800000, guid: a467554c328c44162b284f6e00ae01ca,
         type: 3}'
     - line: '|   iOSLaunchScreeniPadBackgroundColor:'
     - line: '|     serializedVersion: 2'
@@ -323,7 +323,7 @@ MonoBehaviour:
     - line: '|   - m_BuildTarget: '
     - line: '|     m_Icons:'
     - line: '|     - serializedVersion: 2'
-    - line: '|       m_Icon: {fileID: 2800000, guid: 3ddf7b9d0cc0748b19efb5466b771f6e,
+    - line: '|       m_Icon: {fileID: 2800000, guid: 22ad8e04f309c4081933cbd0cb7f0214,
         type: 3}'
     - line: '|       m_Width: 128'
     - line: '|       m_Height: 128'
@@ -331,6 +331,41 @@ MonoBehaviour:
     - line: '|   m_BuildTargetPlatformIcons:'
     - line: '|   - m_BuildTarget: iPhone'
     - line: '|     m_Icons:'
+    - line: '|     - m_Textures:'
+    - line: '|       - {fileID: 2800000, guid: 978c4b53c4bba4ba0a2fe4ff2f141ccd,
+        type: 3}'
+    - line: '|       m_Width: 180'
+    - line: '|       m_Height: 180'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: iPhone'
+    - line: '|     - m_Textures:'
+    - line: '|       - {fileID: 2800000, guid: a16f6006457be415f912a91a36173e16,
+        type: 3}'
+    - line: '|       m_Width: 120'
+    - line: '|       m_Height: 120'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: iPhone'
+    - line: '|     - m_Textures:'
+    - line: '|       - {fileID: 2800000, guid: 11edbc656ad4c4fd9ab4ade7ea00bc76,
+        type: 3}'
+    - line: '|       m_Width: 167'
+    - line: '|       m_Height: 167'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: iPad'
+    - line: '|     - m_Textures:'
+    - line: '|       - {fileID: 2800000, guid: ac2e98333be524adeb3a27676c15db43,
+        type: 3}'
+    - line: '|       m_Width: 152'
+    - line: '|       m_Height: 152'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: iPad'
+    - line: '|     - m_Textures:'
+    - line: '|       - {fileID: 2800000, guid: 5c0643af7b6d14c359e62903c337b04a,
+        type: 3}'
+    - line: '|       m_Width: 76'
+    - line: '|       m_Height: 76'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: iPad'
     - line: '|     - m_Textures:'
     - line: '|       - {fileID: 2800000, guid: a16f6006457be415f912a91a36173e16,
         type: 3}'
@@ -429,41 +464,6 @@ MonoBehaviour:
     - line: '|       m_Height: 1024'
     - line: '|       m_Kind: 4'
     - line: '|       m_SubKind: App Store'
-    - line: '|     - m_Textures:'
-    - line: '|       - {fileID: 2800000, guid: 978c4b53c4bba4ba0a2fe4ff2f141ccd,
-        type: 3}'
-    - line: '|       m_Width: 180'
-    - line: '|       m_Height: 180'
-    - line: '|       m_Kind: 0'
-    - line: '|       m_SubKind: iPhone'
-    - line: '|     - m_Textures:'
-    - line: '|       - {fileID: 2800000, guid: a16f6006457be415f912a91a36173e16,
-        type: 3}'
-    - line: '|       m_Width: 120'
-    - line: '|       m_Height: 120'
-    - line: '|       m_Kind: 0'
-    - line: '|       m_SubKind: iPhone'
-    - line: '|     - m_Textures:'
-    - line: '|       - {fileID: 2800000, guid: 11edbc656ad4c4fd9ab4ade7ea00bc76,
-        type: 3}'
-    - line: '|       m_Width: 167'
-    - line: '|       m_Height: 167'
-    - line: '|       m_Kind: 0'
-    - line: '|       m_SubKind: iPad'
-    - line: '|     - m_Textures:'
-    - line: '|       - {fileID: 2800000, guid: ac2e98333be524adeb3a27676c15db43,
-        type: 3}'
-    - line: '|       m_Width: 152'
-    - line: '|       m_Height: 152'
-    - line: '|       m_Kind: 0'
-    - line: '|       m_SubKind: iPad'
-    - line: '|     - m_Textures:'
-    - line: '|       - {fileID: 2800000, guid: 5c0643af7b6d14c359e62903c337b04a,
-        type: 3}'
-    - line: '|       m_Width: 76'
-    - line: '|       m_Height: 76'
-    - line: '|       m_Kind: 0'
-    - line: '|       m_SubKind: iPad'
     - line: '|   - m_BuildTarget: Android'
     - line: '|     m_Icons:'
     - line: '|     - m_Textures: []'
@@ -893,6 +893,7 @@ MonoBehaviour:
     - line: '|     VisionOS: UNITY_POST_PROCESSING_STACK_V2'
     - line: '|     WebGL: UNITY_POST_PROCESSING_STACK_V2'
     - line: '|     XboxOne: UNITY_POST_PROCESSING_STACK_V2'
+    - line: '|     iPhone: LEVELPLAY_DEPENDENCIES_INSTALLED'
     - line: '|     tvOS: UNITY_POST_PROCESSING_STACK_V2'
     - line: '|   additionalCompilerArguments: {}'
     - line: '|   platformArchitecture: {}'
@@ -1025,8 +1026,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7106587320802344962
-      type: {class: iOSPlatformSettings, ns: UnityEditor.iOS, asm: UnityEditor.iOS.Extensions}
+    - rid: 4067069659850211331
+      type: {class: WebGLPlatformSettings, ns: UnityEditor.WebGL, asm: UnityEditor.WebGL.Extensions}
       data:
         m_Development: 0
         m_ConnectProfiler: 0
@@ -1037,9 +1038,9 @@ MonoBehaviour:
         m_ExplicitNullChecks: 0
         m_ExplicitDivideByZeroChecks: 0
         m_ExplicitArrayBoundsChecks: 0
-        m_CompressionType: 3
+        m_CompressionType: -1
         m_InstallInBuildFolder: 0
-        m_iOSXcodeBuildConfig: 1
-        m_SymlinkSources: 0
-        m_PreferredXcode: 
-        m_SymlinkTrampoline: 0
+        m_CodeOptimization: 0
+        m_WebGLClientBrowserPath: 
+        m_WebGLClientBrowserType: 0
+        m_WebGLTextureSubtarget: 0

@@ -5046,7 +5046,6 @@ areoles
 areology
 arepa
 arepas
-ares
 arete
 aretes
 arethusa
@@ -7498,7 +7497,6 @@ bangle
 bangles
 bangs
 bangtail
-bani
 banian
 banians
 baning
@@ -9911,8 +9909,6 @@ binging
 bingo
 bingoes
 bingos
-binit
-binits
 binnacle
 binnacles
 binned
@@ -19254,7 +19250,6 @@ coaxing
 cobalt
 cobaltic
 cobalts
-cobb
 cobber
 cobbers
 cobbier
@@ -19267,7 +19262,6 @@ cobbles
 cobblestone
 cobblestones
 cobbling
-cobbs
 cobby
 cobia
 cobias
@@ -58601,8 +58595,6 @@ limuloid
 limulus
 limy
 linable
-linac
-linacs
 linage
 linages
 linalol
@@ -106223,11 +106215,8 @@ torero
 toreros
 tores
 toreutic
-tori
 toric
 torics
-tories
-torii
 torment
 tormented
 tormenting
@@ -106326,7 +106315,6 @@ torula
 torulae
 torulas
 torus
-tory
 tosh
 toshes
 toss

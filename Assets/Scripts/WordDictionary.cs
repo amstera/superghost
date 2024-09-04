@@ -209,7 +209,7 @@ public class WordDictionary
             bool firstCharIsVowel = vowels.Contains(firstChar);
             bool lastCharIsVowel = vowels.Contains(lastChar);
 
-            if (currentLevel <= 1 && difficulty == Difficulty.Normal)
+            if (currentLevel <= 2 && difficulty == Difficulty.Normal)
             {
                 difficulty = Difficulty.Easy;
             }
@@ -340,7 +340,7 @@ public class WordDictionary
             return null;
         }
 
-        if (currentLevel <= 1 && difficulty == Difficulty.Normal)
+        if (currentLevel <= 2 && difficulty == Difficulty.Normal)
         {
             difficulty = Difficulty.Easy;
         }
@@ -440,7 +440,7 @@ public class WordDictionary
         {
             Random random = new Random();
             ratio = 0.4f - playerAIWinDifference * 0.025f;
-            if (!isAILosing && difficulty == Difficulty.Normal && random.NextDouble() <= ratio)
+            if (!isAILosing && difficulty <= Difficulty.Normal && random.NextDouble() <= ratio)
             {
                 if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
                 {
