@@ -128,6 +128,8 @@ public class GameManager : MonoBehaviour
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
 
+        Application.targetFrameRate = 40;
+
         if (saveObject.Difficulty == Difficulty.Hard && saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0)
         {
             saveObject.Difficulty = Difficulty.Normal;
@@ -156,7 +158,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            AudioManager.instance.GameStarted(skipButton.canSkip);
+            AudioManager.instance.GameStarted();
 
             tutorialPopup.Show(0, false, true);
             saveObject.HasSeenTutorial = true;
@@ -321,7 +323,7 @@ public class GameManager : MonoBehaviour
             var unlockedHats = statsPopup.GetUnlockedHats(true);
             statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
 
-            AudioManager.instance.GameStarted(skipButton.canSkip);
+            AudioManager.instance.GameStarted();
         }
         else
         {
@@ -849,7 +851,8 @@ public class GameManager : MonoBehaviour
         else
         {
             var caspString = GetCaspText();
-            wordDisplay.text = $"{caspString} wins!\n<color=red>{word.ToUpper()}</color>\nis not a word";
+            var wordLink = GenerateInvalidWordLink(word);
+            wordDisplay.text = $"{caspString} wins!\n{wordLink}\nis not a word";
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -1683,6 +1686,13 @@ public class GameManager : MonoBehaviour
         string displayWord = gameWord.ToUpper();
 
         return $"<link={link}><color={color}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
+    }
+
+    private string GenerateInvalidWordLink(string gameWord)
+    {
+        string link = $"https://www.greenteagaming.com/#contact";
+        string displayWord = gameWord.ToUpper();
+        return $"<link={link}><color=red>{displayWord}</color></link>";
     }
 
     private string GetCaspText(bool isHappy = true)

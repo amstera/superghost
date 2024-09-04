@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WordPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public BlockPopUp blockPopup;
+    public ReportPopUp reportPopUp;
+    public Button defineButton, blockButton, reportButton;
     public float fadeInDuration = 0.25f;
     public float fadeOutDuration = 0.25f;
     public AudioSource clickAudioSource;
@@ -36,6 +39,21 @@ public class WordPopUp : MonoBehaviour
         this.word = word;
         this.url = url;
 
+        bool isValidWord = url.Contains("dictionary", System.StringComparison.InvariantCultureIgnoreCase);
+        if (isValidWord)
+        {
+            defineButton.gameObject.SetActive(true);
+            blockButton.interactable = true;
+            reportButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            defineButton.gameObject.SetActive(false);
+            blockButton.interactable = false;
+            reportButton.gameObject.SetActive(true);
+
+        }
+
         StopAllCoroutines();
         StartCoroutine(FadeCanvasGroup(canvasGroup, canvasGroup.alpha, 1f, fadeInDuration));
     }
@@ -59,6 +77,17 @@ public class WordPopUp : MonoBehaviour
             Hide();
 
             blockPopup.Show(word);
+        }
+    }
+
+    public void OpenReport()
+    {
+        if (!string.IsNullOrEmpty(url))
+        {
+            clickAudioSource?.Play();
+            Hide();
+
+            reportPopUp.Show(word, url);
         }
     }
 

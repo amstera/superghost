@@ -117,16 +117,22 @@ public class SettingsPopUp : MonoBehaviour
 
     public void OpenContact()
     {
-        Application.OpenURL("https://www.greenteagaming.com#contact");
+        clickAudioSource?.Play();
+
+        Application.OpenURL("https://www.greenteagaming.com/#contact");
     }
 
     public void OpenTerms()
     {
+        clickAudioSource?.Play();
+
         Application.OpenURL("https://www.greenteagaming.com/terms-of-service");
     }
 
     public void OpenPrivacy()
     {
+        clickAudioSource?.Play();
+
         Application.OpenURL("https://www.greenteagaming.com/privacy-policy");
     }
 
@@ -166,7 +172,7 @@ public class SettingsPopUp : MonoBehaviour
 
         if (saveObject.EnableMusic)
         {
-            AudioManager.instance.StartMusic(gameManager.skipButton.canSkip);
+            AudioManager.instance.StartMusic();
         }
         else
         {

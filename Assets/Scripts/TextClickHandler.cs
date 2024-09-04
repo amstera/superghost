@@ -54,7 +54,8 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTrans, eventData.position, eventData.pressEventCamera, out Vector2 localPos);
                 localPos = new Vector2(0, localPos.y - 80);
 
-                wordPopup.Show(localPos, word, url);
+                string wordToUse = !string.IsNullOrEmpty(word) && url.Contains(word, System.StringComparison.InvariantCultureIgnoreCase) ? word : gameManager.gameWord;
+                wordPopup.Show(localPos, wordToUse, url);
                 return;
             }
         }

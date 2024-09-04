@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
         audioMixer.SetFloat("Volume", 0f); // Unmutes the Master group
     }
 
-    public void GameStarted(bool canSkip)
+    public void GameStarted()
     {
         isGameStarted = true;
         var newClip = saveObject.CurrentLevel < 5 ? bgMusic : bossMusic;
@@ -72,7 +72,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StartMusic(bool canSkip)
+    public void StartMusic()
     {
         if (bgMusicAudioSource.isPlaying)
         {

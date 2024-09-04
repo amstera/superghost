@@ -4503,7 +4503,6 @@ apoplexy
 aporia
 aporias
 aport
-apos
 apospory
 apostacy
 apostasies
@@ -36453,7 +36452,6 @@ eyewinks
 eyewitness
 eyewitnesses
 eying
-eyne
 eyra
 eyras
 eyre
@@ -47197,8 +47195,6 @@ hegemon
 hegemonic
 hegemons
 hegemony
-hegira
-hegiras
 hegumen
 hegumene
 hegumens
@@ -112864,8 +112860,6 @@ venule
 venules
 venulose
 venulous
-venus
-venuses
 vera
 veracious
 veraciously
