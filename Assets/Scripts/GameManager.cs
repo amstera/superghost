@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public PointsText pointsText, totalPointsText, currencyEarnedText, bonusCurrencyEarnedText, endingPointsText, currencyText;
     public PointsExtendedText pointsEarnedText;
     public ChallengePopUp challengePopup;
+    public PowersWarningPopUp powersWarningPopUp;
     public ShopPopUp shopPopUp;
     public HistoryText historyText;
     public TextMeshProUGUI endGameText, pointsCalculateText, levelText;
@@ -128,7 +129,7 @@ public class GameManager : MonoBehaviour
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
 
-        Application.targetFrameRate = 40;
+        Application.targetFrameRate = 45;
 
         if (saveObject.Difficulty == Difficulty.Hard && saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0)
         {
@@ -180,7 +181,7 @@ public class GameManager : MonoBehaviour
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.outline.color = metCriteria ? Color.green : Color.red;
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
-        criteriaText.GetComponent<ScaleInOut>().enabled = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
+        criteriaText.StartFlashing((playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria, gameState);
     }
 
     private IEnumerator NewGame()
@@ -366,6 +367,12 @@ public class GameManager : MonoBehaviour
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
+
+        bool noPowersUsed = ItemsUsed == 0 && (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1);
+        if (currentGame == 1 && noPowersUsed)
+        {
+            powersWarningPopUp.Show();
+        }
 
         if (noRepeatLetters)
         {
@@ -1164,7 +1171,8 @@ public class GameManager : MonoBehaviour
         criteriaText.UpdateState(gameState);
         criteriaText.outline.color = metCriteria ? Color.green : Color.red;
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
-        criteriaText.GetComponent<ScaleInOut>().enabled = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
+        bool shouldFlash = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
+        criteriaText.StartFlashing(shouldFlash, gameState);
 
         bool wonRun = false;
         if (gameOver)
@@ -1372,7 +1380,7 @@ public class GameManager : MonoBehaviour
                     { "difficulty", saveObject.Difficulty.ToString() },
                     { "high_score", saveObject.Statistics.HighScore },
                     { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
-                    { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) },
+                    { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 },
                     { "won_game", playerWon & metCriteria }
                 };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CriteriaText : MonoBehaviour
 {
@@ -12,10 +13,14 @@ public class CriteriaText : MonoBehaviour
     private List<GameCriterion> currentCriteria = new List<GameCriterion>();
     private SaveObject saveObject;
     private string incompleteSymbol = "<size=10> </size><sprite=0>";
+    private ScaleInOut scaleInOut;
+    private GameState latestState;
+    private Coroutine flashingCoroutine;
 
     public void Awake()
     {
         saveObject = SaveManager.Load();
+        scaleInOut = GetComponent<ScaleInOut>();
     }
 
     public bool SetLevelCriteria(int level)
@@ -174,16 +179,17 @@ public class CriteriaText : MonoBehaviour
             }
         }
 
-        criteriaText.text = sb.ToString();
+        criteriaText.text = sb.ToString().Trim();
         criteriaText.fontSize = currentCriteria.Count < 2 ? 24 : 23.5f;
     }
 
-    public void UpdateState(GameState state)
+    public void UpdateState(GameState state, bool flashRed = false)
     {
+        latestState = state; // Update the latest state
         StringBuilder sb = new StringBuilder();
+
         foreach (var criterion in currentCriteria)
         {
-            if (sb.Length > 0) sb.AppendLine();
             string appendText = $"-{criterion.GetDescription()}";
             if (!criterion.IsRestrictive)
             {
@@ -193,14 +199,22 @@ public class CriteriaText : MonoBehaviour
                 }
                 else
                 {
-                    appendText = $"-{criterion.GetDescription()}{incompleteSymbol}";
+                    if (flashRed)
+                    {
+                        appendText = $"<color=red>-{criterion.GetDescription()}</color>{incompleteSymbol}";
+                    }
+                    else
+                    {
+                        appendText = $"-{criterion.GetDescription()}{incompleteSymbol}";
+                    }
                 }
             }
-            sb.Append(appendText);
+            sb.AppendLine(appendText);
         }
 
-        criteriaText.text = sb.ToString();
+        criteriaText.text = sb.ToString().Trim();
     }
+
 
     public List<GameCriterion> GetCurrentCriteria()
     {
@@ -221,6 +235,34 @@ public class CriteriaText : MonoBehaviour
         }
 
         return failedState.GetDescription();
+    }
+
+    public void StartFlashing(bool isEnabled, GameState state)
+    {
+        latestState = state; // Store the current state
+
+        scaleInOut.enabled = isEnabled; // Ensure the existing logic for scaleInOut is preserved
+
+        if (flashingCoroutine != null)
+        {
+            StopCoroutine(flashingCoroutine);
+        }
+
+        if (isEnabled)
+        {
+            flashingCoroutine = StartCoroutine(FlashText());
+        }
+    }
+
+    private IEnumerator FlashText()
+    {
+        bool flashRed = false;
+        while (true)
+        {
+            UpdateState(latestState, flashRed);
+            flashRed = !flashRed;
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     private char GetLetter(int level)
