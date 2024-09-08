@@ -30643,6 +30643,10 @@ douce
 doucely
 douceur
 douceurs
+douche
+douched
+douches
+douching
 dough
 doughboy
 doughier
@@ -116372,8 +116376,6 @@ witness
 witnessed
 witnesses
 witnessing
-witney
-witneys
 wits
 witted
 witticism
@@ -117436,7 +117438,6 @@ yields
 yikes
 yill
 yills
-yince
 yins
 yipe
 yipes

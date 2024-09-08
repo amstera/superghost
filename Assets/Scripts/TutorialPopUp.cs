@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class TutorialPopUp : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class TutorialPopUp : MonoBehaviour
     private int currentPageIndex = 0;
     private bool showCloseButton;
     private bool startNewGame;
+    private System.Action callback;
     private List<int> visiblePageIndices = new List<int>();
 
     private void Start()
@@ -29,63 +31,65 @@ public class TutorialPopUp : MonoBehaviour
     }
 
     // Determines which pages are visible based on the player's progress
-    private void SetVisiblePages()
+    private void SetVisiblePages(int startingPageIndex = 0, int endingPageIndex = -1)
     {
         visiblePageIndices.Clear();
 
-        bool hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
-        bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
-        bool hasPressedChallengeButton = saveObject.HasPressedChallengeButton;
-
-        // Pages 1-5 are always available
-        for (int i = 0; i < 5; i++) visiblePageIndices.Add(i);
-
-        // Unlock Pages 6-9 if the challenge button has been pressed
-        if (hasPressedChallengeButton)
+        if (startingPageIndex >= 0 && endingPageIndex >= 0 && endingPageIndex >= startingPageIndex)
         {
-            for (int i = 5; i <= 8; i++) visiblePageIndices.Add(i);
+            // Only show pages between the start and end index, inclusive
+            for (int i = startingPageIndex; i <= endingPageIndex && i < pages.Length; i++)
+            {
+                visiblePageIndices.Add(i);
+            }
         }
-
-        // Unlock Pages 10-14 if the player has won a game
-        if (hasWonGame)
+        else
         {
-            for (int i = 9; i <= 13; i++) visiblePageIndices.Add(i);
-        }
+            bool hasWonGame = saveObject.Statistics.EasyGameWins > 0 || saveObject.Statistics.NormalGameWins > 0 || saveObject.Statistics.HardGameWins > 0;
+            bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
+            bool hasPressedChallengeButton = saveObject.HasPressedChallengeButton;
 
-        // Unlock Page 15 if the player has won a run
-        if (hasWonRun) visiblePageIndices.Add(14);
+            // Pages 1-5 are always available
+            for (int i = 0; i < 5; i++) visiblePageIndices.Add(i);
+
+            // Unlock Pages 6-9 if the challenge button has been pressed
+            if (hasPressedChallengeButton)
+            {
+                for (int i = 5; i <= 8; i++) visiblePageIndices.Add(i);
+            }
+
+            // Unlock Pages 10-14 if the player has won a game
+            if (hasWonGame)
+            {
+                for (int i = 9; i <= 13; i++) visiblePageIndices.Add(i);
+            }
+
+            // Unlock Page 15 if the player has won a run
+            if (hasWonRun) visiblePageIndices.Add(14);
+        }
     }
 
     // Display the tutorial, starting at a specific page
-    public void Show(int startingPageIndex = 0, bool showCloseButton = true, bool startNewGame = false)
+    public void Show(int startingPageIndex = 0, bool showCloseButton = true, bool startNewGame = false, System.Action callback = null, int endingPageIndex = -1, string closeButtonText = "Close")
     {
         clickAudioSource?.Play();
 
         this.showCloseButton = showCloseButton;
         this.startNewGame = startNewGame;
-        SetVisiblePages();
+        this.callback = callback;
+        closeButton.GetComponentInChildren<TextMeshProUGUI>().text = closeButtonText;
+
+        // If endingPageIndex is specified, ensure only the pages within the range are visible
+        SetVisiblePages(startingPageIndex, endingPageIndex);
 
         // Map the original page index to the correct visible index
-        currentPageIndex = MapOriginalToVisibleIndex(startingPageIndex);
+        currentPageIndex = 0; // Always start at the first visible page within the provided range
 
         UpdateUI();
         StartCoroutine(FadeIn());
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-    }
-
-    // Maps the original page index to the closest visible page index
-    private int MapOriginalToVisibleIndex(int originalPageIndex)
-    {
-        // Ensure the original page index maps to the correct visible page
-        for (int i = 0; i < visiblePageIndices.Count; i++)
-        {
-            if (visiblePageIndices[i] >= originalPageIndex) return i;
-        }
-
-        // If the requested page is out of bounds, default to the last visible page
-        return visiblePageIndices.Count - 1;
     }
 
     public void ShowButton()
@@ -120,6 +124,11 @@ public class TutorialPopUp : MonoBehaviour
 
         StopAllCoroutines();
         ResetPopUp();
+
+        if (callback != null)
+        {
+            callback.Invoke();
+        }
     }
 
     private void ResetPopUp()

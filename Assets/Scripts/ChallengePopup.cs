@@ -23,8 +23,10 @@ public class ChallengePopUp : MonoBehaviour
     public float shakeMagnitude = 0.1f;
 
     public int minLength = 3;
-
     private string originalSubstring;
+    private string originalInputBeforeSubstring = "";
+    private string originalInputAfterSubstring = "";
+
     private Vector3 originalScale;
     private Vector3 originalPos;
     private HashSet<char> restrictedLetters = new HashSet<char>();
@@ -37,6 +39,7 @@ public class ChallengePopUp : MonoBehaviour
         originalScale = popUpGameObject.transform.localScale;
         originalPos = popUpGameObject.transform.localPosition;
         ResetPopUp();
+        inputField.onValueChanged.AddListener(OnInputChanged);
     }
 
     public void Show(string substring)
@@ -49,12 +52,13 @@ public class ChallengePopUp : MonoBehaviour
         pointsText.text = gameManager.pointsText.pointsText.text;
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
-        substring = substring.ToLower().Trim();
-
-        originalSubstring = substring;
+        originalSubstring = substring.ToLower().Trim();
         challengeText.text = $"CASP calls a bluff on:\n<color=#FF3800>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
-        inputField.text = substring;
+        inputField.text = originalSubstring;
+
+        originalInputBeforeSubstring = "";
+        originalInputAfterSubstring = "";
 
         comboText.text = gameManager.comboText.GetString();
         activeEffectsText.MatchEffects(gameManager.activeEffectsText);
@@ -84,6 +88,26 @@ public class ChallengePopUp : MonoBehaviour
             popUpGameObject.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, currentTime / scaleDuration);
             yield return null;
         }
+    }
+
+    private void OnInputChanged(string newText)
+    {
+        // Ensure the locked substring is preserved
+        if (!newText.Contains(originalSubstring))
+        {
+            // Reset the input if the locked part is altered
+            inputField.text = originalInputBeforeSubstring + originalSubstring + originalInputAfterSubstring;
+            inputField.caretPosition = inputField.text.Length;
+            return;
+        }
+
+        // Update editable parts
+        int lockedStartIndex = newText.IndexOf(originalSubstring);
+        originalInputBeforeSubstring = newText.Substring(0, lockedStartIndex);
+        originalInputAfterSubstring = newText.Substring(lockedStartIndex + originalSubstring.Length);
+
+        // Reconstruct the input field with the locked substring intact
+        inputField.text = originalInputBeforeSubstring + originalSubstring + originalInputAfterSubstring;
     }
 
     public void Send()

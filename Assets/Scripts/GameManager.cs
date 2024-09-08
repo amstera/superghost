@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     public ActiveEffectsText activeEffectsText;
     public CommandCenter commandCenter;
     public BackgroundSwirl backgroundSwirl;
+    public TutorialModal tutorialModal;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
@@ -161,7 +162,7 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.instance.GameStarted();
 
-            tutorialPopup.Show(0, false, true);
+            tutorialPopup.Show(0, false, true, endingPageIndex: 4);
             saveObject.HasSeenTutorial = true;
 
             SaveManager.Save(saveObject);
@@ -238,6 +239,10 @@ public class GameManager : MonoBehaviour
         nextRoundButton.interactable = true;
         nextRoundButton.gameObject.SetActive(false);
         commandCenter.gameObject.SetActive(true);
+        if (aiLivesText.HasFullLives())
+        {
+            tutorialModal.ShowModal();
+        }
         pointsCalculateText.text = string.Empty;
         backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
         commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
@@ -248,7 +253,7 @@ public class GameManager : MonoBehaviour
             bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
             if (saveObject.HasSeenTutorial && hasWonGame && !saveObject.HasSeenRunTutorial)
             {
-                tutorialPopup.Show(9, false, true);
+                tutorialPopup.Show(9, false, true, endingPageIndex: 13);
                 saveObject.HasSeenRunTutorial = true;
 
                 SaveManager.Save(saveObject);
@@ -256,7 +261,7 @@ public class GameManager : MonoBehaviour
             }
             else if (saveObject.HasSeenTutorial && saveObject.HasSeenRunTutorial && hasWonRun && !saveObject.HasSeenEndlessModeTutorial)
             {
-                tutorialPopup.Show(14, false, true);
+                tutorialPopup.Show(14, false, true, endingPageIndex: 14);
                 saveObject.HasSeenEndlessModeTutorial = true;
 
                 SaveManager.Save(saveObject);
@@ -323,6 +328,7 @@ public class GameManager : MonoBehaviour
 
             var unlockedHats = statsPopup.GetUnlockedHats(true);
             statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
+            statsButton.GetComponent<ScaleInOut>().maxScale = saveObject.UnlockedHats.Count == unlockedHats.Count ? 1.05f : 1.25f;
 
             AudioManager.instance.GameStarted();
         }
@@ -482,7 +488,7 @@ public class GameManager : MonoBehaviour
                 saveObject.HasPressedChallengeButton = true;
                 SaveManager.Save(saveObject);
 
-                tutorialPopup.Show(5, false);
+                tutorialPopup.Show(5, false, callback: () => ChallengeWord(), endingPageIndex: 8, closeButtonText: "Challenge");
             }
             else
             {
@@ -1066,6 +1072,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Hide();     
         nextRoundButton.gameObject.SetActive(true);
         commandCenter.gameObject.SetActive(false);
+        tutorialModal.gameObject.SetActive(false);
         levelText.gameObject.SetActive(false);
         activeEffectsText.ClearAll();
 
@@ -1391,6 +1398,7 @@ public class GameManager : MonoBehaviour
 
         var unlockedHats = statsPopup.GetUnlockedHats(true);
         statsButton.GetComponent<Image>().color = saveObject.UnlockedHats.Count == unlockedHats.Count ? Color.white : Color.yellow;
+        statsButton.GetComponent<ScaleInOut>().maxScale = saveObject.UnlockedHats.Count == unlockedHats.Count ? 1.05f : 1.25f;
 
         if (playSound)
         {
