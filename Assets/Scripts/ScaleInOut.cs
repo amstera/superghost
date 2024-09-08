@@ -42,4 +42,9 @@ public class ScaleInOut : MonoBehaviour
             currentScaleFactor = 0.0f;
         }
     }
+
+    void OnDisable()
+    {
+        transform.localScale = originalScale;
+    }
 }
