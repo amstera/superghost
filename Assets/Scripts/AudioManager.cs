@@ -34,11 +34,6 @@ public class AudioManager : MonoBehaviour
         {
             MuteMaster();
         }
-
-        if (!saveObject.EnableMusic)
-        {
-            bgMusicAudioSource.Stop();
-        }
     }
 
     public void MuteMaster()
@@ -55,7 +50,7 @@ public class AudioManager : MonoBehaviour
     {
         isGameStarted = true;
         var newClip = saveObject.CurrentLevel < 5 ? bgMusic : bossMusic;
-        if (bgMusicAudioSource.clip != newClip && saveObject.EnableMusic)
+        if (bgMusicAudioSource.clip != newClip)
         {
             float pitch = saveObject.CurrentLevel >= 10 ? 1.1f : saveObject.CurrentLevel == 9 ? 1.05f : 1f;
             StartCoroutine(FadeOutAndIn(newClip, targetPitch: pitch));
@@ -66,7 +61,7 @@ public class AudioManager : MonoBehaviour
     {
         isGameStarted = false;
         this.didWin = didWin;
-        if (bgMusicAudioSource.clip != gameEndMusic && saveObject.EnableMusic)
+        if (bgMusicAudioSource.clip != gameEndMusic)
         {
             StartCoroutine(FadeOutAndIn(gameEndMusic, targetPitch: didWin ? 1 : 0.8f));
         }
@@ -96,9 +91,14 @@ public class AudioManager : MonoBehaviour
         bgMusicAudioSource.Stop();
     }
 
+    public void AdjustVolume()
+    {
+        bgMusicAudioSource.volume = (bgMusicAudioSource.clip == bossMusic ? 0.3f : 0.2f) * saveObject.MusicVolume;
+    }
+
     private IEnumerator FadeOutAndIn(AudioClip newClip, float fadeDuration = 0.5f, float targetPitch = 1)
     {
-        bgMusicAudioSource.volume = newClip == bossMusic ? 0.25f : 0.15f;
+        bgMusicAudioSource.volume = (newClip == bossMusic ? 0.3f : 0.2f) * saveObject.MusicVolume;
 
         // Check if a clip is currently playing
         if (bgMusicAudioSource.isPlaying)

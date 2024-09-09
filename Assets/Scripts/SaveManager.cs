@@ -65,8 +65,9 @@ public class SaveManager : MonoBehaviour
 public class SaveObject
 {
     public bool EnableSound = true;
-    public bool EnableMusic = true;
+    public float MusicVolume = 0.75f;
     public bool EnableMotion = true;
+    public bool EnableLowPowerMode;
     public bool HasSeenTutorial;
     public bool HasSeenRunTutorial;
     public bool HasSeenEndlessModeTutorial;

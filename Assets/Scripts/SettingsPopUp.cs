@@ -14,7 +14,8 @@ public class SettingsPopUp : MonoBehaviour
     public Sprite lockImage;
 
     public TextMeshProUGUI dropdownText, footerText, dictionaryValidateText;
-    public Toggle sfxToggle, musicToggle, motionToggle;
+    public Toggle sfxToggle, motionToggle, lowPowerToggle;
+    public Slider musicSlider;
     public TMP_Dropdown difficultyDropdown;
     public TMP_InputField inputField;
 
@@ -34,8 +35,9 @@ public class SettingsPopUp : MonoBehaviour
         originalPos = popUpGameObject.transform.localPosition;
 
         sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
-        musicToggle.onValueChanged.AddListener(OnMusicToggleChanged);
+        musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
         motionToggle.onValueChanged.AddListener(OnMotionToggleChanged);
+        lowPowerToggle.onValueChanged.AddListener(OnLowPowerToggleChanged);
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
 
         ResetPopUp();
@@ -51,11 +53,14 @@ public class SettingsPopUp : MonoBehaviour
         // Set up SFX toggle
         sfxToggle.isOn = saveObject.EnableSound;
 
-        // Set up Music toggle
-        musicToggle.isOn = saveObject.EnableMusic;
+        // Set up Music slider
+        musicSlider.value = saveObject.MusicVolume;
 
         // Set up Motion toggle
         motionToggle.isOn = saveObject.EnableMotion;
+
+        // Set up Low Power Mode toggle
+        lowPowerToggle.isOn = saveObject.EnableLowPowerMode;
 
         // Set up Difficulty dropdown
         difficultyDropdown.value = (int)saveObject.Difficulty;
@@ -162,22 +167,13 @@ public class SettingsPopUp : MonoBehaviour
         }
     }
 
-    private void OnMusicToggleChanged(bool isEnabled)
+    private void OnMusicVolumeChanged(float volume)
     {
-        clickAudioSource?.Play();
-
-        saveObject.EnableMusic = isEnabled;
+        saveObject.MusicVolume = volume;
         gameManager.saveObject = saveObject;
         SaveManager.Save(saveObject);
 
-        if (saveObject.EnableMusic)
-        {
-            AudioManager.instance.StartMusic();
-        }
-        else
-        {
-            AudioManager.instance.StopMusic();
-        }
+        AudioManager.instance.AdjustVolume();
     }
 
     private void OnMotionToggleChanged(bool isEnabled)
@@ -190,6 +186,17 @@ public class SettingsPopUp : MonoBehaviour
 
         gameManager.backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
         gameManager.commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
+    }
+
+    private void OnLowPowerToggleChanged(bool isEnabled)
+    {
+        clickAudioSource?.Play();
+
+        saveObject.EnableLowPowerMode = isEnabled;
+        gameManager.saveObject = saveObject;
+        SaveManager.Save(saveObject);
+
+        Application.targetFrameRate = isEnabled ? 30 : 40;
     }
 
     private void OnDifficultyChanged(int index)

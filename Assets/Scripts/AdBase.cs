@@ -14,7 +14,19 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
 
     public virtual void LoadAd()
     {
-        Advertisement.Load(surfacingId, this);
+        if (isAdReady)
+        {
+            return;
+        }
+
+        if (Advertisement.isInitialized)
+        {
+            Advertisement.Load(surfacingId, this);
+        }
+        else
+        {
+            RetryLoadAd(5f); // Retry after 5 seconds if not initialized
+        }
     }
 
     public void ShowAd()
@@ -39,20 +51,18 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
-        Debug.LogError($"Error loading Ad on {placementId}: {error} - {message}");
         OnAdFailed?.Invoke();
         isAdReady = false;
+        RetryLoadAd(5f); // Retry after 5 seconds if loading fails
     }
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
     {
-        Debug.LogError($"Error showing Ad on {placementId}: {error} - {message}");
         OnAdFailed?.Invoke();
     }
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
     {
-        Debug.Log($"Ad on {placementId} completed with result {showCompletionState}");
         isAdReady = false;
         LoadAd(); // Automatically reload ad for future use
 
@@ -61,7 +71,7 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
         {
             OnAdCompleted?.Invoke(); // user finished watching ad
 
-            var gamesPlayedEvent = new CustomEvent("watchedAd"){};
+            var gamesPlayedEvent = new CustomEvent("watchedAd") { };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
         else
@@ -78,5 +88,10 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
     public void OnUnityAdsShowClick(string placementId)
     {
         // Optionally handle ad click event
+    }
+
+    private void RetryLoadAd(float retryDelay)
+    {
+        Invoke(nameof(LoadAd), retryDelay);
     }
 }

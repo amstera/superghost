@@ -67112,6 +67112,7 @@ nephritis
 nephron
 nephrons
 nephropathy
+nephrostomy
 nepotic
 nepotism
 nepotist
@@ -117546,8 +117547,6 @@ yourn
 yours
 yourself
 yourselves
-yous
-youse
 youth
 youthen
 youthens

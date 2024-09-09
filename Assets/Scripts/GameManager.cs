@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
 
-        Application.targetFrameRate = 45;
+        Application.targetFrameRate = saveObject.EnableLowPowerMode ? 30 : 40;
 
         if (saveObject.Difficulty == Difficulty.Hard && saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0)
         {
