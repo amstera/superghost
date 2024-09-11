@@ -209,7 +209,7 @@ public class WordDictionary
             bool firstCharIsVowel = vowels.Contains(firstChar);
             bool lastCharIsVowel = vowels.Contains(lastChar);
 
-            if (currentLevel <= 2 && difficulty == Difficulty.Normal)
+            if (currentLevel <= 1 && difficulty == Difficulty.Normal)
             {
                 difficulty = Difficulty.Easy;
             }
@@ -340,7 +340,7 @@ public class WordDictionary
             return null;
         }
 
-        if (currentLevel <= 2 && difficulty == Difficulty.Normal)
+        if (currentLevel <= 1 && difficulty == Difficulty.Normal)
         {
             difficulty = Difficulty.Easy;
         }

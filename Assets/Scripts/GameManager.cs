@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, redoLevel, fireBallCalculate, criteria;
+    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, redoLevel, fireBallCalculate, criteria, criteriaPill;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -373,6 +373,10 @@ public class GameManager : MonoBehaviour
         currencyEarnedText.Reset();
         currencyEarnedText.gameObject.SetActive(false);
         comboText.ResetPending();
+        if (criteriaPill.GetComponentInChildren<TextMeshProUGUI>().text != "" && !DeviceTypeChecker.IsiPhoneSE())
+        {
+            criteriaPill.SetActive(true);
+        }
 
         bool noPowersUsed = ItemsUsed == 0 && (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1);
         if (currentGame == 1 && noPowersUsed)
@@ -1178,6 +1182,7 @@ public class GameManager : MonoBehaviour
         criteriaText.UpdateState(gameState);
         criteriaText.outline.color = metCriteria ? Color.green : Color.red;
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
+        criteriaPill.SetActive(false);
         bool shouldFlash = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
         criteriaText.StartFlashing(shouldFlash, gameState);
 
@@ -1217,7 +1222,7 @@ public class GameManager : MonoBehaviour
                 playerText.SetColor(Color.green);
                 aiText.SetColor(Color.red);
 
-                int gameWonCurrency = stars.GetStars() * 5 + (currentGame + 1) * 3;
+                int gameWonCurrency = Math.Max(15, stars.GetStars() * 5 + (currentGame + 1) * 3 + 5);
                 bonusCurrencyEarnedText.AddPoints(gameWonCurrency, true, "Bonus: ", delay: 0.5f);
                 currency += gameWonCurrency;
                 if (currency > saveObject.Statistics.MostMoney)
@@ -1318,6 +1323,19 @@ public class GameManager : MonoBehaviour
 
                     currencyText.SetPoints(currency);
                     saveObject.RunStatistics.MostMoney = currency;
+
+                    var wonRunEvent = new CustomEvent("wonRun")
+                    {
+                        { "games_played", saveObject.Statistics.GamesPlayed },
+                        { "current_level", copySaveObject.CurrentLevel + 1 },
+                        { "current_score", points },
+                        { "version", Application.version },
+                        { "difficulty", saveObject.Difficulty.ToString() },
+                        { "high_score", saveObject.Statistics.HighScore },
+                        { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                        { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
+                    };
+                    AnalyticsService.Instance.RecordEvent(wonRunEvent);
                 }
             }
             else // lose game
@@ -1388,7 +1406,8 @@ public class GameManager : MonoBehaviour
                     { "high_score", saveObject.Statistics.HighScore },
                     { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
                     { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 },
-                    { "won_game", playerWon & metCriteria }
+                    { "won_game", playerWon & metCriteria },
+                    { "won_ghost", playerWon }
                 };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
@@ -1945,6 +1964,8 @@ public class GameManager : MonoBehaviour
         ghostAvatar.CanMercy = true;
         SetRepeatingLetters(false);
         SetWordDirection(0);
+        var criteriaPillText = criteriaPill.GetComponentInChildren<TextMeshProUGUI>();
+        criteriaPillText.text = "";
 
         foreach (var criterion in criteria)
         {
@@ -1966,6 +1987,7 @@ public class GameManager : MonoBehaviour
                     wordDictionary.SetMinLength(minLength);
                     challengePopup.minLength = minLength;
                     bluffPopup.minLength = minLength;
+                    criteriaPillText.text = $"{minLength + 1}+ Letter Words Only";
                 }
                 else if (criterion is NoComboLetters)
                 {
@@ -1976,12 +1998,14 @@ public class GameManager : MonoBehaviour
                     wordDictionary.SetNumberCriteria(oddLetters.GetCriteria());
                     challengePopup.AddNumberCriteria(oddLetters.GetCriteria());
                     bluffPopup.AddNumberCriteria(oddLetters.GetCriteria());
+                    criteriaPillText.text = "Odd Length Words Only";
                 }
                 else if (criterion is EvenLetters evenLetters)
                 {
                     wordDictionary.SetNumberCriteria(evenLetters.GetCriteria());
                     challengePopup.AddNumberCriteria(evenLetters.GetCriteria());
                     bluffPopup.AddNumberCriteria(evenLetters.GetCriteria());
+                    criteriaPillText.text = "Even Length Words Only";
                 }
                 else if (criterion is AIStarts)
                 {

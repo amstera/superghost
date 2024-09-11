@@ -97,9 +97,15 @@ public class CriteriaText : MonoBehaviour
     private void AddCriteria(int amount, int level, int startIndex, List<GameCriterion> currentCriteria, List<GameCriterion> previousCriteria, char letter)
     {
         List<GameCriterion> possibleCriteria = new List<GameCriterion> {
-            new OddLetters(), new EvenLetters(), new AIStarts(), new StartWithHandicap(level >= 10 ? 3 : level >= 6 ? 2 : 1), new MinLetters(level >= 5 ? 6 : 5), new NoUsingLetter(letter)
+            new AIStarts(), new StartWithHandicap(level >= 10 ? 3 : level >= 6 ? 2 : 1), new NoUsingLetter(letter)
         };
 
+        if (level > 2)
+        {
+            possibleCriteria.Add(new OddLetters());
+            possibleCriteria.Add(new EvenLetters());
+            possibleCriteria.Add(new MinLetters(level >= 5 ? 6 : 5));
+        }
         if (level > 3)
         {
             possibleCriteria.Add(new NoRepeatLetters());

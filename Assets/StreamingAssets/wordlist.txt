@@ -53874,7 +53874,6 @@ ivies
 ivories
 ivory
 ivylike
-iwis
 ixia
 ixias
 ixodid
@@ -103834,6 +103833,8 @@ teleports
 teleprinter
 teleprinters
 teleprocessing
+teleprompter
+teleprompters
 teleran
 telerans
 teles

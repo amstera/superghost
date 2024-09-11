@@ -585,7 +585,7 @@ public class ShopPopUp : MonoBehaviour
             case 7:
                 return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 8:
-                return (int)RoundHalfUp((substringLength + 1) * 1.25f);
+                return (int)RoundHalfUp((substringLength + 1) * 1.1f);
             case 9:
                 return gameEnded ? 2 : (roundsAhead + 1) * 2;
             case 10:
@@ -609,7 +609,7 @@ public class ShopPopUp : MonoBehaviour
             case 19:
                 return 5;
             case 20:
-                return (int)RoundHalfUp((substringLength + 1) * 1.25f);
+                return (int)RoundHalfUp((substringLength + 1) * 1.1f);
             case 21:
                 return 5;
             case 22:
