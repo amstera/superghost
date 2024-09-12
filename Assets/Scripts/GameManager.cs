@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     public CommandCenter commandCenter;
     public BackgroundSwirl backgroundSwirl;
     public TutorialModal tutorialModal;
+    public ProperNounsWarningPopUp properNounsWarningPopUp;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
     public float ChanceMultiplier = 1;
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch, ItemsUsed;
     public int currency = 5;
+    public List<string> properNouns = new List<string>();
 
     private HashSet<string> previousWords = new HashSet<string>();
     private List<RecapObject> recap = new List<RecapObject>();
@@ -873,6 +875,10 @@ public class GameManager : MonoBehaviour
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
+            if (properNouns.Contains(word.ToLower()))
+            {
+                properNounsWarningPopUp.Show(word);
+            }
             if (gameWord.ToLower() != originalWord.ToLower())
             {
                 previousWords.Add(gameWord);

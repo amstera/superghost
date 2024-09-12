@@ -48030,7 +48030,6 @@ hissiest
 hissing
 hissings
 hissy
-hist
 histamin
 histamine
 histamines
@@ -62682,6 +62681,7 @@ mesosphere
 mesospheres
 mesothelioma
 mesotron
+mesovarium
 mesozoan
 mesozoic
 mesquit
@@ -96663,6 +96663,7 @@ sonorous
 sonorously
 sonorousness
 sonovox
+sonovoxes
 sons
 sonship
 sonships

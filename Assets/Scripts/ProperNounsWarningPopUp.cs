@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
-public class PowersWarningPopUp : MonoBehaviour
+public class ProperNounsWarningPopUp : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
+    public TextMeshProUGUI bodyText;
 
     public AudioSource clickAudioSource;
 
@@ -19,8 +21,10 @@ public class PowersWarningPopUp : MonoBehaviour
         ResetPopUp();
     }
 
-    public void Show()
+    public void Show(string word)
     {
+        bodyText.text = $"<color=yellow>{word.ToUpper()}</color> is a proper noun!\n\n<size=30>Proper nouns <color=red>do not count</color> as words!\n\nex: <color=red>countries, months, days</color>, etc.</size>";
+
         StopAllCoroutines(); // Ensure no other animations are running
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
