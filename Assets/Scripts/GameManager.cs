@@ -248,6 +248,7 @@ public class GameManager : MonoBehaviour
         pointsCalculateText.text = string.Empty;
         backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
         commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
+        challengeButton.GetComponent<ScaleInOut>().enabled = false;
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -884,6 +885,12 @@ public class GameManager : MonoBehaviour
                 previousWords.Add(gameWord);
             }
             UpdatePoints(gameWord, -1);
+
+            var invalidWordEvent = new CustomEvent("invalidWord")
+            {
+                { "word", word.ToLower() }
+            };
+            AnalyticsService.Instance.RecordEvent(invalidWordEvent);
         }
 
         EndGame();
@@ -1413,7 +1420,8 @@ public class GameManager : MonoBehaviour
                     { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
                     { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 },
                     { "won_game", playerWon & metCriteria },
-                    { "won_ghost", playerWon }
+                    { "won_ghost", playerWon },
+                    { "word", gameWord?.ToLower() ?? "" }
                 };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
@@ -1531,6 +1539,10 @@ public class GameManager : MonoBehaviour
             else
             {
                 PlayComputerWord(word);
+                if (!saveObject.HasPressedChallengeButton)
+                {
+                    challengeButton.GetComponent<ScaleInOut>().enabled = true;
+                }
             }
         }
         else

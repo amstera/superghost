@@ -63052,6 +63052,8 @@ microscopy
 microsecond
 microseconds
 microsurgery
+microswitch
+microswitches
 microwavable
 microwave
 microwaveable

@@ -16,11 +16,34 @@ public class CriteriaText : MonoBehaviour
     private ScaleInOut scaleInOut;
     private GameState latestState;
     private Coroutine flashingCoroutine;
+    private bool isFlashing;
 
-    public void Awake()
+    void Awake()
     {
         saveObject = SaveManager.Load();
         scaleInOut = GetComponent<ScaleInOut>();
+    }
+
+    void OnEnable()
+    {
+        if (isFlashing)
+        {
+            if (flashingCoroutine != null)
+            {
+                StopCoroutine(flashingCoroutine);
+                flashingCoroutine = null;
+            }
+            flashingCoroutine = StartCoroutine(FlashText());
+        }
+    }
+
+    void OnDisable()
+    {
+        if (flashingCoroutine != null)
+        {
+            StopCoroutine(flashingCoroutine);
+            flashingCoroutine = null;
+        }
     }
 
     public bool SetLevelCriteria(int level)
@@ -246,12 +269,13 @@ public class CriteriaText : MonoBehaviour
     public void StartFlashing(bool isEnabled, GameState state)
     {
         latestState = state; // Store the current state
-
         scaleInOut.enabled = isEnabled; // Ensure the existing logic for scaleInOut is preserved
+        isFlashing = isEnabled;
 
         if (flashingCoroutine != null)
         {
             StopCoroutine(flashingCoroutine);
+            flashingCoroutine = null;
         }
 
         if (isEnabled)
@@ -259,7 +283,6 @@ public class CriteriaText : MonoBehaviour
             flashingCoroutine = StartCoroutine(FlashText());
         }
     }
-
     private IEnumerator FlashText()
     {
         bool flashRed = false;
