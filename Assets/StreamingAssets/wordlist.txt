@@ -6735,6 +6735,7 @@ axillary
 axillas
 axils
 axing
+axiologist
 axiology
 axiom
 axiomatic
@@ -6776,6 +6777,7 @@ ayatollahs
 ayes
 ayin
 ayins
+ayous
 ayurveda
 azalea
 azaleas
@@ -14123,7 +14125,6 @@ caddishly
 caddishness
 caddy
 caddying
-cade
 cadelle
 cadelles
 cadence
@@ -14133,7 +14134,6 @@ cadency
 cadent
 cadenza
 cadenzas
-cades
 cadet
 cadets
 cadge
@@ -24128,7 +24128,9 @@ cuatros
 cubage
 cubages
 cubature
+cubbed
 cubbies
+cubbing
 cubbish
 cubby
 cubbyhole
@@ -25051,11 +25053,9 @@ daggles
 daggling
 daglock
 daglocks
-dago
 dagoba
 dagobas
 dagoes
-dagos
 dags
 daguerreotype
 daguerreotyped
@@ -33228,6 +33228,8 @@ emmy
 emmys
 emodin
 emodins
+emoji
+emojis
 emollient
 emollients
 emolument
@@ -38462,7 +38464,6 @@ fixings
 fixit
 fixities
 fixity
-fixt
 fixture
 fixtures
 fixure
@@ -44039,8 +44040,6 @@ gorget
 gorgeted
 gorgets
 gorging
-gorgon
-gorgons
 gorhen
 gorhens
 gorier
@@ -61959,6 +61958,7 @@ meadowlarks
 meadows
 meadowy
 meads
+meady
 meager
 meagerly
 meagerness
@@ -63373,6 +63373,8 @@ millipedes
 millirem
 millisecond
 milliseconds
+milliwatt
+milliwatts
 millpond
 millponds
 millrace
@@ -63931,6 +63933,7 @@ misfitting
 misfocus
 misform
 misforms
+misfortunate
 misfortune
 misfortunes
 misframe
@@ -66421,6 +66424,7 @@ mythology
 mythos
 myths
 mythy
+myurous
 myxameba
 myxedema
 myxocyte
@@ -67524,6 +67528,8 @@ nightingale
 nightingales
 nightjar
 nightlife
+nightlight
+nightlights
 nightlong
 nightly
 nightmare
@@ -68744,6 +68750,8 @@ numskulls
 nunatak
 nunataks
 nunchaku
+nunchuk
+nunchuks
 nuncio
 nuncios
 nuncle
@@ -74073,7 +74081,6 @@ peddling
 pederast
 pederasts
 pederasty
-pedes
 pedestal
 pedestals
 pedestrian
@@ -75896,9 +75903,7 @@ pikes
 pikestaff
 pikestaffs
 pikestaves
-piki
 piking
-pikis
 pilaf
 pilaff
 pilaffs
@@ -86491,6 +86496,10 @@ resized
 resizes
 resizing
 resketch
+reskin
+reskinned
+reskinning
+reskins
 reslate
 reslated
 reslates
@@ -86634,6 +86643,7 @@ resprays
 respread
 respring
 resprout
+resprouting
 resprung
 rest
 restable
@@ -87109,6 +87119,7 @@ reuses
 reusing
 reutter
 reutters
+revaluate
 revaluation
 revaluations
 revalue
@@ -90535,7 +90546,6 @@ scathingly
 scatological
 scatology
 scats
-scatt
 scatted
 scatter
 scatterbrain
@@ -94970,6 +94980,7 @@ slapped
 slapper
 slappers
 slapping
+slappy
 slaps
 slapstick
 slash
@@ -95569,10 +95580,6 @@ smelters
 smeltery
 smelting
 smelts
-smerk
-smerked
-smerking
-smerks
 smew
 smews
 smidge
@@ -103749,9 +103756,6 @@ tektitic
 tela
 telae
 telamon
-telco
-telcos
-tele
 telecast
 telecaster
 telecasters
@@ -107235,6 +107239,9 @@ trendy
 trepan
 trepang
 trepangs
+trepanned
+trepanning
+trepans
 trepans
 trephine
 trepid
@@ -109074,6 +109081,7 @@ unattractive
 unattractively
 unattributed
 unau
+unaugmented
 unaus
 unauthentic
 unauthorized
@@ -109313,7 +109321,6 @@ unchokes
 unchosen
 unchristian
 unchurch
-unci
 uncia
 unciae
 uncial
@@ -109494,6 +109501,7 @@ uncrated
 uncrates
 uncrazy
 uncreate
+uncreative
 uncrewed
 uncritical
 uncritically
@@ -109525,7 +109533,6 @@ uncurled
 uncurling
 uncurls
 uncursed
-uncus
 uncustomary
 uncut
 uncute
@@ -109939,6 +109946,7 @@ unequipped
 unequivocal
 unequivocally
 unerased
+unerect
 unerotic
 unerring
 unerringly
@@ -109958,6 +109966,7 @@ unexceptional
 unexcited
 unexciting
 unexcused
+unexercised
 unexotic
 unexpected
 unexpectedly
@@ -110037,7 +110046,6 @@ unfix
 unfixed
 unfixes
 unfixing
-unfixt
 unflagging
 unflaggingly
 unflappability
@@ -110177,6 +110185,7 @@ ungulae
 ungular
 ungulate
 ungulates
+unhabitual
 unhailed
 unhair
 unhaired
@@ -111151,6 +111160,7 @@ unsoaked
 unsober
 unsociable
 unsocial
+unsoftened
 unsoiled
 unsold
 unsolder
@@ -116619,6 +116629,7 @@ woofer
 woofers
 woofing
 woofs
+woohoo
 wooing
 wooingly
 wool
@@ -117416,6 +117427,7 @@ yeshivot
 yessed
 yesses
 yessing
+yessir
 yester
 yesterday
 yesterdays

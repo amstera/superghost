@@ -436,7 +436,7 @@ public class ShopPopUp : MonoBehaviour
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
-        reshuffleText.text = $"Shuffle Powers - <color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>";
+        reshuffleText.text = $"New Powers - <color={(canAffordReshuffle ? "green" : "red")}>{restockCost}¤</color>";
         reshuffleText.color = new Color(reshuffleText.color.r, reshuffleText.color.g, reshuffleText.color.b, canAffordReshuffle ? 1 : 0.5f);
         getMoreButton.outline.color = canAffordReshuffle ? new Color32(100, 230, 70, 255) : new Color32(240, 235, 50, 255);
         getMoreButton.text.enableVertexGradient = !canAffordReshuffle;

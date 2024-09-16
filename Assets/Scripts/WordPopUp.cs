@@ -28,7 +28,7 @@ public class WordPopUp : MonoBehaviour
         }
     }
 
-    public void Show(Vector3 position, string word, string url)
+    public void Show(Vector3 position, string word, string url, bool isValidWord)
     {
         clickAudioSource?.Play();
 
@@ -39,11 +39,11 @@ public class WordPopUp : MonoBehaviour
         this.word = word;
         this.url = url;
 
-        bool isValidWord = url.Contains("dictionary", System.StringComparison.InvariantCultureIgnoreCase);
-        if (isValidWord)
+        bool showDefine = url.Contains("dictionary", System.StringComparison.InvariantCultureIgnoreCase);
+        if (showDefine)
         {
             defineButton.gameObject.SetActive(true);
-            blockButton.interactable = true;
+            blockButton.interactable = isValidWord;
             reportButton.gameObject.SetActive(false);
         }
         else

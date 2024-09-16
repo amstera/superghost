@@ -249,6 +249,8 @@ public class GameManager : MonoBehaviour
         backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
         commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
         challengeButton.GetComponent<ScaleInOut>().enabled = false;
+        wordDisplay.transform.localPosition = Vector3.zero;
+        wordDisplay.fontSizeMax = 45;
 
         if (gameOver) // only at the beginning of a new game and not any new round
         {
@@ -283,8 +285,7 @@ public class GameManager : MonoBehaviour
             totalPointsText.gameObject.SetActive(false);
             redoLevel.gameObject.SetActive(false);
             RectTransform wordDisplayRect = wordDisplay.GetComponent<RectTransform>();
-            wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, 135);
-            wordDisplay.fontSizeMax = 45;
+            wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, DeviceTypeChecker.IsiPhoneSE() ? 215 : 275);
             newIndicator.SetActive(false);
             highestLevelNewIndicator.SetActive(false);
             comboText.transform.parent.gameObject.SetActive(true);
@@ -296,7 +297,6 @@ public class GameManager : MonoBehaviour
             currencyText.gameObject.SetActive(true);
             endingPointsText.gameObject.SetActive(false);
             recap.Clear();
-            wordDisplay.transform.localPosition = Vector3.zero;
             pointsText.Reset();
             pointsText.normalColor = Color.white;
             pointsText.pointsText.color = Color.white;
@@ -822,6 +822,7 @@ public class GameManager : MonoBehaviour
             string wordLink = GenerateWordLink(word, true);
             wordDisplay.text = $"You win with\n{wordLink}\n{caspString} was <color=green>bluffing</color>";
             wordDisplay.word = word;
+            wordDisplay.fontSizeMax = 40;
 
             var previousWord = previousWords.LastOrDefault() ?? gameWord;
             var addedChars = ReplaceIgnoreCase(word, previousWord, "").ToCharArray();
@@ -853,6 +854,7 @@ public class GameManager : MonoBehaviour
             string wordLink = GenerateWordLink(word, true);
             wordDisplay.text = $"You win!\n{wordLink}\nis a word";
             wordDisplay.word = word;
+            wordDisplay.fontSizeMax = 40;
             aiLivesText.LoseLife();
             confettiPS.Play();
             playerWon = true;
@@ -872,7 +874,21 @@ public class GameManager : MonoBehaviour
         {
             var caspString = GetCaspText();
             var wordLink = GenerateInvalidWordLink(word);
-            wordDisplay.text = $"{caspString} wins!\n{wordLink}\nis not a word";
+            wordDisplay.text = $"{caspString} wins!\n{wordLink}\nisn't valid";
+            var similarWord = wordDictionary.FindClosestWord(word);
+            if (!string.IsNullOrEmpty(similarWord))
+            {
+                if (playerLivesText.LivesRemaining() > 1)
+                {
+                    wordDisplay.text += "\n\n";
+                }
+                else
+                {
+                    wordDisplay.text = $"{wordLink}\nisn't valid\n";
+                }
+                string similarWordLink = GenerateWordLink(similarWord, false, true);
+                wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
+            }
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
@@ -1732,11 +1748,15 @@ public class GameManager : MonoBehaviour
         return playerLivesText.LivesRemaining() - aiLivesText.LivesRemaining();
     }
 
-    private string GenerateWordLink(string gameWord, bool isWinning)
+    private string GenerateWordLink(string gameWord, bool isWinning, bool isNeutral = false)
     {
         string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
         string color = isWinning ? "green" : "red";
         string displayWord = gameWord.ToUpper();
+        if (isNeutral)
+        {
+            return $"<link={link}><color=yellow>{displayWord}</color></link>";
+        }
 
         return $"<link={link}><color={color}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
     }

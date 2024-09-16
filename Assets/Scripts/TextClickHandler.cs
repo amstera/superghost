@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -34,28 +35,32 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         int linkIndex = TMP_TextUtilities.FindIntersectingLink(this, eventData.position, eventData.pressEventCamera);
+
+        // Check if a link was clicked (index not -1)
         if (linkIndex != -1)
         {
-            // Link was clicked
+            // Get the link info for the clicked link
             TMP_LinkInfo linkInfo = textInfo.linkInfo[linkIndex];
 
             // Extract the URL/id from the linkInfo
             string url = linkInfo.GetLinkID();
 
-            // Open the URL if it's not empty
+            // Check if the URL is not empty
             if (!string.IsNullOrEmpty(url))
             {
+                // Ensure wordPopup is assigned
                 if (wordPopup == null)
                 {
                     wordPopup = GetComponentInChildren<WordPopUp>();
                 }
 
+                // Get the local position for pop-up
                 RectTransform rectTrans = GetComponent<RectTransform>();
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTrans, eventData.position, eventData.pressEventCamera, out Vector2 localPos);
-                localPos = new Vector2(0, localPos.y - 80);
+                localPos = new Vector2(0, localPos.y - 80); // Adjust pop-up position as needed
 
                 string wordToUse = !string.IsNullOrEmpty(word) && url.Contains(word, System.StringComparison.InvariantCultureIgnoreCase) ? word : gameManager.gameWord;
-                wordPopup.Show(localPos, wordToUse, url);
+                wordPopup.Show(localPos, wordToUse, url, !(wordToUse != word && textInfo.linkCount > 1));
                 return;
             }
         }

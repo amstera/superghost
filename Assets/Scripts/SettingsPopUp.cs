@@ -275,7 +275,22 @@ public class SettingsPopUp : MonoBehaviour
         else
         {
             dictionaryValidateText.color = Color.red;
-            dictionaryValidateText.text = isBlockedWord ? $"{inputField.text.ToUpper()} is blocked" : $"{inputField.text.ToUpper()} is not a valid word";
+            if (isBlockedWord)
+            {
+                dictionaryValidateText.text = $"{inputField.text.ToUpper()} is blocked";
+            }
+            else
+            {
+                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
+                if (string.IsNullOrEmpty(similarWord))
+                {
+                    dictionaryValidateText.text = $"{inputField.text.ToUpper()} is not a valid word";
+                }
+                else
+                {
+                    dictionaryValidateText.text = $"Did you mean {similarWord.ToUpper()}?";
+                }
+            }
         }
 
         inputField.text = "";

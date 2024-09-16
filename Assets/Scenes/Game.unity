@@ -3795,7 +3795,7 @@ CanvasGroup:
   m_GameObject: {fileID: 122664041}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &122664044
@@ -15658,8 +15658,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000023
-  m_Size: 0.5792665
+  m_Value: 1.0047795
+  m_Size: 0.57094496
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -31944,7 +31944,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -40, y: 135}
+  m_SizeDelta: {x: -40, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &863971982
 CanvasRenderer:
@@ -49522,7 +49522,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 90.78589, y: -73.5}
+  m_AnchoredPosition: {x: 90.78589, y: -62}
   m_SizeDelta: {x: 164.49, y: 30.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1302973463
@@ -53782,8 +53782,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0000032032754
-  m_Size: 0.33191243
+  m_Value: -0.0034492335
+  m_Size: 0.32237768
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -63277,7 +63277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2427}
+  m_AnchoredPosition: {x: 0, y: 1147.1824}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -63469,7 +63469,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -405}
-  m_SizeDelta: {x: 380, y: 55}
+  m_SizeDelta: {x: 360, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1741486813
 MonoBehaviour:
@@ -64699,7 +64699,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Shuffle Powers - <color=green>6\xA4</color>"
+  m_text: "New Powers - <color=green>6\xA4</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -64726,7 +64726,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.55
+  m_fontSize: 30
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -66683,6 +66683,9 @@ MonoBehaviour:
   - british
   - american
   - canadian
+  - mexican
+  - casp
+  - casper
 --- !u!4 &1816581305
 Transform:
   m_ObjectHideFlags: 0
@@ -75030,7 +75033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.4891}
+  m_AnchoredPosition: {x: 0, y: 282.51486}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706
@@ -75130,8 +75133,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Get <color=green>mana (\xA4)</color> each time you win a round!\n \nNeed
-    more? Watch an ad to get\n<color=green>10\xA4</color>"
+  m_text: "You get <color=green>mana (\xA4)</color> each time you win a round!\n
+    \nNeed more? Watch an ad to get\n<color=green>10\xA4</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -79811,7 +79814,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 415}
-  m_SizeDelta: {x: -50, y: 40}
+  m_SizeDelta: {x: -50, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2112197295
 MonoBehaviour:

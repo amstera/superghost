@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class WordDictionary
 {
@@ -21,6 +22,7 @@ public class WordDictionary
     private NumberCriteria numberCriteria = null;
     private bool noRepeatingLetters;
     private delegate bool MatchCondition(string w, string extension);
+    private BKTree bkTree;
 
     public void LoadWords(string[] lines)
     {
@@ -58,6 +60,8 @@ public class WordDictionary
                 commonWords[parts[0]] = frequency;
             }
         }
+
+        Task.Run(() => BuildBKTreeAsync());
     }
 
     public void SortWordsByCommonality()
@@ -142,6 +146,19 @@ public class WordDictionary
         }
 
         return filteredWords.Contains(word.ToLower());
+    }
+
+    public string FindClosestWord(string inputWord)
+    {
+        if (bkTree == null)
+        {
+            return null;
+        }
+
+        inputWord = inputWord.ToLower();
+        double minSimilarity = 0.8;
+
+        return bkTree.FindBestMatch(inputWord, minSimilarity);
     }
 
     public string FindWordContains(string substring, bool isBluff)
@@ -253,6 +270,11 @@ public class WordDictionary
 
         // return nothing if choosing not to bluff the word
         return null;
+    }
+
+    private void BuildBKTreeAsync()
+    {
+        bkTree = new BKTree(words, commonWords);
     }
 
     private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, bool addAtEnd, string substring)
@@ -618,7 +640,7 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")

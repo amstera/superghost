@@ -69,34 +69,34 @@ public class CriteriaText : MonoBehaviour
                 canSkip = true;
                 break;
             case 1:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(25, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(15, difficultyMultiplier)));
                 currentCriteria.Add(new UseAtLeastXItems(1));
                 break;
             case 2:
                 canSkip = true;
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(25, difficultyMultiplier)));
                 AddCriteria(1, 2, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 3:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(50, difficultyMultiplier)));
                 AddCriteria(1, 3, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 4:
                 canSkip = true;
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(75, difficultyMultiplier)));
                 AddCriteria(1, 4, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 5:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(100, difficultyMultiplier)));
                 AddCriteria(1, 5, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 6:
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(125, difficultyMultiplier)));
                 AddCriteria(1, 6, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 7:
                 canSkip = true;
-                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(175, difficultyMultiplier)));
+                currentCriteria.Add(new ScoreAtLeastXPoints(AdjustScore(150, difficultyMultiplier)));
                 AddCriteria(1, 7, 1, currentCriteria, previousCriteria, letter);
                 break;
             case 8:
@@ -290,7 +290,7 @@ public class CriteriaText : MonoBehaviour
         {
             UpdateState(latestState, flashRed);
             flashRed = !flashRed;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.65f);
         }
     }
 
