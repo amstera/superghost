@@ -905,7 +905,11 @@ public class GameManager : MonoBehaviour
             var invalidWordEvent = new CustomEvent("invalidWord")
             {
                 { "word", word.ToLower() },
-                { "total_games", saveObject.Statistics.GamesPlayed }
+                { "games_played", saveObject.Statistics.GamesPlayed },
+                { "current_level", currentGame + 1 },
+                { "difficulty", saveObject.Difficulty.ToString() },
+                { "current_score", points },
+                { "current_lives", $"P:{playerLivesText.LivesRemaining()/5} - C:{aiLivesText.LivesRemaining()/5}" }
             };
             AnalyticsService.Instance.RecordEvent(invalidWordEvent);
         }
@@ -1438,7 +1442,8 @@ public class GameManager : MonoBehaviour
                     { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 },
                     { "won_game", playerWon & metCriteria },
                     { "won_ghost", playerWon },
-                    { "word", gameWord?.ToLower() ?? "" }
+                    { "word", gameWord?.ToLower() ?? "" },
+                    { "current_lives", $"P:{playerLivesText.LivesRemaining()/5} - C:{aiLivesText.LivesRemaining()/5}" }
                 };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
@@ -1853,6 +1858,14 @@ public class GameManager : MonoBehaviour
 
             int pointsForFire = 40;
             fireBallCalculate.SetActive(pointsToShow >= pointsForFire);
+            if (fireBallCalculate.gameObject.activeSelf)
+            {
+                criteriaPill.SetActive(false);
+            }
+            else if (criteriaPill.GetComponentInChildren<TextMeshProUGUI>().text != "" && !DeviceTypeChecker.IsiPhoneSE())
+            {
+                criteriaPill.SetActive(true);
+            }
         }
 
         pointsCalculateText.text = calculationText;
@@ -2026,7 +2039,7 @@ public class GameManager : MonoBehaviour
                     wordDictionary.SetMinLength(minLength);
                     challengePopup.minLength = minLength;
                     bluffPopup.minLength = minLength;
-                    criteriaPillText.text = $"{minLength + 1}+ Letter Words Only";
+                    criteriaPillText.text = $"<sprite=0> {minLength + 1}+ Letter Words Only";
                 }
                 else if (criterion is NoComboLetters)
                 {
@@ -2037,14 +2050,14 @@ public class GameManager : MonoBehaviour
                     wordDictionary.SetNumberCriteria(oddLetters.GetCriteria());
                     challengePopup.AddNumberCriteria(oddLetters.GetCriteria());
                     bluffPopup.AddNumberCriteria(oddLetters.GetCriteria());
-                    criteriaPillText.text = "Odd Length Words Only";
+                    criteriaPillText.text = "<sprite=0> Odd Length Words Only";
                 }
                 else if (criterion is EvenLetters evenLetters)
                 {
                     wordDictionary.SetNumberCriteria(evenLetters.GetCriteria());
                     challengePopup.AddNumberCriteria(evenLetters.GetCriteria());
                     bluffPopup.AddNumberCriteria(evenLetters.GetCriteria());
-                    criteriaPillText.text = "Even Length Words Only";
+                    criteriaPillText.text = "<sprite=0> Even Length Words Only";
                 }
                 else if (criterion is AIStarts)
                 {

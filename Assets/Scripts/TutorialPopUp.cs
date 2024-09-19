@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI.ProceduralImage;
 
 public class TutorialPopUp : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TutorialPopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public GameObject[] pages;
     public Button previousButton, nextButton, closeButton;
+    public ProceduralImage buttonMeter;
     public Slider progressBar;
     public float fadeDuration = 0.5f;
 
@@ -73,6 +75,8 @@ public class TutorialPopUp : MonoBehaviour
         this.callback = callback;
         closeButton.GetComponentInChildren<TextMeshProUGUI>().text = closeButtonText;
         visitedPages.Clear();
+        buttonMeter.fillAmount = 0;
+        buttonMeter.gameObject.SetActive(false);
 
         SetVisiblePages(startingPageIndex, endingPageIndex);
 
@@ -189,16 +193,21 @@ public class TutorialPopUp : MonoBehaviour
 
     private void UpdateButtonVisibility()
     {
-        previousButton.gameObject.SetActive(currentPageIndex > 0);
+        previousButton.interactable = false;
+        nextButton.interactable = false;
 
-        if (visitedPages.Contains(currentPageIndex) || showCloseButton)
+        previousButton.gameObject.SetActive(currentPageIndex > 0);
+        nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+
+        if (!visitedPages.Contains(currentPageIndex) && !showCloseButton)
         {
-            nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+            visitedPages.Add(currentPageIndex);
+            StartCoroutine(ShowNextButtonWithDelay());
         }
         else
         {
-            nextButton.gameObject.SetActive(false);
-            StartCoroutine(ShowNextButtonWithDelay());
+            nextButton.interactable = true;
+            previousButton.interactable = true;
         }
 
         closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePageIndices.Count - 1);
@@ -206,9 +215,26 @@ public class TutorialPopUp : MonoBehaviour
 
     private IEnumerator ShowNextButtonWithDelay()
     {
-        yield return new WaitForSeconds(1f);
-        visitedPages.Add(currentPageIndex); // Mark this page as visited
-        nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+        // Disable the button and show the meter
+        nextButton.interactable = false;
+        buttonMeter.fillAmount = 0;
+        buttonMeter.gameObject.SetActive(true);
+
+        float chargeTime = 2f; // Time for the meter to fill
+        float elapsedTime = 0;
+
+        // Animate the circular meter's fill
+        while (elapsedTime < chargeTime)
+        {
+            elapsedTime += Time.deltaTime;
+            buttonMeter.fillAmount = Mathf.Clamp01(elapsedTime / chargeTime);
+            yield return null;
+        }
+
+        // Once the meter is fully charged, hide the meter, enable the button, and pop it
+        buttonMeter.gameObject.SetActive(false);
+        nextButton.interactable = true;
+        previousButton.interactable = true;
         StartCoroutine(PopButton(nextButton));
     }
 

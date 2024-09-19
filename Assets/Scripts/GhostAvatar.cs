@@ -10,6 +10,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI textMeshProUGUI;
     public CanvasGroup canvasGroup;
     public Image ghostImage, glowGhostImage, speechBubble;
+    public Sprite speechSprite, thoughtSprite;
     public GameObject flag, mercyButton;
     public Sprite normalGhost, angryGhost, thinkingGhost, sadGhost, surprisedGhost;
     public Sprite normalBlinkGhost, angryBlinkGhost, thinkingBlinkGhost, sadBlinkGhost, surprisedBlinkGhost;
@@ -59,6 +60,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         {
             StopCoroutine("AnimateThinking"); // Stop the thinking animation if it's running
             isThinking = false;
+            StartCoroutine(TransitionBubbleSprite(speechSprite));
         }
 
         UpdateState(isLosing, currentLevel);
@@ -88,12 +90,11 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             mercyButton.SetActive(true);
         }
 
-        if (!isThinking)
-        {
-            StartCoroutine("AnimateThinking");
-            ghostImage.sprite = thinkingGhost;
-            isThinking = true;
-        }
+        StartCoroutine("AnimateThinking");
+        ghostImage.sprite = thinkingGhost;
+        isThinking = true;
+
+        StartCoroutine(TransitionBubbleSprite(thoughtSprite));
     }
 
     public void SetFlag(GameState gameState)
@@ -108,10 +109,38 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         StartCoroutine(Shake());
     }
 
+    private IEnumerator TransitionBubbleSprite(Sprite targetSprite)
+    {
+        // Smoothly fade out the current sprite
+        float duration = 0.05f;
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            speechBubble.color = new Color(speechBubble.color.r, speechBubble.color.g, speechBubble.color.b, Mathf.Lerp(1, 0, elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Change the sprite once faded out
+        speechBubble.color = new Color(speechBubble.color.r, speechBubble.color.g, speechBubble.color.b, 0);
+        speechBubble.sprite = targetSprite;
+
+        // Smoothly fade the new sprite in
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            speechBubble.color = new Color(speechBubble.color.r, speechBubble.color.g, speechBubble.color.b, Mathf.Lerp(0, 1, elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        speechBubble.color = new Color(speechBubble.color.r, speechBubble.color.g, speechBubble.color.b, 1);
+    }
+
     IEnumerator PopEffect()
     {
         var originalScale = transform.localScale;
-        var duration = 0.15f;
+        var duration = 0.2f;
         var popEffectScale = 1.2f;
 
         float elapsedTime = 0f;

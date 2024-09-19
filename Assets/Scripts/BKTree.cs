@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 public class BKTree
 {
@@ -37,7 +38,89 @@ public class BKTree
 
         root.Search(word.ToLower(), minSimilarity, ref bestMatch, ref bestDistance, ref bestSimilarity);
 
-        return bestMatch;
+        return bestSimilarity >= minSimilarity ? bestMatch : null;
+    }
+
+    private static string ComputeSoundex(string word)
+    {
+        if (string.IsNullOrEmpty(word))
+            return null;
+
+        // Handle "ph" as "f" and other special mappings before processing
+        word = word.Replace("ph", "f").Replace("ck", "k").Replace("sh", "s").Replace("gh", "g").Replace("c", "k");
+
+        // Retain the first letter of the word
+        char firstLetter = char.ToUpper(word[0]);
+
+        // Build the Soundex code by converting each character based on its sound
+        StringBuilder soundexCode = new StringBuilder();
+        soundexCode.Append(firstLetter);
+
+        for (int i = 1; i < word.Length; i++)
+        {
+            char c = char.ToUpper(word[i]);
+
+            if ("BFPV".Contains(c))
+                soundexCode.Append('1');
+            else if ("CGJKQSXZ".Contains(c))
+                soundexCode.Append('2');
+            else if ("DT".Contains(c))
+                soundexCode.Append('3');
+            else if ("L".Contains(c))
+                soundexCode.Append('4');
+            else if ("MN".Contains(c))
+                soundexCode.Append('5');
+            else if ("R".Contains(c))
+                soundexCode.Append('6');
+            // Ignore vowels and non-consonant characters
+        }
+
+        // Remove consecutive duplicates
+        string rawSoundex = soundexCode.ToString();
+        StringBuilder result = new StringBuilder();
+        result.Append(rawSoundex[0]);
+
+        for (int i = 1; i < rawSoundex.Length; i++)
+        {
+            if (rawSoundex[i] != rawSoundex[i - 1])
+            {
+                result.Append(rawSoundex[i]);
+            }
+        }
+
+        // Pad with zeros or trim to ensure a four-character code
+        while (result.Length < 4)
+        {
+            result.Append('0');
+        }
+
+        return result.ToString().Substring(0, 4);
+    }
+
+    // N-Gram comparison method (bi-gram) to improve structural similarity comparison
+    private static double ComputeNGramSimilarity(string s1, string s2)
+    {
+        var bigrams1 = GenerateBigrams(s1);
+        var bigrams2 = GenerateBigrams(s2);
+
+        int matches = 0;
+        foreach (var bigram in bigrams1)
+        {
+            if (bigrams2.Contains(bigram))
+                matches++;
+        }
+
+        return (double)matches / Math.Max(bigrams1.Count, bigrams2.Count);
+    }
+
+    private static HashSet<string> GenerateBigrams(string word)
+    {
+        HashSet<string> bigrams = new HashSet<string>();
+        for (int i = 0; i < word.Length - 1; i++)
+        {
+            bigrams.Add(word.Substring(i, 2));
+        }
+        return bigrams;
     }
 
     private class BKTreeNode
@@ -81,28 +164,21 @@ public class BKTree
             // Adjust similarity based on letter structure
             double adjustedSimilarity = similarity;
 
-            // Boost for matching letter structure
-            if (HasSimilarLetterStructure(word, Word))
+            string wordSoundex = ComputeSoundex(word);
+            string candidateSoundex = ComputeSoundex(Word);
+            if (wordSoundex == candidateSoundex)
             {
-                adjustedSimilarity += 0.3; // Boost for similar letter arrangement
+                adjustedSimilarity += 0.2; // Boost similarity for phonetically similar words
             }
 
-            // Use word frequency to favor more common words (optional)
-            if (wordFrequency.ContainsKey(Word))
-            {
-                adjustedSimilarity += 0.2; // Boost for common words
-            }
+            // Boost similarity based on N-Gram comparison
+            double nGramSimilarity = ComputeNGramSimilarity(word, Word);
+            adjustedSimilarity += nGramSimilarity * 0.3; // Boost for bigram structural similarity
 
             // Penalize words that have fewer shared letters across the entire word
             if (HasFewSharedLetters(word, Word))
             {
                 adjustedSimilarity -= 0.3; // Penalize for having too few shared letters
-            }
-
-            // Strong penalty for rare or uncommon words if frequency data exists
-            if (!wordFrequency.ContainsKey(Word))
-            {
-                adjustedSimilarity -= 0.2; // Penalize rare words when comparing common ones
             }
 
             // Choose the best match based on adjusted similarity
@@ -128,22 +204,6 @@ public class BKTree
                     childNode.Search(word, minSimilarity, ref bestMatch, ref bestDistance, ref bestSimilarity);
                 }
             }
-        }
-
-        private bool HasSimilarLetterStructure(string input, string candidate)
-        {
-            int length = Math.Min(input.Length, candidate.Length);
-            int matchCount = 0;
-
-            for (int i = 0; i < length; i++)
-            {
-                if (input[i] == candidate[i])
-                {
-                    matchCount++;
-                }
-            }
-
-            return (double)matchCount / length > 0.6; // Boost for 60%+ matching letters in position
         }
 
         private bool HasFewSharedLetters(string input, string candidate)

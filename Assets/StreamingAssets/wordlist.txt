@@ -31,7 +31,6 @@ abandoning
 abandonment
 abandons
 abapical
-abas
 abase
 abased
 abasedly
@@ -4013,6 +4012,8 @@ anthologizes
 anthologizing
 anthology
 anthracite
+anthracycline
+anthracyclines
 anthrax
 anthropocentric
 anthropoid
@@ -4088,6 +4089,7 @@ antidepressant
 antidepressants
 antiderivative
 antiderivatives
+antidisestablishmentarianism
 antidora
 antidote
 antidotes
@@ -54085,6 +54087,7 @@ janitor
 janitorial
 janitors
 janizary
+janky
 janty
 japan
 japanize
@@ -54825,6 +54828,7 @@ judgment
 judgmental
 judgmentally
 judgments
+judgy
 judicatories
 judicatory
 judicature
@@ -63886,6 +63890,8 @@ misdiagnoses
 misdiagnosing
 misdiagnosis
 misdial
+misdialed
+misdialing
 misdials
 misdid
 misdirect
@@ -69371,6 +69377,7 @@ octyls
 ocular
 ocularly
 oculars
+oculate
 oculi
 oculist
 oculists
@@ -72217,6 +72224,7 @@ oxtongue
 oxyacetylene
 oxyacid
 oxyacids
+oxybenzone
 oxygen
 oxygenate
 oxygenated
@@ -76162,8 +76170,6 @@ pinnule
 pinnules
 pinny
 pinochle
-pinocle
-pinocles
 pinole
 pinoles
 pinon
@@ -85758,6 +85764,10 @@ renumber
 renumbered
 renumbering
 renumbers
+renunciate
+renunciated
+renunciates
+renunciating
 renunciation
 renunciations
 renvoi
@@ -110400,6 +110410,7 @@ uninterested
 uninteresting
 uninterrupted
 uninterruptedly
+unintimidating
 uninvited
 uninviting
 uninvolved
@@ -110966,6 +110977,7 @@ unrepentant
 unreported
 unrepresentative
 unrepresented
+unrequired
 unrequited
 unreserved
 unreservedly
