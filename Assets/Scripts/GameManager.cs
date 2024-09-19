@@ -904,7 +904,8 @@ public class GameManager : MonoBehaviour
 
             var invalidWordEvent = new CustomEvent("invalidWord")
             {
-                { "word", word.ToLower() }
+                { "word", word.ToLower() },
+                { "total_games", saveObject.Statistics.GamesPlayed }
             };
             AnalyticsService.Instance.RecordEvent(invalidWordEvent);
         }

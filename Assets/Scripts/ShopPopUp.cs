@@ -305,6 +305,7 @@ public class ShopPopUp : MonoBehaviour
         currency -= cost;
         gameManager.currency -= cost;
         gameManager.currencyText.AddPoints(-cost);
+        gameManager.commandCenter.UpdateCurrency();
         currencyText.AddPoints(-cost);
 
         InitializeShopItems(isItem);

@@ -34,11 +34,15 @@ public class CommandCenter : MonoBehaviour
 
     public void UpdateState(List<GameCriterion> criteria, GameState gameState)
     {
-        var useItemCriterion = criteria.Find(c => c is UseAtLeastXItems);
         var minPointsCriterion = criteria.Find(c => c is ScoreAtLeastXPoints);
         shopText.gameObject.SetActive((gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency >= 5)
-            || (useItemCriterion != null && !useItemCriterion.IsMet(gameState))
             || (minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && gameManager.aiLivesText.LivesRemaining() <= 2 && gameManager.currency > 0));
+        UpdateCurrency();
         shopButton.GetComponentInChildren<TextMeshProUGUI>().enableVertexGradient = shopText.gameObject.activeSelf;
+    }
+
+    public void UpdateCurrency()
+    {
+        shopText.text = $"Use {gameManager.currency}\nMana (¤)";
     }
 }

@@ -23,6 +23,7 @@ public class TutorialPopUp : MonoBehaviour
     private bool startNewGame;
     private System.Action callback;
     private List<int> visiblePageIndices = new List<int>();
+    private HashSet<int> visitedPages = new HashSet<int>();
 
     private void Start()
     {
@@ -30,14 +31,12 @@ public class TutorialPopUp : MonoBehaviour
         SetVisiblePages();
     }
 
-    // Determines which pages are visible based on the player's progress
     private void SetVisiblePages(int startingPageIndex = 0, int endingPageIndex = -1)
     {
         visiblePageIndices.Clear();
 
         if (startingPageIndex >= 0 && endingPageIndex >= 0 && endingPageIndex >= startingPageIndex)
         {
-            // Only show pages between the start and end index, inclusive
             for (int i = startingPageIndex; i <= endingPageIndex && i < pages.Length; i++)
             {
                 visiblePageIndices.Add(i);
@@ -49,27 +48,22 @@ public class TutorialPopUp : MonoBehaviour
             bool hasWonRun = saveObject.Statistics.EasyWins > 0 || saveObject.Statistics.NormalWins > 0 || saveObject.Statistics.HardWins > 0;
             bool hasPressedChallengeButton = saveObject.HasPressedChallengeButton;
 
-            // Pages 1-5 are always available
             for (int i = 0; i < 5; i++) visiblePageIndices.Add(i);
 
-            // Unlock Pages 6-9 if the challenge button has been pressed
             if (hasPressedChallengeButton)
             {
                 for (int i = 5; i <= 8; i++) visiblePageIndices.Add(i);
             }
 
-            // Unlock Pages 10-14 if the player has won a game
             if (hasWonGame)
             {
                 for (int i = 9; i <= 13; i++) visiblePageIndices.Add(i);
             }
 
-            // Unlock Page 15 if the player has won a run
             if (hasWonRun) visiblePageIndices.Add(14);
         }
     }
 
-    // Display the tutorial, starting at a specific page
     public void Show(int startingPageIndex = 0, bool showCloseButton = true, bool startNewGame = false, System.Action callback = null, int endingPageIndex = -1, string closeButtonText = "Close")
     {
         clickAudioSource?.Play();
@@ -78,12 +72,11 @@ public class TutorialPopUp : MonoBehaviour
         this.startNewGame = startNewGame;
         this.callback = callback;
         closeButton.GetComponentInChildren<TextMeshProUGUI>().text = closeButtonText;
+        visitedPages.Clear();
 
-        // If endingPageIndex is specified, ensure only the pages within the range are visible
         SetVisiblePages(startingPageIndex, endingPageIndex);
 
-        // Map the original page index to the correct visible index
-        currentPageIndex = 0; // Always start at the first visible page within the provided range
+        currentPageIndex = 0;
 
         UpdateUI();
         StartCoroutine(FadeIn());
@@ -94,7 +87,6 @@ public class TutorialPopUp : MonoBehaviour
 
     public void ShowButton()
     {
-        // Call Show() with the first visible page instead of defaulting to page 1 (index 0).
         Show(visiblePageIndices[0], true);
     }
 
@@ -103,15 +95,25 @@ public class TutorialPopUp : MonoBehaviour
         float currentTime = 0;
         popUpGameObject.SetActive(true);
 
+        // Start with scale at 0 (collapsed)
+        popUpGameObject.transform.localScale = Vector3.zero;
+
         while (currentTime < fadeDuration)
         {
             currentTime += Time.deltaTime;
+
+            // Lerp both the alpha and the scale simultaneously
             canvasGroup.alpha = Mathf.Lerp(0, 1, currentTime / fadeDuration);
+            popUpGameObject.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, currentTime / fadeDuration);
+
             yield return null;
         }
+
+        // Ensure the final values are exactly set to avoid any inaccuracies from Lerp
+        canvasGroup.alpha = 1;
+        popUpGameObject.transform.localScale = Vector3.one;
     }
 
-    // Hide the popup and reset its state
     public void Hide()
     {
         clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
@@ -165,7 +167,6 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
-    // Update UI elements based on the current page
     private void UpdateUI()
     {
         UpdatePageVisibility();
@@ -173,7 +174,6 @@ public class TutorialPopUp : MonoBehaviour
         StartCoroutine(AnimateProgressBar());
     }
 
-    // Show only the current page and hide others
     private void UpdatePageVisibility()
     {
         for (int i = 0; i < pages.Length; i++)
@@ -187,12 +187,29 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
-    // Adjust button visibility based on the current page index
     private void UpdateButtonVisibility()
     {
         previousButton.gameObject.SetActive(currentPageIndex > 0);
-        nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+
+        if (visitedPages.Contains(currentPageIndex) || showCloseButton)
+        {
+            nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+        }
+        else
+        {
+            nextButton.gameObject.SetActive(false);
+            StartCoroutine(ShowNextButtonWithDelay());
+        }
+
         closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePageIndices.Count - 1);
+    }
+
+    private IEnumerator ShowNextButtonWithDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        visitedPages.Add(currentPageIndex); // Mark this page as visited
+        nextButton.gameObject.SetActive(currentPageIndex < visiblePageIndices.Count - 1);
+        StartCoroutine(PopButton(nextButton));
     }
 
     private IEnumerator AnimateProgressBar()
@@ -214,12 +231,11 @@ public class TutorialPopUp : MonoBehaviour
         }
     }
 
-    // Adds a pop effect to buttons when pressed
     private IEnumerator PopButton(Button button)
     {
         Vector3 originalScale = Vector3.one;
         Vector3 targetScale = originalScale * 1.2f;
-        float popDuration = 0.1f;
+        float popDuration = 0.15f;
         float elapsedTime = 0;
 
         while (elapsedTime < popDuration)

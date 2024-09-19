@@ -277,7 +277,6 @@ abortive
 abortively
 aborts
 abortus
-abos
 abought
 aboulia
 aboulias
@@ -1385,6 +1384,7 @@ adulator
 adulators
 adulatory
 adult
+adulted
 adulterant
 adulterants
 adulterate
@@ -1400,6 +1400,7 @@ adulteries
 adulterous
 adultery
 adulthood
+adulting
 adultly
 adults
 adumbral
@@ -2567,6 +2568,7 @@ alkine
 alkines
 alkoxide
 alkoxy
+alkoxysilane
 alky
 alkyd
 alkyds
@@ -10679,6 +10681,7 @@ blocks
 blocky
 blocs
 blog
+blogged
 blogger
 bloggers
 blogging
@@ -12778,6 +12781,8 @@ brollies
 brolly
 bromal
 bromals
+bromance
+bromances
 bromate
 bromated
 bromates
@@ -18736,6 +18741,10 @@ cliche
 cliched
 cliches
 click
+clickbait
+clickbaited
+clickbaiting
+clickbaits
 clicked
 clicker
 clickers
@@ -23894,6 +23903,10 @@ crowd
 crowded
 crowder
 crowders
+crowdfund
+crowdfunded
+crowdfunding
+crowdfunds
 crowdie
 crowdies
 crowding
@@ -24097,6 +24110,8 @@ cryptal
 cryptic
 cryptically
 crypto
+cryptocurrencies
+cryptocurrency
 cryptogram
 cryptograms
 cryptographer
@@ -25996,6 +26011,10 @@ declines
 declining
 declivities
 declivity
+declutter
+decluttered
+decluttering
+declutters
 deco
 decoct
 decocted
@@ -28412,6 +28431,7 @@ digitizing
 digits
 diglot
 diglots
+dignification
 dignified
 dignifies
 dignify
@@ -29263,6 +29283,8 @@ dished
 dishelm
 dishelms
 disherit
+disheritor
+disheritors
 dishes
 dishevel
 disheveled
@@ -34533,6 +34555,7 @@ equalling
 equally
 equals
 equanimity
+equanimous
 equate
 equated
 equates
@@ -35694,7 +35717,6 @@ exegete
 exegetes
 exegetic
 exegetical
-exempla
 exemplar
 exemplars
 exemplary
@@ -35704,7 +35726,6 @@ exemplified
 exemplifies
 exemplify
 exemplifying
-exemplum
 exempt
 exempted
 exempting
@@ -41829,6 +41850,7 @@ gamey
 gamic
 gamier
 gamiest
+gamification
 gamified
 gamifies
 gamify
@@ -42167,6 +42189,7 @@ gastronomy
 gastropod
 gastropods
 gastrula
+gastrulation
 gasts
 gasworks
 gate
@@ -43225,6 +43248,7 @@ glamour
 glamoured
 glamouring
 glamours
+glamping
 glams
 glance
 glanced
@@ -46600,6 +46624,8 @@ hashes
 hashhead
 hashing
 hashish
+hashtag
+hashtags
 haslet
 haslets
 hasp
@@ -46749,10 +46775,6 @@ haversack
 haversacks
 haves
 having
-havior
-haviors
-haviour
-haviours
 havoc
 havocked
 havocker
@@ -51875,6 +51897,7 @@ inflow
 inflows
 influence
 influenced
+influencer
 influences
 influencing
 influent
@@ -52299,6 +52322,7 @@ inrun
 inruns
 inrush
 inrushes
+insalivate
 insalubrious
 insane
 insanely
@@ -53970,8 +53994,6 @@ jadishly
 jaditic
 jaeger
 jaegers
-jager
-jagers
 jagg
 jaggary
 jagged
@@ -53979,8 +54001,6 @@ jaggeder
 jaggedest
 jaggedly
 jaggedness
-jagger
-jaggers
 jaggery
 jagghery
 jaggier
@@ -54315,7 +54335,6 @@ jerseyed
 jerseys
 jess
 jessant
-jesse
 jessed
 jesses
 jessing
@@ -54641,6 +54660,7 @@ jollification
 jollifications
 jollify
 jollily
+jolling
 jollity
 jolly
 jollying
@@ -60648,8 +60668,6 @@ maist
 maists
 maize
 maizes
-majagua
-majaguas
 majestic
 majestically
 majesties
@@ -67255,6 +67273,8 @@ neurone
 neurones
 neuronic
 neurons
+neuropath
+neuropathic
 neurosal
 neuroscience
 neurosciences
@@ -73222,6 +73242,7 @@ parking
 parkings
 parkland
 parklike
+parkour
 parks
 parkway
 parkways
@@ -73879,6 +73900,8 @@ payouts
 payroll
 payrolls
 pays
+paywall
+paywalls
 pazazz
 pazazzes
 peace
@@ -75463,6 +75486,10 @@ phot
 photic
 photics
 photo
+photobomb
+photobombed
+photobombing
+photobombs
 photocell
 photocells
 photocopied
@@ -86645,6 +86672,7 @@ respring
 resprout
 resprouting
 resprung
+respun
 rest
 restable
 restack
@@ -86765,6 +86793,7 @@ result
 resultant
 resultants
 resulted
+resultful
 resulting
 results
 resume
@@ -91907,6 +91936,8 @@ selfdoms
 selfed
 selfheal
 selfhood
+selfie
+selfies
 selfing
 selfish
 selfishly
@@ -92605,15 +92636,18 @@ sextans
 sextant
 sextants
 sextarii
+sexted
 sextet
 sextets
 sextette
 sextile
 sextiles
+sexting
 sexto
 sexton
 sextons
 sextos
+sexts
 sexts
 sextuple
 sextuplet
@@ -104445,8 +104479,10 @@ texases
 text
 textbook
 textbooks
+texted
 textile
 textiles
+texting
 textless
 texts
 textual
@@ -108530,6 +108566,10 @@ twenties
 twentieth
 twentieths
 twenty
+twerk
+twerked
+twerking
+twerks
 twerp
 twerps
 twibil
@@ -109360,6 +109400,7 @@ unclearest
 uncleft
 unclench
 uncles
+unclever
 unclinch
 unclip
 unclips
@@ -112444,10 +112485,14 @@ vans
 vantage
 vantages
 vanward
+vape
+vaped
+vapes
 vapid
 vapidity
 vapidly
 vapidness
+vaping
 vapor
 vapored
 vaporer
@@ -113425,8 +113470,10 @@ vinosity
 vinous
 vinously
 vintage
+vintaged
 vintager
 vintages
+vintaging
 vintner
 vintners
 viny
@@ -113734,6 +113781,11 @@ vizoring
 vizors
 vizsla
 vizslas
+vlog
+vlogged
+vlogger
+vloggers
+vlogging
 vocab
 vocable
 vocables
@@ -116852,10 +116904,6 @@ worths
 worthwhile
 worthy
 worts
-wost
-wots
-wotted
-wotting
 would
 wouldest
 wouldst
@@ -117142,6 +117190,8 @@ xylidins
 xylitol
 xylitols
 xylocarp
+xylograph
+xylography
 xyloid
 xylol
 xylols
@@ -117639,6 +117689,7 @@ yurta
 yurts
 yutz
 yutzes
+yuzu
 ywis
 zabaione
 zabajone

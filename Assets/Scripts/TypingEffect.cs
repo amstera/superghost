@@ -6,34 +6,48 @@ public class TypingEffect : MonoBehaviour
 {
     public float TypingSpeed = 0.045f;
     public bool PlayOnEnable = true;
+    public float StartDelay = 0.0f;
+
+    private string fullText;
 
     private TextMeshProUGUI text;
-
     private Coroutine _typingCoroutine;
 
-    void Start()
+    void Awake()
     {
         text = GetComponent<TextMeshProUGUI>();
+        fullText = text.text;
     }
 
     private void OnEnable()
     {
         if (PlayOnEnable && text != null)
         {
-            StartTyping();
+            StartCoroutine(StartTypingWithDelay());
         }
     }
 
-    public void StartTyping()
+    private IEnumerator StartTypingWithDelay()
+    {
+        text.text = string.Empty;
+
+        yield return new WaitForSeconds(StartDelay); 
+        StartTyping(fullText);
+    }
+
+    public void StartTyping(string fullText)
     {
         if (text != null)
         {
-            string fullText = text.text;
-            text.text = string.Empty;
-
             if (_typingCoroutine != null)
             {
-                StopCoroutine(_typingCoroutine);    
+                StopCoroutine(_typingCoroutine);
+            }
+
+            if (TypingSpeed == 0)
+            {
+                text.text = fullText;
+                return;
             }
 
             _typingCoroutine = StartCoroutine(TypeText(fullText));
