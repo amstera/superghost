@@ -36,7 +36,7 @@ public class SkipPopUp : MonoBehaviour
         clickAudioSource?.Play();
 
         amountToEarn = Mathf.Min(30, 5 * saveObject.CurrentLevel + 5);
-        bodyText.text = $"This level is skippable!\n\nSkip <color=yellow>Level {saveObject.CurrentLevel + 1}</color> and get <color=green>{amountToEarn}¤</color>";
+        bodyText.text = $"You can skip to <color=yellow>Level {saveObject.CurrentLevel + 2}</color>!\n\n<line-height=45>Skip Level {saveObject.CurrentLevel + 1} and get <color=green>{amountToEarn}¤</color></line-height>";
         skipButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Skip (<color=green>+{amountToEarn}¤</color>)";
         currencyText.SetPoints(gameManager.currency);
 

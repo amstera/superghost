@@ -398,8 +398,7 @@ public class GameManager : MonoBehaviour
         commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), GetGameState());
 
         int playerAiWinDifference = GetPlayerAIWinDifference();
-        bool isAILosing = playerAiWinDifference > 0;
-        ghostAvatar.UpdateState(isAILosing, currentGame);
+        ghostAvatar.UpdateState(playerAiWinDifference, currentGame);
 
         criteria.gameObject.SetActive(criteriaText.GetCurrentCriteria().Count > 0);
         if (backgroundSwirl.gameObject.activeSelf)
@@ -909,7 +908,7 @@ public class GameManager : MonoBehaviour
                 { "current_level", currentGame + 1 },
                 { "difficulty", saveObject.Difficulty.ToString() },
                 { "current_score", points },
-                { "current_lives", $"P:{playerLivesText.LivesRemaining()/5} - C:{aiLivesText.LivesRemaining()/5}" }
+                { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" }
             };
             AnalyticsService.Instance.RecordEvent(invalidWordEvent);
         }
@@ -1443,7 +1442,7 @@ public class GameManager : MonoBehaviour
                     { "won_game", playerWon & metCriteria },
                     { "won_ghost", playerWon },
                     { "word", gameWord?.ToLower() ?? "" },
-                    { "current_lives", $"P:{playerLivesText.LivesRemaining()/5} - C:{aiLivesText.LivesRemaining()/5}" }
+                    { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" }
                 };
             AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }

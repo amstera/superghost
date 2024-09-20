@@ -3207,6 +3207,8 @@ amnion
 amnionic
 amnions
 amnios
+amnioscopies
+amnioscopy
 amniote
 amniotes
 amniotic
@@ -3596,6 +3598,7 @@ anesthetic
 anesthetics
 anesthetist
 anesthetists
+anesthetization
 anesthetize
 anesthetized
 anesthetizes
@@ -3640,6 +3643,10 @@ anginal
 anginas
 anginose
 anginous
+angiogram
+angiograms
+angiographies
+angiography
 angioma
 angiomas
 angioplasties
@@ -4184,6 +4191,8 @@ antipot
 antipoverty
 antiproton
 antiprotons
+antipsychotic
+antipsychotics
 antipyic
 antiquarian
 antiquarianism
@@ -7746,6 +7755,7 @@ barista
 baristas
 barite
 barites
+baritonal
 baritone
 baritones
 barium
@@ -11528,6 +11538,7 @@ bookstore
 bookstores
 bookworm
 bookworms
+boolean
 boom
 boombox
 boomboxes
@@ -13773,7 +13784,6 @@ busload
 busloads
 busman
 busmen
-buss
 bussed
 busses
 bussing
@@ -17680,6 +17690,8 @@ chocolate
 chocolates
 chocolatey
 chocolaty
+chode
+chodes
 choice
 choicely
 choicer
@@ -23404,6 +23416,7 @@ creations
 creative
 creatively
 creativeness
+creativities
 creativity
 creator
 creators
@@ -37976,7 +37989,6 @@ figurines
 figuring
 figwort
 figworts
-fila
 filagree
 filament
 filamentous
@@ -52944,6 +52956,7 @@ interned
 internee
 internees
 internes
+internet
 interning
 internist
 internists
@@ -54605,9 +54618,6 @@ jogs
 johannes
 john
 johnboat
-johnnie
-johnnies
-johnny
 johnnycake
 johnnycakes
 johns
@@ -55521,9 +55531,11 @@ ketoses
 ketosis
 ketotic
 kettle
+kettled
 kettledrum
 kettledrums
 kettles
+kettling
 kevel
 kevels
 kevil
@@ -69812,6 +69824,7 @@ oncet
 oncidium
 oncogene
 oncogenes
+oncological
 oncologist
 oncologists
 oncology
@@ -72232,6 +72245,10 @@ oxygenates
 oxygenating
 oxygenation
 oxygenic
+oxygenize
+oxygenized
+oxygenizes
+oxygenizing
 oxygens
 oxymora
 oxymoron
@@ -76141,9 +76158,6 @@ pinkings
 pinkish
 pinkly
 pinkness
-pinko
-pinkoes
-pinkos
 pinkroot
 pinks
 pinky
@@ -78105,8 +78119,6 @@ posthumous
 posthumously
 posthypnotic
 postiche
-postie
-posties
 postilion
 postilions
 postillion
@@ -80318,6 +80330,8 @@ prosses
 prossie
 prossies
 prost
+prostaglandin
+prostaglandins
 prostate
 prostates
 prostheses
@@ -83719,6 +83733,10 @@ recliner
 recliners
 reclines
 reclining
+reclose
+reclosed
+recloses
+reclosing
 reclothe
 recluse
 recluses
@@ -100507,6 +100525,7 @@ subfreezing
 subfusc
 subfuscs
 subgenre
+subgenres
 subgenus
 subgoal
 subgoals
@@ -102397,6 +102416,8 @@ sympatry
 symphonic
 symphonies
 symphony
+symphyses
+symphysis
 sympodia
 symposia
 symposium
@@ -108839,6 +108860,7 @@ tzarist
 tzarists
 tzaritza
 tzars
+tzatziki
 tzetze
 tzetzes
 tzigane
@@ -111164,6 +111186,7 @@ unsheathing
 unshed
 unshell
 unshells
+unsheltered
 unshift
 unshifts
 unship
@@ -117983,11 +118006,8 @@ zoeal
 zoeas
 zoecia
 zoecium
-zoftig
-zoic
 zoisite
 zoisites
-zombi
 zombie
 zombies
 zombified
@@ -118010,7 +118030,6 @@ zoneless
 zoner
 zoners
 zones
-zonetime
 zoning
 zonk
 zonked

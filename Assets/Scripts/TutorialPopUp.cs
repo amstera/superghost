@@ -123,13 +123,13 @@ public class TutorialPopUp : MonoBehaviour
         clickAudioSource.pitch = Random.Range(0.75f, 1.25f);
         clickAudioSource?.Play();
 
+        StopAllCoroutines();
+        ResetPopUp();
+
         if (!showCloseButton && startNewGame)
         {
             gameManager.NewGamePressed();
         }
-
-        StopAllCoroutines();
-        ResetPopUp();
 
         if (callback != null)
         {

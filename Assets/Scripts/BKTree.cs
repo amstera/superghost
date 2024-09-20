@@ -46,55 +46,88 @@ public class BKTree
         if (string.IsNullOrEmpty(word))
             return null;
 
-        // Handle "ph" as "f" and other special mappings before processing
-        word = word.Replace("ph", "f").Replace("ck", "k").Replace("sh", "s").Replace("gh", "g").Replace("c", "k");
+        // Dictionary for transformations
+        var transformations = new Dictionary<string, string>
+        {
+            {"ph", "f"}, {"ck", "k"}, {"gh", "f"}, {"ps", "s"},
+            {"qu", "kw"}, {"wr", "r"}, {"mb", "m"}
+        };
+
+        // Apply transformations
+        foreach (var pair in transformations)
+        {
+            word = word.Replace(pair.Key, pair.Value);
+        }
+
+        // Handle silent final 'e'
+        if (word.EndsWith("e"))
+        {
+            word = word.Substring(0, word.Length - 1);
+        }
+
+        // Handle soft 'c' (c followed by e, i, or y should not be replaced)
+        word = ReplaceHardC(word);
 
         // Retain the first letter of the word
         char firstLetter = char.ToUpper(word[0]);
-
-        // Build the Soundex code by converting each character based on its sound
         StringBuilder soundexCode = new StringBuilder();
         soundexCode.Append(firstLetter);
 
+        // Soundex mapping
+        var soundexMap = new Dictionary<char, char>
+        {
+            {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
+            {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'},
+            {'Q', '2'}, {'S', '2'}, {'X', '2'}, {'Z', '2'},
+            {'D', '3'}, {'T', '3'},
+            {'L', '4'},
+            {'M', '5'}, {'N', '5'},
+            {'R', '6'}
+        };
+
+        // Generate Soundex code, skipping the first letter
+        char previousCode = '0';
         for (int i = 1; i < word.Length; i++)
         {
-            char c = char.ToUpper(word[i]);
-
-            if ("BFPV".Contains(c))
-                soundexCode.Append('1');
-            else if ("CGJKQSXZ".Contains(c))
-                soundexCode.Append('2');
-            else if ("DT".Contains(c))
-                soundexCode.Append('3');
-            else if ("L".Contains(c))
-                soundexCode.Append('4');
-            else if ("MN".Contains(c))
-                soundexCode.Append('5');
-            else if ("R".Contains(c))
-                soundexCode.Append('6');
-            // Ignore vowels and non-consonant characters
-        }
-
-        // Remove consecutive duplicates
-        string rawSoundex = soundexCode.ToString();
-        StringBuilder result = new StringBuilder();
-        result.Append(rawSoundex[0]);
-
-        for (int i = 1; i < rawSoundex.Length; i++)
-        {
-            if (rawSoundex[i] != rawSoundex[i - 1])
+            char currentChar = char.ToUpper(word[i]);
+            if (soundexMap.TryGetValue(currentChar, out char code))
             {
-                result.Append(rawSoundex[i]);
+                // Append the code only if it is not a duplicate of the previous code
+                if (code != previousCode)
+                {
+                    soundexCode.Append(code);
+                    previousCode = code;
+                }
             }
         }
 
-        // Pad with zeros or trim to ensure a four-character code
-        while (result.Length < 4)
+        // Ensure the result is exactly 4 characters, padded with zeros if necessary
+        while (soundexCode.Length < 4)
         {
-            result.Append('0');
+            soundexCode.Append('0');
         }
 
-        return result.ToString().Substring(0, 4);
+        return soundexCode.ToString().Substring(0, 4);
+    }
+
+    // Helper method to handle hard 'c' transformation
+    private static string ReplaceHardC(string word)
+    {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < word.Length; i++)
+        {
+            if (word[i] == 'c' && (i + 1 < word.Length) && !"eiyao".Contains(word[i + 1]))
+            {
+                result.Append('k'); // Replace hard 'c' with 'k'
+            }
+            else
+            {
+                result.Append(word[i]);
+            }
+        }
+
+        return result.ToString();
     }
 
     // N-Gram comparison method (bi-gram) to improve structural similarity comparison
@@ -178,7 +211,7 @@ public class BKTree
             // Penalize words that have fewer shared letters across the entire word
             if (HasFewSharedLetters(word, Word))
             {
-                adjustedSimilarity -= 0.3; // Penalize for having too few shared letters
+                adjustedSimilarity -= 0.2; // Penalize for having too few shared letters
             }
 
             // Choose the best match based on adjusted similarity

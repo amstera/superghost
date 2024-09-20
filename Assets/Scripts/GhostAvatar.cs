@@ -27,10 +27,11 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
     private float popScale = 1.25f;
     private float popDuration = 0.1f;
     private bool isThinking = false;
-    private bool isLosing;
+    private int playerAiWinDiff;
     private bool shouldShowFlag;
     private Color currentGlowColor = Color.white;
     private Coroutine shakingTouchedCoroutine;
+    private Coroutine continuousShakeCoroutine;
 
     void Start()
     {
@@ -63,7 +64,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             StartCoroutine(TransitionBubbleSprite(speechSprite));
         }
 
-        UpdateState(isLosing, currentLevel);
+        UpdateState(playerAiWinDiff, currentLevel);
         textMeshProUGUI.text = text;
         StartCoroutine(PopTextEffect());
     }
@@ -88,6 +89,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         {
             flag.SetActive(true);
             mercyButton.SetActive(true);
+            StopShaking();
         }
 
         StartCoroutine("AnimateThinking");
@@ -95,6 +97,28 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         isThinking = true;
 
         StartCoroutine(TransitionBubbleSprite(thoughtSprite));
+    }
+
+    public void UpdateState(int playerAiWinDiff, int currentLevel)
+    {
+        this.playerAiWinDiff = playerAiWinDiff;
+        this.currentLevel = currentLevel;
+
+        if (flag.activeSelf)
+        {
+            ghostImage.sprite = sadGhost;
+            StopShaking();
+        }
+        else if (playerAiWinDiff > 0)
+        {
+            ghostImage.sprite = angryGhost;
+            StartShaking();
+        }
+        else
+        {
+            ghostImage.sprite = normalGhost;
+            StopShaking();
+        }
     }
 
     public void SetFlag(GameState gameState)
@@ -108,6 +132,26 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         StartCoroutine(PopEffect());
         StartCoroutine(Shake());
     }
+
+    private void StartShaking()
+    {
+        if (continuousShakeCoroutine != null)
+        {
+            StopCoroutine(continuousShakeCoroutine);
+        }
+        continuousShakeCoroutine = StartCoroutine(ContinuousShake());
+    }
+
+    private void StopShaking()
+    {
+        if (continuousShakeCoroutine != null)
+        {
+            StopCoroutine(continuousShakeCoroutine);
+            continuousShakeCoroutine = null;
+            transform.localPosition = new Vector3(transform.localPosition.x, startYPosition, transform.localPosition.z); // Reset to original position
+        }
+    }
+
 
     private IEnumerator TransitionBubbleSprite(Sprite targetSprite)
     {
@@ -201,26 +245,7 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
         // Wait while showing the surprised image
         yield return new WaitForSeconds(0.1f);
 
-        UpdateState(isLosing, currentLevel);
-    }
-
-    public void UpdateState(bool isLosing, int currentLevel)
-    {
-        this.isLosing = isLosing;
-        this.currentLevel = currentLevel;
-
-        if (flag.activeSelf)
-        {
-            ghostImage.sprite = sadGhost;
-        }
-        else if (isLosing)
-        {
-            ghostImage.sprite = angryGhost;
-        }
-        else
-        {
-            ghostImage.sprite = normalGhost;
-        }
+        UpdateState(playerAiWinDiff, currentLevel);
     }
 
     private void UpdateGhostColor()
@@ -340,6 +365,34 @@ public class GhostAvatar : MonoBehaviour, IPointerClickHandler
             else if (ghostImage.sprite == thinkingBlinkGhost) ghostImage.sprite = thinkingGhost;
             else if (ghostImage.sprite == sadBlinkGhost) ghostImage.sprite = sadGhost;
             else if (ghostImage.sprite == surprisedBlinkGhost) ghostImage.sprite = surprisedGhost;
+        }
+    }
+
+    private IEnumerator ContinuousShake()
+    {
+        float maxShakeMagnitude = 4f; // Maximum shake magnitude
+        float baseShakeDuration = 0.1f; // Duration of each shake
+
+        while (playerAiWinDiff > 0)
+        {
+            // Calculate the shake magnitude based on playerAiWinDiff (higher difference = more shake)
+            float shakeMagnitude = Mathf.Clamp(playerAiWinDiff, 0, maxShakeMagnitude) * 10;
+            float elapsed = 0.0f;
+            Vector3 originalPos = transform.localPosition;
+
+            // Shake for the duration based on aiPlayerWinDiff
+            while (elapsed < baseShakeDuration)
+            {
+                float x = originalPos.x + Random.Range(-1f, 1f) * shakeMagnitude * Time.deltaTime;
+                float y = originalPos.y + Random.Range(-1f, 1f) * shakeMagnitude * Time.deltaTime;
+                transform.localPosition = new Vector3(x, y, originalPos.z);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.localPosition = originalPos; // Reset to original position after shake
+            yield return new WaitForSeconds(baseShakeDuration); // Pause before the next shake
         }
     }
 
