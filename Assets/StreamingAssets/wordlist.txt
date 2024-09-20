@@ -11882,6 +11882,7 @@ bounces
 bouncier
 bounciest
 bouncily
+bounciness
 bouncing
 bouncy
 bound
@@ -16398,6 +16399,8 @@ cepes
 cephalad
 cephalic
 cephalin
+cephalopod
+cephalopods
 cepheid
 cepheids
 ceps
@@ -17485,6 +17488,8 @@ chimeric
 chimerical
 chimers
 chimes
+chimichanga
+chimichangas
 chiming
 chimla
 chimlas
@@ -26217,6 +26222,8 @@ deepening
 deepens
 deeper
 deepest
+deepfake
+deepfakes
 deeply
 deepness
 deeps
@@ -30859,10 +30866,13 @@ dowser
 dowsers
 dowses
 dowsing
+doxed
+doxes
 doxie
 doxies
 doxologies
 doxology
+doxxing
 doxy
 doyen
 doyenne
@@ -38086,7 +38096,6 @@ filming
 filmis
 filmland
 filmless
-filmlike
 filmmaker
 filmmakers
 filmography
@@ -38135,7 +38144,6 @@ finagling
 final
 finale
 finales
-finalis
 finalise
 finalism
 finalist
@@ -42119,8 +42127,6 @@ garveys
 gasalier
 gasbag
 gasbags
-gascon
-gascons
 gaseity
 gaselier
 gaseous
@@ -48540,6 +48546,7 @@ homophobia
 homophobic
 homophone
 homophones
+homophonic
 homosexual
 homosexuality
 homosexuals
@@ -51912,6 +51919,7 @@ inflows
 influence
 influenced
 influencer
+influencers
 influences
 influencing
 influent
@@ -59047,6 +59055,10 @@ liverymen
 lives
 livest
 livestock
+livestream
+livestreamed
+livestreaming
+livestreams
 livetrap
 livid
 lividity
@@ -59056,8 +59068,6 @@ liviers
 living
 livingly
 livings
-livre
-livres
 livyer
 livyers
 lixivia
@@ -59067,8 +59077,6 @@ lizard
 lizards
 llama
 llamas
-llano
-llanos
 loach
 loaches
 load
@@ -67783,6 +67791,7 @@ nock
 nocked
 nocking
 nocks
+noctambulic
 noctuid
 noctuids
 noctule
@@ -80707,6 +80716,8 @@ pterins
 pterodactyl
 pterodactyls
 pteropod
+pterosaur
+pterosaurs
 pterygia
 pteryla
 pterylae
@@ -91291,6 +91302,7 @@ scrupulously
 scrupulousness
 scrutineer
 scrutineers
+scrutinization
 scrutinize
 scrutinized
 scrutinizes
