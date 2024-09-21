@@ -1920,6 +1920,7 @@ public class GameManager : MonoBehaviour
 
         saveObject.Statistics.LastIncrementDate = lastIncrementedDate;
         saveObject.Statistics.DailyPlayStreak = currentStreak;
+        saveObject.Statistics.HighestDailyPlayStreak = Math.Max(saveObject.Statistics.HighestDailyPlayStreak, currentStreak);
     }
 
     private void PlayComputerWord(string word)

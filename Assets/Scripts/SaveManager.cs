@@ -98,6 +98,7 @@ public class Statistics
     public int MostPointsPerRound;
     public DateTime LastIncrementDate = DateTime.MinValue;
     public int DailyPlayStreak;
+    public int HighestDailyPlayStreak;
     public int HighestLevel;
     public int EasyHighestLevel;
     public int HardHighestLevel;

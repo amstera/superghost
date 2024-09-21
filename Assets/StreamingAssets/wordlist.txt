@@ -9981,6 +9981,8 @@ biographically
 biographies
 biography
 biogs
+biohazard
+biohazards
 bioherm
 bioherms
 biologic
@@ -32359,6 +32361,7 @@ edict
 edictal
 edicts
 edification
+edifications
 edifice
 edifices
 edified
@@ -49849,6 +49852,7 @@ hyponymy
 hypopnea
 hypopyon
 hypos
+hypotension
 hypotenuse
 hypotenuses
 hypothalami
@@ -53544,6 +53548,7 @@ ipecac
 ipecacs
 ipomoea
 ipomoeas
+iproniazid
 iracund
 irade
 irades
@@ -55258,6 +55263,8 @@ karting
 kartings
 karts
 karyotin
+karyotype
+karyotypes
 kasbah
 kasbahs
 kasha
@@ -56494,7 +56501,6 @@ kything
 laager
 laagered
 laagers
-laari
 labara
 labarum
 labarums
@@ -78429,6 +78435,9 @@ practicing
 practicum
 practicums
 practise
+practised
+practises
+practising
 practitioner
 practitioners
 praecipe
@@ -104822,6 +104831,7 @@ thimble
 thimbleful
 thimblefuls
 thimbles
+thimerosal
 thin
 thinclad
 thindown
@@ -111289,6 +111299,7 @@ unstably
 unstack
 unstacked
 unstacks
+unstaffed
 unstained
 unstate
 unstated

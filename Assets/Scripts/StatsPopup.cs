@@ -231,14 +231,32 @@ public class StatsPopup : MonoBehaviour
 
         var unlockedHats = GetUnlockedHats(false);
 
-        // Repopulate unlock items
-        foreach (var hatData in hat.hatDataList)
+        // Split hatDataList into unlocked and locked groups, preserving order
+        var unlockedHatsData = hat.hatDataList
+            .Where(hatData => unlockedHats.Contains(hatData.hatType))
+            .ToList();
+
+        var lockedHatsData = hat.hatDataList
+            .Where(hatData => !unlockedHats.Contains(hatData.hatType))
+            .ToList();
+
+        // First, display unlocked hats
+        foreach (var hatData in unlockedHatsData)
         {
             var unlockItem = Instantiate(unlockPrefab, unlocksContentRect);
             unlockItem.statsPopup = this;
-            bool isUnlocked = unlockedHats.Contains(hatData.hatType);
-            bool isNewlyUnlocked = isUnlocked && !saveObject.UnlockedHats.Contains(hatData.hatType);
+            bool isUnlocked = true; // We know these are unlocked
+            bool isNewlyUnlocked = !saveObject.UnlockedHats.Contains(hatData.hatType);
             unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);
+        }
+
+        // Then, display locked hats
+        foreach (var hatData in lockedHatsData)
+        {
+            var unlockItem = Instantiate(unlockPrefab, unlocksContentRect);
+            unlockItem.statsPopup = this;
+            bool isUnlocked = false;
+            unlockItem.Init(hatData.hatType, isUnlocked, false, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);
         }
 
         StartCoroutine(ScrollToTop(unlocksScrollRect));
@@ -318,6 +336,18 @@ public class StatsPopup : MonoBehaviour
         if (saveObject.Statistics.NormalWins >= 10 || saveObject.Statistics.HardWins >= 10)
         {
             unlockedHats.Add(HatType.Top);
+        }
+        if (saveObject.Statistics.HighScore >= 500)
+        {
+            unlockedHats.Add(HatType.Chef);
+        }
+        if (saveObject.Statistics.EasyHighestLevel >= 14 || saveObject.Statistics.HighestLevel >= 14 || saveObject.Statistics.HardHighestLevel >= 14)
+        {
+            unlockedHats.Add(HatType.Viking);
+        }
+        if (saveObject.Statistics.HighestDailyPlayStreak >= 5)
+        {
+            unlockedHats.Add(HatType.Cat);
         }
 
         return unlockedHats;

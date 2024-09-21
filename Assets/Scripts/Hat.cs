@@ -63,7 +63,10 @@ public enum HatType
     Steampunk,
     Taco,
     Top,
-    Wizard
+    Wizard,
+    Chef,
+    Viking,
+    Cat
 }
 
 [System.Serializable]
