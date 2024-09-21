@@ -12903,6 +12903,7 @@ brouhaha
 brouhahas
 brow
 browband
+browbands
 browbeat
 browbeaten
 browbeating
@@ -13836,7 +13837,6 @@ butenes
 buteo
 buteos
 butes
-butle
 butled
 butler
 butlers
@@ -26739,6 +26739,7 @@ delis
 delish
 delist
 delisted
+delisting
 delists
 deliver
 deliverable
@@ -26874,6 +26875,9 @@ demireps
 demise
 demised
 demises
+demisexual
+demisexuality
+demisexually
 demising
 demister
 demit
@@ -48549,6 +48553,7 @@ homophones
 homophonic
 homosexual
 homosexuality
+homosexually
 homosexuals
 homy
 honan
@@ -56430,8 +56435,6 @@ kukris
 kulak
 kulaki
 kulaks
-kultur
-kulturs
 kumiss
 kumisses
 kummel
@@ -56440,10 +56443,6 @@ kumquat
 kumquats
 kumys
 kumyses
-kuna
-kune
-kunzite
-kunzites
 kurbash
 kurgan
 kurgans
@@ -56453,8 +56452,6 @@ kurtoses
 kurtosis
 kuru
 kurus
-kusso
-kussos
 kuvasz
 kuvaszok
 kvas
@@ -56475,10 +56472,6 @@ kwacha
 kwachas
 kwanza
 kwanzas
-kyack
-kyacks
-kyak
-kyaks
 kyanise
 kyanised
 kyanises
@@ -56487,22 +56480,11 @@ kyanites
 kyanize
 kyanized
 kyanizes
-kyar
-kyars
-kyat
-kyats
-kybosh
-kyboshed
-kyboshes
-kyes
 kylikes
 kylix
-kymogram
 kyphoses
 kyphosis
 kyphotic
-kyrie
-kyries
 kyte
 kytes
 kythe
@@ -69812,6 +69794,8 @@ omnipresence
 omnipresent
 omniscience
 omniscient
+omnisexual
+omnisexuality
 omnivora
 omnivore
 omnivores
@@ -72881,6 +72865,9 @@ panoramic
 panpipe
 panpipes
 pans
+pansexual
+pansexuality
+pansexually
 pansies
 pansophy
 pansy
@@ -77556,6 +77543,9 @@ poltroon
 poltroons
 poly
 polyacrylamide
+polyamorous
+polyamorously
+polyamory
 polyandrous
 polyandry
 polybrid
@@ -77635,6 +77625,8 @@ polypus
 polys
 polysemous
 polysemy
+polysexual
+polysexuality
 polysome
 polystyrene
 polysyllabic
