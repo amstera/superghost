@@ -10,6 +10,8 @@ using Unity.Services.Analytics;
 using System;
 using Random = UnityEngine.Random;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 public class GameManager : MonoBehaviour
 {
@@ -1755,15 +1757,52 @@ public class GameManager : MonoBehaviour
 
     private string GenerateWordLink(string gameWord, bool isWinning, bool isNeutral = false)
     {
-        string link = $"https://www.dictionary.com/browse/{gameWord.ToLower()}";
-        string color = isWinning ? "green" : "red";
+        // Initially use the fallback link
+        string fallbackLink = string.Format(DictionaryUrlBuilder.fallbackUrl, gameWord);
         string displayWord = gameWord.ToUpper();
-        if (isNeutral)
-        {
-            return $"<link={link}><color=yellow>{displayWord}</color></link>";
-        }
 
-        return $"<link={link}><color={color}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
+        string initialColor = isNeutral ? "yellow" : (isWinning ? "green" : "red");
+
+        // For winning and losing cases, we add the magnifying glass icon
+        string initialLink = isNeutral
+            ? $"<link={fallbackLink}><color={initialColor}>{displayWord}</color></link>"
+            : $"<link={fallbackLink}><color={initialColor}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
+
+        // Display the initial link with the fallback URL
+        wordDisplay.text = wordDisplay.text.Replace(gameWord.ToUpper(), initialLink);
+
+        // Start an async method to fetch and update the link
+        ReplaceLinkAsync(gameWord, fallbackLink);
+
+        return initialLink;
+    }
+
+    private async void ReplaceLinkAsync(string gameWord, string fallbackLink)
+    {
+        // Get the verified link asynchronously
+        string verifiedLink = await DictionaryUrlBuilder.BuildDictionaryUrlAsync(gameWord);
+
+        // Once verified, start a coroutine to update the UI on the main thread
+        if (wordDisplay.text.Contains(fallbackLink))
+        {
+            StartCoroutine(UpdateLinkOnMainThread(fallbackLink, verifiedLink));
+        }
+    }
+
+    private IEnumerator UpdateLinkOnMainThread(string fallbackLink, string verifiedLink)
+    {
+        // Make sure we're on the main thread and then replace the link
+        yield return null;
+
+        // Use regex to replace only the specific fallback link
+        string pattern = $@"<link={Regex.Escape(fallbackLink)}>";
+        string replacementLink = $"<link={verifiedLink}>";
+
+        // Ensure we still have the fallback link before replacing it
+        if (wordDisplay.text.Contains(fallbackLink))
+        {
+            wordDisplay.text = Regex.Replace(wordDisplay.text, pattern, replacementLink);
+        }
     }
 
     private string GenerateInvalidWordLink(string gameWord)

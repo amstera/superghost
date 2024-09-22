@@ -39,19 +39,18 @@ public class WordPopUp : MonoBehaviour
         this.word = word;
         this.url = url;
 
-        bool showDefine = url.Contains("dictionary", System.StringComparison.InvariantCultureIgnoreCase);
-        if (showDefine)
-        {
-            defineButton.gameObject.SetActive(true);
-            blockButton.interactable = isValidWord;
-            reportButton.gameObject.SetActive(false);
-        }
-        else
+        bool showReport = url.Contains("greenteagaming.com", System.StringComparison.InvariantCultureIgnoreCase);
+        if (showReport)
         {
             defineButton.gameObject.SetActive(false);
             blockButton.interactable = false;
             reportButton.gameObject.SetActive(true);
-
+        }
+        else
+        {
+            defineButton.gameObject.SetActive(true);
+            blockButton.interactable = isValidWord;
+            reportButton.gameObject.SetActive(false);
         }
 
         StopAllCoroutines();

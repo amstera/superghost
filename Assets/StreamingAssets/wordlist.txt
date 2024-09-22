@@ -34380,6 +34380,7 @@ epeeists
 epees
 epeiric
 ependyma
+ependymoma
 epergne
 epergnes
 epha
@@ -62265,6 +62266,7 @@ megatons
 megavolt
 megawatt
 megawatts
+megestrol
 megilla
 megillah
 megillas
@@ -70113,6 +70115,8 @@ optimally
 optime
 optimes
 optimise
+optimised
+optimising
 optimism
 optimisms
 optimist
@@ -76479,6 +76483,10 @@ pivotman
 pivotmen
 pivots
 pixel
+pixelate
+pixelated
+pixelates
+pixelating
 pixels
 pixes
 pixie
@@ -85999,6 +86007,9 @@ repleading
 repleads
 repled
 repledge
+repledged
+repledges
+repledging
 replenish
 replenished
 replenishes
@@ -105131,8 +105142,6 @@ thrummer
 thrumming
 thrummy
 thrums
-thruput
-thruputs
 thrush
 thrushes
 thrust
@@ -105580,6 +105589,7 @@ tinning
 tinnitus
 tinny
 tinplate
+tinplates
 tinpot
 tins
 tinsel
@@ -106849,12 +106859,6 @@ trances
 tranche
 tranches
 trancing
-trangam
-trangams
-trank
-tranks
-tranq
-tranqs
 tranquil
 tranquiler
 tranquilest
