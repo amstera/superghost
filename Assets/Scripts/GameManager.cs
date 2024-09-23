@@ -1768,9 +1768,6 @@ public class GameManager : MonoBehaviour
             ? $"<link={fallbackLink}><color={initialColor}>{displayWord}</color></link>"
             : $"<link={fallbackLink}><color={initialColor}>{displayWord}</color><size=20> </size><size=40><voffset=1.5><sprite=0></voffset></size></link>";
 
-        // Display the initial link with the fallback URL
-        wordDisplay.text = wordDisplay.text.Replace(gameWord.ToUpper(), initialLink);
-
         // Start an async method to fetch and update the link
         ReplaceLinkAsync(gameWord, fallbackLink);
 

@@ -8669,6 +8669,7 @@ befallen
 befalling
 befalls
 befell
+befezzed
 befinger
 befit
 befits
@@ -18148,7 +18149,6 @@ cindered
 cindering
 cinders
 cindery
-cine
 cineast
 cineaste
 cineasts
@@ -18177,8 +18177,6 @@ cinnamyl
 cinquain
 cinque
 cinques
-cion
-cions
 cioppino
 cipher
 ciphered
@@ -78186,6 +78184,7 @@ postscript
 postscripts
 postseason
 postseasons
+postsecondary
 postshow
 postsynaptic
 postsync
@@ -110258,6 +110257,7 @@ ungrammatical
 ungrateful
 ungratefully
 ungratefulness
+ungreased
 ungreedy
 unground
 ungrudging

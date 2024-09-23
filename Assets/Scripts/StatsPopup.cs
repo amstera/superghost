@@ -11,7 +11,7 @@ public class StatsPopup : MonoBehaviour
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject, statsPage, unlocksPage, newUnlocksIndicator;
     public Button statsIconButton, statsButton, unlocksButton;
-    public TextMeshProUGUI statsText;
+    public TextMeshProUGUI statsText, unlocksTitleText;
     public GameManager gameManager;
     public UnlockItem unlockPrefab;
     public Hat hat;
@@ -239,6 +239,8 @@ public class StatsPopup : MonoBehaviour
         var lockedHatsData = hat.hatDataList
             .Where(hatData => !unlockedHats.Contains(hatData.hatType))
             .ToList();
+
+        unlocksTitleText.text = $"Unlocks ({unlockedHatsData.Count}/{hat.hatDataList.Count})";
 
         // First, display unlocked hats
         foreach (var hatData in unlockedHatsData)
