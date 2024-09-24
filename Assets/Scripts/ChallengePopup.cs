@@ -53,7 +53,7 @@ public class ChallengePopUp : MonoBehaviour
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         originalSubstring = substring.ToLower().Trim();
-        challengeText.text = $"CASP calls a bluff on:\n<color=#FF3800>{substring.ToUpper()}</color>";
+        challengeText.text = $"<size=45><sprite=2></size><color=yellow>CASP</color> thinks you bluffed with\n<color=red>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = originalSubstring;
 

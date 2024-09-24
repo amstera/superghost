@@ -34,7 +34,7 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
 
     public void Refresh()
     {
-        if (lastPointerEventData != null && wordPopup.canvasGroup.alpha > 0) // pop up is showing
+        if (lastPointerEventData != null && wordPopup != null && wordPopup.canvasGroup.alpha > 0) // pop up is showing
         {
             wordPopup.Hide();
             OnPointerClick(lastPointerEventData);

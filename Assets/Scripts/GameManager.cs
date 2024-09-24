@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     public BackgroundSwirl backgroundSwirl;
     public TutorialModal tutorialModal;
     public ProperNounsWarningPopUp properNounsWarningPopUp;
+    public BadWordsWarningPopUp badWordsWarningPopUp;
     public WordDictionary wordDictionary = new WordDictionary();
 
     public AudioClip winSound, loseSound, loseGameSound, winGameSound, winRunSound;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
     public int ResetWordUses, PlayerRestoreLivesUses, AIRestoreLivesUses, AILivesMatch, ItemsUsed;
     public int currency = 5;
     public List<string> properNouns = new List<string>();
+    public List<string> badWords = new List<string>();
 
     private HashSet<string> previousWords = new HashSet<string>();
     private List<RecapObject> recap = new List<RecapObject>();
@@ -875,6 +877,7 @@ public class GameManager : MonoBehaviour
             var caspString = GetCaspText();
             var wordLink = GenerateInvalidWordLink(word);
             wordDisplay.text = $"{caspString} wins!\n{wordLink}\nisn't valid";
+
             var similarWord = wordDictionary.FindClosestWord(word);
             if (!string.IsNullOrEmpty(similarWord))
             {
@@ -889,13 +892,20 @@ public class GameManager : MonoBehaviour
                 string similarWordLink = GenerateWordLink(similarWord, false, true);
                 wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
             }
+
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
+
             if (properNouns.Contains(word.ToLower()))
             {
                 properNounsWarningPopUp.Show(word);
             }
+            else if (badWords.Contains(word.ToLower()))
+            {
+                badWordsWarningPopUp.Show();
+            }
+
             if (gameWord.ToLower() != originalWord.ToLower())
             {
                 previousWords.Add(gameWord);

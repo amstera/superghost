@@ -71,8 +71,6 @@ abbacies
 abbacy
 abbas
 abbatial
-abbe
-abbes
 abbess
 abbesses
 abbey
@@ -1333,6 +1331,7 @@ adoption
 adoptions
 adoptive
 adopts
+adorability
 adorable
 adorableness
 adorably
@@ -10684,6 +10683,8 @@ blockages
 blockbuster
 blockbusters
 blockbusting
+blockchain
+blockchains
 blocked
 blocker
 blockers
@@ -15281,6 +15282,8 @@ cardioid
 cardiologist
 cardiologists
 cardiology
+cardiomyocyte
+cardiomyocytes
 cardiomyopathy
 cardiopulmonary
 cardiovascular
@@ -20276,6 +20279,10 @@ commixt
 commode
 commodes
 commodification
+commodified
+commodifies
+commodify
+commodifying
 commodious
 commodiously
 commodities
@@ -21980,10 +21987,8 @@ coomb
 coombe
 coombes
 coombs
-coon
 cooncan
 cooncans
-coons
 coonskin
 coontie
 coonties
@@ -24836,6 +24841,7 @@ cybernetic
 cybernetics
 cyberpunk
 cyberpunks
+cybersecurity
 cybersex
 cyberspace
 cyberspaces
@@ -39484,6 +39490,7 @@ focuses
 focusing
 focussed
 focusses
+focussing
 fodder
 foddered
 fodders
@@ -49316,6 +49323,8 @@ humbles
 humblest
 humbling
 humbly
+humbucker
+humbuckers
 humbug
 humbugged
 humbugging
@@ -49752,6 +49761,7 @@ hyperbolic
 hypercritical
 hypercritically
 hypercube
+hyperfine
 hyperglycemia
 hypergol
 hyperinflation
@@ -55113,6 +55123,7 @@ kabukis
 kachina
 kachinas
 kaddish
+kaempferol
 kaffeeklatsch
 kaffeeklatsches
 kaffiyah
@@ -60172,6 +60183,7 @@ luxating
 luxation
 luxe
 luxes
+luxometer
 luxuriance
 luxuriant
 luxuriantly
@@ -68073,6 +68085,7 @@ nonfat
 nonfatal
 nonfattening
 nonfatty
+nonfeasance
 nonferrous
 nonfiction
 nonfictional
@@ -68532,7 +68545,6 @@ noters
 notes
 noteworthiness
 noteworthy
-nother
 nothing
 nothingness
 nothings
@@ -77640,6 +77652,8 @@ polypore
 polypous
 polypropylene
 polyps
+polyptych
+polyptychs
 polypus
 polys
 polysemous
@@ -81321,15 +81335,8 @@ pusillanimous
 pusillanimously
 pusley
 pusleys
-puslike
 puss
 pusses
-pussier
-pussiest
-pussley
-pussleys
-pusslies
-pusslike
 pussly
 pussycat
 pussycats
@@ -85161,6 +85168,11 @@ reinforcing
 reinform
 reinfuse
 reining
+reinitiate
+reinitiated
+reinitiates
+reinitiating
+reinitiation
 reinject
 reinjure
 reinjury
@@ -85777,7 +85789,10 @@ renominates
 renominating
 renomination
 renominations
+renotified
+renotifies
 renotify
+renotifying
 renounce
 renounced
 renouncement
@@ -109298,6 +109313,9 @@ unbosomed
 unbosoming
 unbosoms
 unbottle
+unbottled
+unbottles
+unbottling
 unbought
 unbouncy
 unbound
@@ -113278,7 +113296,9 @@ viator
 viatores
 viators
 vibe
+vibed
 vibes
+vibing
 vibist
 vibists
 vibraharp

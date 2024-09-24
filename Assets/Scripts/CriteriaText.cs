@@ -125,14 +125,18 @@ public class CriteriaText : MonoBehaviour
 
         if (level > 2)
         {
-            possibleCriteria.Add(new OddLetters());
             possibleCriteria.Add(new EvenLetters());
             possibleCriteria.Add(new MinLetters(level >= 5 ? 6 : 5));
         }
         if (level > 3)
         {
+            possibleCriteria.Add(new OddLetters());
+        }
+        if (level > 4)
+        {
             possibleCriteria.Add(new NoRepeatLetters());
         }
+
         if ((level >= 3 && level <= 7) || level >= 10)
         {
             possibleCriteria.Add(new OnlyMove(true));
