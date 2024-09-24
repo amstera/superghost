@@ -10,7 +10,6 @@ using Unity.Services.Analytics;
 using System;
 using Random = UnityEngine.Random;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 public class GameManager : MonoBehaviour
@@ -1799,6 +1798,7 @@ public class GameManager : MonoBehaviour
         if (wordDisplay.text.Contains(fallbackLink))
         {
             wordDisplay.text = Regex.Replace(wordDisplay.text, pattern, replacementLink);
+            wordDisplay.Refresh();
         }
     }
 

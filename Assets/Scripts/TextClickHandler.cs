@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,6 +13,7 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
     private WordPopUp wordPopup;
     private Coroutine colorLerpCoroutine;
     private Coroutine popCoroutine;
+    private PointerEventData lastPointerEventData;
 
     public override string text
     {
@@ -32,8 +32,19 @@ public class TextClickHandler : TextMeshProUGUI, IPointerClickHandler
         }
     }
 
+    public void Refresh()
+    {
+        if (lastPointerEventData != null && wordPopup.canvasGroup.alpha > 0) // pop up is showing
+        {
+            wordPopup.Hide();
+            OnPointerClick(lastPointerEventData);
+        }
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
+        lastPointerEventData = eventData;
+
         int linkIndex = TMP_TextUtilities.FindIntersectingLink(this, eventData.position, eventData.pressEventCamera);
 
         // Check if a link was clicked (index not -1)

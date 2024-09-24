@@ -69,7 +69,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _GlowPower: 0.5
-    - _GlowSpread: 0.85
+    - _GlowSpread: 0.79
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -84,6 +84,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 1, g: 1, b: 1, a: 0.6862745}
+    - _GlowColor: {r: 1, g: 0.8900114, b: 0, a: 0.6862745}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

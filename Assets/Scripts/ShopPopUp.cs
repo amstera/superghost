@@ -120,9 +120,9 @@ public class ShopPopUp : MonoBehaviour
 
                 ShopItemInfo SelectWeightedRandom(List<ShopItemInfo> items, float favoredWeight = 1.25f)
                 {
-                    if (currentLevel == 0)
+                    if (currentLevel <= 2)
                     {
-                        favoredWeight += 0.25f;
+                        favoredWeight += 0.5f;
                     }
 
                     ShopItemInfo selected = null;

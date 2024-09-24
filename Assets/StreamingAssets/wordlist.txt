@@ -1,3 +1,4 @@
+
 aahed
 aahing
 aahs
@@ -2260,6 +2261,7 @@ alachlor
 alack
 alacrity
 alae
+alakazam
 alameda
 alamedas
 alamo
@@ -19742,7 +19744,6 @@ cokehead
 cokelike
 cokes
 coking
-coky
 cola
 colander
 colanders
@@ -20008,6 +20009,7 @@ colotomy
 colour
 coloured
 colourer
+colouring
 colours
 colpitis
 cols
@@ -32614,6 +32616,7 @@ eighteen
 eighteens
 eighteenth
 eighteenths
+eightfold
 eighth
 eighthly
 eighths
@@ -62932,6 +62935,9 @@ metropolis
 metropolises
 metropolitan
 metros
+metrosexual
+metrosexuality
+metrosexuals
 mettle
 mettled
 mettles
@@ -64933,6 +64939,7 @@ monolith
 monolithic
 monoliths
 monolog
+monologic
 monologist
 monologists
 monologs
@@ -80430,6 +80437,8 @@ protium
 protiums
 protocol
 protocols
+protolanguage
+protolanguages
 proton
 protonic
 protons
@@ -84488,6 +84497,7 @@ reentering
 reenters
 reentries
 reentry
+reenvision
 reequip
 reequipped
 reequipping
@@ -86246,6 +86256,7 @@ reputed
 reputedly
 reputes
 reputing
+requalification
 request
 requested
 requester
@@ -92613,6 +92624,7 @@ setulous
 setup
 setups
 seven
+sevenfold
 sevens
 seventeen
 seventeens
