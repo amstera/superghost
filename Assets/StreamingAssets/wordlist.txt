@@ -49717,6 +49717,7 @@ hygienic
 hygienically
 hygienist
 hygienists
+hygrochasy
 hygrometer
 hygrometers
 hying
@@ -54703,6 +54704,7 @@ jollification
 jollifications
 jollify
 jollily
+jolliness
 jolling
 jollity
 jolly
@@ -63650,6 +63652,8 @@ minoring
 minorities
 minority
 minors
+minotaur
+minotaurs
 minoxidil
 minster
 minsters
@@ -67071,8 +67075,6 @@ negotiations
 negotiator
 negotiators
 negritude
-negroid
-negroids
 negroni
 negronis
 negs
@@ -71542,6 +71544,10 @@ overcharge
 overcharged
 overcharges
 overcharging
+overclock
+overclocked
+overclocking
+overclocks
 overcloud
 overclouded
 overclouding
@@ -85096,6 +85102,10 @@ rehoused
 rehouses
 rehousing
 rehung
+rehydrate
+rehydrated
+rehydrates
+rehydrating
 reif
 reification
 reified
@@ -110056,6 +110066,7 @@ unenforced
 unenlightened
 unenterprising
 unenthusiastic
+unentitled
 unenviable
 unenvied
 unequal
@@ -117149,6 +117160,7 @@ writher
 writhers
 writhes
 writhing
+writhings
 writing
 writings
 writs
