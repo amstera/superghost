@@ -10,7 +10,7 @@ public class BluffPopUp : MonoBehaviour
 
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public TextMeshProUGUI warningText, pointsText, bluffText, comboText, pointsCalculateText;
+    public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText, formattedText;
     public TMP_InputField inputField;
 
     public AudioSource winAudioSource, noticeAudioSource;
@@ -54,7 +54,6 @@ public class BluffPopUp : MonoBehaviour
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         originalSubstring = substring.ToLower().Trim();
-        bluffText.text = $"Optionally, finish the word for bonus points:";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = originalSubstring;
 
@@ -106,8 +105,14 @@ public class BluffPopUp : MonoBehaviour
         originalInputBeforeSubstring = newText.Substring(0, lockedStartIndex);
         originalInputAfterSubstring = newText.Substring(lockedStartIndex + originalSubstring.Length);
 
-        // Update the input field text with the locked substring intact
+        // Reconstruct the input field with the locked substring intact
         inputField.text = originalInputBeforeSubstring + originalSubstring + originalInputAfterSubstring;
+
+        // Update the formatted text with color
+        string formatted = originalInputBeforeSubstring
+                           + $"<color=red>{originalSubstring}</color>"
+                           + originalInputAfterSubstring;
+        formattedText.text = formatted;
     }
 
     public void Send()
@@ -244,6 +249,17 @@ public class BluffPopUp : MonoBehaviour
         warningText.gameObject.SetActive(false);
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
+        // Clear input and formatted text
+        inputField.text = string.Empty;
+        formattedText.text = string.Empty;
+
+        // Reset inputField RectTransform to stretch anchors and positions
+        RectTransform inputFieldRectTransform = inputField.textComponent.GetComponent<RectTransform>();
+        inputFieldRectTransform.anchorMin = new Vector2(0, 0); // Left and bottom to 0
+        inputFieldRectTransform.anchorMax = new Vector2(1, 1); // Right and top to 1
+        inputFieldRectTransform.offsetMin = Vector2.zero; // Left and bottom offset to 0
+        inputFieldRectTransform.offsetMax = Vector2.zero; // Right and top offset to 0
     }
 
     private void ShowWarning(string text)

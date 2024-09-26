@@ -12,7 +12,7 @@ public class ChallengePopUp : MonoBehaviour
     public GameObject popUpGameObject;
     public TextMeshProUGUI challengeText;
     public TMP_InputField inputField;
-    public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText;
+    public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText, formattedText;
     public ActiveEffectsText activeEffectsText;
 
     public AudioSource alertAudioSource, noticeAudioSource;
@@ -108,6 +108,12 @@ public class ChallengePopUp : MonoBehaviour
 
         // Reconstruct the input field with the locked substring intact
         inputField.text = originalInputBeforeSubstring + originalSubstring + originalInputAfterSubstring;
+
+        // Update the formatted text with color
+        string formatted = originalInputBeforeSubstring
+                           + $"<color=red>{originalSubstring}</color>"
+                           + originalInputAfterSubstring;
+        formattedText.text = formatted;
     }
 
     public void Send()
@@ -234,6 +240,17 @@ public class ChallengePopUp : MonoBehaviour
         warningText.gameObject.SetActive(false);
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
+        // Clear input and formatted text
+        inputField.text = string.Empty;
+        formattedText.text = string.Empty;
+
+        // Reset inputField RectTransform to stretch anchors and positions
+        RectTransform inputFieldRectTransform = inputField.textComponent.GetComponent<RectTransform>();
+        inputFieldRectTransform.anchorMin = new Vector2(0, 0); // Left and bottom to 0
+        inputFieldRectTransform.anchorMax = new Vector2(1, 1); // Right and top to 1
+        inputFieldRectTransform.offsetMin = Vector2.zero; // Left and bottom offset to 0
+        inputFieldRectTransform.offsetMax = Vector2.zero; // Right and top offset to 0
     }
 
     private void ShowWarning(string text)

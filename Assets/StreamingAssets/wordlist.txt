@@ -12353,7 +12353,6 @@ brazers
 brazes
 brazier
 braziers
-brazil
 brazilin
 brazils
 brazing
@@ -21073,6 +21072,7 @@ confrontations
 confronted
 confronting
 confronts
+confusable
 confuse
 confused
 confusedly
@@ -28380,7 +28380,6 @@ dieting
 dietitian
 dietitians
 diets
-diff
 differ
 differed
 difference
@@ -28409,7 +28408,6 @@ diffracted
 diffracting
 diffraction
 diffracts
-diffs
 diffuse
 diffused
 diffusely
@@ -38950,6 +38948,8 @@ flexile
 flexing
 flexion
 flexions
+flexitarian
+flexitarians
 flexor
 flexors
 flextime
@@ -41017,6 +41017,9 @@ frugging
 frugs
 fruit
 fruitage
+fruitarian
+fruitarianism
+fruitarians
 fruitcake
 fruitcakes
 fruited
@@ -62818,6 +62821,8 @@ metamorphosed
 metamorphoses
 metamorphosing
 metamorphosis
+metamynodon
+metamynodons
 metaphor
 metaphoric
 metaphorical
@@ -66355,6 +66360,7 @@ myalgias
 myalgic
 myases
 myasis
+myasthenia
 mycele
 myceles
 mycelia
@@ -75111,6 +75117,8 @@ pervious
 pervs
 pesade
 pesades
+pescatarian
+pescatarians
 peseta
 pesetas
 pesewa
@@ -77552,6 +77560,8 @@ polliwog
 polliwogs
 pollock
 pollocks
+pollotarian
+pollotarians
 polls
 pollster
 pollsters
@@ -82389,6 +82399,10 @@ rage
 raged
 ragee
 ragees
+ragequit
+ragequits
+ragequitted
+ragequitting
 rages
 ragg
 ragged
@@ -93523,6 +93537,12 @@ shoe
 shoebill
 shoebox
 shoed
+shoegaze
+shoegazed
+shoegazer
+shoegazers
+shoegazes
+shoegazing
 shoehorn
 shoehorned
 shoehorning
@@ -109684,6 +109704,7 @@ undecideds
 undecipherable
 undecked
 undeclared
+undeclined
 undee
 undefeated
 undefended
@@ -118073,6 +118094,7 @@ zoisite
 zoisites
 zombie
 zombies
+zombification
 zombified
 zombifies
 zombify

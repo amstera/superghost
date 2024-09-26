@@ -621,7 +621,7 @@ public class GameManager : MonoBehaviour
 
     public void EnableChanceMultiplier()
     {
-        var values = playerLivesText.LivesRemaining() == 1 && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 1.5f, 2.5f };
+        var values = (playerLivesText.LivesRemaining() == 1 || currentGame < 2) && !gameOver ? new float[] { 0.5f, 1.5f, 1.5f, 2.5f, 2.5f } : new float[] { 0.5f, 1.5f, 1.5f, 2.5f };
         var index = Random.Range(0, values.Length);
         ChanceMultiplier = values[index];
         if (ChanceMultiplier == 0.5f)
@@ -897,11 +897,12 @@ public class GameManager : MonoBehaviour
             isLastWordValid = false;
             isPlayerTurn = true;
 
-            if (properNouns.Contains(word.ToLower()))
+            var lowerWord = word.ToLower();
+            if (properNouns.Contains(lowerWord))
             {
                 properNounsWarningPopUp.Show(word);
             }
-            else if (badWords.Contains(word.ToLower()))
+            else if (badWords.Contains(lowerWord))
             {
                 badWordsWarningPopUp.Show();
             }
