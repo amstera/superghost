@@ -249,7 +249,8 @@ public class StatsPopup : MonoBehaviour
             unlockItem.statsPopup = this;
             bool isUnlocked = true; // We know these are unlocked
             bool isNewlyUnlocked = !saveObject.UnlockedHats.Contains(hatData.hatType);
-            unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);
+            float ratio = hatData.width / hatData.height;
+            unlockItem.Init(hatData.hatType, isUnlocked, isNewlyUnlocked, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description, ratio);
         }
 
         // Then, display locked hats
@@ -258,7 +259,8 @@ public class StatsPopup : MonoBehaviour
             var unlockItem = Instantiate(unlockPrefab, unlocksContentRect);
             unlockItem.statsPopup = this;
             bool isUnlocked = false;
-            unlockItem.Init(hatData.hatType, isUnlocked, false, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description);
+            float ratio = hatData.width / hatData.height;
+            unlockItem.Init(hatData.hatType, isUnlocked, false, saveObject.HatType == hatData.hatType, hatData.sprite, hatData.name, hatData.description, ratio);
         }
 
         StartCoroutine(ScrollToTop(unlocksScrollRect));

@@ -11439,6 +11439,8 @@ bonspiel
 bontebok
 bonus
 bonuses
+bonxie
+bonxies
 bony
 bonze
 bonzer
@@ -23938,6 +23940,10 @@ crowdie
 crowdies
 crowding
 crowds
+crowdsource
+crowdsourced
+crowdsources
+crowdsourcing
 crowdy
 crowed
 crower
@@ -25718,6 +25724,10 @@ deathtraps
 deathwatch
 deathwatches
 deathy
+deauthorize
+deauthorized
+deauthorizes
+deauthorizing
 deave
 deaved
 deaves
@@ -26231,7 +26241,9 @@ deepens
 deeper
 deepest
 deepfake
+deepfaked
 deepfakes
+deepfaking
 deeply
 deepness
 deeps
@@ -41494,6 +41506,7 @@ futhork
 futhorks
 futile
 futilely
+futilities
 futility
 futon
 futons
@@ -46432,6 +46445,7 @@ haptenic
 haptens
 haptic
 haptical
+haram
 harangue
 harangued
 harangues
@@ -75447,6 +75461,10 @@ phimoses
 phimosis
 phimotic
 phis
+phish
+phished
+phishes
+phishing
 phiz
 phizes
 phlebitis
@@ -77583,7 +77601,6 @@ polonaise
 polonaises
 polonium
 polos
-pols
 poltergeist
 poltergeists
 poltroon
@@ -93257,7 +93274,6 @@ sherpas
 sherries
 sherris
 sherry
-shes
 shetland
 sheuch
 sheuchs
@@ -94699,8 +94715,6 @@ skankers
 skankier
 skanking
 skanks
-skanky
-skas
 skat
 skate
 skateboard
@@ -94720,19 +94734,11 @@ skatoles
 skatols
 skats
 skean
-skeane
-skeanes
 skeans
 skedaddle
 skedaddled
 skedaddles
 skedaddling
-skee
-skeed
-skeeing
-skeen
-skeens
-skees
 skeet
 skeeter
 skeeters
@@ -96071,8 +96077,6 @@ sniggle
 sniggled
 sniggler
 sniggles
-sniglet
-sniglets
 snip
 snipe
 sniped
@@ -110250,11 +110254,14 @@ unfreeze
 unfreezes
 unfreezing
 unfrequented
+unfriend
 unfriended
+unfriending
 unfriendlier
 unfriendliest
 unfriendliness
 unfriendly
+unfriends
 unfrock
 unfrocked
 unfrocking
@@ -115941,7 +115948,6 @@ whopper
 whoppers
 whopping
 whops
-whorish
 whorl
 whorled
 whorls

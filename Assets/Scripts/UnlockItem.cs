@@ -41,17 +41,32 @@ public class UnlockItem : MonoBehaviour, IPointerClickHandler
     private bool newlyUnlocked;
     private string originalTitleText;
 
-    public void Init(HatType type, bool unlocked, bool newlyUnlocked, bool enabled, Sprite displaySprite, string titleText, string descriptionText)
+    public void Init(HatType type, bool unlocked, bool newlyUnlocked, bool enabled, Sprite displaySprite, string titleText, string descriptionText, float ratio)
     {
         _unlocked = unlocked;
         _enabled = enabled;
         this.newlyUnlocked = newlyUnlocked;
+
         hatType = type;
         if (type != HatType.None)
         {
             displayImage.sprite = displaySprite;
         }
-        displayImage.rectTransform.sizeDelta = new Vector2(85, 85);
+
+        float maxSize = 85f;
+        float width, height;
+        if (ratio > 1) // Wider than tall
+        {
+            width = maxSize;
+            height = maxSize / ratio;
+        }
+        else // Taller than wide or equal
+        {
+            height = maxSize;
+            width = maxSize * ratio;
+        }
+        displayImage.rectTransform.sizeDelta = new Vector2(width, height);
+
         originalTitleText = titleText;
         title.text = titleText;
         description.text = descriptionText;

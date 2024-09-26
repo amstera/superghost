@@ -20448,8 +20448,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000012
-  m_Size: 0.57926476
+  m_Value: 1.000008
+  m_Size: 0.57909346
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -43188,7 +43188,6 @@ MonoBehaviour:
   popUpGameObject: {fileID: 498805139}
   warningText: {fileID: 438754364}
   pointsText: {fileID: 867801734}
-  bluffText: {fileID: 1975118852}
   comboText: {fileID: 672856225}
   pointsCalculateText: {fileID: 992485177}
   formattedText: {fileID: 1292364878}
@@ -54601,8 +54600,8 @@ MonoBehaviour:
     sprite: {fileID: 0}
     name: None
     description: CASP's default look
-    width: 0
-    height: 0
+    width: 85
+    height: 85
     xPos: 0
     yPos: 0
   - hatType: 2
@@ -54705,8 +54704,8 @@ MonoBehaviour:
     sprite: {fileID: 5307958571244974569, guid: 4f20dbed1d9704e668cd97a8490291fd, type: 3}
     name: Chef
     description: Get 500+ points in a game
-    width: 65
-    height: 45
+    width: 60
+    height: 40
     xPos: 0
     yPos: 50
   - hatType: 14
@@ -59297,8 +59296,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.00000085420686
-  m_Size: 0.33191198
+  m_Value: -0.000005765896
+  m_Size: 0.33171567
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -69994,7 +69993,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.24}
+  m_AnchoredPosition: {x: 0, y: 1143.2456}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -82257,7 +82256,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.48953}
+  m_AnchoredPosition: {x: 0, y: 284.4867}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706
