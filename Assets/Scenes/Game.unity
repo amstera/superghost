@@ -20448,8 +20448,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.000008
-  m_Size: 0.57909346
+  m_Value: 1
+  m_Size: 0.579266
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -59296,8 +59296,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.000005765896
-  m_Size: 0.33171567
+  m_Value: 0
+  m_Size: 0.3319134
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -69993,7 +69993,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2456}
+  m_AnchoredPosition: {x: 0, y: 1143.239}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -73649,7 +73649,11 @@ MonoBehaviour:
   - fapped
   - fapper
   - fappers
-  - gaylord
+  - cumming
+  - jizz
+  - jizzed
+  - jizzing
+  - cums
 --- !u!4 &1816581305
 Transform:
   m_ObjectHideFlags: 0
@@ -82256,7 +82260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.4867}
+  m_AnchoredPosition: {x: 0, y: 284.49002}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706

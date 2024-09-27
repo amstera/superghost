@@ -2144,6 +2144,7 @@ airfoil
 airfoils
 airframe
 airfreight
+airfreights
 airglow
 airglows
 airhead
@@ -4827,6 +4828,8 @@ aqueducts
 aqueous
 aquifer
 aquifers
+aquilifer
+aquilifers
 aquiline
 aquiver
 arabesk
@@ -9344,6 +9347,7 @@ bestowal
 bestowals
 bestowed
 bestower
+bestowers
 bestowing
 bestows
 bestrew
@@ -10001,6 +10005,8 @@ biome
 biomedical
 biomes
 biometer
+biometric
+biometrics
 biometry
 biomorph
 bionic
@@ -24135,6 +24141,8 @@ cryogeny
 cryolite
 cryonic
 cryonics
+cryoscope
+cryoscopes
 cryostat
 cryosurgery
 cryotron
@@ -38814,6 +38822,7 @@ flavin
 flavine
 flavines
 flavins
+flavivirus
 flavone
 flavones
 flavonol
@@ -38828,7 +38837,12 @@ flavors
 flavorsome
 flavory
 flavour
+flavourful
+flavouring
+flavourings
+flavourless
 flavours
+flavoursome
 flavoury
 flaw
 flawed
@@ -40436,6 +40450,10 @@ fozy
 frabjous
 fracas
 fracases
+frack
+fracked
+fracking
+fracks
 fractal
 fractals
 fracted
@@ -41506,6 +41524,7 @@ futhork
 futhorks
 futile
 futilely
+futilitarian
 futilities
 futility
 futon
@@ -43901,6 +43920,7 @@ goglet
 goglets
 gogo
 gogos
+goidelic
 going
 goings
 goiter
@@ -45824,7 +45844,6 @@ hadiths
 hadj
 hadjee
 hadjees
-hadjes
 hadji
 hadjis
 hadron
@@ -45983,6 +46002,7 @@ hairstylists
 hairwork
 hairworm
 hairy
+hajj
 hake
 hakes
 hakim
@@ -49068,6 +49088,10 @@ hottie
 hotties
 hotting
 hottish
+hotwire
+hotwired
+hotwires
+hotwiring
 houdah
 houdahs
 hound
@@ -58842,6 +58866,7 @@ lipomas
 lipomata
 liposome
 liposuction
+liposuctions
 lipped
 lippen
 lippened
@@ -75301,6 +75326,7 @@ phage
 phages
 phagocyte
 phagocytes
+phagocytosis
 phalange
 phalanger
 phalangers
@@ -83322,6 +83348,9 @@ reanimating
 reanimation
 reannex
 reanoint
+reanointed
+reanointing
+reanoints
 reap
 reapable
 reaped
@@ -83752,6 +83781,7 @@ recirculates
 recirculating
 recision
 recit
+recitable
 recital
 recitalist
 recitalists
@@ -103238,6 +103268,8 @@ tankless
 tanklike
 tanks
 tankship
+tanline
+tanlines
 tannable
 tannage
 tannages
