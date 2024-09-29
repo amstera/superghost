@@ -1,5 +1,4 @@
 using System;
-using Unity.Services.Analytics;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -70,9 +69,6 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
         if (userRewarded)
         {
             OnAdCompleted?.Invoke(); // user finished watching ad
-
-            var gamesPlayedEvent = new CustomEvent("watchedAd") { };
-            AnalyticsService.Instance.RecordEvent(gamesPlayedEvent);
         }
         else
         {

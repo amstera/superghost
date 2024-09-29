@@ -12,6 +12,7 @@ public class ShopPopUp : MonoBehaviour
     public GameManager gameManager;
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
+    public GameObject shopModals;
     public ScrollRect scrollRect;
     public PointsText currencyText;
     public Button shuffleButton;
@@ -61,6 +62,13 @@ public class ShopPopUp : MonoBehaviour
 
         currencyText.SetPoints(currency);
 
+        if (!saveObject.HasSeenShopModals)
+        {
+            shopModals.SetActive(true);
+            saveObject.HasSeenShopModals = true;
+            SaveManager.Save(saveObject);
+        }
+
         InitializeShopItems(false);
 
         StartCoroutine(FadeIn());
@@ -95,6 +103,10 @@ public class ShopPopUp : MonoBehaviour
 
     public List<ShopItemInfo> GetVisibleShopItems()
     {
+        if (visibleShopItems == null || visibleShopItems.Count == 0)
+        {
+            GetShopItems();
+        }
         return visibleShopItems;
     }
 
@@ -243,6 +255,7 @@ public class ShopPopUp : MonoBehaviour
 
             gameManager.ItemsUsed++;
             gameManager.UpdateGameState();
+            gameManager.powersModal.HideModal(0);
 
             saveObject.Statistics.UsedShopItemIds[item.id] = saveObject.Statistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
             saveObject.RunStatistics.UsedShopItemIds[item.id] = saveObject.RunStatistics.UsedShopItemIds.GetValueOrDefault(item.id) + 1;
@@ -305,7 +318,6 @@ public class ShopPopUp : MonoBehaviour
         currency -= cost;
         gameManager.currency -= cost;
         gameManager.currencyText.AddPoints(-cost);
-        gameManager.commandCenter.UpdateCurrency();
         currencyText.AddPoints(-cost);
 
         InitializeShopItems(isItem);

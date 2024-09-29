@@ -322,6 +322,7 @@ public class NoMercy : GameCriterion
 public class GameState
 {
     public string CurrentWord;
+    public int CurrentLevel;
     public int ItemsUsed;
     public int Points;
     public bool EndGame;

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Services.Analytics;
 
 public class ExtraManaPopUp : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class ExtraManaPopUp : MonoBehaviour
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
 
-        bodyText.text = $"You get <color=green>mana (¤)</color> each time you win a round!\n\nNeed more? Watch an ad to get\n<color=green>{amount}¤</color>";
+        bodyText.text = $"Get <color=green>mana (¤)</color> each time you <color=green>win</color> a round for powers!\n\nNeed more? Watch an ad to get\n<color=green>{amount}¤</color>";
         watchButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Watch (<color=green>+{amount}¤</color>)";
 
         // Subscribe to ad events
@@ -112,6 +113,19 @@ public class ExtraManaPopUp : MonoBehaviour
     {
         Debug.Log("Ad Completed - Reward the player with mana.");
         AddMana();
+
+        var adWatchedEvent = new CustomEvent("watchedAd")
+            {
+                { "source", "extra_mana" },
+                { "games_played", saveObject.Statistics.GamesPlayed },
+                { "current_level", saveObject.CurrentLevel + 1 },
+                { "difficulty", saveObject.Difficulty.ToString() },
+                { "current_lives", $"P:{gameManager.playerLivesText.LivesRemaining()}/5 - C:{gameManager.aiLivesText.LivesRemaining()}/5" },
+                { "high_score", saveObject.Statistics.HighScore },
+                { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
+            };
+        AnalyticsService.Instance.RecordEvent(adWatchedEvent);
     }
 
     public void AddMana()

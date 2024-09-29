@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Unity.Services.Analytics;
 
 public class RedoLevelPopUp : MonoBehaviour
 {
@@ -108,7 +109,22 @@ public class RedoLevelPopUp : MonoBehaviour
     private void HandleAdCompleted()
     {
         Debug.Log("Ad Completed - Reward the player.");
+
         RestartLevel();
+
+        var adWatchedEvent = new CustomEvent("watchedAd")
+            {
+                { "source", "redo_level" },
+                { "games_played", saveObject.Statistics.GamesPlayed },
+                { "current_level", saveObject.CurrentLevel + 1 },
+                { "difficulty", saveObject.Difficulty.ToString() },
+                { "high_score", saveObject.Statistics.HighScore },
+                { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
+            };
+        AnalyticsService.Instance.RecordEvent(adWatchedEvent);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void RestartLevel()
@@ -127,8 +143,6 @@ public class RedoLevelPopUp : MonoBehaviour
         saveObject.RestrictedChars = copySaveObject.RestrictedChars.ToDictionary(entry => entry.Key, entry => entry.Value);
         saveObject.ChosenCriteria = copySaveObject.ChosenCriteria.ToDictionary(entry => entry.Key, entry => entry.Value);
         SaveManager.Save(saveObject);
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void HandleAdSkipped()

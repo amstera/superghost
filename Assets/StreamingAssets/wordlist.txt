@@ -695,6 +695,7 @@ accumulations
 accumulative
 accumulator
 accumulators
+accuracies
 accuracy
 accurate
 accurately
@@ -3155,6 +3156,7 @@ amines
 aminic
 aminity
 amino
+aminobenzoate
 amins
 amir
 amirate
@@ -10023,6 +10025,8 @@ biophysics
 biopic
 biopics
 bioplasm
+bioplastic
+bioplastics
 biopsic
 biopsied
 biopsies
@@ -24133,6 +24137,7 @@ crybaby
 crying
 cryingly
 cryobank
+cryobanks
 cryogen
 cryogenic
 cryogenics
@@ -27186,6 +27191,11 @@ deontic
 deorbit
 deorbits
 deoxy
+deoxygenate
+deoxygenated
+deoxygenates
+deoxygenating
+deoxygenation
 depaint
 depaints
 depart
@@ -27314,6 +27324,8 @@ depository
 deposits
 depot
 depots
+depotted
+depotting
 deprave
 depraved
 depraver
@@ -28515,7 +28527,6 @@ diked
 diker
 dikers
 dikes
-dikey
 diking
 diktat
 diktats
@@ -32540,7 +32551,6 @@ effusions
 effusive
 effusively
 effusiveness
-efts
 eftsoon
 eftsoons
 egad
@@ -32551,8 +32561,6 @@ egalitarianism
 egalitarians
 egalite
 egalites
-eger
-egers
 egest
 egesta
 egested
@@ -32656,7 +32664,6 @@ eikones
 eikons
 einkorn
 einkorns
-einstein
 einsteinium
 eirenic
 eisteddfod
@@ -32686,10 +32693,7 @@ ekes
 eking
 ekistic
 ekistics
-ekpwele
-ekpweles
 ektexine
-ekuele
 elaborate
 elaborated
 elaborately
@@ -35932,6 +35936,8 @@ exons
 exonumia
 exonym
 exonyms
+exoplanet
+exoplanets
 exorable
 exorbitance
 exorbitant
@@ -37556,6 +37562,7 @@ feminie
 feminine
 femininely
 feminines
+femininities
 femininity
 feminise
 feminism
@@ -40523,6 +40530,8 @@ franchisor
 franchisors
 francium
 francize
+francophile
+francophiles
 francophone
 francs
 frangibility
@@ -47463,7 +47472,8 @@ hemiola
 hemiolas
 hemiolia
 hemiplegia
-hemipter
+hemiplegic
+hemiptera
 hemisphere
 hemispheres
 hemispheric
@@ -49764,6 +49774,8 @@ hygrometers
 hying
 hyla
 hylas
+hyloism
+hyloist
 hylozoic
 hymen
 hymenal
@@ -49992,6 +50004,7 @@ ichorous
 ichors
 ichs
 ichthyic
+ichthyologic
 ichthyologist
 ichthyologists
 ichthyology
@@ -50021,6 +50034,8 @@ iconoclastic
 iconoclasts
 iconography
 icons
+icosahedron
+icosahedrons
 icteric
 icterics
 icterus
@@ -52309,6 +52324,7 @@ innervated
 innervates
 innervating
 innervation
+innervations
 innerve
 innerved
 innerves
@@ -55352,6 +55368,7 @@ katsura
 katsuras
 katydid
 katydids
+katzenjammer
 kauri
 kauries
 kauris
@@ -56611,6 +56628,7 @@ labs
 laburnum
 laburnums
 labyrinth
+labyrinthian
 labyrinthine
 labyrinths
 lace
@@ -61606,6 +61624,7 @@ mascot
 mascots
 masculine
 masculines
+masculinities
 masculinity
 maser
 masers
@@ -65817,9 +65836,6 @@ mudslinger
 mudslingers
 mudslinging
 mudstone
-mueddin
-mueddins
-muenster
 muesli
 mueslis
 muezzin
@@ -65840,7 +65856,6 @@ mufti
 muftis
 mugful
 mugfuls
-mugg
 muggar
 muggars
 mugged
@@ -65855,12 +65870,7 @@ mugginess
 mugging
 muggings
 muggins
-muggs
-muggur
-muggurs
 muggy
-mughal
-mughals
 mugs
 mugwort
 mugworts
@@ -68316,6 +68326,7 @@ nonreturnables
 nonrigid
 nonrival
 nonroyal
+nonrulings
 nonrural
 nonscheduled
 nonscientific
@@ -68457,6 +68468,7 @@ nopals
 nope
 noplace
 nordic
+norethindrone
 nori
 noria
 norias
@@ -70860,6 +70872,8 @@ outcooks
 outcount
 outcrawl
 outcried
+outcried
+outcries
 outcries
 outcrop
 outcropped
@@ -70871,6 +70885,7 @@ outcrow
 outcrowd
 outcrows
 outcry
+outcrying
 outcurse
 outcurve
 outdance
@@ -81639,6 +81654,8 @@ quadrille
 quadrilles
 quadrillion
 quadrillions
+quadrinomial
+quadrinomials
 quadriplegia
 quadriplegic
 quadriplegics
@@ -92608,9 +92625,6 @@ serrates
 serration
 serrations
 serried
-serries
-serry
-serrying
 sers
 serum
 serumal
@@ -97579,6 +97593,10 @@ speedo
 speedometer
 speedometers
 speedos
+speedran
+speedrun
+speedrunning
+speedruns
 speeds
 speedster
 speedsters
@@ -107055,6 +107073,7 @@ transgressions
 transgressor
 transgressors
 tranship
+transhumance
 transience
 transiency
 transient
@@ -110430,6 +110449,7 @@ unhelms
 unhelped
 unhelpful
 unhelpfully
+unhelpfulness
 unheralded
 unheroic
 unhesitating
@@ -111118,6 +111138,10 @@ unrepentant
 unreported
 unrepresentative
 unrepresented
+unrequest
+unrequested
+unrequesting
+unrequests
 unrequired
 unrequited
 unreserved
@@ -111666,6 +111690,8 @@ unweeded
 unweight
 unweighted
 unwelcome
+unwelcomed
+unwelcoming
 unwelded
 unwell
 unwept
@@ -114191,6 +114217,8 @@ vowers
 vowing
 vowless
 vows
+voxel
+voxels
 voyage
 voyaged
 voyager
@@ -117298,6 +117326,7 @@ xanthic
 xanthin
 xanthine
 xanthins
+xanthism
 xanthoma
 xanthone
 xanthous
@@ -117635,7 +117664,6 @@ yessed
 yesses
 yessing
 yessir
-yester
 yesterday
 yesterdays
 yestern
@@ -117643,15 +117671,12 @@ yesteryear
 yestreen
 yeti
 yetis
-yett
-yetts
 yeuk
 yeuked
 yeuking
 yeuks
 yeuky
 yews
-yids
 yield
 yielded
 yielder
@@ -117659,8 +117684,6 @@ yielders
 yielding
 yields
 yikes
-yill
-yills
 yins
 yipe
 yipes
@@ -117808,8 +117831,6 @@ yuca
 yucas
 yucca
 yuccas
-yucch
-yuch
 yuck
 yucked
 yuckier
@@ -117819,9 +117840,6 @@ yucks
 yucky
 yuga
 yugas
-yukked
-yukkier
-yukkiest
 yukking
 yukky
 yuks

@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     public CommandCenter commandCenter;
     public BackgroundSwirl backgroundSwirl;
     public TutorialModal tutorialModal;
+    public PowersModal powersModal;
     public ProperNounsWarningPopUp properNounsWarningPopUp;
     public BadWordsWarningPopUp badWordsWarningPopUp;
     public WordDictionary wordDictionary = new WordDictionary();
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
     private int roundCurrency;
     private int minLength = 3;
     private int minPointsNeeded;
+    private BKTree properNounsBkTree, badWordsBkTree;
+
     public enum TextPosition { None, Left, Right }
 
     private const string separator = "_";
@@ -157,6 +160,8 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(LoadCommonWords());
 
         wordDictionary.SortWordsByCommonality();
+        properNounsBkTree = new BKTree(properNouns);
+        badWordsBkTree = new BKTree(badWords);
 
         if (saveObject.HasSeenTutorial)
         {
@@ -185,9 +190,10 @@ public class GameManager : MonoBehaviour
         criteriaText.UpdateState(gameState);
         commandCenter.UpdateState(criteriaText.GetCurrentCriteria(), gameState);
         bool metCriteria = criteriaText.AllMet(gameState);
-        criteriaText.outline.color = metCriteria ? Color.green : Color.red;
-        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
-        criteriaText.StartFlashing((playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria, gameState);
+        criteriaText.outline.color = metCriteria ? new Color32(0, 255, 0, 110) : new Color32(255, 0, 0, 110);
+        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 40) : new Color32(150, 50, 50, 40);
+        bool shouldFlash = (playerLivesText.LivesRemaining() <= 2 || aiLivesText.LivesRemaining() <= 2) && !metCriteria;
+        criteriaText.StartFlashing(shouldFlash, gameState);
     }
 
     private IEnumerator NewGame()
@@ -314,8 +320,8 @@ public class GameManager : MonoBehaviour
             isPlayerTurn = true;
             currencyText.SetPoints(saveObject.Currency);
             criteriaText.criteriaText.color = Color.yellow;
-            criteriaText.outline.color = Color.red;
-            criteriaText.background.color = new Color32(150, 50, 50, 35);
+            criteriaText.outline.color = new Color32(255, 0, 0, 110);
+            criteriaText.background.color = new Color32(150, 50, 50, 40);
             criteriaText.backgroundHUDOutline.color = new Color32(108, 108, 108, 255);
 
             var main = confettiPS.main;
@@ -878,33 +884,45 @@ public class GameManager : MonoBehaviour
             var wordLink = GenerateInvalidWordLink(word);
             wordDisplay.text = $"{caspString} wins!\n{wordLink}\nisn't valid";
 
-            var similarWord = wordDictionary.FindClosestWord(word);
-            if (!string.IsNullOrEmpty(similarWord))
-            {
-                if (playerLivesText.LivesRemaining() > 1)
-                {
-                    wordDisplay.text += "\n\n";
-                }
-                else
-                {
-                    wordDisplay.text = $"{wordLink}\nisn't valid\n";
-                }
-                string similarWordLink = GenerateWordLink(similarWord, false, true);
-                wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
-            }
-
             playerLivesText.LoseLife();
             isLastWordValid = false;
             isPlayerTurn = true;
 
             var lowerWord = word.ToLower();
-            if (properNouns.Contains(lowerWord))
+
+            var matchingFlaggedWord = false;
+            var similarProperNoun = properNounsBkTree.FindBestMatch(lowerWord, 0.9);
+            if (!string.IsNullOrEmpty(similarProperNoun))
             {
-                properNounsWarningPopUp.Show(word);
+                properNounsWarningPopUp.Show(similarProperNoun);
+                matchingFlaggedWord = true;
             }
-            else if (badWords.Contains(lowerWord))
+            else
             {
-                badWordsWarningPopUp.Show();
+                var similarBadWord = badWordsBkTree.FindBestMatch(lowerWord, 0.9);
+                if (!string.IsNullOrEmpty(similarBadWord))
+                {
+                    badWordsWarningPopUp.Show();
+                    matchingFlaggedWord = true;
+                }
+            }
+
+            if (!matchingFlaggedWord)
+            {
+                var similarWord = wordDictionary.FindClosestWord(word);
+                if (!string.IsNullOrEmpty(similarWord))
+                {
+                    if (playerLivesText.LivesRemaining() > 1)
+                    {
+                        wordDisplay.text += "\n\n";
+                    }
+                    else
+                    {
+                        wordDisplay.text = $"{wordLink}\nisn't valid\n";
+                    }
+                    string similarWordLink = GenerateWordLink(similarWord, false, true);
+                    wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
+                }
             }
 
             if (gameWord.ToLower() != originalWord.ToLower())
@@ -920,7 +938,10 @@ public class GameManager : MonoBehaviour
                 { "current_level", currentGame + 1 },
                 { "difficulty", saveObject.Difficulty.ToString() },
                 { "current_score", points },
-                { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" }
+                { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" },
+                { "high_score", saveObject.Statistics.HighScore },
+                { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
             };
             AnalyticsService.Instance.RecordEvent(invalidWordEvent);
         }
@@ -1122,6 +1143,7 @@ public class GameManager : MonoBehaviour
         nextRoundButton.gameObject.SetActive(true);
         commandCenter.gameObject.SetActive(false);
         tutorialModal.gameObject.SetActive(false);
+        powersModal.HideModal(0);
         levelText.gameObject.SetActive(false);
         activeEffectsText.ClearAll();
 
@@ -1225,10 +1247,10 @@ public class GameManager : MonoBehaviour
         var gameState = GetGameState();
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.UpdateState(gameState);
-        criteriaText.outline.color = metCriteria ? Color.green : Color.red;
-        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 35) : new Color32(150, 50, 50, 35);
+        criteriaText.outline.color = metCriteria ? new Color32(0, 255, 0, 110) : new Color32(255, 0, 0, 110);
+        criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 40) : new Color32(150, 50, 50, 40);
         criteriaPill.SetActive(false);
-        bool shouldFlash = (playerLivesText.LivesRemaining() == 1 || aiLivesText.LivesRemaining() == 1) && !metCriteria;
+        bool shouldFlash = (playerLivesText.LivesRemaining() <= 2 || aiLivesText.LivesRemaining() <= 2) && !metCriteria;
         criteriaText.StartFlashing(shouldFlash, gameState);
 
         bool wonRun = false;
@@ -1331,7 +1353,7 @@ public class GameManager : MonoBehaviour
                 UpdateLevelStats();
 
                 criteriaText.criteriaText.color = Color.green;
-                criteriaText.outline.color = Color.green;
+                criteriaText.outline.color = new Color32(0, 255, 0, 110);
                 criteriaText.backgroundHUDOutline.color = Color.green;
 
                 if (currentGame == 10) // win run
@@ -1404,7 +1426,7 @@ public class GameManager : MonoBehaviour
                 gameStatusAudioSource.clip = loseGameSound;
                 currencyEarnedText.gameObject.SetActive(false);
                 vignette.Show(0.125f);
-                criteriaText.outline.color = Color.red;
+                criteriaText.outline.color = new Color32(255, 0, 0, 110);
                 criteriaText.backgroundHUDOutline.color = Color.red;
 
                 if (playerWon)
@@ -1413,20 +1435,20 @@ public class GameManager : MonoBehaviour
                     historyText.textComponent.text = historyText.textComponent.text.Replace("<color=green>", "<color=#8C8C8C>");
                 }
 
+                RectTransform wordDisplayRect = wordDisplay.GetComponent<RectTransform>();
+                wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, 195);
+
                 if (currentGame > 0)
                 {
                     redoLevel.gameObject.SetActive(true);
                     runInfoButton.transform.localPosition = new Vector2(runInfoButton.transform.localPosition.x, 40);
                     wordDisplay.transform.localPosition += Vector3.down * 45;
-
-                    RectTransform wordDisplayRect = wordDisplay.GetComponent<RectTransform>();
-                    wordDisplayRect.sizeDelta = new Vector2(wordDisplayRect.sizeDelta.x, 195);
                     wordDisplay.fontSizeMax = 40;
                 }
                 else
                 {
                     runInfoButton.transform.localPosition = new Vector2(runInfoButton.transform.localPosition.x, 113);
-                    wordDisplay.transform.localPosition += Vector3.up * 25;
+                    wordDisplay.transform.localPosition = new Vector2(0, -65);
                 }
 
                 wordDisplay.transform.localPosition += Vector3.up * 25;
@@ -2019,7 +2041,8 @@ public class GameManager : MonoBehaviour
         {
             ItemsUsed = ItemsUsed,
             Points = points,
-            EndGame = gameOver
+            EndGame = gameOver,
+            CurrentLevel = currentGame
         };
     }
 

@@ -288,7 +288,7 @@ public class SettingsPopUp : MonoBehaviour
                 }
                 else
                 {
-                    dictionaryValidateText.text = $"Did you mean {similarWord.ToUpper()}?";
+                    dictionaryValidateText.text = $"Not valid! Did you mean {similarWord.ToUpper()}?";
                 }
             }
         }

@@ -50,7 +50,7 @@ public class BKTree
         var transformations = new Dictionary<string, string>
         {
             {"ph", "f"}, {"ck", "k"}, {"gh", "f"}, {"ps", "s"},
-            {"qu", "kw"}, {"wr", "r"}, {"mb", "m"}
+            {"qu", "kw"}, {"wr", "r"}, {"mb", "m"}, {"or", "er"}
         };
 
         // Apply transformations

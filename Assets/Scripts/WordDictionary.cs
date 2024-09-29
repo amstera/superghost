@@ -369,7 +369,7 @@ public class WordDictionary
 
         bool isAILosing = playerAIWinDifference > 0;
 
-        float ratio = 0.75f;
+        float ratio = currentLevel == 0 ? 1 : 0.75f;
         if (!isAILosing && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
