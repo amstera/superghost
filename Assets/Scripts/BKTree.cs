@@ -5,11 +5,9 @@ using System.Text;
 public class BKTree
 {
     private BKTreeNode root;
-    private static Dictionary<string, int> wordFrequency; // Frequency dictionary for prioritizing common words
 
-    public BKTree(IEnumerable<string> words, Dictionary<string, int> frequencies = null)
+    public BKTree(IEnumerable<string> words)
     {
-        wordFrequency = frequencies ?? new Dictionary<string, int>();
         BuildTree(words);
     }
 

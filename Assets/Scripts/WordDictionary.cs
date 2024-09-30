@@ -274,7 +274,7 @@ public class WordDictionary
 
     private void BuildBKTreeAsync()
     {
-        bkTree = new BKTree(words, commonWords);
+        bkTree = new BKTree(words);
     }
 
     private char ChooseNextLetter(bool firstCharIsVowel, bool lastCharIsVowel, bool addAtEnd, string substring)

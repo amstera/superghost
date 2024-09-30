@@ -18544,6 +18544,7 @@ clarion
 clarioned
 clarioning
 clarions
+clarities
 clarity
 clarkia
 clarkias
@@ -62504,6 +62505,8 @@ memorized
 memorizes
 memorizing
 memory
+memoryless
+memorylessness
 memos
 mems
 memsahib
@@ -100779,6 +100782,7 @@ subniche
 subnodal
 subnormal
 subocean
+suboctave
 suboptic
 suboptimal
 suboral
@@ -101631,6 +101635,7 @@ supernovae
 supernovas
 supernumeraries
 supernumerary
+superoctave
 superpose
 superposed
 superposes

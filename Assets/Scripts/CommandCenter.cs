@@ -51,7 +51,7 @@ public class CommandCenter : MonoBehaviour
         else if (minCriteriaNotMet && playerCurrency > 0) // not hitting enough points
         {
             float pointsRatio = (float)gameState.Points / minPointsCriterion.GetPoints();
-            float requiredRatio = aiLives == 1 ? 0.85f : 0.6f;
+            float requiredRatio = aiLives == 1 ? 1f : 0.5f;
             if (pointsRatio < requiredRatio)
             {
                 showPowersNotice = true;
