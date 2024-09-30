@@ -14,6 +14,8 @@ public class ChallengePopUp : MonoBehaviour
     public TMP_InputField inputField;
     public TextMeshProUGUI warningText, pointsText, comboText, pointsCalculateText, formattedText;
     public ActiveEffectsText activeEffectsText;
+    public GameObject challengeModal;
+    public TutorialPopUp tutorialPopup;
 
     public AudioSource alertAudioSource, noticeAudioSource;
 
@@ -33,11 +35,13 @@ public class ChallengePopUp : MonoBehaviour
     private NumberCriteria numberCriteria = null;
     private bool noRepeatingLetters;
     private int wordDirection;
+    private SaveObject saveObject;
 
     private void Awake()
     {
         originalScale = popUpGameObject.transform.localScale;
         originalPos = popUpGameObject.transform.localPosition;
+        saveObject = SaveManager.Load();
         ResetPopUp();
         inputField.onValueChanged.AddListener(OnInputChanged);
     }
@@ -48,6 +52,11 @@ public class ChallengePopUp : MonoBehaviour
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
+
+        if (!saveObject.HasPressedChallengeButton)
+        {
+            challengeModal.SetActive(true);
+        }
 
         pointsText.text = gameManager.pointsText.pointsText.text;
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
@@ -65,6 +74,18 @@ public class ChallengePopUp : MonoBehaviour
 
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
+    }
+
+    public void ShowChallengeTutorial()
+    {
+        bool hasSeenChallengeTutorial = saveObject.HasPressedChallengeButton;
+        if (!saveObject.HasPressedChallengeButton)
+        {
+            saveObject.HasPressedChallengeButton = true;
+            SaveManager.Save(saveObject);
+        }
+
+        tutorialPopup.Show(5, hasSeenChallengeTutorial, endingPageIndex: 8);
     }
 
     private IEnumerator FadeIn()

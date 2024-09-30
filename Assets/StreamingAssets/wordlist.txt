@@ -5961,6 +5961,8 @@ atemoya
 atemoyas
 atenolol
 ates
+athame
+athames
 athanasy
 atheism
 atheisms
@@ -33016,6 +33018,7 @@ eluvial
 eluviate
 eluvium
 eluviums
+elven
 elver
 elvers
 elves
@@ -62776,6 +62779,7 @@ mesne
 mesnes
 mesocarp
 mesoderm
+mesofauna
 mesoglea
 mesomere
 mesomorph
@@ -65057,6 +65061,8 @@ monopolizing
 monopoly
 monorail
 monorails
+monorhyme
+monorhymes
 monos
 monosome
 monosomy
@@ -110218,6 +110224,14 @@ unfastens
 unfathomable
 unfavorable
 unfavorably
+unfavorite
+unfavorited
+unfavorites
+unfavoriting
+unfavourite
+unfavourited
+unfavourites
+unfavouriting
 unfazed
 unfeared
 unfeasible
@@ -117840,9 +117854,6 @@ yucks
 yucky
 yuga
 yugas
-yukking
-yukky
-yuks
 yulan
 yulans
 yule
@@ -117856,8 +117867,6 @@ yupon
 yupons
 yuppie
 yuppies
-yuppify
-yuppy
 yups
 yurt
 yurta

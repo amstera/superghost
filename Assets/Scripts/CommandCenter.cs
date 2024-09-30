@@ -34,16 +34,33 @@ public class CommandCenter : MonoBehaviour
 
     public void UpdateState(List<GameCriterion> criteria, GameState gameState)
     {
+        int playerLives = gameManager.playerLivesText.LivesRemaining();
+        int aiLives = gameManager.aiLivesText.LivesRemaining();
+        int playerCurrency = gameManager.currency;
+        int gamesPlayed = saveObject.Statistics.GamesPlayed;
+        int currentLevel = saveObject.CurrentLevel;
+
         var minPointsCriterion = criteria.Find(c => c is ScoreAtLeastXPoints) as ScoreAtLeastXPoints;
-        bool minCriteriaNotMet = minPointsCriterion != null
-                    && !minPointsCriterion.IsMet(gameState)
-                    && gameManager.aiLivesText.LivesRemaining() <= 2;
-        bool showPowersNotice = (gameManager.playerLivesText.LivesRemaining() == 1 && gameManager.currency >= 5 && saveObject.Statistics.GamesPlayed > 0)
-            || (minCriteriaNotMet && gameManager.currency > 0);
+        bool minCriteriaNotMet = minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && aiLives <= 2;
+
+        bool showPowersNotice = false;
+        if (playerLives == 1 && playerCurrency > 0 && gamesPlayed > 0) // 1 life left
+        {
+            showPowersNotice = true;
+        }
+        else if (minCriteriaNotMet && playerCurrency > 0) // not hitting enough points
+        {
+            float pointsRatio = (float)gameState.Points / minPointsCriterion.GetPoints();
+            float requiredRatio = aiLives == 1 ? 0.85f : 0.6f;
+            if (pointsRatio < requiredRatio)
+            {
+                showPowersNotice = true;
+            }
+        }
 
         if (showPowersNotice)
         {
-            if (minCriteriaNotMet && minPointsCriterion != null)
+            if (minCriteriaNotMet)
             {
                 powersModal.ShowModal($"Use your <color=yellow>Powers</color> to reach <color=yellow>{minPointsCriterion.GetPoints()} PTS</color>!");
             }
@@ -52,12 +69,12 @@ public class CommandCenter : MonoBehaviour
                 powersModal.ShowModal($"Use your <color=yellow>Powers</color> to beat <sprite=1><color=yellow>CASP</color>!");
             }
         }
-        else if (saveObject.CurrentLevel == 1 && gameManager.aiLivesText.LivesRemaining() == 1)
+        else if (currentLevel == 1 && aiLives == 1)
         {
             var useAtLeastItemsCriteria = criteria.Find(c => c is UseAtLeastXItems) as UseAtLeastXItems;
-            if (criteria != null && !useAtLeastItemsCriteria.IsMet(gameState))
+            if (useAtLeastItemsCriteria != null && !useAtLeastItemsCriteria.IsMet(gameState))
             {
-                powersModal.ShowModal($"You must use <color=yellow>1+ Power</color> to win the game!");
+                powersModal.ShowModal("You must use <color=yellow>1+ Power</color> to win the game!");
             }
         }
         else

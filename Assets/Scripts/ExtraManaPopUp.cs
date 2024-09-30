@@ -45,7 +45,7 @@ public class ExtraManaPopUp : MonoBehaviour
 
         watchButton.interactable = true;
         currencyText.SetPoints(gameManager.currency);
-        amount = saveObject.CurrentLevel < 10 ? 10 : 40;
+        amount = saveObject.CurrentLevel < 10 ? 15 : 40;
 
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
