@@ -81,6 +81,7 @@ public class ChallengePopUp : MonoBehaviour
         bool hasSeenChallengeTutorial = saveObject.HasPressedChallengeButton;
         if (!saveObject.HasPressedChallengeButton)
         {
+            challengeModal.SetActive(false);
             saveObject.HasPressedChallengeButton = true;
             SaveManager.Save(saveObject);
         }

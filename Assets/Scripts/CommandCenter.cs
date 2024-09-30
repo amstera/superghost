@@ -44,7 +44,7 @@ public class CommandCenter : MonoBehaviour
         bool minCriteriaNotMet = minPointsCriterion != null && !minPointsCriterion.IsMet(gameState) && aiLives <= 2;
 
         bool showPowersNotice = false;
-        if (playerLives == 1 && playerCurrency > 0 && gamesPlayed > 0) // 1 life left
+        if (playerLives == 1 && playerCurrency >= 5 && gamesPlayed > 0) // 1 life left
         {
             showPowersNotice = true;
         }
@@ -62,11 +62,11 @@ public class CommandCenter : MonoBehaviour
         {
             if (minCriteriaNotMet)
             {
-                powersModal.ShowModal($"Use your <color=yellow>Powers</color> to reach <color=yellow>{minPointsCriterion.GetPoints()} PTS</color>!");
+                powersModal.ShowModal($"Use <color=yellow>Powers</color> to reach <color=yellow>{minPointsCriterion.GetFormattedPoints()} PTS</color>!");
             }
             else
             {
-                powersModal.ShowModal($"Use your <color=yellow>Powers</color> to beat <sprite=1><color=yellow>CASP</color>!");
+                powersModal.ShowModal($"Use <color=yellow>Powers</color> to beat <sprite=1><color=yellow>CASP</color>!");
             }
         }
         else if (currentLevel == 1 && aiLives == 1)
@@ -74,7 +74,7 @@ public class CommandCenter : MonoBehaviour
             var useAtLeastItemsCriteria = criteria.Find(c => c is UseAtLeastXItems) as UseAtLeastXItems;
             if (useAtLeastItemsCriteria != null && !useAtLeastItemsCriteria.IsMet(gameState))
             {
-                powersModal.ShowModal("You must use <color=yellow>1+ Power</color> to win the game!");
+                powersModal.ShowModal("You must use <color=yellow>1+ Power</color> to win!");
             }
         }
         else

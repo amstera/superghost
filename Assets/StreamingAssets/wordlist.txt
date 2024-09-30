@@ -9983,6 +9983,7 @@ biogen
 biogenic
 biogens
 biogeny
+biogeography
 biographer
 biographers
 biographic
@@ -24789,6 +24790,7 @@ cutlases
 cutlass
 cutlasses
 cutler
+cutleries
 cutlers
 cutlery
 cutlet
@@ -54356,8 +54358,6 @@ jefe
 jefes
 jehad
 jehads
-jehu
-jehus
 jejuna
 jejunal
 jejune
@@ -54454,10 +54454,8 @@ jestful
 jesting
 jestings
 jests
-jesuit
 jesuitic
 jesuitry
-jesuits
 jetbead
 jetbeads
 jete
@@ -95671,6 +95669,7 @@ slush
 slushed
 slushes
 slushier
+slushies
 slushiest
 slushily
 slushiness
@@ -102828,9 +102827,6 @@ tabourer
 tabouret
 tabours
 tabs
-tabu
-tabued
-tabuing
 tabular
 tabulate
 tabulated
@@ -102844,7 +102840,6 @@ tabuli
 tabulis
 tabun
 tabuns
-tabus
 tace
 taces
 tacet
@@ -112868,6 +112863,10 @@ vealiest
 vealing
 veals
 vealy
+vectogram
+vectograms
+vectograph
+vectographs
 vector
 vectored
 vectoring

@@ -11509,6 +11509,97 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277721589}
   m_CullTransparentMesh: 1
+--- !u!1 &279466807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279466808}
+  - component: {fileID: 279466811}
+  - component: {fileID: 279466810}
+  - component: {fileID: 279466809}
+  m_Layer: 5
+  m_Name: Outline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &279466808
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279466807}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 473937272}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &279466809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279466807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68356c3764ad390429ddad9e48ce8c31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &279466810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279466807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8207547, g: 0.70537066, b: 0.12001601, a: 0.7176471}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 3f91331724a9da84197e9b6d94f0483c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+  borderWidth: 1
+  falloffDistance: 1
+--- !u!222 &279466811
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279466807}
+  m_CullTransparentMesh: 1
 --- !u!1 &281495362
 GameObject:
   m_ObjectHideFlags: 0
@@ -20131,7 +20222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.076470606, g: 0.7075472, b: 0.06341223, a: 0.3764706}
+  m_Color: {r: 0.076470606, g: 0.7075472, b: 0.06341223, a: 0.5019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -21277,8 +21368,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0013775
-  m_Size: 0.57543373
+  m_Value: 1.0000011
+  m_Size: 0.5792664
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -24159,6 +24250,7 @@ RectTransform:
   m_Children:
   - {fileID: 465702292}
   - {fileID: 2050468748}
+  - {fileID: 279466808}
   m_Father: {fileID: 1867108839}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -28362,7 +28454,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -20}
+  m_SizeDelta: {x: -12, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &597627432
 MonoBehaviour:
@@ -28384,7 +28476,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Use your <color=yellow>Powers</color> to beat <sprite=1><color=yellow>CASP</color>!
+  m_text: Use <color=yellow>Powers</color> to beat <sprite=1><color=yellow>CASP</color>!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -28411,12 +28503,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.6
+  m_fontSize: 22
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 25
+  m_fontSizeMax: 22
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -41834,7 +41926,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -59358,7 +59450,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360759221}
   m_LocalRotation: {x: -0, y: 0.18463661, z: -0, w: 0.98280686}
-  m_LocalPosition: {x: 0, y: 0, z: -40}
+  m_LocalPosition: {x: 0, y: 0, z: -29.2}
   m_LocalScale: {x: 0.9997081, y: 0.99970824, z: 0.9997081}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59369,7 +59461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 21.28, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -69, y: 397}
+  m_AnchoredPosition: {x: -96.6, y: 385.6}
   m_SizeDelta: {x: 130, y: 126.91998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1360759223
@@ -60561,8 +60653,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -178, y: 377.2}
-  m_SizeDelta: {x: 115, y: 126.91998}
+  m_AnchoredPosition: {x: -176, y: 380}
+  m_SizeDelta: {x: 115, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1392198006
 CanvasGroup:
@@ -60631,7 +60723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14901961, g: 0.46226418, b: 0.1882353, a: 0.8235294}
+  m_Color: {r: 0.14901961, g: 0.46226418, b: 0.1882353, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -62290,8 +62382,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.0009942433
-  m_Size: 0.32752132
+  m_Value: -0.0000010143706
+  m_Size: 0.33191317
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -65563,7 +65655,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 88}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: -50, y: 78.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1507896424
@@ -65586,10 +65678,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'You can skip to <color=yellow>Level 3</color>!
+  m_text: 'You can optionally skip to <color=yellow>Level 3</color>!
 
 
-    Skip Level 2 and
+    In exchange,
     get <color=green>$10</color>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -65852,7 +65944,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -60, y: 392}
-  m_SizeDelta: {x: 115, y: 126.91998}
+  m_SizeDelta: {x: 115, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1526582766
 MonoBehaviour:
@@ -73857,7 +73949,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1144.3757}
+  m_AnchoredPosition: {x: 0, y: 1143.2402}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -79747,6 +79839,7 @@ GameObject:
   - component: {fileID: 1846231850}
   - component: {fileID: 1846231852}
   - component: {fileID: 1846231851}
+  - component: {fileID: 1846231853}
   m_Layer: 5
   m_Name: Arrow
   m_TagString: Untagged
@@ -79770,7 +79863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 54, y: -75}
+  m_AnchoredPosition: {x: 48, y: -78}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1846231851
@@ -79786,7 +79879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.078431375, g: 0.70980394, b: 0.06666667, a: 0.6509804}
+  m_Color: {r: 0.078431375, g: 0.70980394, b: 0.06666667, a: 0.7647059}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -79811,6 +79904,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846231849}
   m_CullTransparentMesh: 1
+--- !u!114 &1846231853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846231849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1847132175
 GameObject:
   m_ObjectHideFlags: 0
@@ -80348,8 +80456,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -303}
-  m_SizeDelta: {x: 305, y: 265.7083}
+  m_AnchoredPosition: {x: 0, y: -343}
+  m_SizeDelta: {x: 305, y: 405.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1864869063
 MonoBehaviour:
@@ -80372,14 +80480,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: 'When you <color=green>win</color> a run, you enter <color=yellow>ENDLESS
-    MODE</color>
+    MODE</color>!
 
 
-    The points keep getting higher...
+    The points keep getting higher... <line-height=15>
 
+    </line-height>
 
-    Try to reach your
-    <color=green>highest level</color>!'
+    Try
+    to reach your <color=green>highest level</color>!<line-height=30>
+
+    </line-height>
+
+    <size=25>(You
+    also unlock <color=red>HARD</color> difficulty)</size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -80420,7 +80534,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 10
+  m_paragraphSpacing: 5
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -86221,7 +86335,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 283.92072}
+  m_AnchoredPosition: {x: 0, y: 284.48956}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706

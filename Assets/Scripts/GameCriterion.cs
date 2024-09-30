@@ -23,27 +23,7 @@ public class ScoreAtLeastXPoints : GameCriterion
     public override string GetDescription()
     {
         var highlightPointsColor = isMet ? "green" : "#FF5733";
-        string formattedPoints;
-
-        if (points >= 10000)
-        {
-            formattedPoints = $"{points / 1000}K";
-        }
-        else if (points >= 1000)
-        {
-            if (points % 1000 == 0)
-            {
-                formattedPoints = $"{points / 1000}K";
-            }
-            else
-            {
-                formattedPoints = $"{points / 1000.0:F1}K".TrimEnd('0').TrimEnd('.');
-            }
-        }
-        else
-        {
-            formattedPoints = points.ToString();
-        }
+        string formattedPoints = GetFormattedPoints();
 
         return $"Score <color={highlightPointsColor}>{formattedPoints}+</color> PTS";
     }
@@ -57,6 +37,25 @@ public class ScoreAtLeastXPoints : GameCriterion
     public int GetPoints()
     {
         return points;
+    }
+
+    public string GetFormattedPoints()
+    {
+        if (points >= 10000)
+        {
+            return $"{points / 1000}K";
+        }
+        if (points >= 1000)
+        {
+            if (points % 1000 == 0)
+            {
+                return $"{points / 1000}K";
+            }
+
+            return $"{points / 1000.0:F1}K".TrimEnd('0').TrimEnd('.');
+        }
+
+        return points.ToString();
     }
 
     public void SetPoints(int points)

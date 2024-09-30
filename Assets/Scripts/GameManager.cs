@@ -138,13 +138,7 @@ public class GameManager : MonoBehaviour
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
 
-        Application.targetFrameRate = saveObject.EnableLowPowerMode ? 30 : 40;
-
-        if (saveObject.Difficulty == Difficulty.Hard && saveObject.Statistics.EasyWins == 0 && saveObject.Statistics.NormalWins == 0)
-        {
-            saveObject.Difficulty = Difficulty.Normal;
-            SaveManager.Save(saveObject);
-        }
+        Application.targetFrameRate = saveObject.EnableLowPowerMode ? 30 : 45;
     }
 
     IEnumerator Start()
@@ -192,7 +186,7 @@ public class GameManager : MonoBehaviour
         bool metCriteria = criteriaText.AllMet(gameState);
         criteriaText.outline.color = metCriteria ? new Color32(0, 255, 0, 110) : new Color32(255, 0, 0, 110);
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 40) : new Color32(150, 50, 50, 40);
-        bool shouldFlash = (playerLivesText.LivesRemaining() <= 2 || aiLivesText.LivesRemaining() <= 2) && !metCriteria;
+        bool shouldFlash = aiLivesText.LivesRemaining() <= 2 && !metCriteria;
         criteriaText.StartFlashing(shouldFlash, gameState);
     }
 
@@ -1250,7 +1244,7 @@ public class GameManager : MonoBehaviour
         criteriaText.outline.color = metCriteria ? new Color32(0, 255, 0, 110) : new Color32(255, 0, 0, 110);
         criteriaText.background.color = metCriteria ? new Color32(50, 150, 50, 40) : new Color32(150, 50, 50, 40);
         criteriaPill.SetActive(false);
-        bool shouldFlash = (playerLivesText.LivesRemaining() <= 2 || aiLivesText.LivesRemaining() <= 2) && !metCriteria;
+        bool shouldFlash = aiLivesText.LivesRemaining() <= 2 && !metCriteria;
         criteriaText.StartFlashing(shouldFlash, gameState);
 
         bool wonRun = false;
