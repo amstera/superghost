@@ -12,7 +12,8 @@ public class ShopPopUp : MonoBehaviour
     public GameManager gameManager;
     public CanvasGroup canvasGroup;
     public GameObject popUpGameObject;
-    public GameObject shopModals;
+    public GameObject shopModalsParent;
+    public List<Modal> shopModals;
     public ScrollRect scrollRect;
     public PointsText currencyText;
     public Button shuffleButton;
@@ -23,6 +24,7 @@ public class ShopPopUp : MonoBehaviour
     public TextMeshProUGUI discountText;
     public ActiveEffectsText activeEffectsText;
     public ActiveEffectsText shopActiveEffectsText;
+    public TutorialPopUp tutorialPopup;
 
     public AudioSource clickAudioSource, moneyAudioSource;
 
@@ -64,7 +66,7 @@ public class ShopPopUp : MonoBehaviour
 
         if (!saveObject.HasSeenShopModals)
         {
-            shopModals.SetActive(true);
+            shopModalsParent.SetActive(true);
             saveObject.HasSeenShopModals = true;
             SaveManager.Save(saveObject);
         }
@@ -108,6 +110,29 @@ public class ShopPopUp : MonoBehaviour
             GetShopItems();
         }
         return visibleShopItems;
+    }
+
+    public void ShowTutorial()
+    {
+        StartCoroutine(ScrollToTop());
+
+        if (saveObject.HasSeenRunTutorial)
+        {
+            tutorialPopup.Show(11, callback: () => { ShowModals(); }, endingPageIndex: 11);
+        }
+        else
+        {
+            ShowModals();
+        }
+    }
+
+    private void ShowModals()
+    {
+        shopModalsParent.SetActive(true);
+        foreach (var shopModal in shopModals)
+        {
+            shopModal.Show();
+        }
     }
 
     private void GetShopItems(bool saveChanges = false, bool overrideExistingItems = false)

@@ -11420,6 +11420,10 @@ boniatos
 bonier
 boniest
 boniface
+bonified
+bonifies
+bonify
+bonifying
 boniness
 boning
 bonita
@@ -12709,11 +12713,9 @@ bristling
 bristly
 bristol
 bristols
-brit
 britches
 brith
 briths
-brits
 britska
 britskas
 britt
@@ -18104,6 +18106,7 @@ chymosin
 chymous
 chytrid
 chytrids
+ciabatta
 ciao
 cibol
 cibols
@@ -28613,6 +28616,8 @@ diminished
 diminishes
 diminishing
 diminuendo
+diminuendoed
+diminuendoing
 diminuendos
 diminution
 diminutions
@@ -31878,9 +31883,6 @@ dusts
 dustup
 dustups
 dusty
-dutch
-dutchman
-dutchmen
 duteous
 dutiable
 duties
@@ -33867,7 +33869,6 @@ engirded
 engirdle
 engirds
 engirt
-english
 englut
 engluts
 engorge
@@ -36722,6 +36723,7 @@ fain
 faineant
 fainer
 fainest
+fainites
 faint
 fainted
 fainter
@@ -38291,17 +38293,14 @@ finking
 finks
 finless
 finlike
-finmark
-finmarks
 finned
-finnicky
 finnier
 finniest
 finning
 finnmark
 finny
 fino
-finochio
+finocchio
 finos
 fins
 fiord
@@ -40688,6 +40687,8 @@ freeze
 freezer
 freezers
 freezes
+freezie
+freezies
 freezing
 freight
 freighted
@@ -40698,9 +40699,7 @@ freights
 fremd
 fremitus
 frena
-french
 frenched
-frenches
 frenetic
 frenetically
 frenula
@@ -42804,13 +42803,8 @@ geriatrician
 geriatricians
 geriatrics
 germ
-german
 germane
-germanic
 germanium
-germans
-germen
-germens
 germfree
 germicidal
 germicide
@@ -44696,7 +44690,6 @@ greeds
 greedy
 greegree
 greeing
-greek
 green
 greenback
 greenbacks
@@ -50052,6 +50045,9 @@ idea
 ideal
 idealess
 idealise
+idealised
+idealises
+idealising
 idealism
 idealist
 idealistic
@@ -51937,6 +51933,7 @@ infiltrator
 infiltrators
 infinite
 infinitely
+infinites
 infinitesimal
 infinitesimally
 infinitesimals
@@ -52131,9 +52128,6 @@ ingrowing
 ingrown
 ingrowth
 inguinal
-ingulf
-ingulfed
-ingulfs
 inhabit
 inhabitable
 inhabitant
@@ -60543,6 +60537,7 @@ mafficks
 mafia
 mafias
 mafic
+mafiosa
 mafiosi
 mafioso
 mafiosos
@@ -63930,6 +63925,10 @@ miscited
 miscites
 misclaim
 misclass
+misclick
+misclicked
+misclicking
+misclicks
 miscode
 miscoded
 miscodes
@@ -68022,6 +68021,7 @@ nonbeliever
 nonbelievers
 nonbelligerent
 nonbelligerents
+nonbiblical
 nonbinding
 nonblack
 nonbody
@@ -68339,6 +68339,7 @@ nonscheduled
 nonscientific
 nonseasonal
 nonsectarian
+nonsecular
 nonsegregated
 nonself
 nonsense
@@ -88023,7 +88024,6 @@ rimming
 rimose
 rimosely
 rimosity
-rimous
 rimple
 rimpled
 rimples
@@ -91129,7 +91129,6 @@ scorning
 scorns
 scorpion
 scorpions
-scot
 scotch
 scotched
 scotches
@@ -91142,7 +91141,6 @@ scotoma
 scotomas
 scotopia
 scotopic
-scots
 scottie
 scotties
 scoundrel
@@ -102356,8 +102354,6 @@ swishes
 swishier
 swishing
 swishy
-swiss
-swisses
 switch
 switchable
 switchback
@@ -102843,7 +102839,6 @@ tabuns
 tace
 taces
 tacet
-tach
 tache
 taches
 tachinid
@@ -102855,7 +102850,6 @@ tachiste
 tachists
 tachometer
 tachometers
-tachs
 tachycardia
 tachyon
 tachyons
@@ -108499,11 +108493,9 @@ turion
 turions
 turista
 turistas
-turk
 turkey
 turkeys
 turkois
-turks
 turmeric
 turmerics
 turmoil
@@ -110253,7 +110245,10 @@ unfetters
 unfilial
 unfilled
 unfilmed
+unfilter
 unfiltered
+unfiltering
+unfilters
 unfinished
 unfired
 unfished
@@ -115613,16 +115608,10 @@ wharfs
 wharve
 wharves
 what
-whatchamacallit
-whatchamacallits
 whatever
 whatness
 whatnot
 whatnots
-whats
-whatsis
-whatsit
-whatsits
 whatsoever
 whaup
 whaups
@@ -117871,7 +117860,6 @@ yupon
 yupons
 yuppie
 yuppies
-yups
 yurt
 yurta
 yurts

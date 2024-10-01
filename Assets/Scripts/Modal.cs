@@ -34,6 +34,13 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         HideModal();
     }
 
+    public void Show()
+    {
+        gameObject.SetActive(true);
+        dismissed = false;
+        canvasGroup.alpha = 1f;
+    }
+
     // Coroutine to fade out the CanvasGroup over the given duration
     private IEnumerator FadeOut(float duration)
     {

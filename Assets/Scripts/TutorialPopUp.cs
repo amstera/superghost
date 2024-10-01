@@ -240,20 +240,30 @@ public class TutorialPopUp : MonoBehaviour
 
     private IEnumerator AnimateProgressBar()
     {
-        if (progressBar != null && visiblePageIndices.Count > 0)
+        if (progressBar != null)
         {
-            float targetValue = (float)currentPageIndex / (visiblePageIndices.Count - 1);
-            float currentValue = progressBar.value;
-            float elapsedTime = 0;
-
-            while (elapsedTime < 0.15f)
+            // Hide the progress bar if there's only one visible page
+            if (visiblePageIndices.Count <= 1)
             {
-                elapsedTime += Time.deltaTime;
-                progressBar.value = Mathf.Lerp(currentValue, targetValue, elapsedTime / 0.15f);
-                yield return null;
+                progressBar.gameObject.SetActive(false);
             }
+            else
+            {
+                progressBar.gameObject.SetActive(true);
 
-            progressBar.value = targetValue;
+                float targetValue = (float)currentPageIndex / (visiblePageIndices.Count - 1);
+                float currentValue = progressBar.value;
+                float elapsedTime = 0;
+
+                while (elapsedTime < 0.15f)
+                {
+                    elapsedTime += Time.deltaTime;
+                    progressBar.value = Mathf.Lerp(currentValue, targetValue, elapsedTime / 0.15f);
+                    yield return null;
+                }
+
+                progressBar.value = targetValue;
+            }
         }
     }
 
