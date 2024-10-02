@@ -220,7 +220,7 @@ public class TutorialPopUp : MonoBehaviour
         buttonMeter.fillAmount = 0;
         buttonMeter.gameObject.SetActive(true);
 
-        float chargeTime = 2f; // Time for the meter to fill
+        float chargeTime = 1.5f; // Time for the meter to fill
         float elapsedTime = 0;
 
         // Animate the circular meter's fill

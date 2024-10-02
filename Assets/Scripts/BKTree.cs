@@ -17,11 +17,13 @@ public class BKTree
         if (!enumerator.MoveNext())
             throw new Exception("Word list is empty.");
 
-        root = new BKTreeNode(enumerator.Current);
+        // Normalize and create the root node
+        root = new BKTreeNode(enumerator.Current.ToLowerInvariant());
 
         while (enumerator.MoveNext())
         {
-            root.Add(enumerator.Current);
+            // Normalize words at insertion
+            root.Add(enumerator.Current.ToLowerInvariant());
         }
     }
 
@@ -31,10 +33,21 @@ public class BKTree
             return null;
 
         string bestMatch = null;
-        int bestDistance = int.MaxValue;
+        int bestDistance = -1; // Changed from int.MaxValue
         double bestSimilarity = 0.0;
+        string wordSoundex = ComputeSoundex(word);
+        HashSet<string> wordBigrams = GenerateBigrams(word);
+        HashSet<char> wordCharSet = new HashSet<char>(word);
 
-        root.Search(word.ToLower(), minSimilarity, ref bestMatch, ref bestDistance, ref bestSimilarity);
+        root.Search(
+            word.ToLowerInvariant(),
+            minSimilarity,
+            ref bestMatch,
+            ref bestDistance,
+            ref bestSimilarity,
+            wordSoundex,
+            wordBigrams,
+            wordCharSet);
 
         return bestSimilarity >= minSimilarity ? bestMatch : null;
     }
@@ -44,18 +57,22 @@ public class BKTree
         if (string.IsNullOrEmpty(word))
             return null;
 
-        // Dictionary for transformations
+        word = word.ToLowerInvariant();
+
+        // Transformations to simplify the word
         var transformations = new Dictionary<string, string>
         {
             {"ph", "f"}, {"ck", "k"}, {"gh", "f"}, {"ps", "s"},
             {"qu", "kw"}, {"wr", "r"}, {"mb", "m"}, {"or", "er"}
         };
 
-        // Apply transformations
+        // Apply transformations using StringBuilder for efficiency
+        StringBuilder sbWord = new StringBuilder(word);
         foreach (var pair in transformations)
         {
-            word = word.Replace(pair.Key, pair.Value);
+            sbWord.Replace(pair.Key, pair.Value);
         }
+        word = sbWord.ToString();
 
         // Handle silent final 'e'
         if (word.EndsWith("e"))
@@ -63,11 +80,11 @@ public class BKTree
             word = word.Substring(0, word.Length - 1);
         }
 
-        // Handle soft 'c' (c followed by e, i, or y should not be replaced)
+        // Handle hard and soft 'c'
         word = ReplaceHardC(word);
 
-        // Retain the first letter of the word
-        char firstLetter = char.ToUpper(word[0]);
+        // Retain the first letter
+        char firstLetter = char.ToUpperInvariant(word[0]);
         StringBuilder soundexCode = new StringBuilder();
         soundexCode.Append(firstLetter);
 
@@ -87,19 +104,22 @@ public class BKTree
         char previousCode = '0';
         for (int i = 1; i < word.Length; i++)
         {
-            char currentChar = char.ToUpper(word[i]);
+            char currentChar = char.ToUpperInvariant(word[i]);
             if (soundexMap.TryGetValue(currentChar, out char code))
             {
-                // Append the code only if it is not a duplicate of the previous code
                 if (code != previousCode)
                 {
                     soundexCode.Append(code);
                     previousCode = code;
                 }
             }
+            else
+            {
+                previousCode = '0'; // Reset if character is not mapped
+            }
         }
 
-        // Ensure the result is exactly 4 characters, padded with zeros if necessary
+        // Ensure the result is exactly 4 characters
         while (soundexCode.Length < 4)
         {
             soundexCode.Append('0');
@@ -108,10 +128,10 @@ public class BKTree
         return soundexCode.ToString().Substring(0, 4);
     }
 
-    // Helper method to handle hard 'c' transformation
     private static string ReplaceHardC(string word)
     {
-        StringBuilder result = new StringBuilder();
+        // Use StringBuilder to avoid multiple string allocations
+        StringBuilder result = new StringBuilder(word.Length);
 
         for (int i = 0; i < word.Length; i++)
         {
@@ -128,22 +148,6 @@ public class BKTree
         return result.ToString();
     }
 
-    // N-Gram comparison method (bi-gram) to improve structural similarity comparison
-    private static double ComputeNGramSimilarity(string s1, string s2)
-    {
-        var bigrams1 = GenerateBigrams(s1);
-        var bigrams2 = GenerateBigrams(s2);
-
-        int matches = 0;
-        foreach (var bigram in bigrams1)
-        {
-            if (bigrams2.Contains(bigram))
-                matches++;
-        }
-
-        return (double)matches / Math.Max(bigrams1.Count, bigrams2.Count);
-    }
-
     private static HashSet<string> GenerateBigrams(string word)
     {
         HashSet<string> bigrams = new HashSet<string>();
@@ -158,13 +162,19 @@ public class BKTree
     {
         public string Word { get; private set; }
         public int MaxWordLength { get; private set; }
-        private Dictionary<int, BKTreeNode> Children { get; set; }
+        public string SoundexCode { get; private set; }
+        public HashSet<string> Bigrams { get; private set; }
+        public HashSet<char> CharacterSet { get; private set; }
+        private SortedList<int, BKTreeNode> Children { get; set; }
 
         public BKTreeNode(string word)
         {
             Word = word;
             MaxWordLength = word.Length;
-            Children = new Dictionary<int, BKTreeNode>();
+            SoundexCode = ComputeSoundex(word);
+            Bigrams = GenerateBigrams(word);
+            CharacterSet = new HashSet<char>(word);
+            Children = new SortedList<int, BKTreeNode>();
         }
 
         public void Add(string word)
@@ -182,68 +192,95 @@ public class BKTree
             }
             else
             {
-                Children[distance] = new BKTreeNode(word);
+                Children.Add(distance, new BKTreeNode(word));
             }
         }
 
-        public void Search(string word, double minSimilarity, ref string bestMatch, ref int bestDistance, ref double bestSimilarity)
+        public void Search(
+            string word,
+            double minSimilarity,
+            ref string bestMatch,
+            ref int bestDistance,
+            ref double bestSimilarity,
+            string wordSoundex,
+            HashSet<string> wordBigrams,
+            HashSet<char> wordCharSet)
         {
             int distance = ComputeLevenshteinDistance(Word, word);
+
             int maxLength = Math.Max(word.Length, Word.Length);
             double similarity = 1.0 - ((double)distance / maxLength);
 
-            // Adjust similarity based on letter structure
             double adjustedSimilarity = similarity;
 
-            string wordSoundex = ComputeSoundex(word);
-            string candidateSoundex = ComputeSoundex(Word);
-            if (wordSoundex == candidateSoundex)
+            // Use precomputed Soundex codes
+            if (wordSoundex == SoundexCode)
             {
-                adjustedSimilarity += 0.2; // Boost similarity for phonetically similar words
+                adjustedSimilarity += 0.2; // Boost for phonetic similarity
             }
 
-            // Boost similarity based on N-Gram comparison
-            double nGramSimilarity = ComputeNGramSimilarity(word, Word);
-            adjustedSimilarity += nGramSimilarity * 0.3; // Boost for bigram structural similarity
-
-            // Penalize words that have fewer shared letters across the entire word
-            if (HasFewSharedLetters(word, Word))
+            // Use precomputed bigrams
+            int matches = 0;
+            foreach (var bigram in Bigrams)
             {
-                adjustedSimilarity -= 0.2; // Penalize for having too few shared letters
+                if (wordBigrams.Contains(bigram))
+                    matches++;
+            }
+            double nGramSimilarity = (double)matches / Math.Max(Bigrams.Count, wordBigrams.Count);
+            adjustedSimilarity += nGramSimilarity * 0.3; // Boost for structural similarity
+
+            // Penalize if too few shared letters
+            if (HasFewSharedLetters(wordCharSet, CharacterSet))
+            {
+                adjustedSimilarity -= 0.2; // Penalize for few shared letters
             }
 
-            // Choose the best match based on adjusted similarity
-            if ((adjustedSimilarity > bestSimilarity) || (adjustedSimilarity == bestSimilarity && distance < bestDistance))
+            // Update best match if this node is better
+            if ((adjustedSimilarity > bestSimilarity) ||
+                (Math.Abs(adjustedSimilarity - bestSimilarity) < 0.0001 && (distance < bestDistance || bestDistance == -1)))
             {
                 bestSimilarity = adjustedSimilarity;
                 bestDistance = distance;
                 bestMatch = Word;
             }
 
+            // Prune the search space
             foreach (var kvp in Children)
             {
                 int key = kvp.Key;
                 BKTreeNode childNode = kvp.Value;
 
-                // Compute minimum possible distance between target word and child's word
+                // Compute minimal possible distance
                 int minPossibleDistance = Math.Abs(distance - key);
                 int childMaxLength = Math.Max(word.Length, childNode.MaxWordLength);
                 double maxPossibleSimilarity = 1.0 - ((double)minPossibleDistance / childMaxLength);
 
-                if (maxPossibleSimilarity >= minSimilarity)
+                if (maxPossibleSimilarity >= minSimilarity && maxPossibleSimilarity > bestSimilarity)
                 {
-                    childNode.Search(word, minSimilarity, ref bestMatch, ref bestDistance, ref bestSimilarity);
+                    childNode.Search(
+                        word,
+                        minSimilarity,
+                        ref bestMatch,
+                        ref bestDistance,
+                        ref bestSimilarity,
+                        wordSoundex,
+                        wordBigrams,
+                        wordCharSet);
                 }
             }
         }
 
-        private bool HasFewSharedLetters(string input, string candidate)
+        private bool HasFewSharedLetters(HashSet<char> inputSet, HashSet<char> candidateSet)
         {
-            var inputSet = new HashSet<char>(input);
-            var candidateSet = new HashSet<char>(candidate);
-
-            inputSet.IntersectWith(candidateSet);
-            return inputSet.Count < 3; // Penalize if fewer than 3 letters are shared
+            int sharedLetters = 0;
+            foreach (var c in inputSet)
+            {
+                if (candidateSet.Contains(c))
+                    sharedLetters++;
+                if (sharedLetters >= 3)
+                    return false; // Enough shared letters
+            }
+            return true; // Fewer than 3 shared letters
         }
 
         private int ComputeLevenshteinDistance(string s, string t)
@@ -270,9 +307,9 @@ public class BKTree
                     int cost = (sChar == t[j - 1]) ? 0 : 1;
                     currentRow[j] = Math.Min(
                         Math.Min(
-                            currentRow[j - 1] + 1,       // Insertion
-                            previousRow[j] + 1),         // Deletion
-                        previousRow[j - 1] + cost);     // Substitution
+                            currentRow[j - 1] + 1,     // Insertion
+                            previousRow[j] + 1),       // Deletion
+                        previousRow[j - 1] + cost);    // Substitution
                 }
 
                 // Swap rows for next iteration
