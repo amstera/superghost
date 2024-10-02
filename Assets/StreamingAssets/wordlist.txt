@@ -2669,6 +2669,8 @@ allodial
 allodium
 allods
 allogamy
+allograft
+allografts
 allonge
 allonges
 allonym
@@ -11098,6 +11100,8 @@ bobbing
 bobbins
 bobble
 bobbled
+bobblehead
+bobbleheads
 bobbles
 bobbling
 bobby
@@ -17908,8 +17912,6 @@ christened
 christening
 christenings
 christens
-christie
-christy
 chroma
 chromas
 chromate
@@ -27835,6 +27837,7 @@ deticker
 deticks
 detinue
 detinues
+detonatable
 detonate
 detonated
 detonates
@@ -34857,6 +34860,7 @@ erysipelas
 erythema
 erythrocyte
 erythrocytes
+erythrodontia
 erythromycin
 erythron
 escalade
@@ -48597,6 +48601,10 @@ homogony
 homograph
 homographs
 homolog
+homologate
+homologated
+homologates
+homologating
 homologous
 homologs
 homologue
@@ -53752,6 +53760,7 @@ irresolutely
 irresoluteness
 irresolution
 irrespective
+irresponsibilities
 irresponsibility
 irresponsible
 irresponsibly
@@ -54316,6 +54325,7 @@ jazzes
 jazzier
 jazziest
 jazzily
+jazziness
 jazzing
 jazzlike
 jazzman
@@ -57879,11 +57889,9 @@ legged
 leggier
 leggiero
 leggiest
-leggin
 legginess
 legging
 leggings
-leggins
 leggy
 leghorn
 leghorns
@@ -59849,6 +59857,7 @@ lowest
 lowing
 lowings
 lowish
+lowkey
 lowland
 lowlander
 lowlanders
@@ -72243,6 +72252,7 @@ ovulated
 ovulates
 ovulating
 ovulation
+ovulations
 ovule
 ovules
 ovum
@@ -75733,6 +75743,7 @@ phyllome
 phyllos
 phylogeny
 phylon
+phylons
 phylum
 physed
 physeds
@@ -91141,8 +91152,6 @@ scotoma
 scotomas
 scotopia
 scotopic
-scottie
-scotties
 scoundrel
 scoundrels
 scour
@@ -103675,6 +103684,7 @@ taxes
 taxi
 taxicab
 taxicabs
+taxidermied
 taxidermist
 taxidermists
 taxidermy
@@ -107118,6 +107128,7 @@ translucence
 translucency
 translucent
 translucently
+translunar
 transmigrate
 transmigrated
 transmigrates
@@ -108776,6 +108787,7 @@ twinight
 twining
 twinjet
 twinjets
+twink
 twinkie
 twinkies
 twinkle
@@ -108785,6 +108797,7 @@ twinkles
 twinkling
 twinklings
 twinkly
+twinks
 twinned
 twinning
 twins
@@ -111751,6 +111764,7 @@ unworthily
 unworthiness
 unworthy
 unwound
+unwounded
 unwove
 unwoven
 unwrap
