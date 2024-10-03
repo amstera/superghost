@@ -494,6 +494,7 @@ academicians
 academics
 academies
 academy
+acai
 acajou
 acajous
 acaleph
@@ -30207,6 +30208,8 @@ dodderer
 doddering
 dodders
 doddery
+dodecahedron
+dodecahedrons
 dodge
 dodged
 dodgem
@@ -70070,7 +70073,6 @@ opaquer
 opaques
 opaquest
 opaquing
-oped
 open
 openable
 opencast
@@ -70117,7 +70119,6 @@ operettas
 operon
 operons
 operose
-opes
 ophidian
 ophite
 ophites
@@ -70133,7 +70134,6 @@ opiating
 opine
 opined
 opines
-oping
 opining
 opinion
 opinionated
@@ -87562,6 +87562,10 @@ rewarm
 rewarmed
 rewarming
 rewarms
+rewarn
+rewarned
+rewarning
+rewarns
 rewash
 rewashed
 rewashes
