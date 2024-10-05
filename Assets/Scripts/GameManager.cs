@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
         currency = saveObject.Currency;
         currentGame = saveObject.CurrentLevel;
 
-        Application.targetFrameRate = saveObject.EnableLowPowerMode ? 30 : 45;
+        Application.targetFrameRate = saveObject.EnableLowPowerMode ? 30 : 40;
     }
 
     IEnumerator Start()
@@ -166,10 +166,7 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.instance.GameStarted();
 
-            tutorialPopup.Show(0, false, true, endingPageIndex: 4);
-            saveObject.HasSeenTutorial = true;
-
-            SaveManager.Save(saveObject);
+            tutorialPopup.Show(0, false, true, callback: () => HasSeenTutorial(), endingPageIndex: 4);
         }
     }
 
@@ -1096,6 +1093,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void HasSeenTutorial()
+    {
+        saveObject.HasSeenTutorial = true;
+        SaveManager.Save(saveObject);
+
+        var seenTutorialEvent = new CustomEvent("seenTutorial");
+        AnalyticsService.Instance.RecordEvent(seenTutorialEvent);
+    }
+
     private void UpdateWordDisplay(bool updateColor, int newWordIndex)
     {
         string displayText = gameWord.ToUpper();
@@ -1292,27 +1298,23 @@ public class GameManager : MonoBehaviour
                 }
 
                 nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
-                var nextRoundButtonText = "Continue Run >";
+                var nextRoundButtonText = $"Start Level {currentGame + 2} >";
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
                     nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
                 }
-                else
-                {
-                    string totalLevels = currentGame + 2 > 10 ? "" : "/10";
-                    nextRoundButtonText += $"\n<size=30><color=green>Level {currentGame + 2}{totalLevels}</color></size>";
 
-                    Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
+                Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
                     {
                         { Difficulty.Normal, saveObject.Statistics.HighestLevel },
                         { Difficulty.Easy, saveObject.Statistics.EasyHighestLevel },
                         { Difficulty.Hard, saveObject.Statistics.HardHighestLevel }
                     };
-                    if (currentGame + 1 > highestLevelMap[saveObject.Difficulty])
-                    {
-                        highestLevelNewIndicator.SetActive(true);
-                    }
+                if (currentGame + 1 > highestLevelMap[saveObject.Difficulty])
+                {
+                    highestLevelNewIndicator.SetActive(true);
                 }
+
                 nextRoundButton.GetComponentInChildren<TextMeshProUGUI>().text = nextRoundButtonText;
 
                 if (points > saveObject.Statistics.HighScore)

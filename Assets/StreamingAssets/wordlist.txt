@@ -4841,7 +4841,6 @@ arabesk
 arabesks
 arabesque
 arabesques
-arabic
 arabica
 arabicas
 arability
@@ -32640,7 +32639,6 @@ egressed
 egresses
 egret
 egrets
-egyptian
 eide
 eider
 eiderdown
@@ -36575,6 +36573,8 @@ fabliau
 fabliaux
 fabling
 fabric
+fabricant
+fabricants
 fabricate
 fabricated
 fabricates
@@ -47201,8 +47201,6 @@ heavyset
 heavyweight
 heavyweights
 hebdomad
-hebe
-hebes
 hebetate
 hebetic
 hebetude

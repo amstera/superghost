@@ -126,14 +126,14 @@ public class TutorialPopUp : MonoBehaviour
         StopAllCoroutines();
         ResetPopUp();
 
-        if (!showCloseButton && startNewGame)
-        {
-            gameManager.NewGamePressed();
-        }
-
         if (callback != null)
         {
             callback.Invoke();
+        }
+
+        if (!showCloseButton && startNewGame)
+        {
+            gameManager.NewGamePressed();
         }
     }
 
