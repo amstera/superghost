@@ -50,7 +50,7 @@ public class RedoLevelPopUp : MonoBehaviour
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
 
-        bodyText.text = $"When you lose a game, it's a  <color=red>PERMA DEATH!</color>\n\nBut you can watch an ad to get a second chance at <color=green>Level {gameManager.copySaveObject.CurrentLevel + 1}</color>";
+        bodyText.text = $"When you lose a game, it's a <color=red>PERMANENT DEATH</color>\n\nWatch an ad to get a <color=green>second chance</color> at <line-height=55>\n<color=yellow>Level {gameManager.copySaveObject.CurrentLevel + 1}</color>";
 
         // Subscribe to ad events
         if (!initializeAds)

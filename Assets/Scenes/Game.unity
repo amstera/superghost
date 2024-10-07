@@ -4941,7 +4941,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -30, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &127885903
 MonoBehaviour:
@@ -4993,9 +4993,9 @@ MonoBehaviour:
   m_fontSize: 30
   m_fontSizeBase: 30
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 25
+  m_fontSizeMax: 30
   m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -11578,7 +11578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8207547, g: 0.70537066, b: 0.12001601, a: 0.7176471}
+  m_Color: {r: 0.40784314, g: 0.81960785, b: 0.12001601, a: 0.3529412}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11595,7 +11595,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 1
+  borderWidth: 2
   falloffDistance: 1
 --- !u!222 &279466811
 CanvasRenderer:
@@ -21373,8 +21373,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.5792678
+  m_Value: 1.0000012
+  m_Size: 0.57926077
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -62779,8 +62779,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.33191544
+  m_Value: -0.00000074743093
+  m_Size: 0.33190736
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -67117,7 +67117,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 27}
-  m_SizeDelta: {x: -40, y: 320}
+  m_SizeDelta: {x: -50, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1540556561
 MonoBehaviour:
@@ -67139,11 +67139,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'When you lose a game, it is a <color=red>PERMA DEATH!</color>
+  m_text: 'When you lose a game, it''s a <color=red>PERMANENT DEATH</color>
 
 
-    But
-    you can watch an ad to get a second chance at <color=yellow>Level 3</color>'
+    Watch
+    an ad to get a <color=green>second chance</color> at <line-height=55>
+
+    <color=yellow>Level
+    3</color>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -74346,7 +74349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.239}
+  m_AnchoredPosition: {x: 0, y: 1143.2399}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -86844,7 +86847,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.49002}
+  m_AnchoredPosition: {x: 0, y: 284.4895}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706

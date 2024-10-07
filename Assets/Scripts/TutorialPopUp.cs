@@ -23,6 +23,7 @@ public class TutorialPopUp : MonoBehaviour
     private int currentPageIndex = 0;
     private bool showCloseButton;
     private bool startNewGame;
+    private string closeButtonText;
     private System.Action callback;
     private List<int> visiblePageIndices = new List<int>();
     private HashSet<int> visitedPages = new HashSet<int>();
@@ -73,6 +74,7 @@ public class TutorialPopUp : MonoBehaviour
         this.showCloseButton = showCloseButton;
         this.startNewGame = startNewGame;
         this.callback = callback;
+        this.closeButtonText = closeButtonText;
         closeButton.GetComponentInChildren<TextMeshProUGUI>().text = closeButtonText;
         visitedPages.Clear();
         buttonMeter.fillAmount = 0;
@@ -210,7 +212,17 @@ public class TutorialPopUp : MonoBehaviour
             previousButton.interactable = true;
         }
 
-        closeButton.gameObject.SetActive(showCloseButton || currentPageIndex == visiblePageIndices.Count - 1);
+        if (!showCloseButton)
+        {
+            if (currentPageIndex < visiblePageIndices.Count - 1)
+            {
+                closeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Skip Tutorial";
+            }
+            else
+            {
+                closeButton.GetComponentInChildren<TextMeshProUGUI>().text = closeButtonText;
+            }
+        }
     }
 
     private IEnumerator ShowNextButtonWithDelay()
@@ -220,7 +232,7 @@ public class TutorialPopUp : MonoBehaviour
         buttonMeter.fillAmount = 0;
         buttonMeter.gameObject.SetActive(true);
 
-        float chargeTime = 1.5f; // Time for the meter to fill
+        float chargeTime = 1f; // Time for the meter to fill
         float elapsedTime = 0;
 
         // Animate the circular meter's fill
