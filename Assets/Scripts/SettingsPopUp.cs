@@ -288,7 +288,7 @@ public class SettingsPopUp : MonoBehaviour
                 }
                 else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
                 {
-                    dictionaryValidateText.text = $"That's an offensive word";
+                    dictionaryValidateText.text = $"That word is not allowed";
                 }
                 else
                 {

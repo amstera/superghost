@@ -32378,6 +32378,8 @@ eczema
 eczemas
 edacious
 edacity
+edamame
+edamames
 edaphic
 eddied
 eddies
@@ -72215,6 +72217,7 @@ overwintered
 overwintering
 overwinters
 overwise
+overwithheld
 overword
 overwore
 overwork
@@ -73150,6 +73153,9 @@ paradoxically
 paradrop
 parae
 paraffin
+paraffined
+paraffining
+paraffins
 parafoil
 paraform
 paragoge
@@ -79142,6 +79148,8 @@ preoccupies
 preoccupy
 preoccupying
 preop
+preopening
+preopenings
 preoperative
 preops
 preoral
@@ -110163,6 +110171,7 @@ unemployable
 unemployed
 unemployment
 unenclosed
+unencouraging
 unencumbered
 unended
 unending
@@ -110326,6 +110335,7 @@ unforged
 unforgettable
 unforgettably
 unforgivable
+unforgiven
 unforgiving
 unforgot
 unforked
@@ -111159,6 +111169,7 @@ unregistered
 unregulated
 unrehearsed
 unrelated
+unrelaxed
 unrelenting
 unrelentingly
 unreliability

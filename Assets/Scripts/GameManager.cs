@@ -915,26 +915,29 @@ public class GameManager : MonoBehaviour
                     wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
                 }
 
-                var invalidWordEvent = new CustomEvent("invalidWord")
+                if (similarWord == null || !similarWord.Equals(word, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    { "word", word.ToLower() },
-                    { "games_played", saveObject.Statistics.GamesPlayed },
-                    { "current_level", currentGame + 1 },
-                    { "difficulty", saveObject.Difficulty.ToString() },
-                    { "current_score", points },
-                    { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" },
-                    { "high_score", saveObject.Statistics.HighScore },
-                    { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
-                    { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
-                };
-                AnalyticsService.Instance.RecordEvent(invalidWordEvent);
+                    var invalidWordEvent = new CustomEvent("invalidWord")
+                    {
+                        { "word", word.ToLower() },
+                        { "games_played", saveObject.Statistics.GamesPlayed },
+                        { "current_level", currentGame + 1 },
+                        { "difficulty", saveObject.Difficulty.ToString() },
+                        { "current_score", points },
+                        { "current_lives", $"P:{playerLivesText.LivesRemaining()}/5 - C:{aiLivesText.LivesRemaining()}/5" },
+                        { "high_score", saveObject.Statistics.HighScore },
+                        { "total_wins", saveObject.Statistics.NormalWins + saveObject.Statistics.EasyWins +  saveObject.Statistics.HardWins },
+                        { "highest_level", Mathf.Max(saveObject.Statistics.EasyHighestLevel, saveObject.Statistics.HighestLevel, saveObject.Statistics.HardHighestLevel) + 1 }
+                    };
+                    AnalyticsService.Instance.RecordEvent(invalidWordEvent);
+                }
             }
 
             if (gameWord.ToLower() != originalWord.ToLower())
             {
                 previousWords.Add(gameWord);
             }
-            UpdatePoints(gameWord, -1);
+            UpdatePoints(originalWord, -1);
         }
 
         EndGame();

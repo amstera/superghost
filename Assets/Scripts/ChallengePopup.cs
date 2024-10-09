@@ -173,7 +173,7 @@ public class ChallengePopUp : MonoBehaviour
             }
             else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
             {
-                ShowWarning($"That's an offensive word");
+                ShowWarning($"That word is not allowed");
             }
             else
             {
