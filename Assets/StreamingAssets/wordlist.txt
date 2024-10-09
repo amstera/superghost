@@ -7456,6 +7456,7 @@ bandager
 bandages
 bandaging
 bandaid
+bandaids
 bandana
 bandanas
 bandanna
@@ -31713,6 +31714,7 @@ dumplings
 dumps
 dumpsite
 dumpster
+dumpsters
 dumpy
 dunam
 dunams
@@ -57462,6 +57464,8 @@ launders
 laundress
 laundresses
 laundries
+laundromat
+laundromats
 laundry
 laundryman
 laundrymen

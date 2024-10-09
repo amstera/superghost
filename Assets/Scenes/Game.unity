@@ -21358,8 +21358,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2026363666}
   m_HandleRect: {fileID: 2026363665}
   m_Direction: 2
-  m_Value: 1.0000418
-  m_Size: 0.5791114
+  m_Value: 1.0000002
+  m_Size: 0.5792678
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -33722,7 +33722,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CONCEDE
+  m_text: Fold
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
   m_sharedMaterial: {fileID: -1800673210475079738, guid: 5bd15088c40184cd5bfa685460149a27, type: 2}
@@ -63066,8 +63066,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838086854}
   m_HandleRect: {fileID: 838086853}
   m_Direction: 2
-  m_Value: -0.000030164176
-  m_Size: 0.33173627
+  m_Value: -0.00000005338792
+  m_Size: 0.33191544
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -74636,7 +74636,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 1143.2736}
+  m_AnchoredPosition: {x: 0, y: 1143.2391}
   m_SizeDelta: {x: 0, y: 1711.219}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1739679363
@@ -78251,6 +78251,46 @@ MonoBehaviour:
   - irish
   - pakistan
   - norway
+  - nintendo
+  - tums
+  - microsoft
+  - photoshop
+  - mcdonalds
+  - samsung
+  - nike
+  - disney
+  - adidas
+  - toyota
+  - walmart
+  - taser
+  - samsung
+  - lego
+  - ikea
+  - mercedes
+  - ebay
+  - facebook
+  - google
+  - whatsapp
+  - youtube
+  - reddit
+  - tesla
+  - nvidia
+  - walgreens
+  - comcast
+  - kodak
+  - cocacola
+  - costco
+  - netflix
+  - hulu
+  - honda
+  - porsche
+  - amex
+  - visa
+  - lyft
+  - mastercard
+  - fedex
+  - frisbee
+  - rollerblade
   badWords:
   - fuck
   - fucked
@@ -87140,7 +87180,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 284.4727}
+  m_AnchoredPosition: {x: 0, y: 284.4899}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2018457706

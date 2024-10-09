@@ -370,7 +370,8 @@ public class WordDictionary
         bool isAILosing = playerAIWinDifference > 0;
 
         float ratio = currentLevel == 0 ? 1 : 0.75f;
-        if (!isAILosing && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
+        int minWinDifference = currentLevel == 0 ? 2 : 0;
+        if (playerAIWinDifference <= minWinDifference && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
             {
@@ -457,7 +458,7 @@ public class WordDictionary
         }
 
         // Attempt to find a word in the primary list, then in the secondary if necessary
-        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, playerAIWinDifference, difficulty);
+        string foundWord = FindWord(substring, lettersForStartWith, lettersForEndWith, primaryList, playerAIWinDifference, difficulty, currentLevel);
         if (foundWord == null)
         {
             Random random = new Random();
@@ -470,13 +471,13 @@ public class WordDictionary
                 }
             }
 
-            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, playerAIWinDifference, difficulty);
+            return FindWord(substring, lettersForStartWith, lettersForEndWith, secondaryList, playerAIWinDifference, difficulty, currentLevel);
         }
 
         return foundWord;
     }
 
-    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, int playerAIWinDifference, Difficulty difficulty)
+    private string FindWord(string substring, char[] lettersForStartWith, char[] lettersForEndWith, List<string> wordList, int playerAIWinDifference, Difficulty difficulty, int currentLevel)
     {
         bool isAILosing = playerAIWinDifference > 0;
         bool prioritizeStart = ShouldPrioritizeStart(substring.Length, playerAIWinDifference, difficulty);
@@ -484,7 +485,7 @@ public class WordDictionary
         var lettersSecondaryList  = prioritizeStart ? lettersForEndWith : lettersForStartWith;
 
         // First, try to find words with the possible priorizitation
-        var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, wordList, difficulty);
+        var startWithResult = TryExtensionsWithPriority(substring, lettersPrimaryList, prioritizeStart, wordList, difficulty, currentLevel);
         if (string.IsNullOrEmpty(startWithResult))
         {
             Random random = new Random();
@@ -503,7 +504,7 @@ public class WordDictionary
         }
 
         // If none found, fallback to the opposite prioritization
-        return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, wordList, difficulty);
+        return TryExtensionsWithPriority(substring, lettersSecondaryList, !prioritizeStart, wordList, difficulty, currentLevel);
     }
 
     private bool ShouldPrioritizeStart(int substringLength, int playerAIWinDifference, Difficulty difficulty)
@@ -532,7 +533,7 @@ public class WordDictionary
         return random.NextDouble() <= odds;
     }
 
-    private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> wordList, Difficulty difficulty)
+    private string TryExtensionsWithPriority(string substring, char[] letters, bool prioritizeStart, List<string> wordList, Difficulty difficulty, int currentLevel)
     {
         string bestExtension = null;
         foreach (var letter in letters)
@@ -559,7 +560,7 @@ public class WordDictionary
                 }
             }
 
-            if (!prioritizeStart || difficulty == Difficulty.Hard)
+            if (!prioritizeStart || difficulty == Difficulty.Hard || (difficulty == Difficulty.Normal && currentLevel >= 9))
             {
                 foreach (var extension in extensions)
                 {
@@ -640,7 +641,7 @@ public class DifficultySettings
     {
         return difficulty switch
         {
-            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 3000, 2500, 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 2500, 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")

@@ -945,12 +945,12 @@ public class GameManager : MonoBehaviour
 
     public string CheckForProperNoun(string word)
     {
-        return properNounsBkTree.FindBestMatch(word, 0.98);
+        return properNounsBkTree.FindBestMatch(word, 0.9);
     }
 
     public string CheckForOffensiveWord(string word)
     {
-        return badWordsBkTree.FindBestMatch(word, 0.98);
+        return badWordsBkTree.FindBestMatch(word, 0.9);
     }
 
     public void ShowRecap()

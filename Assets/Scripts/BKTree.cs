@@ -33,7 +33,7 @@ public class BKTree
             return null;
 
         string bestMatch = null;
-        int bestDistance = -1; // Changed from int.MaxValue
+        int bestDistance = int.MaxValue;
         double bestSimilarity = 0.0;
         string wordSoundex = ComputeSoundex(word);
         HashSet<string> wordBigrams = GenerateBigrams(word);
@@ -235,9 +235,12 @@ public class BKTree
                 adjustedSimilarity -= 0.2; // Penalize for few shared letters
             }
 
+            // Cap adjustedSimilarity at 1.0
+            adjustedSimilarity = Math.Min(adjustedSimilarity, 1.0);
+
             // Update best match if this node is better
-            if ((adjustedSimilarity > bestSimilarity) ||
-                (Math.Abs(adjustedSimilarity - bestSimilarity) < 0.0001 && (distance < bestDistance || bestDistance == -1)))
+            if (adjustedSimilarity > bestSimilarity ||
+                (Math.Abs(adjustedSimilarity - bestSimilarity) < 0.0001 && distance < bestDistance))
             {
                 bestSimilarity = adjustedSimilarity;
                 bestDistance = distance;
@@ -255,7 +258,11 @@ public class BKTree
                 int childMaxLength = Math.Max(word.Length, childNode.MaxWordLength);
                 double maxPossibleSimilarity = 1.0 - ((double)minPossibleDistance / childMaxLength);
 
-                if (maxPossibleSimilarity >= minSimilarity && maxPossibleSimilarity > bestSimilarity)
+                // Cap maxPossibleSimilarity at 1.0
+                maxPossibleSimilarity = Math.Min(maxPossibleSimilarity, 1.0);
+
+                // Continue searching if maxPossibleSimilarity is promising
+                if (maxPossibleSimilarity >= minSimilarity)
                 {
                     childNode.Search(
                         word,
