@@ -281,14 +281,26 @@ public class SettingsPopUp : MonoBehaviour
             }
             else
             {
-                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
-                if (string.IsNullOrEmpty(similarWord))
+                var properNoun = gameManager.CheckForProperNoun(inputField.text);
+                if (!string.IsNullOrEmpty(properNoun))
                 {
-                    dictionaryValidateText.text = $"{inputField.text.ToUpper()} is not a valid word";
+                    dictionaryValidateText.text = $"{properNoun.ToUpper()} is a proper noun";
+                }
+                else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
+                {
+                    dictionaryValidateText.text = $"That's an offensive word";
                 }
                 else
                 {
-                    dictionaryValidateText.text = $"Not valid! Did you mean {similarWord.ToUpper()}?";
+                    var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
+                    if (string.IsNullOrEmpty(similarWord))
+                    {
+                        dictionaryValidateText.text = $"{inputField.text.ToUpper()} is not a valid word";
+                    }
+                    else
+                    {
+                        dictionaryValidateText.text = $"Not valid! Did you mean {similarWord.ToUpper()}?";
+                    }
                 }
             }
         }

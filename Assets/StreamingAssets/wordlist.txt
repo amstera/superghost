@@ -1797,6 +1797,7 @@ agarose
 agaroses
 agars
 agas
+agastopia
 agate
 agates
 agatize
@@ -10001,6 +10002,7 @@ bioherms
 biologic
 biological
 biologically
+biologies
 biologist
 biologists
 biology
@@ -12377,7 +12379,6 @@ brazes
 brazier
 braziers
 brazilin
-brazils
 brazing
 breach
 breached
@@ -13374,6 +13375,8 @@ bullring
 bullrings
 bullrush
 bulls
+bullseye
+bullseyes
 bullweed
 bullwhip
 bullwhips
@@ -17274,6 +17277,8 @@ cheque
 chequer
 chequers
 cheques
+cherimoya
+cherimoyas
 cherish
 cherished
 cherishes
@@ -32191,6 +32196,8 @@ eavesdropper
 eavesdroppers
 eavesdropping
 eavesdrops
+eavestrough
+eavestroughs
 ebbed
 ebbet
 ebbets
@@ -37630,6 +37637,8 @@ fentanyl
 fenthion
 fenuron
 fenurons
+fenya
+fenyas
 feod
 feodary
 feods
@@ -46434,10 +46443,6 @@ hantles
 hants
 hanuman
 hanumans
-haole
-haoles
-hapax
-hapaxes
 haphazard
 haphazardly
 haphazardness
@@ -47498,6 +47503,8 @@ hemolyze
 hemophilia
 hemophiliac
 hemophiliacs
+hemophobia
+hemophobic
 hemorrhage
 hemorrhaged
 hemorrhages
@@ -48138,7 +48145,6 @@ hissiest
 hissing
 hissings
 hissy
-histamin
 histamine
 histamines
 histed
@@ -60455,6 +60461,8 @@ macrocosm
 macrocosms
 macroeconomic
 macroeconomics
+macroeconomies
+macroeconomy
 macron
 macrons
 macrophages
@@ -63136,6 +63144,8 @@ microcosms
 microdot
 microdots
 microeconomics
+microeconomies
+microeconomy
 microelectronic
 microelectronics
 microfiche
@@ -68488,7 +68498,6 @@ nopalito
 nopals
 nope
 noplace
-nordic
 norethindrone
 nori
 noria
@@ -84900,6 +84909,8 @@ reft
 refuel
 refueled
 refueling
+refuelled
+refuelling
 refuels
 refuge
 refuged
@@ -100433,6 +100444,8 @@ stuns
 stunsail
 stunt
 stunted
+stunter
+stunters
 stunting
 stuntman
 stuntmen
@@ -109541,6 +109554,7 @@ unchokes
 unchosen
 unchristian
 unchurch
+unchurched
 uncia
 unciae
 uncial
@@ -118168,7 +118182,6 @@ zombifies
 zombify
 zombifying
 zombiism
-zombis
 zona
 zonae
 zonal

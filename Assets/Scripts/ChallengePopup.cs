@@ -164,6 +164,28 @@ public class ChallengePopUp : MonoBehaviour
         {
             ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
         }
+        else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
+        {
+            var properNoun = gameManager.CheckForProperNoun(inputField.text);
+            if (!string.IsNullOrEmpty(properNoun))
+            {
+                ShowWarning($"{properNoun.ToUpper()} is a proper noun");
+            }
+            else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
+            {
+                ShowWarning($"That's an offensive word");
+            }
+            else
+            {
+                var warningText = $"{inputField.text.ToUpper()} isn't a valid word";
+                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
+                if (!string.IsNullOrEmpty(similarWord))
+                {
+                    warningText += $"! Are you thinking <color=yellow>{similarWord.ToUpper()}</color>?";
+                }
+                ShowWarning(warningText);
+            }
+        }
         else
         {
             char invalidChar = restrictedLetters.FirstOrDefault(c => inputField.text.Contains(c, System.StringComparison.InvariantCultureIgnoreCase));
@@ -178,6 +200,12 @@ public class ChallengePopUp : MonoBehaviour
                 StartCoroutine(HandleChallenge());
             }
         }
+    }
+
+    public void Skip()
+    {
+        canvasGroup.interactable = false;
+        StartCoroutine(HandleChallenge());
     }
 
     public void AddRestrictedLetter(char c)
@@ -209,7 +237,7 @@ public class ChallengePopUp : MonoBehaviour
 
     private IEnumerator HandleChallenge()
     {
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.05f);
 
         gameManager.HandleChallenge(inputField.text);
         Hide();

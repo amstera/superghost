@@ -123,7 +123,25 @@ public class BluffPopUp : MonoBehaviour
         }
         else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
         {
-            ShowWarning($"{inputField.text.ToUpper()} is not a valid word");
+            var properNoun = gameManager.CheckForProperNoun(inputField.text);
+            if (!string.IsNullOrEmpty(properNoun))
+            {
+                ShowWarning($"{properNoun.ToUpper()} is a proper noun");
+            }
+            else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
+            {
+                ShowWarning($"That's an offensive word");
+            }
+            else
+            {
+                var warningText = $"{inputField.text.ToUpper()} isn't a valid word";
+                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
+                if (!string.IsNullOrEmpty(similarWord))
+                {
+                    warningText += $"! Are you thinking <color=yellow>{similarWord.ToUpper()}</color>?";
+                }
+                ShowWarning(warningText);
+            }
         }
         else if (inputField.text.Length <= minLength)
         {

@@ -882,7 +882,7 @@ public class GameManager : MonoBehaviour
             var lowerWord = word.ToLower();
 
             var matchingFlaggedWord = false;
-            var similarProperNoun = properNounsBkTree.FindBestMatch(lowerWord, 0.9);
+            var similarProperNoun = CheckForProperNoun(lowerWord);
             if (!string.IsNullOrEmpty(similarProperNoun))
             {
                 properNounsWarningPopUp.Show(similarProperNoun);
@@ -890,7 +890,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                var similarBadWord = badWordsBkTree.FindBestMatch(lowerWord, 0.9);
+                var similarBadWord = CheckForOffensiveWord(lowerWord);
                 if (!string.IsNullOrEmpty(similarBadWord))
                 {
                     badWordsWarningPopUp.Show();
@@ -901,9 +901,9 @@ public class GameManager : MonoBehaviour
             if (!matchingFlaggedWord)
             {
                 var similarWord = wordDictionary.FindClosestWord(word);
-                if (!string.IsNullOrEmpty(similarWord))
+                if (!string.IsNullOrEmpty(similarWord) && !similarWord.Equals(word, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (playerLivesText.LivesRemaining() > 1)
+                    if (playerLivesText.LivesRemaining() > 0)
                     {
                         wordDisplay.text += "\n\n";
                     }
@@ -938,6 +938,16 @@ public class GameManager : MonoBehaviour
         }
 
         EndGame();
+    }
+
+    public string CheckForProperNoun(string word)
+    {
+        return properNounsBkTree.FindBestMatch(word, 0.98);
+    }
+
+    public string CheckForOffensiveWord(string word)
+    {
+        return badWordsBkTree.FindBestMatch(word, 0.98);
     }
 
     public void ShowRecap()
