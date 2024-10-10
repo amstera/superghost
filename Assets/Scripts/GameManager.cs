@@ -873,7 +873,7 @@ public class GameManager : MonoBehaviour
         {
             var caspString = GetCaspText();
             var wordLink = GenerateInvalidWordLink(word);
-            wordDisplay.text = $"{caspString} wins!\n{wordLink}\nisn't valid";
+            wordDisplay.text = $"{caspString} wins!\n{wordLink}\nisn't a valid word";
 
             playerLivesText.LoseLife();
             isLastWordValid = false;
@@ -909,7 +909,7 @@ public class GameManager : MonoBehaviour
                     }
                     else
                     {
-                        wordDisplay.text = $"{wordLink}\nisn't valid\n";
+                        wordDisplay.text = $"{wordLink}\nisn't a valid word\n";
                     }
                     string similarWordLink = GenerateWordLink(similarWord, false, true);
                     wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
@@ -1336,7 +1336,10 @@ public class GameManager : MonoBehaviour
                     newIndicator.SetActive(true);
                     saveObject.RunStatistics.SetNewHighScore = true;
 
-                    Device.RequestStoreReview();
+                    if (Application.internetReachability != NetworkReachability.NotReachable)
+                    {
+                        StartCoroutine(RequestStoreReviewCoroutine());
+                    }
                 }
                 if (points > saveObject.RunStatistics.HighScore)
                 {
@@ -1538,6 +1541,21 @@ public class GameManager : MonoBehaviour
         }
 
         SaveManager.Save(saveObject);
+    }
+
+    private IEnumerator RequestStoreReviewCoroutine()
+    {
+        yield return null;
+        #if UNITY_IOS
+            try
+            {
+                Device.RequestStoreReview();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Error requesting store review: " + ex.Message);
+            }
+        #endif
     }
 
     private void ShowHistory()

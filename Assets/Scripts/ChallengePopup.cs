@@ -62,7 +62,7 @@ public class ChallengePopUp : MonoBehaviour
         pointsCalculateText.text = gameManager.pointsCalculateText.text;
 
         originalSubstring = substring.ToLower().Trim();
-        challengeText.text = $"<size=45><sprite=2></size><color=yellow>CASP</color> thinks you bluffed with\n<color=red>{substring.ToUpper()}</color>";
+        challengeText.text = $"Write a <color=green>valid word</color> that contains\n<color=red>{substring.ToUpper()}</color>";
         inputField.placeholder.GetComponent<TextMeshProUGUI>().text = substring;
         inputField.text = originalSubstring;
 
@@ -164,6 +164,10 @@ public class ChallengePopUp : MonoBehaviour
         {
             ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
         }
+        else if (inputField.text.Equals(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must be valid and include {originalSubstring.ToUpper()}");
+        }
         else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
         {
             var properNoun = gameManager.CheckForProperNoun(inputField.text);
@@ -181,7 +185,15 @@ public class ChallengePopUp : MonoBehaviour
                 var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
                 if (!string.IsNullOrEmpty(similarWord))
                 {
-                    warningText += $"! Are you thinking <color=yellow>{similarWord.ToUpper()}</color>?";
+                    warningText += $"! ";
+                    if (similarWord.Contains(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        warningText += $"Did you mean <color=yellow>{similarWord.ToUpper()}</color>?";
+                    }
+                    else
+                    {
+                        warningText += $"You might've misspelled <color=orange>{similarWord.ToUpper()}</color>";
+                    }
                 }
                 ShowWarning(warningText);
             }

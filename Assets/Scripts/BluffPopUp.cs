@@ -121,28 +121,6 @@ public class BluffPopUp : MonoBehaviour
         {
             ShowWarning($"Word must include {originalSubstring.ToUpper()}");
         }
-        else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
-        {
-            var properNoun = gameManager.CheckForProperNoun(inputField.text);
-            if (!string.IsNullOrEmpty(properNoun))
-            {
-                ShowWarning($"{properNoun.ToUpper()} is a proper noun");
-            }
-            else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
-            {
-                ShowWarning($"That word is not allowed");
-            }
-            else
-            {
-                var warningText = $"{inputField.text.ToUpper()} isn't a valid word";
-                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
-                if (!string.IsNullOrEmpty(similarWord))
-                {
-                    warningText += $"! Are you thinking <color=yellow>{similarWord.ToUpper()}</color>?";
-                }
-                ShowWarning(warningText);
-            }
-        }
         else if (inputField.text.Length <= minLength)
         {
             ShowWarning($"Word must be {minLength + 1}+ letters");
@@ -162,6 +140,40 @@ public class BluffPopUp : MonoBehaviour
         else if (wordDirection == 1 && !inputField.text.StartsWith(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
         {
             ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
+        }
+        else if (inputField.text.Equals(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+        {
+            ShowWarning($"Word must be valid and include {originalSubstring.ToUpper()}");
+        }
+        else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
+        {
+            var properNoun = gameManager.CheckForProperNoun(inputField.text);
+            if (!string.IsNullOrEmpty(properNoun))
+            {
+                ShowWarning($"{properNoun.ToUpper()} is a proper noun");
+            }
+            else if (!string.IsNullOrEmpty(gameManager.CheckForOffensiveWord(inputField.text)))
+            {
+                ShowWarning($"That word is not allowed");
+            }
+            else
+            {
+                var warningText = $"{inputField.text.ToUpper()} isn't a valid word";
+                var similarWord = gameManager.wordDictionary.FindClosestWord(inputField.text);
+                if (!string.IsNullOrEmpty(similarWord))
+                {
+                    warningText += $"! ";
+                    if (similarWord.Contains(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        warningText += $"Did you mean <color=yellow>{similarWord.ToUpper()}</color>?";
+                    }
+                    else
+                    {
+                        warningText += $"You might've misspelled <color=orange>{similarWord.ToUpper()}</color>";
+                    }
+                }
+                ShowWarning(warningText);
+            }
         }
         else
         {

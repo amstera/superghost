@@ -13522,8 +13522,6 @@ buoying
 buoys
 bupkes
 bupkus
-buppie
-buppies
 buppy
 buqsha
 buqshas
@@ -47778,6 +47776,9 @@ heterosexual
 heterosexuality
 heterosexually
 heterosexuals
+heterotroph
+heterotrophic
+heterotrophs
 heth
 heths
 hetman
@@ -48632,6 +48633,7 @@ homosexual
 homosexuality
 homosexually
 homosexuals
+homozygous
 homy
 honan
 honans
@@ -70756,10 +70758,8 @@ ottava
 ottavas
 otter
 otters
-otto
 ottoman
 ottomans
-ottos
 ouabain
 ouabains
 oubliette
@@ -115467,12 +115467,6 @@ weirdy
 weirs
 weka
 wekas
-welch
-welched
-welcher
-welchers
-welches
-welching
 welcome
 welcomed
 welcomer
@@ -115512,12 +115506,6 @@ wellsite
 wellspring
 wellsprings
 welly
-welsh
-welshed
-welsher
-welshers
-welshes
-welshing
 welt
 welted
 welter
