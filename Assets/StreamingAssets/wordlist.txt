@@ -87594,6 +87594,10 @@ rewash
 rewashed
 rewashes
 rewashing
+rewatch
+rewatched
+rewatches
+rewatching
 rewax
 rewaxed
 rewaxes
@@ -94873,6 +94877,11 @@ sketchily
 sketchiness
 sketching
 sketchy
+skeuomorph
+skeuomorphic
+skeuomorphism
+skeuomorphisms
+skeuomorphs
 skew
 skewback
 skewbald

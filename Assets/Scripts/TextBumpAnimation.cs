@@ -52,6 +52,9 @@ public class TextBumpAnimation : MonoBehaviour
 
     IEnumerator AnimateTextChange()
     {
+        // Force the text mesh to update its mesh data
+        textMesh.ForceMeshUpdate();
+
         TMP_TextInfo textInfo = textMesh.textInfo;
         Vector3[][] originalVertices = new Vector3[textInfo.meshInfo.Length][];
         for (int m = 0; m < textInfo.meshInfo.Length; m++)

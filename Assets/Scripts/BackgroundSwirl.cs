@@ -4,8 +4,8 @@ public class BackgroundSwirl : MonoBehaviour
 {
     public Material fluidSwirlMaterial;
     
-    private Color defaultNonBossColor = new Color32(70, 130, 125, 255);
-    private Color defaultBossColor = new Color32(40, 180, 180, 255);
+    private Color defaultNonBossColor = new Color32(70, 130, 130, 255);
+    private Color defaultBossColor = new Color32(20, 160, 135, 255);
     private Color defaultEndlessColor = new Color32(160, 10, 155, 255);
     private Color winColor = new Color32(35, 200, 15, 255);
     private Color loseColor = new Color32(180, 35, 50, 255);

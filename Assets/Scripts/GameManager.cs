@@ -247,7 +247,6 @@ public class GameManager : MonoBehaviour
         }
         pointsCalculateText.text = string.Empty;
         backgroundSwirl.gameObject.SetActive(saveObject.EnableMotion);
-        commandCenter.spiralBackground.SetActive(saveObject.EnableMotion);
         challengeButton.GetComponent<ScaleInOut>().enabled = false;
         wordDisplay.transform.localPosition = Vector3.zero;
         wordDisplay.fontSizeMax = 45;
@@ -368,8 +367,7 @@ public class GameManager : MonoBehaviour
         roundCurrency = 0;
         criteriaText.gameObject.SetActive(true);
         levelText.gameObject.SetActive(true);
-        levelText.text = $"Level {currentGame + 1}/" + (currentGame >= 10 ? "∞" : "10");
-        levelText.fontSize = currentGame + 1 == 10 ? 26 : 28;
+        levelText.text = $"Level {currentGame + 1}/" + (currentGame >= 10 ? "?" : "10");
         levelText.color = Color.green;
         skipButton.gameObject.SetActive(true);
         pointsEarnedText.gameObject.SetActive(false);
@@ -906,6 +904,10 @@ public class GameManager : MonoBehaviour
                     if (playerLivesText.LivesRemaining() > 0)
                     {
                         wordDisplay.text += "\n\n";
+                        if (DeviceTypeChecker.IsiPhoneSE())
+                        {
+                            wordDisplay.transform.localPosition += Vector3.down * 20;
+                        }
                     }
                     else
                     {
@@ -1311,10 +1313,15 @@ public class GameManager : MonoBehaviour
                 }
 
                 nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
-                var nextRoundButtonText = $"Start Level {currentGame + 2} >";
+                var nextRoundButtonText = $"Continue Run >\n";
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
-                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -240);
+                    nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -235);
+                }
+                else
+                {
+                    string totalLevels = currentGame + 2 <= 10 ? "/10" : "/?";
+                    nextRoundButtonText += $"<size=35>Level {currentGame + 2}{totalLevels} ‎ </size>";
                 }
 
                 Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
