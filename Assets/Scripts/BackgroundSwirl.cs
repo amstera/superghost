@@ -4,8 +4,8 @@ public class BackgroundSwirl : MonoBehaviour
 {
     public Material fluidSwirlMaterial;
     
-    private Color defaultNonBossColor = new Color32(75, 100, 100, 255);
-    private Color defaultBossColor = new Color32(15, 125, 130, 255);
+    private Color defaultNonBossColor = new Color32(70, 130, 125, 255);
+    private Color defaultBossColor = new Color32(40, 180, 180, 255);
     private Color defaultEndlessColor = new Color32(160, 10, 155, 255);
     private Color winColor = new Color32(35, 200, 15, 255);
     private Color loseColor = new Color32(180, 35, 50, 255);
@@ -18,7 +18,7 @@ public class BackgroundSwirl : MonoBehaviour
 
         if (fluidSwirlMaterial != null)
         {
-            var defaultColor = saveObject.CurrentLevel < 5 ? defaultNonBossColor : saveObject.CurrentLevel < 10 ? defaultBossColor : defaultEndlessColor;
+            var defaultColor = saveObject.CurrentLevel < 5 ? defaultNonBossColor : saveObject.CurrentLevel < 9 ? defaultBossColor : defaultEndlessColor;
             fluidSwirlMaterial.SetColor("_HighlightColor", defaultColor);
         }
     }
@@ -27,7 +27,7 @@ public class BackgroundSwirl : MonoBehaviour
     {
         if (fluidSwirlMaterial != null)
         {
-            var defaultColor = saveObject.CurrentLevel < 5 ? defaultNonBossColor : saveObject.CurrentLevel < 10 ? defaultBossColor : defaultEndlessColor;
+            var defaultColor = saveObject.CurrentLevel < 5 ? defaultNonBossColor : saveObject.CurrentLevel < 9 ? defaultBossColor : defaultEndlessColor;
             Color targetColor;
 
             if (playerWon)

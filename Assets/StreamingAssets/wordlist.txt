@@ -94,6 +94,7 @@ abdomen
 abdomens
 abdomina
 abdominal
+abdominals
 abduce
 abduced
 abducens
@@ -1736,6 +1737,8 @@ afreets
 afresh
 afrit
 afrits
+afro
+afros
 after
 afterbirth
 afterbirths
@@ -94794,13 +94797,6 @@ skags
 skald
 skaldic
 skalds
-skank
-skanked
-skanker
-skankers
-skankier
-skanking
-skanks
 skat
 skate
 skateboard

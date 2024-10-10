@@ -65,6 +65,8 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
         else
         {
             Debug.LogWarning("Ad is not ready to be shown.");
+            // User is trying to view an ad; reset retryCount and attempt to load again
+            retryCount = 0;
             LoadAd();
             OnAdFailed?.Invoke();
         }
@@ -83,7 +85,7 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
-        Debug.LogError($"Failed to load Ad Unit '{placementId}': {error.ToString()} - {message}");
+        Debug.LogError($"Failed to load Ad Unit '{placementId}': {error} - {message}");
         OnAdFailed?.Invoke();
         isAdReady = false;
         RetryLoadAd(5f);
@@ -92,7 +94,7 @@ public abstract class AdBase : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
     // IUnityAdsShowListener implementation
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
     {
-        Debug.LogError($"Error showing Ad Unit '{placementId}': {error.ToString()} - {message}");
+        Debug.LogError($"Error showing Ad Unit '{placementId}': {error} - {message}");
         OnAdFailed?.Invoke();
     }
 
