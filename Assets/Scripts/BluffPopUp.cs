@@ -141,10 +141,6 @@ public class BluffPopUp : MonoBehaviour
         {
             ShowWarning($"Word must start with {originalSubstring.ToUpper()}");
         }
-        else if (inputField.text.Equals(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
-        {
-            ShowWarning($"Word must be valid and include {originalSubstring.ToUpper()}");
-        }
         else if (!gameManager.wordDictionary.IsWordReal(inputField.text, true))
         {
             var properNoun = gameManager.CheckForProperNoun(inputField.text);
@@ -169,10 +165,19 @@ public class BluffPopUp : MonoBehaviour
                     }
                     else
                     {
-                        warningText += $"You might've misspelled <color=orange>{similarWord.ToUpper()}</color>";
+                        warningText += $"You maybe misspelled <color=orange>{similarWord.ToUpper()}</color>";
                     }
+
+                    ShowWarning(warningText);
                 }
-                ShowWarning(warningText);
+                else if (inputField.text.Equals(originalSubstring, System.StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ShowWarning($"Word must be valid and include {originalSubstring.ToUpper()}");
+                }
+                else
+                {
+                    ShowWarning(warningText);
+                }
             }
         }
         else

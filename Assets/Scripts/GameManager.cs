@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem confettiPS;
     public LivesDisplay playerLivesText;
     public LivesDisplay aiLivesText;
-    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, redoLevel, fireBallCalculate, criteria, criteriaPill;
+    public GameObject playerIndicator, aiIndicator, historyBackground, newIndicator, startText, highestLevelNewIndicator, redoLevel, fireBallCalculate, criteria, criteriaPill, challengeModal;
     public VirtualKeyboard keyboard;
     public GhostAvatar ghostAvatar;
     public ComboText comboText;
@@ -747,6 +747,7 @@ public class GameManager : MonoBehaviour
     {
         challengeAudioSource?.Play();
 
+        challengeModal.SetActive(false);
         isChallenging = true;
         ghostAvatar.Think();
         challengeButton.interactable = false;
@@ -899,6 +900,7 @@ public class GameManager : MonoBehaviour
             if (!matchingFlaggedWord)
             {
                 var similarWord = wordDictionary.FindClosestWord(word);
+                /*
                 if (!string.IsNullOrEmpty(similarWord) && !similarWord.Equals(word, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (playerLivesText.LivesRemaining() > 0)
@@ -916,7 +918,7 @@ public class GameManager : MonoBehaviour
                     string similarWordLink = GenerateWordLink(similarWord, false, true);
                     wordDisplay.text += $"Did you mean\n<color=yellow>{similarWordLink}</color>?";
                 }
-
+                */
                 if (similarWord == null || !similarWord.Equals(word, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var invalidWordEvent = new CustomEvent("invalidWord")
@@ -1314,14 +1316,15 @@ public class GameManager : MonoBehaviour
 
                 nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -255);
                 var nextRoundButtonText = $"Continue Run >\n";
+                string totalLevels = currentGame + 2 <= 10 ? "/10" : "/?";
                 if (DeviceTypeChecker.IsiPhoneSE())
                 {
                     nextRoundButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -235);
+                    nextRoundButtonText = $"Next Level ({currentGame + 2}{totalLevels})";
                 }
                 else
                 {
-                    string totalLevels = currentGame + 2 <= 10 ? "/10" : "/?";
-                    nextRoundButtonText += $"<size=35>Level {currentGame + 2}{totalLevels} ‎ </size>";
+                    nextRoundButtonText += $"<size=40>Level {currentGame + 2}{totalLevels} ‎ </size>";
                 }
 
                 Dictionary<Difficulty, int> highestLevelMap = new Dictionary<Difficulty, int>
@@ -1631,6 +1634,7 @@ public class GameManager : MonoBehaviour
                 if (!saveObject.HasPressedChallengeButton)
                 {
                     challengeButton.GetComponent<ScaleInOut>().enabled = true;
+                    challengeModal.SetActive(true);
                 }
             }
         }
@@ -1651,6 +1655,11 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         PlayComputerWord(word);
+                        if (!saveObject.HasPressedChallengeButton)
+                        {
+                            challengeButton.GetComponent<ScaleInOut>().enabled = true;
+                            challengeModal.SetActive(true);
+                        }
                     }
                 }
                 else

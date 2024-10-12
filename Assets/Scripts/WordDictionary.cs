@@ -362,7 +362,7 @@ public class WordDictionary
             return null;
         }
 
-        if (currentLevel <= 1 && difficulty == Difficulty.Normal)
+        if (currentLevel <= 2 && difficulty == Difficulty.Normal)
         {
             difficulty = Difficulty.Easy;
         }
@@ -642,7 +642,7 @@ public class DifficultySettings
         return difficulty switch
         {
             Difficulty.Easy => new DifficultySettings { ProbabilityOffset = 1f, ScoreThresholds = new[] { 2500, 2000, 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
-            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.85f, ScoreThresholds = new[] { 1250, 1000, 750, 500, 400, 250, 100 } },
+            Difficulty.Normal => new DifficultySettings { ProbabilityOffset = 0.8f, ScoreThresholds = new[] { 1500, 1250, 1000, 750, 500, 400, 250, 100 } },
             Difficulty.Hard => new DifficultySettings { ProbabilityOffset = 0.65f, ScoreThresholds = new[] { 1000, 750, 500, 400, 250, 100 } },
             _ => throw new ArgumentOutOfRangeException(nameof(difficulty), "Unsupported difficulty level.")
         };

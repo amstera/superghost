@@ -6519,6 +6519,10 @@ autopsying
 autos
 autosome
 autotomy
+autotroph
+autotrophic
+autotrophism
+autotrophs
 autotype
 autotypy
 autoworker
@@ -66866,7 +66870,6 @@ natantly
 natation
 natatory
 natch
-nates
 nathless
 nation
 national
@@ -71259,9 +71262,6 @@ outranks
 outrate
 outrated
 outrates
-outrave
-outraved
-outraves
 outre
 outreach
 outreached
@@ -82079,7 +82079,6 @@ quilter
 quilters
 quilting
 quilts
-quin
 quinary
 quinate
 quince
@@ -82108,7 +82107,6 @@ quinolin
 quinols
 quinone
 quinones
-quins
 quinsied
 quinsies
 quinsy
@@ -88440,6 +88438,7 @@ rodsmen
 roebuck
 roebucks
 roentgen
+roentgenium
 roentgens
 roes
 rogation
@@ -96490,6 +96489,7 @@ socials
 societal
 societies
 society
+sociobiology
 socioeconomic
 socioeconomically
 sociological
@@ -104684,8 +104684,6 @@ tevatron
 tewed
 tewing
 tews
-texas
-texases
 text
 textbook
 textbooks
@@ -110556,6 +110554,7 @@ unhusk
 unhusked
 unhusks
 unhygienic
+unhyphenated
 unialgal
 uniaxial
 unibody
