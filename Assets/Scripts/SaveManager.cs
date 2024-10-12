@@ -74,6 +74,7 @@ public class SaveObject
     public bool HasPressedChallengeButton;
     public bool HasDismissedTutorialModal;
     public bool HasSeenShopModals;
+    public bool HasRedoneLevel;
     public int Currency = 5;
     public int CurrentLevel;
     public HatType HatType = HatType.None;

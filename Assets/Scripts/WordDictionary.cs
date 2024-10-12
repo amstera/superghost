@@ -371,7 +371,7 @@ public class WordDictionary
 
         float ratio = currentLevel == 0 ? 1 : 0.75f;
         int minWinDifference = currentLevel == 0 ? 2 : 0;
-        if (playerAIWinDifference <= minWinDifference && difficulty == Difficulty.Easy && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
+        if (playerAIWinDifference <= minWinDifference && (difficulty == Difficulty.Easy || (difficulty == Difficulty.Normal && playerAIWinDifference < -2)) && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
             {

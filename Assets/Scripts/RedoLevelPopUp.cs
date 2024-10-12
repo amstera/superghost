@@ -50,7 +50,14 @@ public class RedoLevelPopUp : MonoBehaviour
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
 
-        bodyText.text = $"When you lose a game, it's a <color=red>PERMANENT DEATH</color>\n\nWatch an ad to get a <color=green>second chance</color> at <line-height=55>\n<color=yellow>Level {gameManager.copySaveObject.CurrentLevel + 1}</color>";
+        string adText = "Watch an ad to get a <color=green>second chance</color>";
+        watchButton.GetComponentInChildren<TextMeshProUGUI>().text = "Watch Ad";
+        if (!saveObject.HasRedoneLevel)
+        {
+            adText = "Here's a one-time chance for a <color=green>second shot</color>";
+            watchButton.GetComponentInChildren<TextMeshProUGUI>().text = "Retry Level";
+        }
+        bodyText.text = $"When you lose a game, it's a <color=red>PERMANENT DEATH</color>\n\n{adText} at <line-height=55>\n<color=yellow>Level {gameManager.copySaveObject.CurrentLevel + 1}</color>";
 
         // Subscribe to ad events
         if (!initializeAds)
@@ -88,7 +95,15 @@ public class RedoLevelPopUp : MonoBehaviour
     {
         clickAudioSource?.Play();
 
-        AdsManager.Instance.rewardedAd.ShowAd();
+        if (saveObject.HasRedoneLevel)
+        {
+            AdsManager.Instance.rewardedAd.ShowAd();
+        }
+        else
+        {
+            RestartLevel();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public void Hide()
@@ -142,6 +157,7 @@ public class RedoLevelPopUp : MonoBehaviour
         saveObject.ShopItemIds = copySaveObject.ShopItemIds.ToList();
         saveObject.RestrictedChars = copySaveObject.RestrictedChars.ToDictionary(entry => entry.Key, entry => entry.Value);
         saveObject.ChosenCriteria = copySaveObject.ChosenCriteria.ToDictionary(entry => entry.Key, entry => entry.Value);
+        saveObject.HasRedoneLevel = true;
         SaveManager.Save(saveObject);
     }
 
