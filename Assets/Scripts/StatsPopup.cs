@@ -353,6 +353,14 @@ public class StatsPopup : MonoBehaviour
         {
             unlockedHats.Add(HatType.Cat);
         }
+        if (saveObject.Statistics.MostPointsPerRound >= 250)
+        {
+            unlockedHats.Add(HatType.Dog);
+        }
+        if (saveObject.Statistics.RunLosses > 0)
+        {
+            unlockedHats.Add(HatType.IceCream);
+        }
 
         return unlockedHats;
     }

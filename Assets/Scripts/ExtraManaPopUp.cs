@@ -52,7 +52,7 @@ public class ExtraManaPopUp : MonoBehaviour
         StartCoroutine(FadeIn());
         StartCoroutine(ScaleIn());
 
-        bodyText.text = $"Get <color=green>mana (¤)</color> each time you <color=green>win</color> a round for powers!\n\nNeed more? Watch an ad to get\n<color=green>{amount}¤</color>";
+        bodyText.text = $"Get <color=green>mana (¤)</color> each time you <color=green>win</color> a round!\n\nNeed more? Watch an ad to get\n<color=green>{amount}¤</color>";
         watchButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Watch (<color=green>+{amount}¤</color>)";
 
         // Subscribe to ad events

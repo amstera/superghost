@@ -1476,6 +1476,7 @@ public class GameManager : MonoBehaviour
                 wordDisplay.transform.localPosition += Vector3.up * 25;
 
                 saveObject.RunStatistics.MostMoney = currency;
+                saveObject.Statistics.RunLosses++;
                 ResetRun();
             }
 

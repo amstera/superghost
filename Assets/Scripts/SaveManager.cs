@@ -112,6 +112,7 @@ public class Statistics
     public int EasyGameWins;
     public int NormalGameWins;
     public int HardGameWins;
+    public int RunLosses;
     public Dictionary<int, int> UsedShopItemIds = new Dictionary<int, int>();
     public List<string> WinningWords = new List<string>();
 }

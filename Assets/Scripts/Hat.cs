@@ -66,7 +66,9 @@ public enum HatType
     Wizard,
     Chef,
     Viking,
-    Cat
+    Cat,
+    Dog,
+    IceCream
 }
 
 [System.Serializable]

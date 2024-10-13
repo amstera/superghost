@@ -362,16 +362,21 @@ public class WordDictionary
             return null;
         }
 
-        if (currentLevel <= 2 && difficulty == Difficulty.Normal)
+        if (currentLevel <= 1 && difficulty == Difficulty.Normal)
         {
             difficulty = Difficulty.Easy;
         }
 
         bool isAILosing = playerAIWinDifference > 0;
 
-        float ratio = currentLevel == 0 ? 1 : 0.75f;
+        float ratio = currentLevel == 0 ? 1f : 0.75f;
         int minWinDifference = currentLevel == 0 ? 2 : 0;
-        if (playerAIWinDifference <= minWinDifference && (difficulty == Difficulty.Easy || (difficulty == Difficulty.Normal && playerAIWinDifference < -2)) && rng.NextDouble() <= ratio) // if it's easy and you can spell a word, just spell it
+        bool shouldSpellWord = (difficulty == Difficulty.Easy ||
+                               (difficulty == Difficulty.Normal && playerAIWinDifference < -2) ||
+                               (difficulty == Difficulty.Normal && currentLevel == 2)) &&
+                               playerAIWinDifference <= minWinDifference &&
+                               rng.NextDouble() <= ratio;
+        if (shouldSpellWord)
         {
             if (filteredWords.Any(f => f.Contains(substring) && f.Length - substring.Length == 1))
             {
@@ -379,7 +384,7 @@ public class WordDictionary
             }
         }
 
-        if (difficulty == Difficulty.Easy)
+        if (difficulty == Difficulty.Easy || (difficulty == Difficulty.Normal && currentLevel <= 2))
         {
             isAILosing = false;
         }

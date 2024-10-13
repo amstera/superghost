@@ -2921,7 +2921,6 @@ alveolars
 alveoli
 alveolus
 alvine
-alway
 always
 alyssum
 alyssums
@@ -45739,10 +45738,8 @@ gyoza
 gyozas
 gyplure
 gyplures
-gypsies
 gypsum
 gypsums
-gypsy
 gyral
 gyrally
 gyrase
@@ -66312,6 +66309,8 @@ musks
 musky
 muslin
 muslins
+muso
+musos
 muspike
 muspikes
 musquash
@@ -69513,6 +69512,8 @@ oculi
 oculist
 oculists
 oculomotor
+oculoplastic
+oculoplastics
 oculus
 odah
 odahs
@@ -79246,6 +79247,10 @@ prepupa
 prepupae
 prepupal
 prepupas
+prequalified
+prequalifies
+prequalify
+prequalifying
 prequel
 prequels
 prerace
@@ -110268,6 +110273,8 @@ unfavorite
 unfavorited
 unfavorites
 unfavoriting
+unfavourable
+unfavourably
 unfavourite
 unfavourited
 unfavourites
@@ -111189,6 +111196,7 @@ unremarked
 unremembered
 unremitting
 unremittingly
+unremorseful
 unrent
 unrented
 unrepaid
