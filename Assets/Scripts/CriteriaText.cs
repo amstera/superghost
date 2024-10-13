@@ -136,7 +136,6 @@ public class CriteriaText : MonoBehaviour
         {
             possibleCriteria.Add(new NoRepeatLetters());
         }
-
         if ((level >= 3 && level <= 7) || level >= 10)
         {
             possibleCriteria.Add(new OnlyMove(true));
@@ -144,6 +143,10 @@ public class CriteriaText : MonoBehaviour
         if (level >= 6)
         {
             possibleCriteria.Add(new NoComboLetters());
+        }
+        if (level >= 7)
+        {
+            possibleCriteria.Add(new PowersCostDouble());
         }
 
         if (saveObject.ChosenCriteria.TryGetValue(level, out List<int> criteria))

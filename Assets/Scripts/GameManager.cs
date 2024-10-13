@@ -2128,6 +2128,7 @@ public class GameManager : MonoBehaviour
         comboText.IsInactive = false;
         aiAlwaysStarts = false;
         ghostAvatar.CanMercy = true;
+        shopPopUp.SetDoubleCost(false);
         SetRepeatingLetters(false);
         SetWordDirection(0);
         var criteriaPillText = criteriaPill.GetComponentInChildren<TextMeshProUGUI>();
@@ -2180,6 +2181,10 @@ public class GameManager : MonoBehaviour
                 else if (criterion is NoRepeatLetters)
                 {
                     SetRepeatingLetters(true);
+                }
+                else if (criterion is PowersCostDouble)
+                {
+                    shopPopUp.SetDoubleCost(true);
                 }
                 else if (criterion is OnlyMove onlyMove)
                 {

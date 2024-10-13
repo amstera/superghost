@@ -39,6 +39,7 @@ public class ShopPopUp : MonoBehaviour
     private HashSet<int> previousShopItemIds = new HashSet<int>();
     private SaveObject saveObject;
     private bool isShuffling = false;
+    private bool hasDoubleCost = false;
 
     private void Awake()
     {
@@ -124,6 +125,23 @@ public class ShopPopUp : MonoBehaviour
         {
             ShowModals();
         }
+    }
+
+    public void SetDoubleCost(bool isDoubleCost)
+    {
+        hasDoubleCost = isDoubleCost;
+        if (hasDoubleCost)
+        {
+            discountText.text = "2x Cost!";
+            totalCostPercentage = 2;
+        }
+        else
+        {
+            discountText.text = "";
+            totalCostPercentage = 1;
+        }
+
+        discountText.gameObject.SetActive(hasDoubleCost);
     }
 
     private void ShowModals()
@@ -374,7 +392,19 @@ public class ShopPopUp : MonoBehaviour
 
     public void ApplyDiscount(float amount)
     {
-        totalCostPercentage = amount;
+        totalCostPercentage = (hasDoubleCost ? 2 : 1) * amount;
+
+        if (hasDoubleCost)
+        {
+            if (amount == 1)
+            {
+                totalCostPercentage = 2;
+            }
+
+            discountText.text = totalCostPercentage == 1 ? "Regular Cost!" : $"{totalCostPercentage}x Cost!";
+            return;
+        }
+
         if (amount == 1)
         {
             discountText.gameObject.SetActive(false);
@@ -559,7 +589,7 @@ public class ShopPopUp : MonoBehaviour
             case 17:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => ApplyDiscount(0.5f), false, true),
-                    totalCostPercentage == 1, true, totalCostPercentage != 1, "", true);
+                    totalCostPercentage == (hasDoubleCost ? 2 : 1), true, totalCostPercentage != (hasDoubleCost ? 2 : 1), "", true);
             case 18:
                 return new ShopItemAdjustableDetails(
                     DoAction(id, cost, () => gameManager.MatchAILives(), true, false),

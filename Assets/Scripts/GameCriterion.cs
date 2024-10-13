@@ -318,6 +318,25 @@ public class NoMercy : GameCriterion
     }
 }
 
+public class PowersCostDouble : GameCriterion
+{
+    public PowersCostDouble()
+    {
+        Id = 12;
+        IsRestrictive = true;
+    }
+
+    public override string GetDescription()
+    {
+        return $"2x Powers Cost";
+    }
+
+    public override bool IsMet(GameState state)
+    {
+        return true;
+    }
+}
+
 public class GameState
 {
     public string CurrentWord;

@@ -56872,8 +56872,6 @@ laker
 lakers
 lakes
 lakeside
-lakh
-lakhs
 lakier
 lakiest
 laking
@@ -79663,6 +79661,7 @@ primers
 primes
 primeval
 primi
+primigenial
 primine
 primines
 priming
@@ -79678,6 +79677,7 @@ primmest
 primming
 primness
 primo
+primogenial
 primogenitor
 primogenitors
 primogeniture
