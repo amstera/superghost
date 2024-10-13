@@ -70,7 +70,7 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
                 localPos.y -= 105;
 
                 GetColor(clickedEffect.color, out Color brighterColor);
-                effectsPopUp.Show(clickedEffect.title, clickedEffect.description, localPos, brighterColor);
+                effectsPopUp.Show(clickedEffect.title, clickedEffect.description, clickedEffect.extraInfoText, localPos, brighterColor);
             }
         }
         else
@@ -126,18 +126,20 @@ public class ActiveEffectsText : MonoBehaviour, IPointerClickHandler
 
 public class ShopItemEffectDetails
 {
-    public ShopItemEffectDetails(int id, string title, string description, Color color, int cost)
+    public ShopItemEffectDetails(int id, string title, string description, Color color, int cost, string extraInfoText)
     {
         this.id = id;
         this.title = title;
         this.description = description;
         this.color = color;
         this.cost = cost;
+        this.extraInfoText = extraInfoText;
     }
 
     public int id;
     public string title;
     public string description;
     public int cost;
+    public string extraInfoText;
     public Color color;
 }

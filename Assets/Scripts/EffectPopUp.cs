@@ -27,13 +27,17 @@ public class EffectsPopUp : MonoBehaviour
         }
     }
 
-    public void Show(string title, string description, Vector3 position, Color color)
+    public void Show(string title, string description, string extraInfoText, Vector3 position, Color color)
     {
         clickAudioSource?.Play();
         canvasGroup.interactable = true;
 
         titleText.text = title;
         descriptionText.text = description;
+        if (!string.IsNullOrEmpty(extraInfoText))
+        {
+            descriptionText.text += $" ({extraInfoText})";
+        }
         transform.localPosition = position;
         backgroundImage.color = color;
 

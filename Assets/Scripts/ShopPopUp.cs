@@ -315,15 +315,23 @@ public class ShopPopUp : MonoBehaviour
             yield return new WaitForSeconds(GetTimeToWait(cost));
         }
 
+        action();
+
         if (shouldAddEffect)
         {
             var shopItem = shopItemPrefabs.Find(s => s.id == id);
             var shopItemInfo = shopItems.Find(s => s.id == id);
-            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItemInfo.body, shopItem.backgroundImage.color, cost);
+
+            var extraInfoText = "";
+            if (shopItem.id == 10 && gameManager.ChanceMultiplier != 1)
+            {
+                var color = gameManager.ChanceMultiplier > 1 ? "yellow" : "red";
+                extraInfoText = $"<color={color}>{gameManager.ChanceMultiplier}x</color>";
+            }
+
+            var details = new ShopItemEffectDetails(id, shopItemInfo.title, shopItemInfo.body, shopItem.backgroundImage.color, cost, extraInfoText);
             activeEffectsText.AddEffect(details);
         }
-
-        action();
 
         if (shouldHide)
         {
