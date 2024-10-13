@@ -1161,6 +1161,7 @@ adequacy
 adequate
 adequately
 adequateness
+adgietto
 adhere
 adhered
 adherence
@@ -8122,8 +8123,6 @@ bating
 batiste
 batistes
 batlike
-batman
-batmen
 baton
 batons
 bats
@@ -42297,6 +42296,8 @@ gastronomically
 gastronomy
 gastropod
 gastropods
+gastropub
+gastropubs
 gastrula
 gastrulation
 gasts
@@ -62468,6 +62469,9 @@ melodiousness
 melodise
 melodist
 melodize
+melodized
+melodizes
+melodizing
 melodrama
 melodramas
 melodramatic
@@ -101663,11 +101667,9 @@ superlatively
 superlatives
 superlay
 superlie
-superman
 supermarket
 supermarkets
 supermassive
-supermen
 supermodel
 supermodels
 supermom
@@ -110517,6 +110519,7 @@ unhelpfully
 unhelpfulness
 unheralded
 unheroic
+unhesitant
 unhesitating
 unhesitatingly
 unhewn

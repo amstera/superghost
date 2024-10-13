@@ -77,7 +77,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Opacity: 0.8888889
+    - _Opacity: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -93,6 +93,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 0.9001629, g: 0.0010587692, b: 0, a: 1}
+    - _GlowColor: {r: 1, g: 0.8756072, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

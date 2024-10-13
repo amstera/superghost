@@ -795,7 +795,7 @@ public class GameManager : MonoBehaviour
         aiLivesText.LoseLife();
         playerWon = true;
         isPlayerTurn = false;
-        int multiplier = HasDoubleBluff ? 2 : 1;
+        float multiplier = HasDoubleBluff ? 2.5f : 1;
 
         var caspString = GetCaspText(false);
         if (string.IsNullOrEmpty(word))
@@ -1959,8 +1959,8 @@ public class GameManager : MonoBehaviour
             }
             if (HasDoubleBluff && bluffPopup.canvasGroup.alpha > 0)
             {
-                calculationText += $" x 2";
-                totalPoints *= 2;
+                calculationText += $" x 2.5";
+                totalPoints *= 2.5f;
                 showTotal = true;
             }
 

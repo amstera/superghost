@@ -289,12 +289,39 @@ public class BluffPopUp : MonoBehaviour
         inputField.text = string.Empty;
         formattedText.text = string.Empty;
 
-        // Reset inputField RectTransform to stretch anchors and positions
+        ResetInputFieldAndCaret();
+    }
+
+    private void ResetInputFieldAndCaret()
+    {
+        // Reset the input field's RectTransform to stretch anchors and positions
         RectTransform inputFieldRectTransform = inputField.textComponent.GetComponent<RectTransform>();
-        inputFieldRectTransform.anchorMin = new Vector2(0, 0); // Left and bottom to 0
-        inputFieldRectTransform.anchorMax = new Vector2(1, 1); // Right and top to 1
-        inputFieldRectTransform.offsetMin = Vector2.zero; // Left and bottom offset to 0
-        inputFieldRectTransform.offsetMax = Vector2.zero; // Right and top offset to 0
+        inputFieldRectTransform.anchorMin = new Vector2(0, 0);
+        inputFieldRectTransform.anchorMax = new Vector2(1, 1);
+        inputFieldRectTransform.offsetMin = Vector2.zero;
+        inputFieldRectTransform.offsetMax = Vector2.zero;
+
+        ResetCaret();
+    }
+
+    private void ResetCaret()
+    {
+        // Look for the caret in the children by name, which avoids the need to search through all RectTransforms
+        var caret = inputField.GetComponentInChildren<TMP_SelectionCaret>();
+
+        if (caret != null)
+        {
+            RectTransform caretRectTransform = caret.GetComponent<RectTransform>();
+
+            if (caretRectTransform != null)
+            {
+                // Reset the caret's RectTransform to stretch anchors
+                caretRectTransform.anchorMin = new Vector2(0, 0);  // Anchor to left and bottom
+                caretRectTransform.anchorMax = new Vector2(1, 1);  // Anchor to right and top
+                caretRectTransform.offsetMin = Vector2.zero;
+                caretRectTransform.offsetMax = Vector2.zero;
+            }
+        }
     }
 
     private void ShowWarning(string text)
