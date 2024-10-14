@@ -332,18 +332,21 @@ public class CriteriaText : MonoBehaviour
 
     private int GetEndlessModeScore(int level)
     {
-        if (level < 10) return 400; // Fallback for levels below 10, though this shouldn't occur in endless mode
+        if (level < 10) return 350; // Fallback for levels below 10, though this shouldn't occur in endless mode
 
         switch (level)
         {
-            case 10: return 400;
-            case 11: return 600;
-            case 12: return 1000;
-            case 13: return 1500;
-            case 14: return 2000;
-            case 15: return 3000;
-            case 16: return 5000;
-            default: return 5000 + (level - 16) * 2500;
+            case 10: return 350;
+            case 11: return 500;
+            case 12: return 650;
+            case 13: return 800;
+            case 14: return 1000;
+            case 15: return 1500;
+            case 16: return 2000;
+            case 17: return 2500;
+            case 18: return 3000;
+            case 19: return 4000;
+            default: return 5000 + (level - 20) * 2500;
         }
     }
 }

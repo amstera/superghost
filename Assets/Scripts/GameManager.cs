@@ -665,6 +665,7 @@ public class GameManager : MonoBehaviour
         ghostAvatar.Hide();
         StartNewGame();
         ResetWordUses++;
+        fireBallCalculate.SetActive(false);
         SetPointsCalculatedText();
     }
 

@@ -147,6 +147,8 @@ public class SettingsPopUp : MonoBehaviour
         canvasGroup.alpha = 0;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+
+        ResetInputFieldAndCaret();
     }
 
     private void OnSfxToggleChanged(bool isEnabled)

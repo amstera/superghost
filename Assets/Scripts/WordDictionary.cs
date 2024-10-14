@@ -373,7 +373,8 @@ public class WordDictionary
         int minWinDifference = currentLevel == 0 ? 2 : 0;
         bool shouldSpellWord = (difficulty == Difficulty.Easy ||
                                (difficulty == Difficulty.Normal && playerAIWinDifference < -2) ||
-                               (difficulty == Difficulty.Normal && currentLevel == 2)) &&
+                               (difficulty == Difficulty.Normal && currentLevel == 3 && playerAIWinDifference <= -1) ||
+                               (difficulty == Difficulty.Normal && currentLevel <= 2)) &&
                                playerAIWinDifference <= minWinDifference &&
                                rng.NextDouble() <= ratio;
         if (shouldSpellWord)
