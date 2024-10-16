@@ -333,11 +333,11 @@ public class StatsPopup : MonoBehaviour
         {
             unlockedHats.Add(HatType.Crown);
         }
-        if (saveObject.Statistics.EasyWins >= 5 || saveObject.Statistics.NormalWins >= 5 || saveObject.Statistics.HardWins >= 5)
+        if (saveObject.Statistics.EasyWins + saveObject.Statistics.NormalWins + saveObject.Statistics.HardWins >= 5)
         {
             unlockedHats.Add(HatType.Taco);
         }
-        if (saveObject.Statistics.NormalWins >= 10 || saveObject.Statistics.HardWins >= 10)
+        if (saveObject.Statistics.NormalWins + saveObject.Statistics.HardWins >= 10)
         {
             unlockedHats.Add(HatType.Top);
         }

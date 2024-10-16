@@ -105,7 +105,8 @@ public class StartWithHandicap : GameCriterion
     public override string GetDescription()
     {
         string substring = "GHOST".Substring(0, amount);
-        return $"Start at <color=red>{substring}</color>";
+        string remainingSubstring = "GHOST".Substring(amount);
+        return $"Start at <color=red>{substring}</color><color=#8B8B8B>{remainingSubstring}</color>";
     }
 
     public override bool IsMet(GameState state)
@@ -204,7 +205,7 @@ public class AIStarts : GameCriterion
 
     public override string GetDescription()
     {
-        return $"<color=yellow>CASP</color> Starts";
+        return $"<color=yellow>CASP</color> Goes First";
     }
 
     public override bool IsMet(GameState state)

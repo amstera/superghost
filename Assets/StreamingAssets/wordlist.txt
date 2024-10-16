@@ -2756,6 +2756,7 @@ almehs
 almemar
 almemars
 almes
+almightiness
 almighty
 almner
 almners
@@ -4070,6 +4071,7 @@ antibug
 antic
 anticancer
 anticar
+antichrist
 anticipate
 anticipated
 anticipates
@@ -6227,8 +6229,6 @@ audaciously
 audaciousness
 audacities
 audacity
-audad
-audads
 audial
 audibility
 audible
@@ -31640,7 +31640,6 @@ dukedom
 dukedoms
 dukes
 duking
-dukka
 dukkah
 dulcet
 dulcetly
@@ -41243,6 +41242,7 @@ fullest
 fullface
 fulling
 fullness
+fullnesses
 fulls
 fully
 fulmar
@@ -46212,6 +46212,7 @@ hamauls
 hambone
 hamboned
 hambones
+hamboning
 hamburg
 hamburger
 hamburgers
@@ -48638,6 +48639,8 @@ homosexual
 homosexuality
 homosexually
 homosexuals
+homozygote
+homozygotes
 homozygous
 homy
 honan
@@ -62974,6 +62977,8 @@ metes
 meth
 methadon
 methadone
+methaemoglobin
+methaemoglobins
 methamphetamine
 methane
 methanes
@@ -63875,6 +63880,8 @@ misalliances
 misallot
 misally
 misalter
+misandrist
+misandrists
 misandry
 misanthrope
 misanthropes
@@ -73160,6 +73167,8 @@ paradox
 paradoxes
 paradoxical
 paradoxically
+paradoxist
+paradoxists
 paradrop
 parae
 paraffin
@@ -75517,6 +75526,9 @@ philistines
 philistinism
 philodendron
 philodendrons
+philogynist
+philogynists
+philogyny
 philological
 philologist
 philologists
@@ -111568,6 +111580,8 @@ unsurprisingly
 unsuspected
 unsuspecting
 unsuspectingly
+unsuspicious
+unsuspiciously
 unsustainable
 unswathe
 unswayed

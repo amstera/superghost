@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 6137158871262751117}
   - component: {fileID: 1556974124799321096}
   - component: {fileID: 8272240342754299840}
+  - component: {fileID: 3505809698333331085}
   m_Layer: 5
   m_Name: Outline
   m_TagString: Untagged
@@ -242,6 +243,21 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 2
   falloffDistance: 0
+--- !u!114 &3505809698333331085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5575547564900779837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8754176642836540052
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +271,7 @@ GameObject:
   - component: {fileID: 1788788382176611332}
   - component: {fileID: 2662882963316927273}
   - component: {fileID: 1438441734804201895}
+  - component: {fileID: 7244681354503363541}
   m_Layer: 5
   m_Name: Key Button
   m_TagString: Untagged
@@ -380,3 +397,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: {x: 10, y: 10, z: 10, w: 10}
+--- !u!114 &7244681354503363541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754176642836540052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1

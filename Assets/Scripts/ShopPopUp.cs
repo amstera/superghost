@@ -22,6 +22,7 @@ public class ShopPopUp : MonoBehaviour
     public List<ShopItem> shopItemPrefabs = new List<ShopItem>();
     public List<Color> colors = new List<Color>();
     public TextMeshProUGUI discountText;
+    public GameObject discountBackground;
     public ActiveEffectsText activeEffectsText;
     public ActiveEffectsText shopActiveEffectsText;
     public TutorialPopUp tutorialPopup;
@@ -142,6 +143,7 @@ public class ShopPopUp : MonoBehaviour
         }
 
         discountText.gameObject.SetActive(hasDoubleCost);
+        discountBackground.SetActive(hasDoubleCost);
     }
 
     private void ShowModals()
@@ -274,8 +276,8 @@ public class ShopPopUp : MonoBehaviour
     public void ReShuffle()
     {
         int baseRestockAmount = saveObject.CurrentLevel < 10 ? 6 : 10;
-        int levelMultiplier = saveObject.CurrentLevel < 10 ? 1 : (int)Math.Pow(2, saveObject.CurrentLevel - 10);
-        int restockCost = Math.Min(60, (int)RoundHalfUp(baseRestockAmount * levelMultiplier * totalCostPercentage));
+        int restockCost = Math.Min(20, (int)RoundHalfUp(baseRestockAmount * totalCostPercentage));
+
         if (currency >= restockCost && !isShuffling) // Check if already shuffling
         {
             StartCoroutine(RefreshShopWithAnimation(false, () => BuyItem(restockCost, null)));
@@ -416,11 +418,13 @@ public class ShopPopUp : MonoBehaviour
         if (amount == 1)
         {
             discountText.gameObject.SetActive(false);
+            discountBackground.SetActive(false);
         }
         else
         {
             discountText.gameObject.SetActive(true);
             discountText.text = $"{(1 - amount) * 100}% Off";
+            discountBackground.SetActive(true);
         }
     }
 
@@ -507,8 +511,8 @@ public class ShopPopUp : MonoBehaviour
         }
 
         int baseRestockAmount = saveObject.CurrentLevel < 10 ? 6 : 10;
-        int levelMultiplier = saveObject.CurrentLevel < 10 ? 1 : (int)Math.Pow(2, saveObject.CurrentLevel - 10);
-        int restockCost = Math.Min(60, (int)RoundHalfUp(baseRestockAmount * levelMultiplier * totalCostPercentage));
+        int restockCost = Math.Min(20, (int)RoundHalfUp(baseRestockAmount * totalCostPercentage));
+
         bool canAffordReshuffle = currency >= restockCost;
         shuffleButton.interactable = canAffordReshuffle;
         var reshuffleText = shuffleButton.GetComponentInChildren<TextMeshProUGUI>();
