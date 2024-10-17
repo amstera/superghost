@@ -74941,8 +74941,6 @@ yowl
 yowled
 yowling
 yowls
-ytterbium
-yttrium
 yuan
 yucca
 yuccas

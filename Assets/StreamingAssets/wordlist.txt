@@ -3566,6 +3566,7 @@ androgynous
 androgyny
 android
 androids
+androphobia
 andros
 ands
 anear
@@ -28389,6 +28390,8 @@ dieback
 diebacks
 diecious
 died
+dieffenbachia
+dieffenbachias
 diehard
 diehards
 dieing
@@ -35144,6 +35147,7 @@ etheric
 etherify
 etherish
 etherize
+ethernet
 ethers
 ethic
 ethical
@@ -45735,6 +45739,7 @@ gynecologists
 gynecology
 gyniatry
 gynoecia
+gynophobia
 gyoza
 gyozas
 gyplure
@@ -88130,6 +88135,8 @@ ringside
 ringtail
 ringtaw
 ringtaws
+ringtone
+ringtones
 ringtoss
 ringworm
 rink
@@ -111720,6 +111727,7 @@ untypical
 untypically
 ununbium
 ununited
+ununpentium
 unurged
 unusable
 unused
